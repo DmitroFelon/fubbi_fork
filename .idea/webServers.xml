@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="43a66444-c74b-4398-b3c3-f5162267394a" name="dev.fubbi" url="http://dev.fubbi.co">
+        <fileTransfer host="45.77.122.41" port="222" accessType="SFTP" password="dfe4df9edf86df9cdffbdfebdf87dfe4dfffdfd3df8bdfc5dffadff9dfffdffa" username="devfubbi">
+          <advancedOptions>
+            <advancedOptions compatibilityMode="true" dataProtectionLevel="Private" maxConnections="8" showHiddenFiles="true" />
+          </advancedOptions>
+          <option name="port" value="222" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
