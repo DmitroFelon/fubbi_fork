@@ -11,12 +11,10 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
+                @foreach($items as $link => $name)
+                    <li class="{{(Request::is($link))?'active':''}}" ><a href="{{$link}}">{{$name}}</a></li>
+                @endforeach
+
             </ul>
         </div>
 

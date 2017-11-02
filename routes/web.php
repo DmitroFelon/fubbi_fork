@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/{page?}', function ($page = null) {
     return view('pages.home');
 });
 
