@@ -11,15 +11,18 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/{page?}', function ($page = null) {
-    return view('pages.home');
+Auth::routes();
+
+Route::get('user', function () {
+
 });
 
-
-Route::get('/test', function () {
-    return ['test'];
-});
+Route::get('/{page?}', 'DashboardController@index')->middleware(['auth']);
 
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
