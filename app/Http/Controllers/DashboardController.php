@@ -8,8 +8,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -35,30 +33,20 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        /*Auth::logout();
-
-        $this->user = Auth::user();
-
-        foreach (Role::$roles as $role) {
-            if ($this->user->hasRole($role)) {
-                $this->role = $role;
-                break;
-            }
-        }*/
     }
 
     /**
      * @param string $page
+     * @param string $action
      * @return \Illuminate\Support\Facades\View|null
      */
-    public function index($page = 'home')
+    public function index($page = 'home', $action = 'main')
     {
-        $page = str_replace('/', '.', $page);
-
+        $action = (isset($action)) ? '.'.$action : '';
 
         //admin for test
-        if (View::exists("pages.admin.{$page}")) {
-            return view("pages.admin.{$page}");
+        if (View::exists("pages.admin.{$page}{$action}")) {
+            return view("pages.admin.{$page}{$action}");
         }
 
         abort(404);

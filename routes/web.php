@@ -11,22 +11,15 @@
 |
 */
 
-use App\Models\Role;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/user', function () {
-    $user = Auth::user();
 
-    $role = Role::where('name', 'admin')->first();
+//TODO add resource controllers, attach to existed views
 
-    $user->attachRole($role);
-
-    return ['ok'];
-});
-
-Route::get('/{page?}', 'DashboardController@index')->middleware('auth');
+Route::get('/{page?}/{action?}', 'DashboardController@index')->middleware('auth');
 
 
