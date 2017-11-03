@@ -18,6 +18,8 @@ Auth::routes();
 
 Route::get('user', function () {
 
+
+    return \App\User::all();
 });
 
 Route::get('/{page?}', 'DashboardController@index')->middleware(['auth']);
