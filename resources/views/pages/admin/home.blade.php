@@ -2,6 +2,6 @@
 
 @section('content')
 
-    admin.article_outlines
+    admin.dashboard
 
 @endsection

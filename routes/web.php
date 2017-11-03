@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/{page?}', 'DashboardController@index')->middleware(['auth']);
+Route::get('/{page?}', 'DashboardController@index')->middleware('auth');
+
