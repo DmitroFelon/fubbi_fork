@@ -8,6 +8,7 @@
 
 namespace App\Providers;
 
+use App\ViewComposers\LeftMenuComposer;
 use App\ViewComposers\TopMenuComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('partials.top-nav', TopMenuComposer::class);
+        View::composer('partials.left-sidebar', LeftMenuComposer::class);
     }
 
     /**
