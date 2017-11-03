@@ -14,17 +14,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
 Auth::routes();
-
-Route::get('user', function () {
-
-
-    return \App\User::all();
-});
 
 Route::get('/{page?}', 'DashboardController@index')->middleware(['auth']);
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

@@ -11,7 +11,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                @foreach($items as $link => $name)
+                @foreach($items as $name => $link)
                     <li class="{{(Request::is($link))?'active':''}}" ><a href="{{$link}}">{{$name}}</a></li>
                 @endforeach
 

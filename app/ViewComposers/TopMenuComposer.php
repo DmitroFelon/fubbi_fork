@@ -9,22 +9,83 @@
 namespace App\ViewComposers;
 
 
+use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TopMenuComposer
 {
     public function compose(View $view)
     {
-        $view->with('items', [
-                'url1' => 'name1',
-                'url2' => 'name2',
-                'url3' => 'name3',
-                'url4' => 'name4',
-                'url5' => 'name5',
-                'url6' => 'name6',
-                'url7' => 'name7',
-                'url8' => 'name8',
-            ]
-        );
+        $links = [];
+
+        foreach (Role::$roles as $role) {
+            if (Auth::user()->hasRole($role)) {
+                $links = $this->{$role}();
+                break;
+            }
+        }
+
+        $view->with('items', $links);
+    }
+
+    public function admin()
+    {
+        return [
+            'Dashboard' => 'home',
+            'Plan' => 'plan',
+            'Alerts' => 'alerts',
+            'Content Checklist' => 'content_checklist',
+            'Design Checklist' => 'design_checklist',
+            'Chat' => 'chat',
+            'Book a call' => 'book a call',
+            'FAQ' => 'fuq',
+            'settings' => 'settings',
+
+        ];
+    }
+
+    public function client()
+    {
+        return [
+            'Dashboard' => 'home',
+            'Plan' => 'plan',
+            'Alerts' => 'alerts',
+            'Content Checklist' => 'content_checklist',
+            'Design Checklist' => 'design_checklist',
+            'Chat' => 'chat',
+            'Book a call' => 'book a call',
+            'FAQ' => 'fuq',
+            'settings' => 'settings',
+
+        ];
+    }
+
+    public function account_manager()
+    {
+        return [
+
+        ];
+    }
+
+    public function writer()
+    {
+        return [
+
+        ];
+    }
+
+    public function editor()
+    {
+        return [
+
+        ];
+    }
+
+    public function designer()
+    {
+        return [
+
+        ];
     }
 }
