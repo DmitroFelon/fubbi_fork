@@ -180,6 +180,14 @@ return [
          *  Project
          */
         App\Providers\ViewComposerServiceProvider::class,
+        /*
+         * Roles provider
+         * */
+        Zizaco\Entrust\EntrustServiceProvider::class,
+        /*
+         * Configs
+         * */
+        Garf\LaravelConf\LaravelConfServiceProvider::class,
 
     ],
 
@@ -229,6 +237,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        /**
+         * Roles
+         * */
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        /**
+         * Configs
+         * */
+        'Conf' => Garf\LaravelConf\ConfFacade::class,
+
 
     ],
 

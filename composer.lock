@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4e5b60d90055111a1ce583320a24af3b",
-    "content-hash": "7eb088f42bf09e9289b8b442d12152a5",
+    "hash": "5894a0c846d989aea40b568f148ef51a",
+    "content-hash": "38b27aa9a2b7de5ec17cf393732fc300",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -378,6 +378,48 @@
                 "trusted proxy"
             ],
             "time": "2017-06-15 17:19:42"
+        },
+        {
+            "name": "garf/laravel-conf",
+            "version": "v3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/garf/laravel-conf.git",
+                "reference": "bca2622a2563b538f400379fbcf3dbd91601da70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/garf/laravel-conf/zipball/bca2622a2563b538f400379fbcf3dbd91601da70",
+                "reference": "bca2622a2563b538f400379fbcf3dbd91601da70",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=4.2",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Garf\\LaravelConf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dinar Garipov",
+                    "email": "garipov.dinar@gmail.com"
+                }
+            ],
+            "description": "Store additional configs in JSON or Database (write, read)",
+            "keywords": [
+                "config",
+                "json",
+                "laravel"
+            ],
+            "time": "2016-11-14 08:48:35"
         },
         {
             "name": "guzzlehttp/guzzle",
