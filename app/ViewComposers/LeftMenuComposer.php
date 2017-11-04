@@ -9,6 +9,7 @@
 namespace App\ViewComposers;
 
 use App\Models\Role;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -27,8 +28,10 @@ class LeftMenuComposer
 
     /**
      * @var string
-     */ 
+     */
     protected $page;
+
+    protected $user;
 
     /**
      * LeftMenuComposer constructor.
@@ -37,6 +40,7 @@ class LeftMenuComposer
      */
     public function __construct(Request $request)
     {
+        $this->user = Auth::user();
         $this->request = $request;
     }
 
@@ -49,11 +53,15 @@ class LeftMenuComposer
 
         $links = [];
 
-        foreach (Role::$roles as $role) {
-            if (Auth::user()->hasRole($role)) {
-                $links = $this->{$role}();
-                break;
+        if(!is_null($this->user)){
+            foreach (Role::$roles as $role) {
+                if ($this->user->hasRole($role)) {
+                    $links = $this->{$role}();
+                    break;
+                }
             }
+        }else{
+            $links = $this->guest();
         }
 
         $view->with('items', $links);
@@ -116,12 +124,12 @@ class LeftMenuComposer
                 break;
             case 'settings':
                 return [
-                    'Account' => '/settings'
+                    'Account' => '/settings',
                 ];
                 break;
             default:
                 return [
-                    'test' => 'test'
+                    'test' => 'test',
                 ];
         }
     }
@@ -183,6 +191,14 @@ class LeftMenuComposer
     {
         return [
 
+        ];
+    }
+
+    public function guest()
+    {
+        return [
+            'Login' => '/login',
+            'Register' => '/register',
         ];
     }
 }

@@ -1,0 +1,6 @@
+div#table_filter {
+  float: right;
+}
+th.sorting:hover, th.sorting_asc:hover, th.sorting_desc:hover{
+  cursor: pointer;
+}

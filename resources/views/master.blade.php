@@ -33,6 +33,8 @@
 
     <footer>
         @include('footer')
+        <link href="{{ URL::to('js/app.js') }}" rel="stylesheet">
+        @yield('script')
     </footer>
 
 </html>

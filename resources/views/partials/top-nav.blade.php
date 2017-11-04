@@ -12,8 +12,9 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 @foreach($items as $name => $link)
-                    <li class="{{(Request::is($link))?'active':''}}" ><a href="{{$link}}">{{$name}}</a></li>
+                    <li class="{{(Request::is($link))?'active':''}}"><a href="{{$link}}">{{$name}}</a></li>
                 @endforeach
+                @auth
                 <li>
                     <a href="{{ route('logout') }}"
                        onclick="event.preventDefault();
@@ -21,6 +22,8 @@
                         Logout
                     </a>
                 </li>
+                @endauth
+
 
             </ul>
         </div>

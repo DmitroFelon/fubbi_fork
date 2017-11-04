@@ -25,6 +25,8 @@ class TopMenuComposer
      */
     protected $request;
 
+    protected $user;
+
     /**
      * TopMenuComposer constructor.
      *
@@ -33,6 +35,7 @@ class TopMenuComposer
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->user = Auth::user();
     }
 
     /**
@@ -42,11 +45,15 @@ class TopMenuComposer
     {
         $links = [];
 
-        foreach (Role::$roles as $role) {
-            if (Auth::user()->hasRole($role)) {
-                $links = $this->{$role}();
-                break;
+        if(!is_null($this->user)){
+            foreach (Role::$roles as $role) {
+                if ($this->user->hasRole($role)) {
+                    $links = $this->{$role}();
+                    break;
+                }
             }
+        }else{
+            $links = $this->guest();
         }
 
         $view->with('items', $links);
@@ -128,5 +135,9 @@ class TopMenuComposer
         return [
 
         ];
+    }
+
+    public function guest(){
+        return [];
     }
 }
