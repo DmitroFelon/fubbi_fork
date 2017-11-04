@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers\Pages\Admin\Teams;
 
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -33,6 +34,6 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('items', []);
+        $view->with('teams', Team::all());
     }
 }

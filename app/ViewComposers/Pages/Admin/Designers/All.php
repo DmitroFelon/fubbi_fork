@@ -33,6 +33,11 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('items', []);
+        $view->with('users',
+            \App\Models\Role::where('name', 'designer')
+                ->first()
+                ->users()
+                ->distinct()
+                ->get());
     }
 }

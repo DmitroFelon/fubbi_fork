@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imad
- * Date: 03/11/17
- * Time: 16:44
- */
 
 namespace App\ViewComposers\Pages\Admin\Projects;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -33,6 +28,6 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('items', []);
+        $view->with('projects', Project::with('client')->get());
     }
 }

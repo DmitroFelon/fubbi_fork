@@ -34,6 +34,12 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('users', User::all());
+        $view->with(
+            'users',
+            \App\Models\Role::where('name', 'client')
+                ->first()
+                ->users()
+                ->distinct()
+                ->get());
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use App\Models\Project;
+use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -19,7 +21,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -28,6 +32,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'client_id');
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+    }
 }
