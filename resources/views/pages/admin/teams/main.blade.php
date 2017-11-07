@@ -9,6 +9,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Workers</th>
+            <th>Rating</th>
 
         </tr>
         </thead>
@@ -18,6 +19,7 @@
                 <td>{{$team->id}}</td>
                 <td>{{$team->name}}</td>
                 <td>{{count($team->users)}}</td>
+                <td>{{round($team->avgRating, 2)}}</td>
             </tr>
         @endforeach
 

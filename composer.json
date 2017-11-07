@@ -9,6 +9,7 @@
         "acacha/stateful-eloquent": "^0.1.8",
         "fideloper/proxy": "~3.3",
         "garf/laravel-conf": "3.*",
+        "ghanem/rating": "^1.4",
         "guzzlehttp/guzzle": "^6.3",
         "kim/activity": "^1.1",
         "laravel/cashier": "~7.0",

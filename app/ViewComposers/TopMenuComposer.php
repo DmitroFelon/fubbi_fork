@@ -25,8 +25,14 @@ class TopMenuComposer
      */
     protected $request;
 
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     protected $user;
 
+    /**
+     * @var string
+     */
     protected $page;
     /**
      * TopMenuComposer constructor.
@@ -57,6 +63,9 @@ class TopMenuComposer
         $view->with('items', $links);
     }
 
+    /**
+     * @return array
+     */
     public function guest()
     {
         return [];
@@ -87,12 +96,12 @@ class TopMenuComposer
     public function client()
     {
         return [
-            'Projects' => 'projects',
-            'Alerts' => 'alerts',
-            'Chat' => 'chat',
-            'Book a call' => 'book a call',
-            'FAQ' => 'fuq',
-            'Settings' => 'settings',
+            'Projects' => '/projects',
+            'Alerts' => '/alerts',
+            'Chat' => '/chat',
+            'Book a call' => '/book_a_call',
+            'FAQ' => '/fuq',
+            'Settings' => '/settings',
 
         ];
     }

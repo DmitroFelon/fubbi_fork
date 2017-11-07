@@ -6,7 +6,8 @@
     @endforeach
     <div class="project-add col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <div align="center" class="transparent">
-            <i class="fa fa-plus fa-4x"></i>
+
+            <i onclick="window.location.replace('{{url('/projects/add')}}');" class="fa fa-plus fa-4x"></i>
         </div>
     </div>
 @endsection
@@ -18,13 +19,16 @@
         font-size: 1.2em;
     }
     .project-card>div{
-        background-color: #ff6666;
+        background-color: #ffc675;
         height: 12em;
         padding: 1em;
     }
     .project-add>div>i{
         padding: 30% 0;
         color: lightgreen;
+    }
+    .project-add>div>i:hover{
+        cursor: pointer;
     }
     .transparent{
         background-color: rgba(0,0,0,0)!important;

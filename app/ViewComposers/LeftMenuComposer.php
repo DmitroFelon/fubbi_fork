@@ -29,6 +29,9 @@ class LeftMenuComposer
      */
     protected $page;
 
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     protected $user;
 
     /**
@@ -59,6 +62,9 @@ class LeftMenuComposer
         $view->with('items', $links);
     }
 
+    /**
+     * @return array
+     */
     public function guest()
     {
         return [
@@ -129,7 +135,7 @@ class LeftMenuComposer
                 break;
             default:
                 return [
-                    'test' => 'test',
+                    'test' => '/test',
                 ];
         }
     }

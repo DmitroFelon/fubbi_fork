@@ -1,4 +1,4 @@
-.env
-.idea/
-.htaccess
-.node_modules
+/.env
+/.idea/
+/.htaccess
+/.node_modules

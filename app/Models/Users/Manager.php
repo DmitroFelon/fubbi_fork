@@ -9,7 +9,9 @@
 namespace App\Models\Users;
 
 use App\User;
+use Ghanem\Rating\Traits\Ratingable;
 
 class Manager extends User
 {
+    use Ratingable;
 }

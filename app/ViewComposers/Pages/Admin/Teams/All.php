@@ -34,6 +34,6 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('teams', Team::with('users')->get());
+        $view->with('teams', Team::with(['users'])->get());
     }
 }

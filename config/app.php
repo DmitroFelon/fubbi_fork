@@ -195,7 +195,11 @@ return [
         /*
          * Get online users
          * */
-        Kim\Activity\ActivityServiceProvider::class
+        Kim\Activity\ActivityServiceProvider::class,
+        /*
+         * Rating system
+         * */
+        Ghanem\Rating\RatingServiceProvider::class,
 
     ],
 
