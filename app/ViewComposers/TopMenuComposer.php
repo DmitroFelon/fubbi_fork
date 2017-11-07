@@ -27,6 +27,7 @@ class TopMenuComposer
 
     protected $user;
 
+    protected $page;
     /**
      * TopMenuComposer constructor.
      *
@@ -34,8 +35,9 @@ class TopMenuComposer
      */
     public function __construct(Request $request)
     {
-        $this->request = $request;
         $this->user = Auth::user();
+        $this->request = $request;
+        $this->page = $request->path();
     }
 
     /**
@@ -43,20 +45,21 @@ class TopMenuComposer
      */
     public function compose(View $view)
     {
-        $links = [];
 
-        if(!is_null($this->user)){
-            foreach (Role::$roles as $role) {
-                if ($this->user->hasRole($role)) {
-                    $links = $this->{$role}();
-                    break;
-                }
-            }
+        if(Auth::check()){
+            $role = $this->user->getRole();
+            $links = $this->{$role}();
         }else{
             $links = $this->guest();
         }
 
+
         $view->with('items', $links);
+    }
+
+    public function guest()
+    {
+        return [];
     }
 
     /**
@@ -84,11 +87,8 @@ class TopMenuComposer
     public function client()
     {
         return [
-            'Dashboard' => 'home',
-            'Plan' => 'plan',
+            'Projects' => 'projects',
             'Alerts' => 'alerts',
-            'Content Checklist' => 'content_checklist',
-            'Design Checklist' => 'design_checklist',
             'Chat' => 'chat',
             'Book a call' => 'book a call',
             'FAQ' => 'fuq',
@@ -135,9 +135,5 @@ class TopMenuComposer
         return [
 
         ];
-    }
-
-    public function guest(){
-        return [];
     }
 }

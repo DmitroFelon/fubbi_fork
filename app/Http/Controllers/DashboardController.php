@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -17,15 +19,7 @@ use Illuminate\Support\Facades\View;
  */
 class DashboardController extends Controller
 {
-    /**
-     * @var \App\User
-     */
-    protected $user;
-
-    /**
-     * @var \App\Models\Role
-     */
-    protected $role;
+   
 
     /**
      * DashboardController constructor.
@@ -42,11 +36,15 @@ class DashboardController extends Controller
      */
     public function index($page = 'home', $action = 'main')
     {
+        $user = Auth::user();
+        
+        $role = $user->getRole();
+        
         $action = (isset($action)) ? '.'.$action : '';
 
         //admin for test
-        if (View::exists("pages.admin.{$page}{$action}")) {
-            return view("pages.admin.{$page}{$action}");
+        if (View::exists("pages.{$role}.{$page}{$action}")) {
+            return view("pages.{$role}.{$page}{$action}");
         }
 
         abort(404);

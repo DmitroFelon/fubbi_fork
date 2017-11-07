@@ -11,7 +11,6 @@
     },
     "devDependencies": {
         "axios": "^0.17",
-        "bootstrap-sass": "^3.3.7",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^1.0",
@@ -19,10 +18,13 @@
         "vue": "^2.1.10"
     },
     "dependencies": {
+        "bootstrap": "^3.3.7",
         "bootstrap-material-design": "^4.0.0-beta.4",
+        "bootstrap-sass": "^3.3.7",
         "datatables.net": "^1.10.16",
         "datatables.net-bs": "^1.10.16",
         "datatables.net-colreorder": "^1.4.1",
-        "datatables.net-colreorder-bs": "^1.4.1"
+        "datatables.net-colreorder-bs": "^1.4.1",
+        "popper.js": "^1.12.6"
     }
 }

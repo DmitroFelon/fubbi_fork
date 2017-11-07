@@ -34,11 +34,13 @@ class All
      */
     public function compose(View $view)
     {
+        
         $view->with(
             'users',
             \App\Models\Role::where('name', 'client')
                 ->first()
                 ->users()
+                ->with('projects')
                 ->distinct()
                 ->get());
     }

@@ -28,6 +28,13 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('projects', Project::with('client')->get());
+
+        $client = $this->request->input('client');
+
+        $projects = Project::with('client')->when($client, function ($query) use ($client) {
+            return $query->where('client_id', $client);
+        })->get();
+
+        $view->with('projects', $projects);
     }
 }

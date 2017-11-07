@@ -20,6 +20,7 @@ class ProjectsTableSeeder extends Seeder
                 'client_id' => rand(1, 21),
                 'name' => $faker->company,
                 'description' => $faker->text(200),
+                'state' => ''
             ];
         }
 

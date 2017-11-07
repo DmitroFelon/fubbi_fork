@@ -188,6 +188,14 @@ return [
          * Configs
          * */
         Garf\LaravelConf\LaravelConfServiceProvider::class,
+        /*
+         * States
+         * */
+        Acacha\Stateful\Providers\StatefulServiceProvider::class,
+        /*
+         * Get online users
+         * */
+        Kim\Activity\ActivityServiceProvider::class
 
     ],
 
@@ -245,6 +253,10 @@ return [
          * Configs
          * */
         'Conf' => Garf\LaravelConf\ConfFacade::class,
+        /*
+         * Get online users
+         * */
+        'Activity' => Kim\Activity\ActivityFacade::class
 
 
     ],

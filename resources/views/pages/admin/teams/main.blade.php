@@ -8,6 +8,7 @@
         <tr>
             <th>Id</th>
             <th>Name</th>
+            <th>Workers</th>
 
         </tr>
         </thead>
@@ -16,6 +17,7 @@
             <tr>
                 <td>{{$team->id}}</td>
                 <td>{{$team->name}}</td>
+                <td>{{count($team->users)}}</td>
             </tr>
         @endforeach
 

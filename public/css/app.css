@@ -8360,3 +8360,8 @@ th.sorting_desc:hover {
   cursor: pointer;
 }
 
+.dataTables_paginate > ul.pagination {
+  margin: 0;
+  float: right;
+}
+

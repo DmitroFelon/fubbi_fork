@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Project;
+use App\Models\Role;
 use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,5 +45,16 @@ class User extends Authenticatable
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+    }
+
+    public function getRole()
+    {
+        foreach (Role::$roles as $r) {
+            if ($this->hasRole($r)) {
+                return $r;
+            }
+        }
+
+        return null;
     }
 }

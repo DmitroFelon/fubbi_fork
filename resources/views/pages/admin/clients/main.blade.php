@@ -9,6 +9,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Projects</th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +18,12 @@
                 <td>{{$user->id}}</td>
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
+                <td>
+                    <a
+                        href="/projects?client={{$user->id}}">
+                        {{(count($user->projects))}}
+                    </a>
+                </td>
             </tr>
         @endforeach
 
@@ -29,8 +36,8 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#table').DataTable();
-        } );
+        });
     </script>
 @endsection

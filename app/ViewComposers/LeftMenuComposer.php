@@ -8,8 +8,6 @@
 
 namespace App\ViewComposers;
 
-use App\Models\Role;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -42,6 +40,7 @@ class LeftMenuComposer
     {
         $this->user = Auth::user();
         $this->request = $request;
+        $this->page = $request->path();
     }
 
     /**
@@ -49,22 +48,23 @@ class LeftMenuComposer
      */
     public function compose(View $view)
     {
-        $this->page = $this->request->path();
 
-        $links = [];
-
-        if(!is_null($this->user)){
-            foreach (Role::$roles as $role) {
-                if ($this->user->hasRole($role)) {
-                    $links = $this->{$role}();
-                    break;
-                }
-            }
-        }else{
+        if (Auth::check()) {
+            $role = $this->user->getRole();
+            $links = $this->{$role}();
+        } else {
             $links = $this->guest();
         }
 
         $view->with('items', $links);
+    }
+
+    public function guest()
+    {
+        return [
+            'Login' => '/login',
+            'Register' => '/register',
+        ];
     }
 
     /**
@@ -140,17 +140,7 @@ class LeftMenuComposer
     public function client()
     {
         return [
-            'Onboarding Quiz' => 'onboarding_quiz',
-            'Keywords' => 'keywords',
-            'Article Topics' => 'article_topics',
-            'Article Outlines' => 'article_outlines',
-            'Articles' => 'articles',
-            'Social Post Text' => 'social_post_text',
-            'Social Post Design' => 'social_post_design',
-            'Quora' => 'quora',
-            'LinkedIn' => 'linkedin',
-            'Medium' => 'medium',
-            'Marketing Calendar' => 'marketing_calendar',
+
         ];
     }
 
@@ -191,14 +181,6 @@ class LeftMenuComposer
     {
         return [
 
-        ];
-    }
-
-    public function guest()
-    {
-        return [
-            'Login' => '/login',
-            'Register' => '/register',
         ];
     }
 }

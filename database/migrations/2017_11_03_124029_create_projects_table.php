@@ -18,6 +18,7 @@ class CreateProjectsTable extends Migration
             $table->integer('client_id');
             $table->string('name');
             $table->string('description', '400');
+            $table->string('state');
 
             $table->timestamps();
         });

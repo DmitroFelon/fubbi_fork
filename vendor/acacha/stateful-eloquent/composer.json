@@ -1,0 +1,38 @@
+{
+    "name": "acacha/stateful-eloquent",
+    "description": "State machines for Eloquent classes",
+    "license": "MIT",
+    "homepage": "https://github.com/mikerice/stateful-eloquent",
+    "keywords": [
+        "laravel",
+        "eloquent",
+        "statemachine"
+    ],
+    "authors": [
+        {
+            "name": "Mike Rice",
+            "email": "mike.hj.rice@gmail.com"
+        },
+        {
+            "name": "Sergi Tur Badenas",
+            "email": "sergiturbadenas@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Acacha\\Stateful\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Acacha\\Stateful\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=5.6.4",
+        "laravel/framework": "~5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    }
+}

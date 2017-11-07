@@ -4,9 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5894a0c846d989aea40b568f148ef51a",
-    "content-hash": "38b27aa9a2b7de5ec17cf393732fc300",
+    "hash": "a5d33f9c07cc247c4897a8bf5f312877",
+    "content-hash": "8ddb418ee40963da7d9a82a01bfe9043",
     "packages": [
+        {
+            "name": "acacha/stateful-eloquent",
+            "version": "0.1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acacha/stateful-eloquent.git",
+                "reference": "f112d9277c84bb995fad03a731f445b14ccf6c35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acacha/stateful-eloquent/zipball/f112d9277c84bb995fad03a731f445b14ccf6c35",
+                "reference": "f112d9277c84bb995fad03a731f445b14ccf6c35",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.3",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Acacha\\Stateful\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergi Tur Badenas",
+                    "email": "sergiturbadenas@gmail.com"
+                },
+                {
+                    "name": "Mike Rice",
+                    "email": "mike.hj.rice@gmail.com"
+                }
+            ],
+            "description": "State machines for Eloquent classes",
+            "homepage": "https://github.com/mikerice/stateful-eloquent",
+            "keywords": [
+                "eloquent",
+                "laravel",
+                "statemachine"
+            ],
+            "time": "2017-05-11 18:51:01"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -688,6 +738,56 @@
                 }
             ],
             "time": "2015-04-20 18:58:01"
+        },
+        {
+            "name": "kim/activity",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thomastkim/laravel-online-users.git",
+                "reference": "840d55e727349b7ac206005c021e1f0190a68c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thomastkim/laravel-online-users/zipball/840d55e727349b7ac206005c021e1f0190a68c6f",
+                "reference": "840d55e727349b7ac206005c021e1f0190a68c6f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^5.2",
+                "illuminate/session": "^5.2",
+                "illuminate/support": "^5.2",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kim\\": "src/Kim"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Kim",
+                    "email": "thomas@thomastkim.com",
+                    "homepage": "http://thomastkim.com"
+                }
+            ],
+            "description": "Easily retrieve a list of users and guests that are online.",
+            "homepage": "https://github.com/thomastkim/laravel-online-users",
+            "keywords": [
+                "laravel",
+                "online activity",
+                "php"
+            ],
+            "time": "2016-04-18 23:27:58"
         },
         {
             "name": "laravel/cashier",

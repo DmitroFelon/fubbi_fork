@@ -13,16 +13,89 @@ use App\ViewComposers\TopMenuComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class ViewComposerServiceProvider
+ *
+ * @package App\Providers
+ */
 class ViewComposerServiceProvider extends ServiceProvider
 {
-    protected $admin_resourses = [
-        'clients' => 'App\ViewComposers\Pages\Admin\Clients\All',
-        'designers' => 'App\ViewComposers\Pages\Admin\Designers\All',
-        'managers' => 'App\ViewComposers\Pages\Admin\Managers\All',
-        'plans' => 'App\ViewComposers\Pages\Admin\Plans\All',
-        'projects' => 'App\ViewComposers\Pages\Admin\Projects\All',
-        'teams' => 'App\ViewComposers\Pages\Admin\Teams\All',
-        'writers' => 'App\ViewComposers\Pages\Admin\Writers\All',
+    /**
+     * @var string
+     */
+    protected $pages_path = 'pages';
+
+    /**
+     * @var string
+     */
+    protected $composers_path = 'App\ViewComposers\Pages';
+
+    /**
+     * @var array
+     */
+    protected $collections = [
+        /*admin*/
+        'admin.clients' => '\Admin\Clients\All',
+        'admin.designers' => '\Admin\Designers\All',
+        'admin.managers' => '\Admin\Managers\All',
+        'admin.plans' => '\Admin\Plans\All',
+        'admin.projects' => '\Admin\Projects\All',
+        'admin.teams' => '\Admin\Teams\All',
+        'admin.writers' => '\Admin\Writers\All',
+        /*client*/
+        'client.projects' => '\Client\Projects\All',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $singles = [
+        /*admin*/
+        'admin.clients' => '\Admin\Clients\Single',
+        'admin.designers' => '\Admin\Designers\Single',
+        'admin.managers' => '\Admin\Managers\Single',
+        'admin.plans' => '\Admin\Plans\Single',
+        'admin.projects' => '\Admin\Projects\Single',
+        'admin.teams' => '\Admin\Teams\Single',
+        'admin.writers' => '\Admin\Writers\Single',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $edits = [
+        /*admin*/
+        'admin.clients' => '\Admin\Clients\Edit',
+        'admin.designers' => '\Admin\Designers\Edit',
+        'admin.managers' => '\Admin\Managers\Edit',
+        'admin.plans' => '\Admin\Plans\Edit',
+        'admin.projects' => '\Admin\Projects\Edit',
+        'admin.teams' => '\Admin\Teams\Edit',
+        'admin.writers' => '\Admin\Writers\Edit',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $adds = [
+        /*admin*/
+        'admin.clients' => '\Admin\Clients\Add',
+        'admin.designers' => '\Admin\Designers\Add',
+        'admin.managers' => '\Admin\Managers\Add',
+        'admin.plans' => '\Admin\Plans\Add',
+        'admin.projects' => '\Admin\Projects\Add',
+        'admin.teams' => '\Admin\Teams\Add',
+        'admin.writers' => '\Admin\Writers\Add',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $actions = [
+        'main',
+        'add',
+        'edit',
+        'single',
     ];
 
     /**
@@ -32,16 +105,27 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*Navigation*/
+        /*
+         * Navigation
+         * */
         View::composer('partials.top-nav', TopMenuComposer::class);
         View::composer('partials.left-sidebar', LeftMenuComposer::class);
 
-        /*Admin pages*/
-        foreach ($this->admin_resourses as $view => $composer) {
-            View::composer("pages.admin.{$view}.main", $composer);
-            unset($view, $composer);
+        $this->compose();
+    }
+
+    /**
+     * Run all view composers
+     */
+    private function compose()
+    {
+
+        foreach ($this->actions as $action) {
+            foreach ($this->collections as $view => $composer) {
+                View::composer("{$this->pages_path}.{$view}.{$action}", $this->composers_path.$composer);
+                unset($view, $composer);
+            }
         }
-        /*Client pages*/
     }
 
     /**
