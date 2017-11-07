@@ -34,7 +34,7 @@ class DashboardController extends Controller
      * @param string $action
      * @return \Illuminate\Support\Facades\View|null
      */
-    public function index($page = 'home', $action = 'main')
+    public function index($page = 'home', $action = 'main', $id = null)
     {
         $user = Auth::user();
         

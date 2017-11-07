@@ -24,10 +24,14 @@ Auth::routes();
 
 Route::get('/test', function () {
 
-    
+    foreach (\App\Models\Keyword::distinct()->get() as $item) {
+        echo $item->text."<br>";
+    }
+
+
     
 });
 
-Route::get('/{page?}/{action?}', 'DashboardController@index')->middleware('auth');
+Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
 
 

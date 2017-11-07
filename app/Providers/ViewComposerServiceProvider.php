@@ -30,6 +30,61 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     protected $composers_path = 'App\ViewComposers\Pages';
 
+    protected $composers = [
+        'admin' => [
+            'clients' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'designers' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'managers' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'plans' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'projects' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'teams' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+            'writers' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ],
+        ],
+        'client' => [
+            'projects' => [
+                'main' => 'All',
+                'single' => 'Single',
+                'edit' => 'Edit',
+                'add' => 'Add',
+            ]
+        ]
+    ];
+
     /**
      * @var array
      */
@@ -58,6 +113,9 @@ class ViewComposerServiceProvider extends ServiceProvider
         'admin.projects' => '\Admin\Projects\Single',
         'admin.teams' => '\Admin\Teams\Single',
         'admin.writers' => '\Admin\Writers\Single',
+        /*client*/
+        'client.projects' => '\Client\Projects\Single',
+
     ];
 
     /**
@@ -72,6 +130,8 @@ class ViewComposerServiceProvider extends ServiceProvider
         'admin.projects' => '\Admin\Projects\Edit',
         'admin.teams' => '\Admin\Teams\Edit',
         'admin.writers' => '\Admin\Writers\Edit',
+        /*client*/
+        'client.projects' => '\Client\Projects\Edit',
     ];
 
     /**
@@ -86,6 +146,8 @@ class ViewComposerServiceProvider extends ServiceProvider
         'admin.projects' => '\Admin\Projects\Add',
         'admin.teams' => '\Admin\Teams\Add',
         'admin.writers' => '\Admin\Writers\Add',
+        /*client*/
+        'client.projects' => '\Client\Projects\Add',
     ];
 
     /**
@@ -119,14 +181,27 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     private function compose()
     {
+        foreach ($this->collections as $view => $composer) {
+            View::composer("{$this->pages_path}.{$view}.main", $this->composers_path.$composer);
+            unset($view, $composer);
+        }
 
-        foreach ($this->actions as $action) {
-            foreach ($this->collections as $view => $composer) {
-                View::composer("{$this->pages_path}.{$view}.{$action}", $this->composers_path.$composer);
-                unset($view, $composer);
-            }
+        foreach ($this->singles as $view => $composer) {
+            View::composer("{$this->pages_path}.{$view}.single", $this->composers_path.$composer);
+            unset($view, $composer);
+        }
+
+        foreach ($this->edits as $view => $composer) {
+            View::composer("{$this->pages_path}.{$view}.edit", $this->composers_path.$composer);
+            unset($view, $composer);
+        }
+
+        foreach ($this->adds as $view => $composer) {
+            View::composer("{$this->pages_path}.{$view}.add", $this->composers_path.$composer);
+            unset($view, $composer);
         }
     }
+
 
     /**
      * Register the service provider.

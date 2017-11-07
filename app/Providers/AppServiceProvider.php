@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
+use App\Models\Users\Client;
+use App\Observers\ClientObserver;
+use App\Observers\ProjectObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Client::observe(ClientObserver::class);
+        Project::observe(ProjectObserver::class);
     }
 
     /**
