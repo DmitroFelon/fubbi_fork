@@ -8,7 +8,6 @@
 
 namespace App\ViewComposers\Pages\Client\Projects;
 
-use App\Models\Users\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -39,9 +38,7 @@ class Single
     public function compose(View $view)
     {
 
-        $client = new Client($this->user->toArray());
-
-        $project = $client->projects()->where('id', $this->request->route('id'))->with('workers')->firstOrFail();
+        $project = $this->user->projects()->where('id', $this->request->route('id'))->with('workers')->firstOrFail();
 
         $view->with('project', $project);
     }

@@ -16,7 +16,6 @@ class CreateProjectWorkerTable extends Migration
         Schema::create('project_worker', function (Blueprint $table) {
             $table->integer('project_id');
             $table->integer('user_id');
-            $table->timestamps();
         });
     }
 

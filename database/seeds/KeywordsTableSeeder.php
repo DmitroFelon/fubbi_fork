@@ -12,14 +12,13 @@ class KeywordsTableSeeder extends Seeder
     public function run()
     {
 
-        //
         $faker = Faker\Factory::create();
 
         $rows = [];
 
-        for ($i = 0; $i<=500; $i++){
+        for ($i = 0; $i<=100; $i++){
             $rows[] = [
-                "text" => $faker->word
+                "text" => $faker->unique()->word
             ];
         }
 

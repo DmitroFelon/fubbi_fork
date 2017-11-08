@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Acacha\Stateful\Contracts\Stateful;
 use Acacha\Stateful\Traits\StatefulTrait;
+use App\Models\Traits\Project\Articles;
+use App\Models\Traits\Project\Keywords;
+use App\Models\Traits\Project\ProjectStates;
+use App\Models\Traits\Project\Teams;
+use App\Models\Traits\Project\Topics;
+use App\Models\Traits\Project\Workers;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 /**
  * Class Project
@@ -15,39 +22,36 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model implements Stateful
 {
     use StatefulTrait;
+    use ProjectStates;
+    use Keywords;
+    use Workers;
+    use Teams;
+    use Articles;
+    use Topics;
+    use RevisionableTrait;
+
+    protected $revisionEnabled = true;
+    protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
+    protected $historyLimit = 20;
+    protected $revisionCreationsEnabled = true;
 
     /**
-     * @var array
+     * Additional observable events.
      */
-    protected $states = [
-        'created' => ['initial' => true],
-        'processing',
-        'errored',
-        'active',
-        'closed' => ['final' => true],
+    protected $observables = [
+        'attachKeywords',
+        'detachKeywords',
+        'syncKeywords',
+        'attachWorkers',
+        'detachWorkers',
+        'syncWorkers',
     ];
 
-    /**
-     * @var array
-     */
-    protected $transitions = [
-        'create' => [
-            'from' => [],
-            'to' => 'created',
-        ],
-        'activate' => [
-            'from' => 'processing',
-            'to' => 'active',
-        ],
-        'reject' => [
-            'from' => 'processing',
-            'to' => 'rejected',
-        ],
-        'complete' => [
-            'from' => 'active',
-            'to' => 'completed',
-        ],
-    ];
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -55,45 +59,5 @@ class Project extends Model implements Stateful
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function workers()
-    {
-        return $this->belongsToMany(User::class, 'project_worker', 'project_id', 'user_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function teams()
-    {
-        return $this->belongsToMany(Team::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function keywords()
-    {
-        return $this->belongsToMany(Keyword::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function articles()
-    {
-        return $this->belongsToMany(Article::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function topics()
-    {
-        return $this->belongsToMany(Topic::class);
     }
 }

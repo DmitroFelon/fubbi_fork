@@ -16,7 +16,6 @@ class CreateTeamUserTable extends Migration
         Schema::create('team_user', function (Blueprint $table) {
             $table->integer('team_id');
             $table->integer('user_id');
-            $table->timestamps();
         });
     }
 
