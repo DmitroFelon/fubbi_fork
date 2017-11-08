@@ -8,7 +8,6 @@
 
 namespace App\ViewComposers\Pages\Admin\Designers;
 
-use App\Models\Users\Designer;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -34,6 +33,10 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('users', Designer::all());
+        $view->with('users',
+            \App\Models\Role::where('name', 'designer')
+                ->first()
+                ->users()
+                ->get());
     }
 }

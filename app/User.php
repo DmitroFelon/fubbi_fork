@@ -22,7 +22,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id',
         'name',
         'email',
         'password',
@@ -38,7 +37,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-  
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'client_id');
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+    }
 
     public function getRole()
     {

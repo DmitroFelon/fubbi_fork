@@ -8,7 +8,6 @@
 
 namespace App\ViewComposers\Pages\Admin\Writers;
 
-use App\Models\Users\Writer;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -34,6 +33,6 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('users', Writer::all());
+        $view->with('users', \App\Models\Role::where('name', 'writer')->first()->users()->get());
     }
 }
