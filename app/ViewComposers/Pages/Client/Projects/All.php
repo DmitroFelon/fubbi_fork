@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers\Pages\Client\Projects;
 
+use App\Models\Users\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -29,6 +30,7 @@ class All
     {
         $this->request = $request;
         $this->user = Auth::user();
+
     }
 
     /**
@@ -36,7 +38,9 @@ class All
      */
     public function compose(View $view)
     {
+        $client = new Client($this->user->toArray());
+
         $view->with(
-            'projects', $this->user->projects()->with('workers')->get());
+            'projects', $client->projects()->with('workers')->get());
     }
 }

@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers\Pages\Admin\Managers;
 
+use App\Models\Users\Manager;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -33,11 +34,6 @@ class All
      */
     public function compose(View $view)
     {
-        $view->with('users',
-            \App\Models\Role::where('name', 'account_manager')
-                ->first()
-                ->users()
-                ->distinct()
-                ->get());
+        $view->with('users', Manager::all());
     }
 }

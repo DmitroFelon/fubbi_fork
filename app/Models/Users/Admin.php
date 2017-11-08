@@ -12,4 +12,12 @@ use App\User;
 
 class Admin extends User
 {
+    public static function all($columns = ['*'])
+    {
+        return \App\Models\Role::where('name', 'admin')
+            ->first()
+            ->users()
+            ->distinct()
+            ->get($columns);
+    }
 }

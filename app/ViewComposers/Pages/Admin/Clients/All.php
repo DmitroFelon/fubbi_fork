@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers\Pages\Admin\Clients;
 
+use App\Models\Users\Client;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -36,12 +37,6 @@ class All
     {
         
         $view->with(
-            'users',
-            \App\Models\Role::where('name', 'client')
-                ->first()
-                ->users()
-                ->with('projects')
-                ->distinct()
-                ->get());
+            'users', Client::all());
     }
 }
