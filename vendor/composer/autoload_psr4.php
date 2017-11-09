@@ -58,5 +58,4 @@ return array(
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'Barryvdh\\LaravelIdeHelper\\' => array($vendorDir . '/barryvdh/laravel-ide-helper/src'),
     'App\\' => array($baseDir . '/app'),
-    'Acacha\\Stateful\\' => array($vendorDir . '/acacha/stateful-eloquent/src'),
 );

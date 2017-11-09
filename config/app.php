@@ -189,10 +189,6 @@ return [
          * */
         Garf\LaravelConf\LaravelConfServiceProvider::class,
         /*
-         * States
-         * */
-        Acacha\Stateful\Providers\StatefulServiceProvider::class,
-        /*
          * Get online users
          * */
         Kim\Activity\ActivityServiceProvider::class,

@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "acacha/stateful-eloquent": "^0.1.8",
         "fideloper/proxy": "~3.3",
         "garf/laravel-conf": "3.*",
         "ghanem/rating": "^1.4",
@@ -17,7 +16,8 @@
         "laravel/tinker": "~1.0",
         "venturecraft/revisionable": "^1.28",
         "webmozart/assert": "^1.2",
-        "zizaco/entrust": "^1.8"
+        "zizaco/entrust": "^1.8",
+        "kodeine/laravel-meta": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",

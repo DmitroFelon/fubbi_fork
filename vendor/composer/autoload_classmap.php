@@ -6,13 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Acacha\\Stateful\\Contracts\\Stateful' => $vendorDir . '/acacha/stateful-eloquent/src/Contracts/Stateful.php',
-    'Acacha\\Stateful\\Events\\Transitioned' => $vendorDir . '/acacha/stateful-eloquent/src/Events/Transitioned.php',
-    'Acacha\\Stateful\\Exceptions\\IllegalStateTransitionException' => $vendorDir . '/acacha/stateful-eloquent/src/Exceptions/IllegalStateTransitionException.php',
-    'Acacha\\Stateful\\Exceptions\\NotValidStatesException' => $vendorDir . '/acacha/stateful-eloquent/src/Exceptions/NotValidStatesException.php',
-    'Acacha\\Stateful\\Exceptions\\NotValidTransitionsException' => $vendorDir . '/acacha/stateful-eloquent/src/Exceptions/NotValidTransitionsException.php',
-    'Acacha\\Stateful\\Providers\\StatefulServiceProvider' => $vendorDir . '/acacha/stateful-eloquent/src/Providers/StatefulServiceProvider.php',
-    'Acacha\\Stateful\\Traits\\StatefulTrait' => $vendorDir . '/acacha/stateful-eloquent/src/Traits/StatefulTrait.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -1350,6 +1343,7 @@ return array(
     'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithContainer' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithContainer.php',
     'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithDatabase' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithDatabase.php',
     'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithExceptionHandling' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithExceptionHandling.php',
+    'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithRedis' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithRedis.php',
     'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithSession' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithSession.php',
     'Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php',
     'Illuminate\\Foundation\\Testing\\Concerns\\MocksApplicationServices' => $vendorDir . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MocksApplicationServices.php',
@@ -1709,6 +1703,9 @@ return array(
     'Kim\\Activity\\Traits\\ActivitySupporter' => $vendorDir . '/kim/activity/src/Kim/Activity/Traits/ActivitySupporter.php',
     'Kim\\Activity\\Traits\\GuestRetriever' => $vendorDir . '/kim/activity/src/Kim/Activity/Traits/GuestRetriever.php',
     'Kim\\Activity\\Traits\\UserRetriever' => $vendorDir . '/kim/activity/src/Kim/Activity/Traits/UserRetriever.php',
+    'Kodeine\\Metable\\MetaData' => $vendorDir . '/kodeine/laravel-meta/src/Kodeine/Metable/MetaData.php',
+    'Kodeine\\Metable\\Metable' => $vendorDir . '/kodeine/laravel-meta/src/Kodeine/Metable/Metable.php',
+    'Kodeine\\Metable\\MetableServiceProvider' => $vendorDir . '/kodeine/laravel-meta/src/Kodeine/Metable/MetableServiceProvider.php',
     'Laravel\\Cashier\\Billable' => $vendorDir . '/laravel/cashier/src/Billable.php',
     'Laravel\\Cashier\\Card' => $vendorDir . '/laravel/cashier/src/Card.php',
     'Laravel\\Cashier\\Cashier' => $vendorDir . '/laravel/cashier/src/Cashier.php',

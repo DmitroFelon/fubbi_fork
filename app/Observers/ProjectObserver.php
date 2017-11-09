@@ -4,13 +4,14 @@ namespace App\Observers;
 
 use App\Models\Project;
 use App\Observers\Traits\Project\Keywords;
+use App\Observers\Traits\Project\States;
 use App\Observers\Traits\Project\Workers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectObserver
 {
-    use Keywords, Workers;
+    use Keywords, Workers, States;
 
     protected $user;
 

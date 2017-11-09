@@ -48,8 +48,8 @@ class Add
 
         $user = $this->user;
 
-        $projects = Cache::remember('projects-user-'.$user->id, Carbon::now()->addMinutes(10), function () use ($user) {
-            return $user->projects()->with('workers')->get();
+        $projects = Cache::remember('projects-user-'.$user->id, Carbon::now()->addMinutes(10), function () {
+            return $this->user->projects()->with('workers')->get();
         });
         
         $keywords = Cache::remember('keywords', Carbon::now()->addMinutes(10), function () {
@@ -57,6 +57,7 @@ class Add
         });
 
         $view->with('projects', $projects);
-        $view->with('keywords', $keywords);
+        
+        $view->with('keywords', $keywords->toArray());
     }
 }

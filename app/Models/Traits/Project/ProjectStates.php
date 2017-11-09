@@ -8,18 +8,18 @@
 
 namespace App\Models\Traits\Project;
 
-trait ProjectStates
+use Illuminate\Support\Facades\Log;
+
+class ProjectStates
 {
     /**
      * @var array
      */
     protected $states = [
         'created' => ['initial' => true],
+        'quiz_filling',
         'keywords_filling',
-        'keywords_filled',
         'on_manager_review',
-        'accepted_by_manager',
-        'rejected_by_manager',
         'processing',
         'on_client_review',
         'accepted_by_client',
@@ -27,25 +27,5 @@ trait ProjectStates
         'completed' => ['final' => true],
     ];
 
-    /**
-     * @var array
-     */
-    protected $transitions = [
-        'create' => [
-            'from' => [],
-            'to' => 'created',
-        ],
-        'activate' => [
-            'from' => 'processing',
-            'to' => 'active',
-        ],
-        'reject' => [
-            'from' => 'processing',
-            'to' => 'rejected',
-        ],
-        'complete' => [
-            'from' => 'active',
-            'to' => 'completed',
-        ],
-    ];
+    
 }

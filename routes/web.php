@@ -24,19 +24,11 @@ Route::get('/test', function () {
 
     $project = Project::find(1);
 
-    $project->syncKeywords([2,3,5,6,12,4,16,54]);
-
-    foreach ($project->keywords()->get() as $keyword) {
-        echo $keyword->text."<br>";
+    try{
+        $project->setState('asdfasdfasdfasdsdfasdff');
     }
-
-    foreach ($project->revisionHistory as $history) {
-
-        $string = isRevisionArray($history, \App\Models\Keyword::class, 'text');
-        if ($string == '') {
-            continue;
-        }
-        echo $string."<br>";
+    catch (Exception $e){
+        echo $e->getMessage();
     }
 });
 
