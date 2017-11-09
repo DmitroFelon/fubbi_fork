@@ -30,6 +30,9 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     protected $composers_path = 'App\ViewComposers\Pages';
 
+    /**
+     * @var array
+     */
     protected $composers = [
         'admin' => [
             'clients' => [
@@ -200,6 +203,12 @@ class ViewComposerServiceProvider extends ServiceProvider
             View::composer("{$this->pages_path}.{$view}.add", $this->composers_path.$composer);
             unset($view, $composer);
         }
+
+        View::composer(
+            "{$this->pages_path}.client.projects.*",
+            $this->composers_path.'\Client\Projects\Add'
+            );
+
     }
 
 

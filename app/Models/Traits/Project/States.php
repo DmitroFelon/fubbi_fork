@@ -17,6 +17,7 @@ trait States
 {
     protected $states = [
         'created',
+        'plan_selection',
         'quiz_filling',
         'keywords_filling',
         'on_manager_review',
@@ -29,6 +30,8 @@ trait States
 
     /**
      * @param string $state
+     * @return bool
+     * @throws \Exception
      */
     public function setState($state)
     {

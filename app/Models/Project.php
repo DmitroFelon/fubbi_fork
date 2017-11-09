@@ -2,24 +2,46 @@
 
 namespace App\Models;
 
-use Acacha\Stateful\Contracts\Stateful;
-use Acacha\Stateful\Traits\StatefulTrait;
 use App\Models\Traits\Project\Articles;
 use App\Models\Traits\Project\Keywords;
-use App\Models\Traits\Project\ProjectStates;
 use App\Models\Traits\Project\States;
 use App\Models\Traits\Project\Teams;
 use App\Models\Traits\Project\Topics;
 use App\Models\Traits\Project\Workers;
+use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Metable\Metable;
+use Venturecraft\Revisionable\Revision;
 use Venturecraft\Revisionable\RevisionableTrait;
-use App\User;
 
 /**
  * Class Project
  *
  * @package App\Models
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
+ * @property-read \App\User $client
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Keyword[] $keywords
+ * @property-read \Illuminate\Database\Eloquent\Collection|Revision[] $revisionHistory
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Topic[] $topics
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $workers
+ * @method static Builder|\App\Models\Project meta()
+ * @mixin \Eloquent
+ * @property int $id
+ * @property int $client_id
+ * @property string $name
+ * @property string $description
+ * @property string $state
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static Builder|\App\Models\Project whereClientId($value)
+ * @method static Builder|\App\Models\Project whereCreatedAt($value)
+ * @method static Builder|\App\Models\Project whereDescription($value)
+ * @method static Builder|\App\Models\Project whereId($value)
+ * @method static Builder|\App\Models\Project whereName($value)
+ * @method static Builder|\App\Models\Project whereState($value)
+ * @method static Builder|\App\Models\Project whereUpdatedAt($value)
  */
 class Project extends Model
 {
@@ -36,6 +58,11 @@ class Project extends Model
      * @const string
      */
     const CREATED = 'created';
+    
+    /**
+     * @const string
+     */
+    const PLAN_SELECTION = 'plan_selection';
 
     /**
      * @const string
@@ -90,7 +117,7 @@ class Project extends Model
     /**
      * @var int
      */
-    protected $historyLimit = 20;
+    protected $historyLimit = 200;
 
     /**
      * @var bool
@@ -118,7 +145,6 @@ class Project extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        
     }
 
     /**
@@ -128,6 +154,4 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'client_id');
     }
-
-
 }

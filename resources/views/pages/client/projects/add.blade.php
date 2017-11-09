@@ -1,10 +1,7 @@
 @extends('master')
 
 @section('content')
-
-
-    @include('pages.client.projects.states.keywords')
-
+    {{--TODO create a project, redirect to page with new project id--}}
 @endsection
 
 @section('script')

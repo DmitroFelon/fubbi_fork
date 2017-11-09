@@ -22,14 +22,10 @@ Auth::routes();
 
 Route::get('/test', function () {
 
-    $project = Project::find(1);
 
-    try{
-        $project->setState('asdfasdfasdfasdsdfasdff');
-    }
-    catch (Exception $e){
-        echo $e->getMessage();
-    }
+
+    Project::find(9)->setState(Project::KEYWORDS_FILLING);
+
 });
 
 function isRevisionArray(Revision $history, $model, $parameter)
