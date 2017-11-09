@@ -9,4 +9,6 @@
     <br>
     Status:
     {{$project->state}}
+
+    {{--TODO show content depens on state--}}
 @endsection

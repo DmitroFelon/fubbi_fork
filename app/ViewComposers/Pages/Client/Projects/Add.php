@@ -51,6 +51,7 @@ class Add
         $projects = Cache::remember('projects-user-'.$user->id, Carbon::now()->addMinutes(10), function () use ($user) {
             return $user->projects()->with('workers')->get();
         });
+        
         $keywords = Cache::remember('keywords', Carbon::now()->addMinutes(10), function () {
             return Keyword::groupBy('text')->get();
         });

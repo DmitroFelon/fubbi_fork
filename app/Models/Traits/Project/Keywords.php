@@ -37,12 +37,7 @@ trait Keywords
     public function syncKeywords($args)
     {
 
-        $this->createRevisionRecord(
-            $this,
-            'keywords',
-            array_values($this->keywords()->pluck('keyword_id')->toArray()),
-            $args
-        );
+        $this->createRevisionRecord($this, 'keywords', array_values($this->keywords()->pluck('keyword_id')->toArray()), $args);
 
         $this->keywords()->sync($args);
 
@@ -51,6 +46,10 @@ trait Keywords
 
     public static function createRevisionRecord($obj, $key, $old = null, $new = null)
     {
+
+        if (empty(array_diff($old, $new))) {
+            return null;
+        }
 
         $revisions = [
             [

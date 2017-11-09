@@ -49,12 +49,12 @@ class User extends Authenticatable
 
     public function getRole()
     {
+
         foreach (Role::$roles as $r) {
             if ($this->hasRole($r)) {
                 return $r;
             }
         }
-
         return null;
     }
 }

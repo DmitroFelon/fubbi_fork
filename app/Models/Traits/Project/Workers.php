@@ -8,6 +8,8 @@
 
 namespace App\Models\Traits\Project;
 
+use App\User;
+
 trait Workers
 {
     /**

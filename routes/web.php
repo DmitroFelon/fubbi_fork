@@ -14,6 +14,7 @@
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Venturecraft\Revisionable\Revision;
 
 Auth::routes();
 
@@ -23,11 +24,7 @@ Route::get('/test', function () {
 
     $project = Project::find(1);
 
-    //$project->name = 'some other cool name';
-
-    //$project->save();
-
-    //$project->syncKeywords([1, 2, 3, 4, 5, 6]);
+    $project->syncKeywords([2,3,5,6,12,4,16,54]);
 
     foreach ($project->keywords()->get() as $keyword) {
         echo $keyword->text."<br>";
@@ -35,26 +32,57 @@ Route::get('/test', function () {
 
     foreach ($project->revisionHistory as $history) {
 
-        $new = $history->newValue();
-
-        $old = $history->oldValue();
-
-        $new_array = json_decode($new, true);
-        $old_array = json_decode($old, true);
-
-        if(is_array($new_array) and is_array($old_array)){
-            $new_string = '';
-            foreach (\App\Models\Keyword::find($new_array) as $keyword){
-                
-            }
+        $string = isRevisionArray($history, \App\Models\Keyword::class, 'text');
+        if ($string == '') {
+            continue;
         }
-
-        echo $history->userResponsible()->name.
-            " changed `".$history->fieldName().
-            "` from `".$old.
-            '` to `'.$new."`<br>";
+        echo $string."<br>";
     }
 });
+
+function isRevisionArray(Revision $history, $model, $parameter)
+{
+    $new = $history->newValue();
+    $old = $history->oldValue();
+    $new_array = json_decode($new, true);
+    $old_array = json_decode($old, true);
+
+    if (! is_array($new_array) and ! is_array($old_array)) {
+        return false;
+    }
+
+    if (empty($new_array) and empty($old_array)) {
+        return false;
+    }
+
+    $added_fields = array_values(array_diff($new_array, $old_array));
+
+    $removed_fields = array_values(array_diff($old_array, $new_array));
+
+    if (empty($added_fields) and empty($removed_fields)) {
+        return false;
+    }
+
+    $added_string = '';
+
+    $removed_string = '';
+
+    foreach ($model::find($added_fields) as $field) {
+        $added_string .= '`'.$field->$parameter.'`';
+    }
+
+    foreach ($model::find($removed_fields) as $field) {
+        $removed_string .= '`'.$field->$parameter.'`';
+    }
+
+    
+
+    $result = $history->userResponsible()->name;
+    $added_string_result = ($added_string != '') ? ' added '.$added_string : '';
+    $removed_string = ($removed_string != '') ? ' removed '.$removed_string : '';
+
+    return $result.$added_string_result.$removed_string;
+}
 
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
 

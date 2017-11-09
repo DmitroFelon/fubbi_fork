@@ -10,9 +10,9 @@ use App\Models\Traits\Project\ProjectStates;
 use App\Models\Traits\Project\Teams;
 use App\Models\Traits\Project\Topics;
 use App\Models\Traits\Project\Workers;
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Venturecraft\Revisionable\RevisionableTrait;
+use App\User;
 
 /**
  * Class Project
@@ -31,7 +31,7 @@ class Project extends Model implements Stateful
     use RevisionableTrait;
 
     protected $revisionEnabled = true;
-    protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
+    protected $revisionCleanup = true;
     protected $historyLimit = 20;
     protected $revisionCreationsEnabled = true;
 
