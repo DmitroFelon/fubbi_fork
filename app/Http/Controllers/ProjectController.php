@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Keyword;
+use App\Models\Plan;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -21,10 +23,20 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Project $project)
+    public function index()
     {
+        switch ($this->request->user()->getRole()) {
+            case 'admin':
+                $projects = Project::all();
+                break;
+            case 'client':
+                $projects = $this->request->user()->projects()->get();
+                break;
+            default:
+                $projects = [];
+        }
 
-        return view('pages.'.$this->request->user()->getRole().'.projects.main', $project->all());
+        return view('pages.'.$this->request->user()->getRole().'.projects.index', ['projects' => $projects]);
     }
 
     /**
@@ -34,7 +46,13 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('pages.'.$this->request->user()->getRole().'.projects.add', ['keywords' => Keyword::all()]);
+        $data = [
+            'keywords' => Keyword::all()->toArray(),
+            'plans' => Plan::all(),
+            'articles' => Article::all(),
+        ];
+
+        return view('pages.'.$this->request->user()->getRole().'.projects.create', $data);
     }
 
     /**
@@ -64,12 +82,14 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param \App\Models\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        //
+        abort_if($project->client_id != $this->request->user()->id, 404);
+
+        return view('pages.'.$this->request->user()->getRole().'.projects.edit', ['project' => $project]);
     }
 
     /**

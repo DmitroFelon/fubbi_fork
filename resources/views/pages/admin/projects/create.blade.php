@@ -1,9 +1,9 @@
 @extends('master')
 
 @section('content')
-    <form>
-
-    </form>
+    {!! Form::model($project, ['method' => 'POST', 'action' => ['ProjectController@store']]) !!}
+    @include('candidates.form', ['submitButtonText' => 'Edit Candidate'])
+    {!! Form::close() !!}
 @endsection
 
 @section('script')

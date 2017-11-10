@@ -6,7 +6,7 @@
     @endforeach
     <div class="project-add col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <div align="center" class="transparent">
-            <i onclick="window.location.replace('{{url('/projects/add')}}');" class="fa fa-plus fa-4x"></i>
+            <i onclick="window.location.replace('{{route('projects.create')}}');" class="fa fa-plus fa-4x"></i>
         </div>
     </div>
 @endsection
