@@ -103,7 +103,6 @@ class ViewComposerServiceProvider extends ServiceProvider
         /*client*/
         'client.projects' => '\Client\Projects\All',
     ];
-
     /**
      * @var array
      */
@@ -120,7 +119,6 @@ class ViewComposerServiceProvider extends ServiceProvider
         'client.projects' => '\Client\Projects\Single',
 
     ];
-
     /**
      * @var array
      */
@@ -136,7 +134,6 @@ class ViewComposerServiceProvider extends ServiceProvider
         /*client*/
         'client.projects' => '\Client\Projects\Edit',
     ];
-
     /**
      * @var array
      */
@@ -176,7 +173,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         View::composer('partials.top-nav', TopMenuComposer::class);
         View::composer('partials.left-sidebar', LeftMenuComposer::class);
 
-        $this->compose();
+        //$this->compose();
     }
 
     /**
@@ -204,10 +201,10 @@ class ViewComposerServiceProvider extends ServiceProvider
             unset($view, $composer);
         }
 
-        View::composer(
+       /* View::composer(
             "{$this->pages_path}.client.projects.*",
             $this->composers_path.'\Client\Projects\Add'
-            );
+            );*/
 
     }
 
@@ -219,5 +216,6 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        
     }
 }

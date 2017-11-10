@@ -18,16 +18,6 @@ use Venturecraft\Revisionable\Revision;
 
 Auth::routes();
 
-//TODO add resource controllers, attach to existed views
-
-Route::get('/test', function () {
-
-
-
-    Project::find(9)->setState(Project::KEYWORDS_FILLING);
-
-});
-
 function isRevisionArray(Revision $history, $model, $parameter)
 {
     $new = $history->newValue();
@@ -72,6 +62,33 @@ function isRevisionArray(Revision $history, $model, $parameter)
     return $result.$added_string_result.$removed_string;
 }
 
-Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
+Route::resource('projects', 'ProjectController');
 
+Route::resource('users', 'UserController');
+
+
+
+
+
+//Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
+/*
+Route::group(['prefix' => '/', 'middleware' => ['role:client']], function() {
+    Route::get('/{page?}/{action?}/{id?}', 'ClientController@index');
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function() {
+    Route::get('/{page?}/{action?}/{id?}', 'AdminController@index');
+});
+
+Route::group(['prefix' => '/manager', 'middleware' => ['role:account_manager']], function() {
+    Route::get('/{page?}/{action?}/{id?}', 'ManagerController@index');
+});
+
+Route::group(['prefix' => '/writer', 'middleware' => ['role:writer']], function() {
+    Route::get('/{page?}/{action?}/{id?}', 'WriterController@index');
+});
+
+Route::group(['prefix' => '/designer', 'middleware' => ['role:designer']], function() {
+    Route::get('/{page?}/{action?}/{id?}', 'DesignerController@index');
+});*/
 

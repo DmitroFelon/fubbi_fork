@@ -196,6 +196,10 @@ return [
          * Rating system
          * */
         Ghanem\Rating\RatingServiceProvider::class,
+        /*
+         * Form Builder
+         * */
+        Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -249,6 +253,7 @@ return [
          * Roles
          * */
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        
         /**
          * Configs
          * */
@@ -256,7 +261,12 @@ return [
         /*
          * Get online users
          * */
-        'Activity' => Kim\Activity\ActivityFacade::class
+        'Activity' => Kim\Activity\ActivityFacade::class,
+        /*
+         * Form builder
+         * */
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
 
     ],

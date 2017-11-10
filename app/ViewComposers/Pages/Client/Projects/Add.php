@@ -9,6 +9,7 @@
 namespace App\ViewComposers\Pages\Client\Projects;
 
 use App\Models\Keyword;
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,22 +43,39 @@ class Add
 
     /**
      * @param \Illuminate\View\View $view
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function compose(View $view)
     {
+        $id = $this->request->route('id');
 
-        $user = $this->user;
+        if (is_null($id)) {
+            $project = new Project();
+            $project->client_id = $this->user->id;
+            $project->name = '';
+            $project->description = '';
+            $project->state = Project::CREATED;
+            $project->save();
+            $id = $project->id;
+            return redirect('/projects/add/'.$id);
+        } else {
+            $project = Project::find($id);
+        }
 
-        $projects = Cache::remember('projects-user-'.$user->id, Carbon::now()->addMinutes(10), function () {
-            return $this->user->projects()->with('workers')->get();
-        });
-        
+        if (! $project instanceof Project) {
+            abort(404);
+        }
+
+        if($project->client_id != $this->user->id){
+            abort(404);
+        }
+
         $keywords = Cache::remember('keywords', Carbon::now()->addMinutes(10), function () {
             return Keyword::groupBy('text')->get();
         });
 
-        $view->with('projects', $projects);
-        
         $view->with('keywords', $keywords->toArray());
+
+        $view->with('project', $project);
     }
 }

@@ -1,7 +1,9 @@
 @extends('master')
 
 @section('content')
-    {{--TODO create a project, redirect to page with new project id--}}
+    <form>
+
+    </form>
 @endsection
 
 @section('script')

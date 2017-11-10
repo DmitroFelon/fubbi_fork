@@ -1,5 +1,5 @@
 @extends('master')
 
 @section('content')
-    edit
+    @includeIf('pages.client.projects.states.'.$project->state)
 @endsection

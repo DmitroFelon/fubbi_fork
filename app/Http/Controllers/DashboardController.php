@@ -19,14 +19,13 @@ use Illuminate\Support\Facades\View;
  */
 class DashboardController extends Controller
 {
-   
-
     /**
      * DashboardController constructor.
      *
      */
     public function __construct()
     {
+
     }
 
     /**

@@ -1,5 +1,6 @@
 @extends('master')
 
+
 @section('content')
-    {{$project->name}}
+    alerts
 @endsection
