@@ -27,7 +27,7 @@
 
         tag_themes_input.tagsinput({
             allowDuplicates: false,
-            itemValue:'text',
+            itemValue:'text ',
             confirmKeys: [13, 44, 8],
             maxTags: 20,
             trimValue: true,
