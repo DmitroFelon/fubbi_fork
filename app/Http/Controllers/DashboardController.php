@@ -40,8 +40,7 @@ class DashboardController extends Controller
         $role = $user->getRole();
         
         $action = (isset($action)) ? '.'.$action : '';
-
-        //admin for test
+        
         if (View::exists("pages.{$role}.{$page}{$action}")) {
             return view("pages.{$role}.{$page}{$action}");
         }

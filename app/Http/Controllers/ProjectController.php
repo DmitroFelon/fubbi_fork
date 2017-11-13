@@ -16,6 +16,7 @@ class ProjectController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
+        
     }
 
     /**
@@ -76,7 +77,7 @@ class ProjectController extends Controller
     {
         abort_if($project->client_id != $this->request->user()->id, 404);
 
-        return view('pages.'.$this->request->user()->getRole().'.projects.single', ['project' => $project]);
+        return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
     }
 
     /**
@@ -89,7 +90,14 @@ class ProjectController extends Controller
     {
         abort_if($project->client_id != $this->request->user()->id, 404);
 
-        return view('pages.'.$this->request->user()->getRole().'.projects.edit', ['project' => $project]);
+        $data = [
+            'keywords' => Keyword::all()->toArray(),
+            'plans' => Plan::all(),
+            'articles' => Article::all(),
+            'project' => $project
+        ];
+
+        return view('pages.'.$this->request->user()->getRole().'.projects.edit', $data);
     }
 
     /**

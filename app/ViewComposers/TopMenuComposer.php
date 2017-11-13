@@ -98,11 +98,6 @@ class TopMenuComposer
         return [
             'Projects' => '/projects',
             'Alerts' => '/alerts',
-            'Chat' => '/chat',
-            'Book a call' => '/book_a_call',
-            'FAQ' => '/fuq',
-            'Settings' => '/settings',
-
         ];
     }
 
@@ -112,7 +107,7 @@ class TopMenuComposer
     public function account_manager()
     {
         return [
-
+            
         ];
     }
 

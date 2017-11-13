@@ -26,9 +26,7 @@
         var tag_themes_input = $('#themes-input');
 
         tag_themes_input.tagsinput({
-            allowDuplicates: false,
-            itemValue:'text ',
-            confirmKeys: [13, 44, 8],
+            confirmKeys: [13],
             maxTags: 20,
             trimValue: true,
             freeInput: true,
@@ -38,24 +36,14 @@
             $('#themes-order-list').append('<li class="list-group-item" data-value="' + event.item + '">' + event.item + '</li>');
         });
         tag_themes_input.on('itemRemoved', function (event) {
-            $('.list-group-item[data-value="' + event.item.text + '"]').remove();
+            $('.list-group-item[data-value="' + event.item + '"]').remove();
         });
-
         $("#themes-order-list").sortable({
             axis: "y",
             toArray: 'data-value',
             placeholder: "sortable-placeholder",
             forcePlaceholderSize: true,
-            opacity: 0.8,
-            update: function (event, ui) {
-
-                themes_order = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
-                tag_themes_input.tagsinput('removeAll');
-                themes_order.forEach(function (element) {
-                    tag_themes_input.tagsinput('add', {text: element});
-                });
-                tag_themes_input.tagsinput('refresh');
-            }
+            opacity: 0.8
         });
 
     </script>

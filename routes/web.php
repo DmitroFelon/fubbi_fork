@@ -67,10 +67,7 @@ Route::resource('projects', 'ProjectController');
 Route::resource('users', 'UserController');
 
 
-
-
-
-//Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
+Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
 /*
 Route::group(['prefix' => '/', 'middleware' => ['role:client']], function() {
     Route::get('/{page?}/{action?}/{id?}', 'ClientController@index');

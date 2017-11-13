@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
+use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,10 +24,19 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(GateContract $gate)
     {
-        $this->registerPolicies();
+        $this->registerPolicies($gate);
 
-        //
+        $gate->before(function (User $user, $ability) {
+            if ($user->getRole() == 'admin') {
+                return true;
+            }
+            return false;
+        });
+
+        $gate->define('manage-project', function (User $user, Project $project) {
+            return $user->id === $project->client_id;
+        });
     }
 }
