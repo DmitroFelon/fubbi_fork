@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Plan;
@@ -60,7 +61,7 @@ class ProjectController extends Controller
 	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request)
+	public function store(StoreProject $request)
 	{
 		//
 	}
@@ -103,7 +104,7 @@ class ProjectController extends Controller
 	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update(StoreProject $request, $id)
 	{
 		//
 	}

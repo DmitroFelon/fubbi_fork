@@ -1,3 +1,4 @@
+@include('partials.errors')
 <div class="">
     <ul class="nav nav-tabs">
         <li class="active">

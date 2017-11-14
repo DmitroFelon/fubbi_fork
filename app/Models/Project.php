@@ -45,113 +45,128 @@ use Venturecraft\Revisionable\RevisionableTrait;
  */
 class Project extends Model
 {
-    use Keywords;
-    use States;
-    use Workers;
-    use Teams;
-    use Articles;
-    use Topics;
-    use RevisionableTrait;
-    use Metable;
+	use Keywords;
+	use States;
+	use Workers;
+	use Teams;
+	use Articles;
+	use Topics;
+	use RevisionableTrait;
+	use Metable;
 
-    /**
-     * @const string
-     */
-    const CREATED = 'created';
-    
-    /**
-     * @const string
-     */
-    const PLAN_SELECTION = 'plan_selection';
+	/**
+	 * @const string
+	 */
+	const CREATED = 'created';
 
-    /**
-     * @const string
-     */
-    const QUIZ_FILLING = 'quiz_filling';
+	/**
+	 * @const string
+	 */
+	const PLAN_SELECTION = 'plan_selection';
 
-    /**
-     * @const string
-     */
-    const KEYWORDS_FILLING = 'keywords_filling';
+	/**
+	 * @const string
+	 */
+	const QUIZ_FILLING = 'quiz_filling';
 
-    /**
-     * @const string
-     */
-    const MANAGER_REVIEW = 'on_manager_review';
+	/**
+	 * @const string
+	 */
+	const KEYWORDS_FILLING = 'keywords_filling';
 
-    /**
-     * @const string
-     */
-    const PROCESSING = 'processing';
+	/**
+	 * @const string
+	 */
+	const MANAGER_REVIEW = 'on_manager_review';
 
-    /**
-     * @const string
-     */
-    const CLIENT_REVIEW = 'on_client_review';
+	/**
+	 * @const string
+	 */
+	const PROCESSING = 'processing';
 
-    /**
-     * @const string
-     */
-    const ACCEPTED_BY_CLIENT = 'accepted_by_client';
+	/**
+	 * @const string
+	 */
+	const CLIENT_REVIEW = 'on_client_review';
 
-    /**
-     * @const string
-     */
-    const REJECTED_BY_CLIENT = 'rejected_by_client';
+	/**
+	 * @const string
+	 */
+	const ACCEPTED_BY_CLIENT = 'accepted_by_client';
 
-    /**
-     * @const string
-     */
-    const COMPLETED = 'completed';
+	/**
+	 * @const string
+	 */
+	const REJECTED_BY_CLIENT = 'rejected_by_client';
 
-    /**
-     * @var bool
-     */
-    protected $revisionEnabled = true;
+	/**
+	 * @const string
+	 */
+	const COMPLETED = 'completed';
 
-    /**
-     * @var bool
-     */
-    protected $revisionCleanup = true;
+	/**
+	 * @var bool
+	 */
+	protected $revisionEnabled = true;
 
-    /**
-     * @var int
-     */
-    protected $historyLimit = 200;
+	/**
+	 * @var bool
+	 */
+	protected $revisionCleanup = true;
 
-    /**
-     * @var bool
-     */
-    protected $revisionCreationsEnabled = true;
+	/**
+	 * @var int
+	 */
+	protected $historyLimit = 200;
 
-    /**
-     * Additional observable events.
-     */
-    protected $observables = [
-        'attachKeywords',
-        'detachKeywords',
-        'syncKeywords',
-        'attachWorkers',
-        'detachWorkers',
-        'syncWorkers',
-        'setState',
-    ];
+	/**
+	 * @var bool
+	 */
+	protected $revisionCreationsEnabled = true;
 
-    /**
-     * Project constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-    }
+	/**
+	 * Additional observable events.
+	 */
+	protected $observables = [
+		'attachKeywords',
+		'detachKeywords',
+		'syncKeywords',
+		'attachWorkers',
+		'detachWorkers',
+		'syncWorkers',
+		'setState',
+	];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function client()
-    {
-        return $this->belongsTo(User::class, 'client_id');
-    }
+	protected $casts = [
+		'themes'                => 'array',
+		'questions'             => 'array',
+		'relevance'             => 'array',
+		'quora_account'         => 'array',
+		'seo_company'           => 'array',
+		'article_example'       => 'array',
+		'compliance_guidelines' => 'array',
+		'branding_guidelines'   => 'array',
+		'avoid_keywords'        => 'array',
+		'image_samples'         => 'array',
+		'image_webpages'        => 'array',
+		'google_access_emails'  => 'array',
+	];
+
+	/**
+	 * Project constructor.
+	 *
+	 * @param array $attributes
+	 */
+	public function __construct(array $attributes = [])
+	{
+		parent::__construct($attributes);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function client()
+	{
+		return $this->belongsTo(User::class, 'client_id');
+	}
 }
