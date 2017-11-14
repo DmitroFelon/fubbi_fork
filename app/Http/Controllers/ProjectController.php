@@ -16,7 +16,6 @@ class ProjectController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-        
     }
 
     /**
@@ -30,11 +29,9 @@ class ProjectController extends Controller
             case 'admin':
                 $projects = Project::all();
                 break;
-            case 'client':
+            default:
                 $projects = $this->request->user()->projects()->get();
                 break;
-            default:
-                $projects = [];
         }
 
         return view('pages.'.$this->request->user()->getRole().'.projects.index', ['projects' => $projects]);
@@ -75,7 +72,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        abort_if($project->client_id != $this->request->user()->id, 404);
+        abort_if($project->client_id != $this->request->user()->id, 403);
 
         return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
     }

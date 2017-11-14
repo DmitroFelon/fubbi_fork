@@ -28,15 +28,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        $gate->before(function (User $user, $ability) {
-            if ($user->getRole() == 'admin') {
-                return true;
-            }
-            return false;
-        });
 
-        $gate->define('manage-project', function (User $user, Project $project) {
-            return $user->id === $project->client_id;
-        });
     }
 }
