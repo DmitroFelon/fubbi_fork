@@ -62,7 +62,7 @@ function isRevisionArray(Revision $history, $model, $parameter)
     return $result.$added_string_result.$removed_string;
 }
 
-Route::resource('projects', 'ProjectController');
+Route::resource('projects', 'ProjectController')->middleware('auth');
 
 Route::resource('users', 'UserController');
 
