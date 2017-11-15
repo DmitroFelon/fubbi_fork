@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\View;
 class ProjectController extends Controller
 {
 	protected $request;
-	
 
 	public function __construct(Request $request)
 	{
@@ -64,7 +63,7 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request)
 	{
-		//
+		 
 	}
 
 	/**
