@@ -1,5 +1,5 @@
 @extends('master')
 
 @section('content')
-    {{$project->name}}
+    {{$project->id}}
 @endsection

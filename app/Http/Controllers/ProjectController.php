@@ -8,6 +8,8 @@ use App\Models\Keyword;
 use App\Models\Plan;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
 class ProjectController extends Controller
@@ -61,9 +63,18 @@ class ProjectController extends Controller
 	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(StoreProject $request)
+	public function store(StoreProject $request, Project $project)
 	{
-		 
+
+		$project->client_id = Auth::user()->id;
+
+		$project->setState(Project::CREATED);
+
+		$project->setMeta($request->except(['_token']));
+
+		$project->save();
+
+		dd($project->id);
 	}
 
 	/**
@@ -85,28 +96,29 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-		abort_if($project->client_id != $this->request->user()->id, 404);
-
 		$data = [
 			'keywords' => Keyword::all()->toArray(),
 			'plans'    => Plan::all(),
 			'articles' => Article::all(),
 			'project'  => $project,
 		];
-
 		return view('pages.'.$this->request->user()->getRole().'.projects.edit', $data);
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  int $id
+	 * @param \App\Http\Requests\StoreProject|\Illuminate\Http\Request $request
+	 * @param \App\Models\Project $project
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(StoreProject $request, $id)
+	public function update(StoreProject $request, Project $project)
 	{
-		//
+		$project->setMeta($request->except(['_token']));
+
+		$project->save();
+
+		return redirect()->action('ProjectController@index');
 	}
 
 	/**

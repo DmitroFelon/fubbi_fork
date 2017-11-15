@@ -1,7 +1,7 @@
 <div class="project-card col-xs-3 col-sm-3 col-md-3 col-lg-3">
     <div>
         <div class="project-name">
-            <a href="{{action('ProjectController@show', ['id' => $project->id])}}">{{$project->name}}</a>
+            <a href="{{action('ProjectController@show', ['id' => $project->id])}}">{{$project->id}}</a>
         </div>
         <div class="project-edit">
             <a class="text-muted" href="{{action('ProjectController@edit', ['id' => $project->id])}}">Edit</a>

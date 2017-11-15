@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Project\Articles;
+use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\Keywords;
 use App\Models\Traits\Project\States;
 use App\Models\Traits\Project\Teams;
@@ -37,7 +38,6 @@ use Venturecraft\Revisionable\RevisionableTrait;
  * @property \Carbon\Carbon|null $updated_at
  * @method static Builder|\App\Models\Project whereClientId($value)
  * @method static Builder|\App\Models\Project whereCreatedAt($value)
- * @method static Builder|\App\Models\Project whereDescription($value)
  * @method static Builder|\App\Models\Project whereId($value)
  * @method static Builder|\App\Models\Project whereName($value)
  * @method static Builder|\App\Models\Project whereState($value)
@@ -53,6 +53,7 @@ class Project extends Model
 	use Topics;
 	use RevisionableTrait;
 	use Metable;
+	use FormProjectAccessors;
 
 	/**
 	 * @const string
@@ -135,21 +136,6 @@ class Project extends Model
 		'detachWorkers',
 		'syncWorkers',
 		'setState',
-	];
-
-	protected $casts = [
-		'themes'                => 'array',
-		'questions'             => 'array',
-		'relevance'             => 'array',
-		'quora_account'         => 'array',
-		'seo_company'           => 'array',
-		'article_example'       => 'array',
-		'compliance_guidelines' => 'array',
-		'branding_guidelines'   => 'array',
-		'avoid_keywords'        => 'array',
-		'image_samples'         => 'array',
-		'image_webpages'        => 'array',
-		'google_access_emails'  => 'array',
 	];
 
 	/**

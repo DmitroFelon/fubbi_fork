@@ -1,8 +1,9 @@
 @extends('master')
 
 @section('content')
-    {!! Form::model($project, ['method' => 'PUT', 'action' => ['ProjectController@store']]) !!}
+    {!! Form::model($project, ['method' => 'PUT', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@update', 'id' => $project->id]]) !!}
     @include('pages.client.projects.form')
+    {!! Form::submit('Save', ['class' => 'btn btn-success form-control']) !!}
     {!! Form::close() !!}
 @endsection
 
