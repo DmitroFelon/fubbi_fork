@@ -13,6 +13,8 @@ use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Metable\Metable;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Venturecraft\Revisionable\Revision;
 use Venturecraft\Revisionable\RevisionableTrait;
 
@@ -43,7 +45,7 @@ use Venturecraft\Revisionable\RevisionableTrait;
  * @method static Builder|\App\Models\Project whereState($value)
  * @method static Builder|\App\Models\Project whereUpdatedAt($value)
  */
-class Project extends Model
+class Project extends Model implements HasMedia
 {
 	use Keywords;
 	use States;
@@ -54,6 +56,7 @@ class Project extends Model
 	use RevisionableTrait;
 	use Metable;
 	use FormProjectAccessors;
+	use HasMediaTrait;
 
 	/**
 	 * @const string

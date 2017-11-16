@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    {!! Form::open(['method' => 'POST', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@store']]) !!}
+    {!! Form::open(['files' => true, 'method' => 'POST', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@store']]) !!}
 
     @include('pages.client.projects.form')
     <div class='form-group'>

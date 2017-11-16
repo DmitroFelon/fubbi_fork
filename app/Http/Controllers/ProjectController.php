@@ -72,6 +72,10 @@ class ProjectController extends Controller
 
 		$project->setMeta($request->except(['_token']));
 
+		foreach ($request->file('article_images') as $file){
+			$project->addMedia($file)->toMediaCollection('article_images');
+		}
+
 		$project->save();
 
 		dd($project->id);
@@ -96,6 +100,8 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
+
+
 		$data = [
 			'keywords' => Keyword::all()->toArray(),
 			'plans'    => Plan::all(),
