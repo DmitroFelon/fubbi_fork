@@ -24,16 +24,13 @@ class AppServiceProvider extends ServiceProvider
         Project::observe(ProjectObserver::class);
 
         Form::component('bsText', 'components.form.text',
-            ['name', 'value', 'label', 'description', 'attributes'=> []]
+            ['name', 'value', 'label', 'description', 'attributes'=> [], 'type'=>'']
         );
         
         Form::component('bsSelect', 'components.form.select',
             ['name', 'list', 'selected', 'label', 'description', 'select_attributes' => [], 'options_attributes'=> []]
         );
 
-        Form::component('bsTagInput', 'components.form.tag-input',
-            ['name', 'label', 'description', 'attributes'=> []]
-        );
     }
 
     /**
