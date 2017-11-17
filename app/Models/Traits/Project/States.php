@@ -30,7 +30,7 @@ trait States
 
     /**
      * @param string $state
-     * @return bool
+     * @return App\Models\Project
      * @throws \Exception
      */
     public function setState($state)
@@ -47,11 +47,9 @@ trait States
         if ($this->isDirty()) {
             $this->save();
             $this->fireModelEvent('setState', false);
-
-            return true;
         }
 
-        return true;
+        return $this;
     }
 
     public function validateState($state)
