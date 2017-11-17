@@ -19,6 +19,7 @@
         "spatie/laravel-medialibrary": "^6.0.0",
         "venturecraft/revisionable": "^1.28",
         "webmozart/assert": "^1.2",
+        "xinax/laravel-gettext": "^4.0",
         "zizaco/entrust": "^1.8"
     },
     "require-dev": {

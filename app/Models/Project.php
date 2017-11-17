@@ -45,6 +45,7 @@ use Venturecraft\Revisionable\RevisionableTrait;
  * @method static Builder|\App\Models\Project whereName($value)
  * @method static Builder|\App\Models\Project whereState($value)
  * @method static Builder|\App\Models\Project whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
  */
 class Project extends Model implements HasMedia
 {

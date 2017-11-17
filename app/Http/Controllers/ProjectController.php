@@ -12,10 +12,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
+/**
+ * Class ProjectController
+ *
+ * @package App\Http\Controllers
+ */
 class ProjectController extends Controller
 {
+	/**
+	 * @var \Illuminate\Http\Request
+	 */
 	protected $request;
 
+	/**
+	 * ProjectController constructor.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 */
 	public function __construct(Request $request)
 	{
 		$this->request = $request;
