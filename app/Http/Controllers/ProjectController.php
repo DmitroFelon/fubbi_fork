@@ -73,18 +73,7 @@ class ProjectController extends Controller
 
 		$project->setMeta($request->except(['_token']));
 
-		foreach ($request->file('article_images') as $file) {
-			$project->addMedia($file)->toMediaCollection('article_images');
-		}
-		foreach ($request->file('compliance_guideline') as $file) {
-			$project->addMedia($file)->toMediaCollection('compliance_guideline');
-		}
-		foreach ($request->file('logo') as $file) {
-			$project->addMedia($file)->toMediaCollection('logo');
-		}
-		foreach ($request->file('ready_content') as $file) {
-			$project->addMedia($file)->toMediaCollection('ready_content');
-		}
+		$project->addFiles($request);
 
 		$project->save();
 
@@ -110,14 +99,12 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-		$data = [
+		return view('pages.'.$this->request->user()->getRole().'.projects.edit', [
 			'keywords' => Keyword::all()->toArray(),
 			'plans'    => Plan::all(),
 			'articles' => Article::all(),
 			'project'  => $project,
-		];
-
-		return view('pages.'.$this->request->user()->getRole().'.projects.edit', $data);
+		]);
 	}
 
 	/**

@@ -12,6 +12,7 @@ use App\Models\Traits\Project\Workers;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Kodeine\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
@@ -157,5 +158,21 @@ class Project extends Model implements HasMedia
 	public function client()
 	{
 		return $this->belongsTo(User::class, 'client_id');
+	}
+
+	public function addFiles(Request $request)
+	{
+		foreach ($request->file('article_images') as $file) {
+			$this->addMedia($file)->toMediaCollection('article_images');
+		}
+		foreach ($request->file('compliance_guideline') as $file) {
+			$this->addMedia($file)->toMediaCollection('compliance_guideline');
+		}
+		foreach ($request->file('logo') as $file) {
+			$this->addMedia($file)->toMediaCollection('logo');
+		}
+		foreach ($request->file('ready_content') as $file) {
+			$this->addMedia($file)->toMediaCollection('ready_content');
+		}
 	}
 }
