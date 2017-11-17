@@ -65,7 +65,6 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request, Project $project)
 	{
-
 		$project->client_id = Auth::user()->id;
 
 		$project->setState(Project::CREATED);
@@ -75,10 +74,20 @@ class ProjectController extends Controller
 		foreach ($request->file('article_images') as $file){
 			$project->addMedia($file)->toMediaCollection('article_images');
 		}
+		foreach ($request->file('compliance_guideline') as $file){
+			$project->addMedia($file)->toMediaCollection('compliance_guideline');
+		}
+		foreach ($request->file('logo') as $file){
+			$project->addMedia($file)->toMediaCollection('logo');
+		}
+		foreach ($request->file('ready_content') as $file){
+			$project->addMedia($file)->toMediaCollection('ready_content');
+		}
 
 		$project->save();
 
-		dd($project->id);
+		return redirect()->action('ProjectController@index');
+
 	}
 
 	/**
@@ -100,8 +109,6 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-
-
 		$data = [
 			'keywords' => Keyword::all()->toArray(),
 			'plans'    => Plan::all(),
@@ -135,6 +142,6 @@ class ProjectController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		return redirect()->action('ProjectController@index');
 	}
 }

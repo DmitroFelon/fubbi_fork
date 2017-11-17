@@ -12,31 +12,30 @@
     <link href="{{ URL::to('css/app.css') }}" rel="stylesheet">
     <script src="{{ URL::to('js/app.js') }}" rel="stylesheet"></script>
 </head>
-
 <header>
     @include('header')
 </header>
+<body>
 
-<body class="container-fluid">
+<main role="main" class="container-fluid">
+    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        @include('partials.left-sidebar')
+    </div>
 
-<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-    @include('partials.left-sidebar')
-</div>
+    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        @yield('content')
+    </div>
 
-<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-    @yield('content')
-</div>
+    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        @include('partials.right-sidebar')
+    </div>
+</main>
 
-<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-    @include('partials.right-sidebar')
-</div>
-
-
-</body>
-
-<footer>
-    @include('footer')
+<footer class="footer">
     @yield('script')
+
+    @include('footer')
 </footer>
 
+</body>
 </html>
