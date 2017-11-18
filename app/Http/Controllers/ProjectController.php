@@ -31,6 +31,7 @@ class ProjectController extends Controller
 	 */
 	public function __construct(Request $request)
 	{
+		
 		$this->request = $request;
 		$this->authorizeResource(Project::class);
 	}

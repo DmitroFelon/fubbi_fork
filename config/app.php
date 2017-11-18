@@ -200,6 +200,10 @@ return [
          * Form Builder
          * */
         Collective\Html\HtmlServiceProvider::class,
+        /*
+         * Langauge manager
+         * */
+        Xinax\LaravelGettext\LaravelGettextServiceProvider::class
     ],
 
     /*
