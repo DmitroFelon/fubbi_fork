@@ -11,6 +11,7 @@ return array(
     'App\\Exceptions\\Project\\ImpossibleState' => $baseDir . '/app/Exceptions/Project/ImpossibleState.php',
     'App\\Exceptions\\Project\\WrongTransition' => $baseDir . '/app/Exceptions/Project/WrongTransition.php',
     'App\\Http\\Controllers\\AdminController' => $baseDir . '/app/Http/Controllers/AdminController.php',
+    'App\\Http\\Controllers\\AnnotationController' => $baseDir . '/app/Http/Controllers/AnnotationController.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
     'App\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',

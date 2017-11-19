@@ -66,26 +66,6 @@ Route::resource('projects', 'ProjectController')->middleware('auth');
 
 Route::resource('users', 'UserController');
 
+Route::apiResource('annotations', 'AnnotationController');
 
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
-/*
-Route::group(['prefix' => '/', 'middleware' => ['role:client']], function() {
-    Route::get('/{page?}/{action?}/{id?}', 'ClientController@index');
-});
-
-Route::group(['prefix' => 'admin', 'middleware' => ['role:admin']], function() {
-    Route::get('/{page?}/{action?}/{id?}', 'AdminController@index');
-});
-
-Route::group(['prefix' => '/manager', 'middleware' => ['role:account_manager']], function() {
-    Route::get('/{page?}/{action?}/{id?}', 'ManagerController@index');
-});
-
-Route::group(['prefix' => '/writer', 'middleware' => ['role:writer']], function() {
-    Route::get('/{page?}/{action?}/{id?}', 'WriterController@index');
-});
-
-Route::group(['prefix' => '/designer', 'middleware' => ['role:designer']], function() {
-    Route::get('/{page?}/{action?}/{id?}', 'DesignerController@index');
-});*/
-
