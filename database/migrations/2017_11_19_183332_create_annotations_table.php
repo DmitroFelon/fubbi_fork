@@ -15,7 +15,7 @@ class CreateAnnotationsTable extends Migration
     {
         Schema::create('annotations', function (Blueprint $table) {
             $table->increments('id')->index();
-            $table->integer('article_id');
+            $table->integer('article_id')->index();
             $table->integer('user_id');
             $table->text('text')->nullable();
             $table->text('quote')->nullable();

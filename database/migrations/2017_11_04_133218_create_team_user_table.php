@@ -14,8 +14,8 @@ class CreateTeamUserTable extends Migration
     public function up()
     {
         Schema::create('team_user', function (Blueprint $table) {
-            $table->integer('team_id');
-            $table->integer('user_id');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

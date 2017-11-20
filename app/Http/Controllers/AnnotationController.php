@@ -28,7 +28,6 @@ class AnnotationController extends Controller
      */
     public function store(Request $request, Annotation $annotation)
     {
-
         $data = $request->input();
 
         $annotation->fill($request->input());

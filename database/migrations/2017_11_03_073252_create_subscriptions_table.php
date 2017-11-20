@@ -14,8 +14,8 @@ class CreateSubscriptionsTable extends Migration
     public function up()
     {
         Schema::create('subscriptions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
+            $table->increments('id')->index();
+            $table->integer('user_id')->index();
             $table->string('name');
             $table->string('stripe_id');
             $table->string('stripe_plan');
