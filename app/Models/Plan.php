@@ -17,5 +17,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plan extends Model
 {
-    //
+	public $timestamps = false;
+	public $incrementing = false;
+	protected $fillable = [
+		'id',
+		'name',
+		'amount',
+		'interval',
+		'trial_period'
+	];
 }

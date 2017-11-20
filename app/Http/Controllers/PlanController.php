@@ -7,79 +7,79 @@ use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		return Plan::all();
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		return ['plans form'];
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request, Plan $plan)
+	{
+		$plan->fill($request->input())->save();
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Plan $plan)
-    {
-        //
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Models\Plan $plan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Plan $plan)
+	{
+		return $plan;
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Plan $plan)
-    {
-        //
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\Models\Plan $plan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(Plan $plan)
+	{
+		return $plan;
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Plan $plan)
-    {
-        //
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \App\Models\Plan $plan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, Plan $plan)
+	{
+		$plan->fill($request->input())->save();
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Plan $plan)
-    {
-        //
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Models\Plan $plan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(Plan $plan)
+	{
+		$plan->delete();
+	}
 }

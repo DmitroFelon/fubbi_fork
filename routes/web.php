@@ -18,7 +18,7 @@ use Venturecraft\Revisionable\Revision;
 
 Auth::routes();
 
-function isRevisionArray(Revision $history, $model, $parameter)
+/*function isRevisionArray(Revision $history, $model, $parameter)
 {
     $new = $history->newValue();
     $old = $history->oldValue();
@@ -60,12 +60,17 @@ function isRevisionArray(Revision $history, $model, $parameter)
     $removed_string = ($removed_string != '') ? ' removed '.$removed_string : '';
 
     return $result.$added_string_result.$removed_string;
-}
+}*/
 
 Route::resource('projects', 'ProjectController')->middleware('auth');
 
-Route::resource('users', 'UserController');
+Route::resource('annotations', 'AnnotationController')->middleware('auth');
 
-Route::apiResource('annotations', 'AnnotationController');
+Route::resource('users', 'UserController')->middleware('auth');
 
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
+
+Route::post(
+    'stripe/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);
