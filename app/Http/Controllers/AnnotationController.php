@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Annotation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AnnotationController extends Controller
 {
 
     public function index(Request $request){
         $annotations = Annotation::with([
-            'user' => function($query)
+            'user' => function(Query $query)
         {
-            $query->addSelect(['id', 'CONCAT_WS(" ", `first_name`, `last_name`) as name']);
+            $query->addSelect(['id']);
+            $query->addSelect(DB::raw('CONCAT_WS(" ", `first_name`, `last_name`) as name'));
         }
         ])->get();
 
