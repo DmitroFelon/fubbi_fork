@@ -13,7 +13,7 @@ class AnnotationController extends Controller
         $annotations = Annotation::with([
             'user' => function($query)
         {
-            $query->addSelect(['id', 'first_name as name']);
+            $query->addSelect(['id', 'CONCAT_WS(" ", `first_name`, `last_name`) as name']);
         }
         ])->get();
 
