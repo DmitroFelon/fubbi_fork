@@ -16,40 +16,60 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		Schema::defaultStringLength(191);
 
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-       
-        Project::observe(ProjectObserver::class);
+		\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        Plan::observe(PlanObserver::class);
+		$this->observers();
 
-        User::observe(UserObserver::class);
+		$this->formComponents();
+	}
 
-        Form::component('bsText', 'components.form.text',
-            ['name', 'value', 'label', 'description', 'attributes'=> [], 'type'=>'']
-        );
-        
-        Form::component('bsSelect', 'components.form.select',
-            ['name', 'list', 'selected', 'label', 'description', 'select_attributes' => [], 'options_attributes'=> []]
-        );
+	private function observers()
+	{
+		Project::observe(ProjectObserver::class);
 
-    }
+		Plan::observe(PlanObserver::class);
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+		User::observe(UserObserver::class);
+	}
+
+	private function formComponents()
+	{
+		Form::component('bsText', 'components.form.text', [
+				'name',
+				'value',
+				'label',
+				'description',
+				'attributes' => [],
+				'type'       => '',
+			]);
+
+		Form::component('bsSelect', 'components.form.select', [
+				'name',
+				'list',
+				'selected',
+				'label',
+				'description',
+				'select_attributes' => [],
+				'options_attributes' => [],
+			]);
+	}
+
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		//
+	}
 }
