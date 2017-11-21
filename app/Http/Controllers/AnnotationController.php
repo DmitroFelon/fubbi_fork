@@ -13,7 +13,7 @@ class AnnotationController extends Controller
         $annotations = Annotation::with([
             'user' => function($query)
         {
-            $query->addSelect(['id', 'name']);
+            $query->addSelect(['id', 'first_name as name']);
         }
         ])->get();
 
