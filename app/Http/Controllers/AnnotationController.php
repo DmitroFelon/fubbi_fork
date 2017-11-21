@@ -12,7 +12,7 @@ class AnnotationController extends Controller
 
     public function index(Request $request){
         $annotations = Annotation::with([
-            'user' => function(Query $query)
+            'user' => function($query)
         {
             $query->addSelect(['id']);
             $query->addSelect(DB::raw('CONCAT_WS(" ", `first_name`, `last_name`) as name'));
