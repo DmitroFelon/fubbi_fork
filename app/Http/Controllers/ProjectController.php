@@ -84,6 +84,12 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request, Project $project)
 	{
+		$subscription = session('subscription');
+
+		$plan = $subscription->stripe_plan;
+
+		$task = config('fubbi.plans');
+
 		$project->client_id = Auth::user()->id;
 
 		$project->setState(Project::CREATED);

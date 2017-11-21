@@ -1,7 +1,6 @@
 <div style="height: 150px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
     <h4 class="text-center">{{$plan->name}}</h4>
 
-
     <div class="stripe-checkout-wrapper">
         <form action="{{url('subscribe')}}" method="POST">
             {{ csrf_field() }}

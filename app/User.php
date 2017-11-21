@@ -42,6 +42,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Annotation[] $annotations
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User withRole($role)
  */
 class User extends Authenticatable
 {
@@ -55,7 +57,9 @@ class User extends Authenticatable
 	 * @var array
 	 */
 	protected $fillable = [
-		'name',
+		'first_name',
+		'last_name',
+		'phone',
 		'email',
 		'password',
 	];

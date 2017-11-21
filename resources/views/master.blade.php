@@ -32,7 +32,7 @@
     </div>
 </main>
 
-<footer class="footer">
+<footer>
     @yield('script')
 
     @include('footer')

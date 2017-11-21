@@ -15,7 +15,8 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id')->index();
-            $table->integer('client_id');
+            $table->integer('client_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('subscription_id');
             $table->string('state');
             $table->timestamps();
         });

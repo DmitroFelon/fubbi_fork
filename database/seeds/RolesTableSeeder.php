@@ -16,36 +16,42 @@ class RolesTableSeeder extends Seeder
             'name' => 'admin',
             'display_name' => 'Service administrator',
             'description' => 'Admin, has all possible permissions',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'client',
             'display_name' => 'Client',
             'description' => 'Client, the most important person here',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'account_manager',
             'display_name' => 'Account Manager',
             'description' => 'Account Manager, handles non-trivial actions',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'writer',
             'display_name' => 'Writer',
             'description' => 'Writer, creates text content',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'editor',
             'display_name' => 'Editor',
             'description' => 'Editor, edits created content',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
 
         DB::table('roles')->insert([
             'name' => 'designer',
             'display_name' => 'Designer',
             'description' => 'Designer, creates appearance',
+            'created_at'  => \Carbon\Carbon::now()
         ]);
     }
 }
