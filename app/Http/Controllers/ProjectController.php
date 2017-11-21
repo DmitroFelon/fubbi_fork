@@ -9,6 +9,7 @@ use App\Models\Plan;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
@@ -64,9 +65,13 @@ class ProjectController extends Controller
 	{
 		$step = ($request->input('step') != null) ? $request->input('step') : 'plan';
 
+		$plans = Cache::remember('plans', 60, function (){
+			return \Stripe\Plan::all();
+		});
+
 		return view('pages.'.$this->request->user()->getRole().'.projects.create', [
 			'keywords' => Keyword::all()->toArray(),
-			'plans'    => Plan::all(),
+			'plans'    => $plans->data,
 			'articles' => Article::all(),
 			'step'     => $step,
 		]);
