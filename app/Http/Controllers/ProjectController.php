@@ -31,7 +31,7 @@ class ProjectController extends Controller
 	 */
 	public function __construct(Request $request)
 	{
-		
+
 		$this->request = $request;
 		$this->authorizeResource(Project::class);
 	}
@@ -60,12 +60,15 @@ class ProjectController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function create(Request $request)
 	{
+		$step = ($request->input('step') != null) ? $request->input('step') : 'plan';
+
 		return view('pages.'.$this->request->user()->getRole().'.projects.create', [
 			'keywords' => Keyword::all()->toArray(),
 			'plans'    => Plan::all(),
 			'articles' => Article::all(),
+			'step'     => $step,
 		]);
 	}
 

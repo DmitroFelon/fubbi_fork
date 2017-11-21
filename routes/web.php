@@ -68,6 +68,8 @@ Route::resource('annotations', 'AnnotationController')->middleware('auth');
 
 Route::resource('users', 'UserController')->middleware('auth');
 
+Route::post('subscribe', 'SubscriptionController@subscribe')->middleware('auth');
+
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
 
 Route::post(

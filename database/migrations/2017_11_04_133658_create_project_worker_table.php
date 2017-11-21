@@ -14,7 +14,7 @@ class CreateProjectWorkerTable extends Migration
     public function up()
     {
         Schema::create('project_worker', function (Blueprint $table) {
-            $table->integer('project_id');
+            $table->integer('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->integer('user_id');
         });
     }

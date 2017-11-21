@@ -22,7 +22,7 @@
         }
     </style>
     <link rel="stylesheet" href="http://assets.annotateit.org/annotator/v1.2.7/annotator.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+
     <script src="http://assets.annotateit.org/annotator/v1.2.7/annotator-full.min.js"></script>
 
     <script>

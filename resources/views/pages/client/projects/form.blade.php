@@ -1,27 +1,18 @@
 @include('partials.errors')
-<div class="">
-    <ul class="nav nav-tabs">
-        <li class="">
-            <a href="#plan-wrapper" data-toggle="tab">Plan</a>
-        </li>
-        <li class="active">
-            <a href="#quiz-wrapper" data-toggle="tab">Quiz</a>
-        </li>
-        <li class="">
-            <a href="#keywords-wrapper" data-toggle="tab">Keywords</a>
-        </li>
-    </ul>
-    <div class="tab-content clearfix">
-        <div class="tab tab-pane" id="plan-wrapper">
+<div>
+    @switch($step)
+        @case('plan')
             @include('pages.client.projects.tabs.plan')
-        </div>
-        <div class="tab tab-pane active" id="quiz-wrapper">
+            @break
+        @case('quiz')
             @include('pages.client.projects.tabs.quiz')
-        </div>
-        <div class="tab tab-pane" id="keywords-wrapper">
+            @break
+        @case('keywords')
             @include('pages.client.projects.tabs.keywords')
-        </div>
-    </div>
+            @break
+        @default
+            error
+    @endswitch
 </div>
 @section('script')
 
@@ -41,14 +32,14 @@
             $('#themes-order-list').append('' +
                     '<li class="list-group-item" data-value="' + event.item + '">' + event.item + '</li>'
             );
-            var sorted = $("#themes-order-list").sortable( "toArray" , {attribute: 'data-value'});
+            var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
             $("#themes_order").val(sorted.join());
         });
         tag_themes_input.on('itemRemoved', function (event) {
             $('.list-group-item[data-value="' + event.item + '"]').remove();
-            var sorted = $("#themes-order-list").sortable( "toArray" , {attribute: 'data-value'});
+            var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
             $("#themes_order").val(sorted.join());
-            if(tag_themes_input.val() == ''){
+            if (tag_themes_input.val() == '') {
                 $("#themes-order-list-wrapper").addClass('hide');
             }
         });
@@ -58,31 +49,39 @@
             placeholder: "sortable-placeholder",
             forcePlaceholderSize: true,
             opacity: 0.8,
-            stop: function( event, ui ) {
-                var sorted = $("#themes-order-list").sortable( "toArray" , {attribute: 'data-value'});
+            stop: function (event, ui) {
+                var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
                 $("#themes_order").val(sorted.join());
             }
         });
-        $(".has-error").on('click', function(){$(this).removeClass("has-error")});
-        $("input").on('keydown', function(event){
-            if (event.keyCode == 13) {return false}
+        $(".has-error").on('click', function () {
+            $(this).removeClass("has-error")
+        });
+        $("input").on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                return false
+            }
         })
     </script>
     <style>
         .sortable-placeholder {
             background-color: rgba(128, 128, 128, 0.15);
         }
-        .bootstrap-tagsinput{
+
+        .bootstrap-tagsinput {
             display: block;
         }
-        .has-error{
+
+        .has-error {
             border-color: rgba(247, 53, 53, 0.8);
             box-shadow: 0 1px 1px rgba(195, 63, 63, 0.44) inset, 0 0 8px rgba(193, 25, 25, 0.83);
             outline: 0 none;
         }
+
         .panel-heading.collapsible {
             cursor: pointer;
         }
+
         .panel-heading.collapsible > h4 > i {
             float: right;
         }

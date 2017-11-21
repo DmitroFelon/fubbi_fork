@@ -1,5 +1,6 @@
+<br>
+{!! Form::open(['files' => true, 'method' => 'POST', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@store']]) !!}
 <fieldset>
-    <br>
     {!! Form::hidden('themes_order', null, ['id'=>'themes_order']) !!}
     {!! Form::bsText('themes', null, __("Type content themes here"), __("Type at least 10 themes. Separate by coma or click 'enter'."), [ 'data-role'=>"tagsinput"]) !!}
 
@@ -125,5 +126,7 @@
     {!! Form::bsText('cta', null, __("Do you want us to add calls to action (CTA) to the end of your articles?"), __("Examples include phoning your office for a complimentary consultation or review. Other times it might be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with specific information i.e. if you want them to download a free report, please share a link to the download offer. If you want people to phone your office please provide details of what you’ll share on the phone call. We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
     {!! Form::bsText('ready_content', null, __("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts."), __("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts"), ['multiple'], 'file') !!}
     {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', __("Do you want to review outlines before we send you articles to approve?"), __("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}
-
 </fieldset>
+{!! Form::submit('Save', ['class' => 'btn btn-success form-control']) !!}
+{!! Form::close() !!}
+
