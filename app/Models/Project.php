@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Kodeine\Metable\Metable;
+use Laravel\Cashier\Subscription;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Venturecraft\Revisionable\Revision;
@@ -68,17 +69,17 @@ class Project extends Model implements HasMedia
 	/**
 	 * @const string
 	 */
-	const PLAN_SELECTION = 'plan_selection';
+	const PLAN_SELECTION = 'plan';
 
 	/**
 	 * @const string
 	 */
-	const QUIZ_FILLING = 'quiz_filling';
+	const QUIZ_FILLING = 'quiz';
 
 	/**
 	 * @const string
 	 */
-	const KEYWORDS_FILLING = 'keywords_filling';
+	const KEYWORDS_FILLING = 'keywords';
 
 	/**
 	 * @const string
@@ -161,19 +162,33 @@ class Project extends Model implements HasMedia
 		return $this->belongsTo(User::class, 'client_id');
 	}
 
+	public function task()
+	{
+		return $this->hasOne(Task::class);
+	}
+
+	public function subscription()
+	{
+		return $this->belongsTo(Subscription::class);
+	}
+
 	public function addFiles(Request $request)
 	{
-		foreach ($request->file('article_images') as $file) {
-			$this->addMedia($file)->toMediaCollection('article_images');
+
+		$file_inputs = [
+			'article_images',
+			'compliance_guideline',
+			'logo',
+			'ready_content'
+		];
+
+		foreach ($file_inputs as $file_input) {
+			if($request->hasFile($file_input)){
+				foreach ($request->file($file_input) as $file) {
+					$this->addMedia($file)->toMediaCollection($file_input);
+				}
+			}
 		}
-		foreach ($request->file('compliance_guideline') as $file) {
-			$this->addMedia($file)->toMediaCollection('compliance_guideline');
-		}
-		foreach ($request->file('logo') as $file) {
-			$this->addMedia($file)->toMediaCollection('logo');
-		}
-		foreach ($request->file('ready_content') as $file) {
-			$this->addMedia($file)->toMediaCollection('ready_content');
-		}
+
 	}
 }

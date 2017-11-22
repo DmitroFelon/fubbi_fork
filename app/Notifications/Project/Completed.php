@@ -2,23 +2,26 @@
 
 namespace App\Notifications\Project;
 
+use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Completed extends Notification
+class Completed extends Notification  implements ShouldQueue
 {
     use Queueable;
+
+    protected $project;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param \App\Models\Project $project
      */
-    public function __construct()
+    public function __construct(Project $project )
     {
-        //
+        $this->project = $project;
     }
 
     /**
@@ -29,7 +32,7 @@ class Completed extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -40,9 +43,10 @@ class Completed extends Notification
      */
     public function toMail($notifiable)
     {
+
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->line('Project completed.')
+                    ->action('Review project', url()->action('ProjectController@show', ['id' => $this->project->id]))
                     ->line('Thank you for using our application!');
     }
 
@@ -55,7 +59,8 @@ class Completed extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'id' => $this->project->id,
+            'name' => $this->project->name
         ];
     }
 }

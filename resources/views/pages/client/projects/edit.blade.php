@@ -2,12 +2,12 @@
 
 @section('content')
 
+    <div><h2>{{$project->subscription->name}}</h2></div>
+    <div class="text-muted">{{$project->subscription->created_at}}</div>
+    <div>{{$project->subscription->stripe_plan}}</div>
+
+    @include('pages.client.projects.form')
 
 
 @endsection
 
-@section('script')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-@endsection

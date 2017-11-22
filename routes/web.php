@@ -11,10 +11,8 @@
 |
 */
 
-use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Venturecraft\Revisionable\Revision;
 
 Auth::routes();
 
@@ -72,7 +70,4 @@ Route::post('subscribe', 'SubscriptionController@subscribe')->middleware('auth')
 
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
 
-Route::post(
-    'stripe/webhook',
-    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
-);
+Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');

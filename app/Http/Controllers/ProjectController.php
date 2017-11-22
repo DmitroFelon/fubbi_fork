@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
-use App\Models\Plan;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
+use Stripe\Plan;
 
 /**
  * Class ProjectController
@@ -61,18 +61,31 @@ class ProjectController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create(Request $request)
+	public function create()
 	{
-		$step = ($request->input('step') != null) ? $request->input('step') : 'plan';
+		$step = 'plan';
 
-		$plans = Cache::remember('plans', 60, function (){
-			return \Stripe\Plan::all();
+		$public_plans = Cache::remember('public_plans', 60, function (){
+			$available_plans = [
+				'fubbi-basic-plan',
+				'fubbi-bronze-plan',
+				'fubbi-silver-plan',
+				'fubbi-gold-plan',
+			];
+
+			$filtered_plans = [];
+
+			foreach (Plan::all()->data as $plan) {
+				if(in_array($plan->id, $available_plans)){
+					$filtered_plans[] = $plan;
+				}
+			}
+
+			return $filtered_plans;
 		});
 
 		return view('pages.'.$this->request->user()->getRole().'.projects.create', [
-			'keywords' => Keyword::all()->toArray(),
-			'plans'    => $plans->data,
-			'articles' => Article::all(),
+			'plans'    => $public_plans,
 			'step'     => $step,
 		]);
 	}
@@ -89,23 +102,7 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request, Project $project)
 	{
-		$subscription = session('subscription');
-
-		$plan = $subscription->stripe_plan;
-
-		$task = config('fubbi.plans');
-
-		$project->client_id = Auth::user()->id;
-
-		$project->setState(Project::CREATED);
-
-		$project->setMeta($request->except(['_token']));
-
-		$project->addFiles($request);
-
-		$project->save();
-
-		return redirect()->action('ProjectController@index');
+		return;
 	}
 
 	/**
@@ -129,9 +126,9 @@ class ProjectController extends Controller
 	{
 		return view('pages.'.$this->request->user()->getRole().'.projects.edit', [
 			'keywords' => Keyword::all()->toArray(),
-			'plans'    => Plan::all(),
 			'articles' => Article::all(),
 			'project'  => $project,
+			'step' => $project->state
 		]);
 	}
 
@@ -144,7 +141,13 @@ class ProjectController extends Controller
 	 */
 	public function update(StoreProject $request, Project $project)
 	{
-		$project->setMeta($request->except(['_token']));
+		$project->setMeta($request->except(['_token', '_step']));
+
+		$step = $request->input('_step');
+
+		$project->addFiles($request);
+
+		$project->state = ($step == Project::QUIZ_FILLING) ? Project::KEYWORDS_FILLING : Project::QUIZ_FILLING;
 
 		$project->save();
 

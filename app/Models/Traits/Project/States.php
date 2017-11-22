@@ -17,9 +17,9 @@ trait States
 {
     protected $states = [
         'created',
-        'plan_selection',
-        'quiz_filling',
-        'keywords_filling',
+        'plan',
+        'quiz',
+        'keywords',
         'on_manager_review',
         'processing',
         'on_client_review',

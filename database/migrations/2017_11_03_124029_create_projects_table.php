@@ -17,6 +17,7 @@ class CreateProjectsTable extends Migration
             $table->increments('id')->index();
             $table->integer('client_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('subscription_id');
+            $table->string('name');
             $table->string('state');
             $table->timestamps();
         });

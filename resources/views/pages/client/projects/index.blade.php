@@ -10,30 +10,3 @@
         </div>
     </div>
 @endsection
-
-<style>
-    .project-card{
-        padding: 1em;
-        color: white;
-        font-size: 1.2em;
-    }
-    .project-card>div{
-        background-color: #ffc675;
-        height: 12em;
-        padding: 1em;
-    }
-    .project-add>div>i{
-        padding: 30% 0;
-        color: lightgreen;
-    }
-    .project-add>div>i:hover{
-        cursor: pointer;
-    }
-    .transparent{
-        background-color: rgba(0,0,0,0)!important;
-    }
-    .project-workers{
-        position: absolute;
-        bottom: 1.5em;
-    }
-</style>

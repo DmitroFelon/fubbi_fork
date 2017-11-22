@@ -2,60 +2,64 @@
 
 namespace App\Notifications\Project;
 
+use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class Created extends Notification
+class Created extends Notification  implements ShouldQueue
 {
-    use Queueable;
+	use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+	protected $project;
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
+	/**
+	 * Create a new notification instance.
+	 *
+	 * @param \App\Models\Project $project
+	 */
+	public function __construct(Project $project)
+	{
+		$this->project = $project;
+	}
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
+	/**
+	 * Get the notification's delivery channels.
+	 *
+	 * @param  mixed $notifiable
+	 * @return array
+	 */
+	public function via($notifiable)
+	{
+		return ['mail', 'database'];
+	}
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
+	/**
+	 * Get the mail representation of the notification.
+	 *
+	 * @param  mixed $notifiable
+	 * @return \Illuminate\Notifications\Messages\MailMessage
+	 */
+	public function toMail($notifiable)
+	{
+		return (new MailMessage)
+			->line('Project created.')
+			->action('Review project', url()->action('ProjectController@show', ['id' => $this->project->id]))
+			->line('Thank you for using our application!');
+	}
+
+	/**
+	 * Get the array representation of the notification.
+	 *
+	 * @param  mixed $notifiable
+	 * @return array
+	 */
+	public function toArray($notifiable)
+	{
+		return [
+			'id' => $this->project->id,
+			'name' => $this->project->name
+		];
+	}
 }

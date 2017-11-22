@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Plan;
+
 use App\Models\Project;
 use App\Models\Users\Client;
 use App\Observers\ClientObserver;
@@ -35,8 +35,6 @@ class AppServiceProvider extends ServiceProvider
 	private function observers()
 	{
 		Project::observe(ProjectObserver::class);
-
-		Plan::observe(PlanObserver::class);
 
 		User::observe(UserObserver::class);
 	}

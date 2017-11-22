@@ -1,8 +1,12 @@
 <br>
-{!! Form::open(['files' => true, 'method' => 'POST', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@store']]) !!}
+{!! Form::model($project,
+['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@update', $project->id]])
+!!}
 <fieldset>
     {!! Form::hidden('themes_order', null, ['id'=>'themes_order']) !!}
     {!! Form::bsText('themes', null, __("Type content themes here"), __("Type at least 10 themes. Separate by coma or click 'enter'."), [ 'data-role'=>"tagsinput"]) !!}
+
+    {!! Form::hidden('_step', \App\Models\Project::QUIZ_FILLING) !!}
 
     <div class="form-group @unless( isset($project) and $project->themes_order != '' ) hide @endunless"
          id="themes-order-list-wrapper">
