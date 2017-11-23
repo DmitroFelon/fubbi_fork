@@ -6,7 +6,6 @@ use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
-use App\Services\FlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -66,7 +65,7 @@ class ProjectController extends Controller
 	{
 		$step = 'plan';
 
-		$public_plans = Cache::remember('public_plans', 60, function (){
+		$public_plans = Cache::remember('public_plans', 60, function () {
 			$available_plans = [
 				'fubbi-basic-plan',
 				'fubbi-bronze-plan',
@@ -77,7 +76,7 @@ class ProjectController extends Controller
 			$filtered_plans = [];
 
 			foreach (Plan::all()->data as $plan) {
-				if(in_array($plan->id, $available_plans)){
+				if (in_array($plan->id, $available_plans)) {
 					$filtered_plans[] = $plan;
 				}
 			}
@@ -86,8 +85,8 @@ class ProjectController extends Controller
 		});
 
 		return view('pages.'.$this->request->user()->getRole().'.projects.create', [
-			'plans'    => $public_plans,
-			'step'     => $step,
+			'plans' => $public_plans,
+			'step'  => $step,
 		]);
 	}
 
@@ -114,7 +113,29 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project)
 	{
-		$media = $project->getMedia('article_images');
+		$meta_to_cast = [
+			'themes',
+			'questions',
+			'avoid_keywords',
+		];
+
+		$meta_to_skip = [
+			'themes_order',
+		];
+
+		$project->metas->transform(function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
+			if (in_array($item->key, $meta_to_cast)) {
+				$item->value = explode(', ', $item->value);
+			}
+
+			$item->value = (filter_var($item->value , FILTER_VALIDATE_URL))
+				?'<a href="'.$item->value.'">'.$item->value.'</a>'
+				:$item->value;
+
+			return (in_array($item->key, $meta_to_skip)) ? null : $item;
+		});
+
+		//die();
 
 		return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
 	}
@@ -127,11 +148,12 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
+
 		return view('pages.'.$this->request->user()->getRole().'.projects.edit', [
 			'keywords' => Keyword::all()->toArray(),
 			'articles' => Article::all(),
 			'project'  => $project,
-			'step' => $project->state
+			'step'     => $project->state,
 		]);
 	}
 
@@ -144,17 +166,36 @@ class ProjectController extends Controller
 	 */
 	public function update(StoreProject $request, Project $project)
 	{
-		$project->setMeta($request->except(['_token', '_step']));
 
-		$step = $request->input('_step');
+		if (! $request->has('_step')) {
+			abort(404);
+		}
 
-		$project->addFiles($request);
-
-		$project->state = ($step == Project::QUIZ_FILLING) ? Project::KEYWORDS_FILLING : Project::QUIZ_FILLING;
+		switch ($request->input('_step')) {
+			case Project::QUIZ_FILLING:
+				$project->setMeta($request->except([
+					'_token',
+					'_step',
+					'_method',
+					'compliance_guideline',
+					'logo',
+					'article_images',
+					'ready_content',
+				]));
+				$project->addFiles($request);
+				$project->state = Project::KEYWORDS_FILLING;
+				break;
+			case Project::KEYWORDS_FILLING:
+				$project->keywords()->sync($request->input('keywords'));
+				break;
+			default:
+				abort(404);
+				break;
+		}
 
 		$project->save();
 
-		return redirect()->action('ProjectController@index');
+		return redirect()->action('ProjectController@edit', [$project]);
 	}
 
 	/**

@@ -2,9 +2,26 @@
 
 @section('content')
 
-    <div><h2>{{$project->subscription->name}}</h2></div>
-    <div class="text-muted">{{$project->subscription->created_at}}</div>
-    <div>{{$project->subscription->stripe_plan}}</div>
+    <blockquote>
+        <div>
+            <a class="lead" target="_blank" href="{{url()->action('ProjectController@show', $project)}}">
+                {{title_case($project->subscription->name)}}
+            </a>
+            <span class="text-muted">
+               <small>
+
+                   Create at: {{$project->subscription->created_at}}
+               </small>
+            </span>
+            <span class="text-muted">
+                <small>
+                    Selected plan: {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</small>
+            </span>
+
+        </div>
+    </blockquote>
+
+
 
     @include('pages.client.projects.form')
 

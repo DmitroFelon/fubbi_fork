@@ -56,10 +56,10 @@ class Registered extends Notification implements ShouldQueue
 	{
 		$notification = NotificationPayload::make(
 			__(
-				'New user %s has beed registered. <a target="_blank" href="%s">See profile<\/a>',
-				$this->new_user->name,
-				url()->action('UserController@show', $this->new_user)
+				'New user %s has beed registered.',
+				$this->new_user->name
 			),
+			url()->action('UserController@show', $this->new_user),
 			get_class($this->new_user),
 			$this->new_user->id
 		);

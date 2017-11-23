@@ -5,13 +5,18 @@
         </li>
     @endfor
 </ul>
+{!! Form::model($project,
+['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@update', $project->id]])
+!!}
+{!! Form::hidden('_step', \App\Models\Project::KEYWORDS_FILLING) !!}
+
 <div class="tab-content clearfix">
     @for($i=1;$i<9;$i++)
         <div class="tab tab-pane {{($i==1)?'active':''}}" id="keyword-{{$i}}">
             @foreach(array_chunk($keywords, 10)[$i] as $keyword)
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <label>
-                        <input name="keywords[]" type="checkbox" value="{{$keyword["text"]}}">
+                        <input @if($project->keywords->find($keyword["id"]) != null) checked="checked" @endif name="keywords[]" type="checkbox" value="{{$keyword["id"]}}">
                         {{ucfirst($keyword["text"])}}
                     </label>
                 </div>
@@ -19,3 +24,5 @@
         </div>
     @endfor
 </div>
+{!! Form::submit('Save', ['class' => 'btn btn-success form-control']) !!}
+{!! Form::close() !!}

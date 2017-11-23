@@ -12,20 +12,23 @@ class NotificationPayload
 {
 	public $message;
 
+	public $link;
+
 	public $relation;
 
 	public $relation_id;
 
-	public function __construct(string $message, string $relation = null, int $relation_id = null)
+	public function __construct(string $message, string $link, string $relation = null, int $relation_id = null)
 	{
 		$this->message     = $message;
+		$this->link        = $link;
 		$this->relation    = $relation;
 		$this->relation_id = $relation_id;
 	}
 
-	public static function make(string $message, string $relation = null, int $relation_id = null)
+	public static function make(string $message, string $link, string $relation = null, int $relation_id = null)
 	{
-		return new self($message, $relation, $relation_id);
+		return new self($message, $link, $relation, $relation_id);
 	}
 
 	public function toArray()
