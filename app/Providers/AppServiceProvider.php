@@ -4,9 +4,6 @@ namespace App\Providers;
 
 
 use App\Models\Project;
-use App\Models\Users\Client;
-use App\Observers\ClientObserver;
-use App\Observers\PlanObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
 use App\User;

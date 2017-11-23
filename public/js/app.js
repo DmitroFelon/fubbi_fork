@@ -747,7 +747,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(8);
-module.exports = __webpack_require__(34);
+module.exports = __webpack_require__(35);
 
 
 /***/ }),
@@ -828,6 +828,7 @@ $(document).ready(function () {
             return false;
         }
     });
+    __webpack_require__(34);
 });
 
 /***/ }),
@@ -21500,6 +21501,49 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 34 */
+/***/ (function(module, exports) {
+
+/**
+ * Created by imad on 23/11/17.
+ */
+
+var annotation = $('.annotation').annotator();
+annotation.annotator('addPlugin', 'Store', {
+    prefix: '/annotations',
+    loadFromSearch: {},
+    urls: {
+        create: '?article_id=1',
+        update: '/:id/?article_id=1',
+        destroy: '/:id/?article_id=1',
+        search: '?article_id=1'
+    }
+});
+annotation.annotator('addPlugin', 'Permissions', {
+    user: { id: user.id, name: user.name },
+    userString: function userString(user) {
+        if (user && user.name) {
+            return user.name;
+        }
+    },
+    userId: function userId(user) {
+        if (user && user.id) {
+            return user.id;
+        }
+    },
+    permissions: {
+        'read': [user.id],
+        'update': [user.id],
+        'delete': [user.id],
+        'admin': [user.id]
+    },
+    userAuthorize: function userAuthorize(action, annotation, user) {
+        return user !== null ? annotation.user.id == user.id : false;
+    }
+});
+annotation.annotator('addPlugin', 'Tags');
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

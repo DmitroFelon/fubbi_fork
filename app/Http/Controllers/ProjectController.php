@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
+use App\Services\FlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -113,6 +114,8 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project)
 	{
+		$media = $project->getMedia('article_images');
+
 		return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
 	}
 

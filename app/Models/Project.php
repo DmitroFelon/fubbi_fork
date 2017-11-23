@@ -18,7 +18,6 @@ use Laravel\Cashier\Subscription;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Venturecraft\Revisionable\Revision;
-use Venturecraft\Revisionable\RevisionableTrait;
 
 /**
  * Class Project
@@ -56,7 +55,6 @@ class Project extends Model implements HasMedia
 	use Teams;
 	use Articles;
 	use Topics;
-	use RevisionableTrait;
 	use Metable;
 	use FormProjectAccessors;
 	use HasMediaTrait;
@@ -111,25 +109,12 @@ class Project extends Model implements HasMedia
 	 */
 	const COMPLETED = 'completed';
 
-	/**
-	 * @var bool
-	 */
-	protected $revisionEnabled = true;
-
-	/**
-	 * @var bool
-	 */
-	protected $revisionCleanup = true;
-
-	/**
-	 * @var int
-	 */
-	protected $historyLimit = 200;
-
-	/**
-	 * @var bool
-	 */
-	protected $revisionCreationsEnabled = true;
+	public static $media_collections = [
+		'article_images',
+		'compliance_guideline',
+		'logo',
+		'ready_content',
+	];
 
 	/**
 	 * Additional observable events.
@@ -174,21 +159,12 @@ class Project extends Model implements HasMedia
 
 	public function addFiles(Request $request)
 	{
-
-		$file_inputs = [
-			'article_images',
-			'compliance_guideline',
-			'logo',
-			'ready_content'
-		];
-
-		foreach ($file_inputs as $file_input) {
-			if($request->hasFile($file_input)){
+		foreach (self::$media_collections as $file_input) {
+			if ($request->hasFile($file_input)) {
 				foreach ($request->file($file_input) as $file) {
 					$this->addMedia($file)->toMediaCollection($file_input);
 				}
 			}
 		}
-
 	}
 }

@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Services\FlashMessage;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
@@ -36,7 +38,7 @@ class DashboardController extends Controller
     public function index($page = 'home', $action = 'main', $id = null)
     {
         $user = Auth::user();
-        
+
         $role = $user->getRole();
         
         $action = (isset($action)) ? '.'.$action : '';

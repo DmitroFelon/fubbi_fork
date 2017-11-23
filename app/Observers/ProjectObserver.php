@@ -26,16 +26,22 @@ class ProjectObserver
 
 	public function created(Project $project)
 	{
-
-		$admin = User::find(1);
+		$should_be_notified = [
+			'admin' => '\App\Notifications\Project\Created',
+			'account_manager' => '\App\Notifications\Project\Created',
+			'writer' => '\App\Notifications\Project\Created',
+			'editor' => '\App\Notifications\Project\Created',
+			'designer' => '\App\Notifications\Project\Created'
+		];
 
 		//todo send different notifications to client admins and workers
-		$admin->notify(new \App\Notifications\Project\Created($project));
 		$this->user->notify(new \App\Notifications\Project\Created($project));
-	}
 
-	public function updated(Project $project)
-	{
-		//TODO create notification
+		foreach ($should_be_notified as $role => $model){
+			$users = User::withRole($role)->get();
+			$users->each(function (User $item, $key) use ($project, $model) {
+				$item->notify(new $model($project));
+			});
+		}
 	}
 }

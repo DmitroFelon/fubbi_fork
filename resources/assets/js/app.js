@@ -78,4 +78,5 @@ $(document).ready(function () {
             return false
         }
     })
+    require('./partials/annotations');
 });

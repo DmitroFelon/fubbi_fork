@@ -12,13 +12,20 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 @foreach($items as $name => $link)
-                    <li class="{{(Request::is($link))?'active':''}}"><a href="{{$link}}">{{$name}}</a></li>
+                    <li class="{{(Request::is($link))?'active':''}}">
+                        <a href="{{$link}}">
+                            {{$name}}
+                            @if($link == '/alerts')
+                                <span class="badge">{{ \Illuminate\Support\Facades\Auth::user()->unreadNotifications->count() }}</span>
+                            @endif
+                        </a>
+
+                    </li>
                 @endforeach
                 @auth
                 <li>
                     <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Logout
                     </a>
                 </li>

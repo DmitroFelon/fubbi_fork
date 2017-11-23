@@ -14,9 +14,10 @@ class UserObserver
 {
 	public function created(User $user)
 	{
-		//TODO notify all admins and managers
-		$admin = User::find(1);
+		$admins = User::withRole('admin')->get();
 
-		$admin->notify(new \App\Notifications\Client\Registered($user));
+		$admins->each(function (User $item, $key) use ($user) {
+			$item->notify(new \App\Notifications\Client\Registered($user));
+		});
 	}
 }

@@ -57,6 +57,9 @@
 .project-workers{
     position: absolute;
     bottom: 1.5em;
+}
+.highlight {
+    background-color: #ffae85;
 }@charset "UTF-8";
 
 /*!

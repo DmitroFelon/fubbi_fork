@@ -2,11 +2,11 @@
 
 namespace App\Notifications\Client;
 
+use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
 
 class Registered extends Notification implements ShouldQueue
 {
@@ -42,11 +42,8 @@ class Registered extends Notification implements ShouldQueue
 	 */
 	public function toMail($notifiable)
 	{
-		
-		return (new MailMessage)
-			->line('The introduction to the notification.')
-			->action('See new client', url('/users/'.$this->new_user->id))
-			->line('Thank you for using our application!');
+
+		return (new MailMessage)->line('The introduction to the notification.')->action('See new client', url('/users/'.$this->new_user->id))->line('Thank you for using our application!');
 	}
 
 	/**
@@ -57,10 +54,16 @@ class Registered extends Notification implements ShouldQueue
 	 */
 	public function toArray($notifiable)
 	{
-		return [
-			'id'    => $this->new_user->id,
-			'name'  => $this->new_user->name,
-			'email' => $this->new_user->email,
-		];
+		$notification = NotificationPayload::make(
+			__(
+				'New user %s has beed registered. <a target="_blank" href="%s">See profile<\/a>',
+				$this->new_user->name,
+				url()->action('UserController@show', $this->new_user)
+			),
+			get_class($this->new_user),
+			$this->new_user->id
+		);
+
+		return $notification->toArray();
 	}
 }

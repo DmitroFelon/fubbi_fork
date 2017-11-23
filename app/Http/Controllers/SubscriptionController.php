@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Services\FlashMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,8 @@ class SubscriptionController extends Controller
 			$project->setState(Project::QUIZ_FILLING);
 
 			$project->save();
+
+			FlashMessage::make(__('Your subscribtion created successfully'), FlashMessage::SUCCESS);
 
 			return redirect()->action('ProjectController@edit', [$project]);
 

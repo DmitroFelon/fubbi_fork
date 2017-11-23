@@ -11,6 +11,7 @@
 |
 */
 
+use App\Notifications\NotificationPayload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,34 @@ Auth::routes();
 
     return $result.$added_string_result.$removed_string;
 }*/
+
+Route::get('/test', function () {
+
+
+	$notification = NotificationPayload::make(
+		__('New user %s has beed registered. <a target="_blank" href="%s">See profile</a>',Auth::user()->name,
+			url()->action('UserController@show', Auth::user()))
+		,
+		get_class(Auth::user()),
+		Auth::user()->id
+	);
+
+	dd($notification->toArray());
+});
+
+Route::get('notification/read/{id?}', function ($id = null) {
+
+	if (! is_null($id)) {
+		$notification = Auth::user()->notifications()->where('id', $id)->first();
+		if (! is_null($notification)) {
+			$notification->markAsRead();
+		}
+	} else {
+		Auth::user()->unreadNotifications->markAsRead();
+	}
+
+	return redirect('alerts');
+});
 
 Route::resource('projects', 'ProjectController')->middleware('auth');
 
