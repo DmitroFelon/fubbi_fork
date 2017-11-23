@@ -54,6 +54,8 @@ class Registered extends Notification implements ShouldQueue
 	 */
 	public function toArray($notifiable)
 	{
+
+		
 		$notification = NotificationPayload::make(
 			__(
 				'New user %s has beed registered.',
