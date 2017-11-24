@@ -157,6 +157,12 @@ class Project extends Model implements HasMedia
 		return $this->belongsTo(Subscription::class);
 	}
 
+	public function outlines()
+	{
+		return $this->hasMany(Outline::class);
+	}
+	
+
 	public function addFiles(Request $request)
 	{
 		foreach (self::$media_collections as $file_input) {

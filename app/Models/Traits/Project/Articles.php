@@ -10,14 +10,19 @@ namespace App\Models\Traits\Project;
 
 use App\Models\Article;
 
+/**
+ * Class Articles
+ *
+ * @package App\Models\Traits\Project
+ */
 trait Articles
 {
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	/**
+     * @return mixed
      */
     public function articles()
     {
-        return $this->belongsToMany(Article::class);
+        return $this->hasMany(Article::class);
     }
+
 }
