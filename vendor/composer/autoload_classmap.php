@@ -4266,6 +4266,7 @@ return array(
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
     'TransCommandTest' => $vendorDir . '/themsaid/laravel-langman/tests/TransCommandTest.php',
+    'UserSeeder' => $baseDir . '/database/seeds/UserSeeder.php',
     'UsersTableSeeder' => $baseDir . '/database/seeds/UsersTableSeeder.php',
     'Venturecraft\\Revisionable\\FieldFormatter' => $vendorDir . '/venturecraft/revisionable/src/Venturecraft/Revisionable/FieldFormatter.php',
     'Venturecraft\\Revisionable\\Revision' => $vendorDir . '/venturecraft/revisionable/src/Venturecraft/Revisionable/Revision.php',
