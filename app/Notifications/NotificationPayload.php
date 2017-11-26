@@ -18,7 +18,7 @@ class NotificationPayload
 
 	public $relation_id;
 
-	public function __construct(string $message, string $link, string $relation = null, int $relation_id = null)
+	public function __construct(string $message, string $link = null, string $relation = null, int $relation_id = null)
 	{
 		$this->message     = $message;
 		$this->link        = $link;
@@ -26,7 +26,7 @@ class NotificationPayload
 		$this->relation_id = $relation_id;
 	}
 
-	public static function make(string $message, string $link, string $relation = null, int $relation_id = null)
+	public static function make(string $message, string $link = null, string $relation = null, int $relation_id = null)
 	{
 		return new self($message, $link, $relation, $relation_id);
 	}

@@ -3,6 +3,7 @@
 namespace App\Notifications\Project;
 
 use App\Models\Project;
+use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -45,7 +46,7 @@ class Created extends Notification  implements ShouldQueue
 	{
 		return (new MailMessage)
 			->line('Project created.')
-			->action('Review project', url()->action('ProjectController@show', ['id' => $this->project->id]))
+			->action('Review project', url()->action('ProjectController@show', $this->project))
 			->line('Thank you for using our application!');
 	}
 
@@ -57,9 +58,16 @@ class Created extends Notification  implements ShouldQueue
 	 */
 	public function toArray($notifiable)
 	{
-		return [
-			'id' => $this->project->id,
-			'name' => $this->project->name
-		];
+		$notification = NotificationPayload::make(
+			__(
+				'New project %s has beed created.',
+				$this->project->name
+			),
+			url()->action('ProjectController@show', $this->project),
+			get_class($this->project),
+			$this->project->id
+		);
+
+		return $notification->toArray();
 	}
 }

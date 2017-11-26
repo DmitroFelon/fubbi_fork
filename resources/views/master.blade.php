@@ -38,14 +38,17 @@
         var stripe_pub = "{{config('services.stripe.key')}}";
         var user = "{{(\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user()->toJson():'{}'}}";
     </script>
-    <script src="http://assets.annotateit.org/annotator/v1.2.7/annotator-full.min.js"></script>
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://assets.annotateit.org/annotator/v1.2.7/annotator-full.min.js"></script>
+
     <script src="https://js.stripe.com/v2/"></script>
+
     <script src="{{ URL::to('js/app.js') }}" rel="stylesheet"></script>
 
     @yield('script')

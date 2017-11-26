@@ -63,16 +63,10 @@ Auth::routes();
 
 Route::get('/test', function () {
 
+	$n= \App\User::find(7)->notifications;
 
-	$notification = NotificationPayload::make(
-		__('New user %s has beed registered. <a target="_blank" href="%s">See profile</a>',Auth::user()->name,
-			url()->action('UserController@show', Auth::user()))
-		,
-		get_class(Auth::user()),
-		Auth::user()->id
-	);
+	dd($n);
 
-	dd($notification->toArray());
 });
 
 Route::get('notification/read/{id?}', function ($id = null) {

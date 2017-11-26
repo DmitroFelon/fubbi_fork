@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 
-$(document).ready(function () {
+jQuery(document).ready(function ($) {
     $(".subscribe-btn").on('click', function () {
         var amount = $(this).attr('data-amount');
         var plan_id = $(this).attr('data-plan');
