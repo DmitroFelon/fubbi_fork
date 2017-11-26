@@ -6,7 +6,6 @@
 
 require('./bootstrap');
 
-
 jQuery(document).ready(function ($) {
     $(".subscribe-btn").on('click', function () {
         var amount = $(this).attr('data-amount');
