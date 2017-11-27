@@ -11,7 +11,6 @@
 |
 */
 
-use App\Notifications\NotificationPayload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,11 +61,7 @@ Auth::routes();
 }*/
 
 Route::get('/test', function () {
-
 	//AIzaSyB-cv3CDCb0giuys6Rf0kkjc5j2uXVMfZo
-
-
-
 });
 
 Route::get('notification/read/{id?}', function ($id = null) {
