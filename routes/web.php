@@ -63,9 +63,9 @@ Auth::routes();
 
 Route::get('/test', function () {
 
-	$n= \App\User::find(7)->notifications;
+	//AIzaSyB-cv3CDCb0giuys6Rf0kkjc5j2uXVMfZo
 
-	dd($n);
+
 
 });
 
