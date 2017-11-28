@@ -124,18 +124,19 @@ class ProjectController extends Controller
 		];
 
 		$project->metas->transform(function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
-			if (in_array($item->key, $meta_to_cast)) {
-				$item->value = explode(', ', $item->value);
-			}
+
 
 			$item->value = (filter_var($item->value , FILTER_VALIDATE_URL))
 				?'<a href="'.$item->value.'">'.$item->value.'</a>'
 				:$item->value;
 
+			if (in_array($item->key, $meta_to_cast)) {
+				$item->value = explode(', ', $item->value);
+			}
+
 			return (in_array($item->key, $meta_to_skip)) ? null : $item;
 		});
-
-		//die();
+		
 
 		return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
 	}
@@ -148,7 +149,6 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-
 		return view('pages.'.$this->request->user()->getRole().'.projects.edit', [
 			'keywords' => Keyword::all()->toArray(),
 			'articles' => Article::all(),

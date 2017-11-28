@@ -14,6 +14,15 @@
 
 <!-- Wrapper-->
 <div id="wrapper">
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
 
     <!-- Navigation -->
 @include('layouts.navigation')
@@ -31,7 +40,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="wrapper wrapper-content animated fadeInUp">
-                    @yield('content')
+                    <div class="ibox-content">
+                        @yield('content')
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,18 @@
+
+/*
+Fix style broken by inspinia form wizard
+*/
+
+.bootstrap-tagsinput{
+    display: block;
+}
+
+.bootstrap-tagsinput > input {
+    border: 0!important;
+    display: inline!important;
+}
+
+.list-group-item{
+    display: block!important;
+    padding: 10px 15px!important;
+}

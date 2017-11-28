@@ -11,6 +11,8 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/vendor/animate/animate.css',
             'resources/assets/vendor/font-awesome/css/font-awesome.css',
             'resources/assets/sass/plugins/steps/jquery.steps.css',
+            'resources/assets/sass/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css',
+            'resources/assets/sass/plugins/blueimp/css/blueimp-gallery.min.css',
         ],
         'public/css/vendor.css')
     .scripts(
@@ -25,6 +27,8 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/jasny/jasny-bootstrap.min.js',
             'resources/assets/js/plugins/steps/jquery.steps.min.js',
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
+            'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',
+            'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],
         'public/js/app.js')

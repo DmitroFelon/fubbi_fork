@@ -10,7 +10,7 @@
         'themes', null,
         __("Type content themes here"),
         __("Type at least 10 themes. Separate by coma or click 'enter'."),
-        [ 'class'=>"tagsinput"]
+        ['required', 'class'=> 'tagsinput' ]
     ) !!}
     <div class="form-group @unless( isset($project) and $project->themes_order != '' ) hide @endunless"
          id="themes-order-list-wrapper">
@@ -30,7 +30,7 @@
         'questions', null,
         __('What are the top 3 questions clients desperately want answers to?'),
         __("Separate by coma or click 'enter'"),
-        ['required', 'data-role'=>"tagsinput"]
+        ['required', 'class'=> 'tagsinput' ]
     ) !!}
 </fieldset>
 <h1>Step 2</h1>
@@ -143,13 +143,13 @@
     {!! Form::bsText('compliance_guideline', null, __("Do you have branding guidelines?"), '', ['multiple'], 'file') !!}
     {!! Form::bsText('logo', null, __("Do you have a high resolution logo that we can use?"), '', [], 'file') !!}
     {!! Form::bsText('article_images[]', null, __("Do you want us to add images to your articles?"), __("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples."), ['multiple'], 'file') !!}
-    {!! Form::bsText('article_images_links', null, __("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), __('Separate by coma or click "enter".'), ['required', 'data-role'=>"tagsinput"]) !!}
-    {!! Form::bsText('avoid_keywords', null, __('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', [ 'data-role'=>'tagsinput']) !!}
-    {!! Form::bsText('image_pages', null, __("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', [ 'data-role'=>'tagsinput']) !!}
+    {!! Form::bsText('article_images_links', null, __("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), __('Separate by coma or click "enter".'), ['required', 'class'=>'tagsinput' ] ) !!}
+    {!! Form::bsText('avoid_keywords', null, __('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', [ 'class'=>'tagsinput']) !!}
+    {!! Form::bsText('image_pages', null, __("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', [ 'class'=>'tagsinput']) !!}
 </fieldset>
 <h1>Step 5</h1>
 <fieldset>
-    {!! Form::bsText('google_access', null, __("We use Google docs to have you approve your articles. Please add all the email addresses of people in your organisation that need access."), '', [ 'data-role'=>"tagsinput"]) !!}
+    {!! Form::bsText('google_access', null, __("We use Google docs to have you approve your articles. Please add all the email addresses of people in your organisation that need access."), '', [ 'class'=>"tagsinput"]) !!}
     {!! Form::bsText('cta', null, __("Do you want us to add calls to action (CTA) to the end of your articles?"), __("Examples include phoning your office for a complimentary consultation or review. Other times it might be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with specific information i.e. if you want them to download a free report, please share a link to the download offer. If you want people to phone your office please provide details of what you’ll share on the phone call. We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
     {!! Form::bsText('ready_content', null, __("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts."), __("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts"), ['multiple'], 'file') !!}
     {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', __("Do you want to review outlines before we send you articles to approve?"), __("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}

@@ -26,7 +26,7 @@
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="#" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/a4.jpg">
+                                <img alt="image" class="img-circle" src="#">
                             </a>
                             <div>
                                 <small class="pull-right text-navy">5h ago</small>
