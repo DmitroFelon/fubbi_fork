@@ -1,7 +1,5 @@
 try {
     window._ = require('lodash');
-
-    //window.dt = require('datatables.net-bs')();
 } catch (e) {
     
 }

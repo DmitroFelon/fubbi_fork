@@ -19,4 +19,5 @@ return array(
     '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
     'f18cc91337d49233e5754e93f3ed9ec3' => $vendorDir . '/laravelcollective/html/src/helpers.php',
     '790c540df67e811a16f8c0516d09d7b4' => $vendorDir . '/xinax/laravel-gettext/src/Xinax/LaravelGettext/Support/helpers.php',
+    '270f70f51ae43c09211e3bc9af77115a' => $vendorDir . '/laravelista/ekko/src/Laravelista/Ekko/helpers.php',
 );

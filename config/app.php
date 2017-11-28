@@ -203,7 +203,11 @@ return [
         /*
          * Langauge manager
          * */
-        Xinax\LaravelGettext\LaravelGettextServiceProvider::class
+        Xinax\LaravelGettext\LaravelGettextServiceProvider::class,
+        /*
+         * Theme dependency
+         * */
+        Laravelista\Ekko\EkkoServiceProvider::class
     ],
 
     /*
@@ -270,6 +274,10 @@ return [
          * */
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        /*
+		* Theme dependency
+		* */
+        'Ekko' => Laravelista\Ekko\Facades\Ekko::class
 
 
 
