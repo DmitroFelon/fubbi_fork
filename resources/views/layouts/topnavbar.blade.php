@@ -2,11 +2,6 @@
     <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" method="post" action="/">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search" />
-                </div>
-            </form>
         </div>
         @auth
         <ul class="nav navbar-top-links navbar-right">
@@ -18,7 +13,7 @@
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="#" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/a7.jpg">
+                                <img alt="image" class="img-circle" src="#">
                             </a>
                             <div>
                                 <small class="pull-right">46h ago</small>
@@ -67,7 +62,7 @@
                     <li class="divider"></li>
                     <li>
                         <div class="text-center link-block">
-                            <a href="#">
+                            <a href="{{url('alerts')}}">
                                 <strong>See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>

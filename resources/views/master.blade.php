@@ -16,20 +16,25 @@
 <div id="wrapper">
 
     <!-- Navigation -->
-    @include('layouts.navigation')
+@include('layouts.navigation')
 
 
-    <!-- Page wraper -->
+<!-- Page wraper -->
     <div id="page-wrapper" class="gray-bg">
 
-        @auth
-        <!-- Page wrapper -->
-        @include('layouts.topnavbar')
-        @endauth
+    @auth
+    <!-- Page wrapper -->
+    @include('layouts.topnavbar')
+    @endauth
 
-        <!-- Main view  -->
-
-        @yield('content')
+    <!-- Main view  -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInUp">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         @include('footer')

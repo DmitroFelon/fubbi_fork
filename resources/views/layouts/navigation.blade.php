@@ -35,12 +35,12 @@
                         IN+
                     </div>
                 </li>
-                @foreach($items as $name => $link)
-                    <li class="{{isActiveRoute($link)}}">
-                        <a href="{{$link}}">
-                            <i class="fa fa-th-large"></i> {{-- TODO set correct icons --}}
-                            <span class="nav-label">{{$name}}</span>
-                            @if($link == '/alerts')
+                @foreach($items as $item)
+                    <li class="{{isActiveRoute($item['url'])}}">
+                        <a href="{{$item['url']}}">
+                            <i class="{{$item['icon']}}"></i>
+                            <span class="nav-label">{{$item['name']}}</span>
+                            @if($item['url'] == '/alerts')
                                 <span class="badge">
                                     {{ \Illuminate\Support\Facades\Auth::user()->unreadNotifications->count() }}
                                 </span>

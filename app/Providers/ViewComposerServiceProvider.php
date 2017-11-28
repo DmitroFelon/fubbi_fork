@@ -31,9 +31,8 @@ class ViewComposerServiceProvider extends ServiceProvider
         /*
          * Navigation
          * */
-        View::composer('partials.top-nav', TopMenuComposer::class);
-        View::composer('layouts.navigation', TopMenuComposer::class);
-        View::composer('partials.left-sidebar', LeftMenuComposer::class);
+        View::composer('layouts.navigation', LeftMenuComposer::class);
+        View::composer('layouts.topnavbar', TopMenuComposer::class);
 
     }
 
