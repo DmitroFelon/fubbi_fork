@@ -20,3 +20,7 @@ Fix style broken by inspinia form wizard
 .blueimp-gallery-image {
     height: 100%;
 }
+
+.clickable:hover{
+    cursor: pointer;
+}

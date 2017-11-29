@@ -117,6 +117,9 @@ class ProjectController extends Controller
 			'themes',
 			'questions',
 			'avoid_keywords',
+			'article_images_links',
+			'image_pages',
+			'google_access'
 		];
 
 		$meta_to_skip = [
@@ -131,7 +134,8 @@ class ProjectController extends Controller
 				:$item->value;
 
 			if (in_array($item->key, $meta_to_cast)) {
-				$item->value = explode(', ', $item->value);
+				$v = $item->value;
+				$item->value = explode(',', $item->value);
 			}
 
 			return (in_array($item->key, $meta_to_skip)) ? null : $item;
