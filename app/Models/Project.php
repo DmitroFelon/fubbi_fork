@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\Traits\Project\Articles;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\Keywords;
+use App\Models\Traits\Project\Oulines;
 use App\Models\Traits\Project\States;
 use App\Models\Traits\Project\Teams;
-use App\Models\Traits\Project\Topics;
 use App\Models\Traits\Project\Workers;
 use App\User;
+use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -53,11 +54,12 @@ class Project extends Model implements HasMedia
 	use States;
 	use Workers;
 	use Teams;
+	use Oulines;
 	use Articles;
-	use Topics;
 	use Metable;
 	use FormProjectAccessors;
 	use HasMediaTrait;
+	use HasComments;
 
 	/**
 	 * @const string
@@ -127,6 +129,7 @@ class Project extends Model implements HasMedia
 		'detachWorkers',
 		'syncWorkers',
 		'setState',
+		'filled'
 	];
 
 	/**
@@ -177,5 +180,11 @@ class Project extends Model implements HasMedia
 
 			}
 		}
+	}
+
+	public function filled(){
+
+		//TODO check project state if project filled, send events to workers
+		$this->fireModelEvent('rejected', false);
 	}
 }

@@ -79,16 +79,26 @@ class LeftMenuComposer
 	public function admin()
 	{
 		return [
-			'Dashboard' => '/',
-			'Clients'   => '/clients',
-			'Writers'   => '/writers',
-			'Designers' => '/designers',
-			'Managers'  => '/managers',
-			'Teams'     => '/teams',
-			'Projects'  => '/projects',
-			'Plans'     => '/plans',
-			'Settings'  => '/settings',
-
+			[
+				'name' => 'Users',
+				'url'  => '/users',
+				'icon' => 'fa fa-user',
+			],
+			[
+				'name' => 'Projects',
+				'url'  => '/projects',
+				'icon' => 'fa fa-file-o',
+			],
+			[
+				'name' => 'Messages',
+				'url'  => '/messages',
+				'icon' => 'fa fa-envelope',
+			],
+			[
+				'name' => 'Settings',
+				'url'  => '/settings',
+				'icon' => 'fa fa-gear',
+			]
 		];
 	}
 
@@ -132,7 +142,21 @@ class LeftMenuComposer
 	public function writer()
 	{
 		return [
-
+			[
+				'name' => 'Projects',
+				'url'  => '/projects',
+				'icon' => 'fa fa-file-o',
+			],
+			[
+				'name' => 'Messages',
+				'url'  => '/messages',
+				'icon' => 'fa fa-envelope',
+			],
+			[
+				'name' => 'Settings',
+				'url'  => '/settings',
+				'icon' => 'fa fa-gear',
+			]
 		];
 	}
 

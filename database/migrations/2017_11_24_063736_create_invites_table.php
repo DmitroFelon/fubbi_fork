@@ -17,7 +17,6 @@ class CreateInvitesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users')->onDelete('cascade')->index();
             $table->integer('project_id')->references('id')->on('projects')->onDelete('cascade')->index();
-            $table->integer('sent_by')->nullable();
             $table->boolean('accepted')->default(false);
             $table->timestamps();
         });

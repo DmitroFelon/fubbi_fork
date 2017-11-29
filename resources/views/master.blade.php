@@ -55,6 +55,12 @@
 
 </div>
 <!-- End wrapper-->
+<script>
+    var stripe_pub = "{{config('services.stripe.key')}}";
+    var user = "{{(\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user()->toJson():'{}'}}";
+</script>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 

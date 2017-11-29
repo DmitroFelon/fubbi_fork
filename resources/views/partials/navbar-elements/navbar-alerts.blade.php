@@ -1,6 +1,6 @@
 <li class="dropdown">
     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-        <i class="fa fa-envelope"></i>
+        <i class="fa fa-bell"></i>
         @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
             <span class="label label-warning">
                 {{count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications)}}

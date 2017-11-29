@@ -1,6 +1,6 @@
 <li class="dropdown">
     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-        <i class="fa fa-bell"></i>  <span class="label label-primary">2</span>
+        <i class="fa fa-envelope"></i>  <span class="label label-primary">2</span>
     </a>
     <ul class="dropdown-menu dropdown-alerts">
         <li>
@@ -23,7 +23,7 @@
         <li class="divider"></li>
         <li>
             <div class="text-center link-block">
-                <a href="{{url('alerts')}}">
+                <a href="{{url('messages')}}">
                     <strong>{{__('See All Messages')}}</strong>
                     <i class="fa fa-angle-right"></i>
                 </a>

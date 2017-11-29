@@ -20,4 +20,5 @@ class UserObserver
 			$item->notify(new \App\Notifications\Client\Registered($user));
 		});
 	}
+
 }

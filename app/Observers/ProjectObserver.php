@@ -28,10 +28,26 @@ class ProjectObserver
 	{
 		$should_be_notified = [
 			'admin'           => \App\Notifications\Project\Created::class,
-			'account_manager' => \App\Notifications\Project\Created::class,
-			'writer'          => \App\Notifications\Project\Created::class,
-			'editor'          => \App\Notifications\Project\Created::class,
-			'designer'        => \App\Notifications\Project\Created::class,
+			'account_manager' => \App\Notifications\Project\Invite::class,
+		];
+
+		$this->user->notify(new \App\Notifications\Project\Created($project));
+
+		foreach ($should_be_notified as $role => $model) {
+			$users = User::withRole($role)->get();
+			$users->each(function (User $user, $key) use ($project, $model) {
+				$user->notify(new $model($project));
+			});
+		}
+	}
+
+
+	public function filled(Project $project) {
+		$should_be_notified = [
+			'account_manager' => \App\Notifications\Project\Invite::class,
+			'writer'          => \App\Notifications\Project\Invite::class,
+			'editor'          => \App\Notifications\Project\Invite::class,
+			'designer'        => \App\Notifications\Project\Invite::class,
 		];
 
 		$this->user->notify(new \App\Notifications\Project\Created($project));
