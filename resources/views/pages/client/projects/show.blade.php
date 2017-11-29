@@ -53,37 +53,7 @@
                     <div class="row">
                         <div class="col col-xs-12">
                             <h3 class="text-center">{{title_case(str_replace('_',' ',$collection))}}</h3>
-                            @foreach($project->getMedia($collection) as $media)
-                                <div class="col col-xs-3">
-                                    <div class="file-box">
-                                        <div class="file">
-                                            <span class="corner"></span>
-                                            <div class="icon">
-                                                @if($media->mime_type == 'image/jpeg')
-                                                    <a href="{{$media->getFullUrl()}}"
-                                                       target="_blank"
-                                                       data-gallery="{{$collection}}">
-                                                        <img class="blueimp-gallery-image"
-                                                             src="{{$media->getFullUrl()}}">
-                                                    </a>
-                                                @else
-                                                    <a target="_blank" href="{{$media->getFullUrl()}}">
-                                                        <i class="fa fa-file"></i>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                            <div class="file-name">
-                                                <a target="_blank" href="{{$media->getFullUrl()}}">
-                                                    {{$media->file_name}}
-                                                </a>
-                                                <br/>
-                                                <small>Added: {{$media->created_at->format('Y-m-d')}}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            @endforeach
+                            @each('partials.client.project.files-row', $project->getMedia($collection), 'media', 'partials.client.project.form.plan.files-row-empty')
                         </div>
 
                     </div>
@@ -93,13 +63,5 @@
         </div>
     </div>
     {{--Media block end--}}
-
-
-    <style>
-        .blueimp-gallery-image {
-            height: 100%;
-        }
-    </style>
-
 
 @endsection
