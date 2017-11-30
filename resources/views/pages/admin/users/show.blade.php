@@ -1,4 +1,5 @@
 @extends('master')
+
 @section('content')
-    designers
-@endsection()
+    {{dd($users)}}
+@endsection

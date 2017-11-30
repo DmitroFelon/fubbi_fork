@@ -179,8 +179,6 @@ class ProjectController extends Controller
 	public function update(StoreProject $request, Project $project)
 	{
 
-		
-
 		if (! $request->has('_step')) {
 			abort(404);
 		}

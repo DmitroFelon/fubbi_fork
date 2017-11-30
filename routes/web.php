@@ -60,9 +60,6 @@ Auth::routes();
     return $result.$added_string_result.$removed_string;
 }*/
 
-Route::get('/test', function () {
-	//AIzaSyB-cv3CDCb0giuys6Rf0kkjc5j2uXVMfZo
-});
 
 Route::get('notification/read/{id?}', function ($id = null) {
 

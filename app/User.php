@@ -9,6 +9,8 @@ use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -45,11 +47,12 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Annotation[] $annotations
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User withRole($role)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
 	use Notifiable;
 	use Billable;
 	use EntrustUserTrait;
+	use HasMediaTrait;
 
 	/**
 	 * The attributes that are mass assignable.
