@@ -2,6 +2,7 @@
 
 @section('content')
 
+    <div class="ibox-content">
     all: <br>
 
     <?php
@@ -17,4 +18,5 @@
         echo json_encode($notification->data)."<br>";
     }
     ?>
+    </div>
 @endsection

@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-
+    <div class="ibox-content">
     @if(\Illuminate\Support\Facades\Auth::user()->unreadNotifications->isNotEmpty())
         <a href="{{url('notification/read/')}}" class="btn btn-primary">Mart all as read</a>
     @endif
@@ -16,4 +16,5 @@
         @each('partials.client.alerts.row', \Illuminate\Support\Facades\Auth::user()->readNotifications, 'notification', 'partials.client.alerts.emptry-row')
 
     </ul>
+    </div>
 @endsection

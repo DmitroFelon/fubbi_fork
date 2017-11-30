@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-
+    <div class="ibox-content">
     <div class="row">
         <div class="col-lg-12">
             <div class="m-b-md">
@@ -141,5 +141,5 @@
         </div>
     </div>
     {{--Media block end--}}
-
+</div>
 @endsection

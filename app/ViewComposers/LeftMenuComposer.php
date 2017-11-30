@@ -85,6 +85,11 @@ class LeftMenuComposer
 				'icon' => 'fa fa-user',
 			],
 			[
+				'name' => 'Teams',
+				'url'  => '/teams',
+				'icon' => 'fa fa-users',
+			],
+			[
 				'name' => 'Projects',
 				'url'  => '/projects',
 				'icon' => 'fa fa-file-o',

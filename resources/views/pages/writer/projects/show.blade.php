@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-
+    <div class="ibox-content">
     {{--Metadata block start--}}
     <div class="panel panel-default">
         <div data-toggle="collapse" href="#meta_data" class="panel-heading clickable">
@@ -71,5 +71,6 @@
         </div>
     </div>
     {{--Media block end--}}
+    </div>
 
 @endsection

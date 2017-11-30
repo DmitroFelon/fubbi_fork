@@ -79,6 +79,8 @@ Route::resource('projects', 'ProjectController')->middleware('auth');
 
 Route::resource('annotations', 'AnnotationController')->middleware('auth');
 
+Route::resource('teams', 'TeamController')->middleware('auth');
+
 Route::resource('users', 'UserController')->middleware('auth');
 
 Route::post('subscribe', 'SubscriptionController@subscribe')->middleware('auth');

@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('content')
+    <div class="ibox-content">
     <div class="ibox">
         <div class="ibox-title">
             <h5>{{__('All projects')}}</h5>
@@ -19,5 +20,6 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 @endsection

@@ -25,30 +25,32 @@
     </div>
 
     <!-- Navigation -->
-@include('layouts.navigation')
+    @include('layouts.navigation')
 
 
 <!-- Page wraper -->
     <div id="page-wrapper" class="gray-bg">
 
-    @auth
-    <!-- Page wrapper -->
-    @include('layouts.topnavbar')
-    @endauth
+        @auth
+            @include('layouts.topnavbar')
+        @endauth
 
 
-    @yield('before-content')
+        @yield('before-content')
 
-    <!-- Main view  -->
+        <!-- Main view  -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="wrapper wrapper-content animated fadeInUp">
-                    <div class="ibox-content">
+
                         @yield('content')
-                    </div>
+
                 </div>
             </div>
         </div>
+        <!-- End Main view  -->
+
+        @yield('after-content')
 
         <!-- Footer -->
         @include('footer')

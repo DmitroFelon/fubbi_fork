@@ -2,8 +2,6 @@
 
 @section('content')
     <div class="ibox-content">
-    @include('pages.client.projects.form')
+        settings
     </div>
 @endsection
-
-

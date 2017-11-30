@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('content')
+    <div class="ibox-content">
     <span class="text-muted small pull-right">Last modification: <i
                 class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>
     <h2>Users</h2>
@@ -55,5 +56,6 @@
             @endforeach
         </div>
 
+    </div>
     </div>
 @endsection

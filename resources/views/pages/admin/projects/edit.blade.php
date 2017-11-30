@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-
+    <div class="ibox-content">
     <blockquote>
         <div>
             <a class="lead" target="_blank" href="{{url()->action('ProjectController@show', $project)}}">
@@ -22,6 +22,6 @@
     </blockquote>
 
     @include('pages.client.projects.form')
-
+    </div>
 @endsection
 

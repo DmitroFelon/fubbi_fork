@@ -1,5 +1,5 @@
 @extends('master')
 
 @section('content')
-    home
+    <div class="ibox-content"></div>
 @endsection
