@@ -36,6 +36,9 @@
     @include('layouts.topnavbar')
     @endauth
 
+
+    @yield('before-content')
+
     <!-- Main view  -->
         <div class="row">
             <div class="col-lg-12">

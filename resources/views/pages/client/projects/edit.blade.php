@@ -21,10 +21,7 @@
         </div>
     </blockquote>
 
-
-
     @include('pages.client.projects.form')
-
 
 @endsection
 

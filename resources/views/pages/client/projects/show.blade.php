@@ -1,11 +1,81 @@
 @extends('master')
 
+
+@section('before-content')
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Project detail</h2>
+        </div>
+    </div>
+@endsection
+
 @section('content')
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="m-b-md">
+                <a href="#" class="btn btn-white btn-xs pull-right">Edit project</a>
+                <h2>{{$project->name}}</h2>
+            </div>
+            <dl class="dl-horizontal">
+                <dt>Status:</dt>
+                <dd><span class="label label-primary">{{ucfirst(str_replace('_',' ',$project->state))}}</span></dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5">
+            <dl class="dl-horizontal">
+                <dt>Client:</dt>
+                <dd>{{$project->client->name}}</dd>
+                <dt>Subscription Plan:</dt>
+                <dd>{{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</dd>
+                <dt>Billing Cycle:</dt>
+                <dd>1 {{__('month')}}</dd>
+                <dt>Messages:</dt>
+                <dd>{{$project->commentCount()}}</dd>
+            </dl>
+        </div>
+        <div class="col-lg-7" id="cluster_info">
+            <dl class="dl-horizontal">
+                <dt>Last Updated:</dt>
+                <dd>
+                    {{$project->updated_at}}
+                    <small class="text-muted">({{$project->updated_at->diffForHumans()}})</small>
+                </dd>
+                <dt>Created:</dt>
+                <dd>
+                    {{$project->created_at}}
+                    <small class="text-muted">({{$project->created_at->diffForHumans()}})</small>
+                </dd>
+                <dt>Participants:</dt>
+                <dd class="project-people">
+                    @foreach($project->workers as $worker)
+                        <span>{{$worker->name}}</span>
+                    @endforeach
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <dl class="dl-horizontal">
+                <dt>{{__('Completed')}}:</dt>
+                <dd>
+                    <div class="progress progress-striped active m-b-sm">
+                        <div style="width: 0.5%;" class="progress-bar">
+                           <span>0.5%</span>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
 
     {{--Metadata block start--}}
     <div class="panel panel-default">
         <div data-toggle="collapse" href="#meta_data" class="panel-heading clickable">
-            <span class="text-center">{{__('Project "%s" Quiz result',$project->name)}}</span>
+            <span class="text-center">{{__('Project quiz result')}}</span>
             <i class="pull-right fa fa-expand" aria-hidden="true"></i>
         </div>
         <div id="meta_data" class="panel-collapse panel-body collapse">

@@ -177,7 +177,6 @@ class Project extends Model implements HasMedia
 				}else{
 					$this->addMedia($request->file($file_input))->toMediaCollection($file_input);
 				}
-
 			}
 		}
 	}

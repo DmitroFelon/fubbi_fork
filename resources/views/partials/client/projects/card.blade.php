@@ -1,6 +1,6 @@
 <tr>
     <td class="project-status">
-        <span class="label label-primary">{{$project->state}}</span>
+        <span class="label label-primary">{{ucfirst(str_replace('_',' ',$project->state))}}</span>
     </td>
     <td class="project-title">
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}">{{$project->name}}</a>
@@ -27,7 +27,7 @@
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm">
             <i class="fa fa-folder"></i> View
         </a>
-        @role('client)
+        @role('client')
         <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm">
             <i class="fa fa-pencil"></i> Edit
         </a>

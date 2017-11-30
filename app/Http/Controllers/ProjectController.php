@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -44,16 +45,27 @@ class ProjectController extends Controller
 	 */
 	public function index()
 	{
-		switch ($this->request->user()->getRole()) {
+		$user = $this->request->user();
+		$role = $user->getRole();
+
+		switch ($role) {
 			case 'admin':
 				$projects = Project::all();
+
+				break;
+			case 'client':
+				$projects = $user->projects()->get();
+				if($projects->isEmpty()){
+					return redirect()->action('ProjectController@create');
+				}
 				break;
 			default:
-				$projects = $this->request->user()->projects()->get();
+				$projects = $user->projects()->get();
+
 				break;
 		}
 
-		return view('pages.'.$this->request->user()->getRole().'.projects.index', ['projects' => $projects]);
+		return view('pages.'.$role.'.projects.index', ['projects' => $projects]);
 	}
 
 	/**
@@ -119,7 +131,7 @@ class ProjectController extends Controller
 			'avoid_keywords',
 			'article_images_links',
 			'image_pages',
-			'google_access'
+			'google_access',
 		];
 
 		$meta_to_skip = [
@@ -128,19 +140,15 @@ class ProjectController extends Controller
 
 		$project->metas->transform(function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
 
-
-			$item->value = (filter_var($item->value , FILTER_VALIDATE_URL))
-				?'<a href="'.$item->value.'">'.$item->value.'</a>'
-				:$item->value;
+			$item->value = (filter_var($item->value, FILTER_VALIDATE_URL)) ? '<a href="'.$item->value.'">'.$item->value.'</a>' : $item->value;
 
 			if (in_array($item->key, $meta_to_cast)) {
-				$v = $item->value;
+				$v           = $item->value;
 				$item->value = explode(',', $item->value);
 			}
 
 			return (in_array($item->key, $meta_to_skip)) ? null : $item;
 		});
-		
 
 		return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
 	}
@@ -171,6 +179,8 @@ class ProjectController extends Controller
 	public function update(StoreProject $request, Project $project)
 	{
 
+		
+
 		if (! $request->has('_step')) {
 			abort(404);
 		}
@@ -191,6 +201,7 @@ class ProjectController extends Controller
 				break;
 			case Project::KEYWORDS_FILLING:
 				$project->keywords()->sync($request->input('keywords'));
+				$project->state = Project::MANAGER_REVIEW;
 				break;
 			default:
 				abort(404);
