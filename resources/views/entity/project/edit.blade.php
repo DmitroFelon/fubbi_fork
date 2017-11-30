@@ -21,7 +21,7 @@
         </div>
     </blockquote>
 
-    @include('entity.project.form')
+    @include('pages.client.projects.form')
     </div>
 @endsection
 
