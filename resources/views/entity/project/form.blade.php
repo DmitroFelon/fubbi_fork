@@ -2,13 +2,13 @@
 
 @switch($step)
 @case(\App\Models\Project::PLAN_SELECTION)
-@include('pages.client.projects.tabs.plan')
+@include('entity.project.tabs.plan')
 @break
 @case(\App\Models\Project::QUIZ_FILLING)
-@include('pages.client.projects.tabs.quiz')
+@include('entity.project.tabs.quiz')
 @break
 @case(\App\Models\Project::KEYWORDS_FILLING)
-@include('pages.client.projects.tabs.keywords')
+@include('entity.project.tabs.keywords')
 @break
 @case(\App\Models\Project::MANAGER_REVIEW)
    <div class="text-primary">

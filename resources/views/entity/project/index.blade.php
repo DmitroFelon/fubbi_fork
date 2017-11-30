@@ -15,7 +15,7 @@
                     <table class="table table-hover">
                         <tbody>
                         @foreach($projects as $project)
-                            @include('partials.client.projects.card')
+                            @include('entity.project.partials.card')
                         @endforeach
                         </tbody>
                     </table>

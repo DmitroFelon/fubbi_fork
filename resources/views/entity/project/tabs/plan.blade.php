@@ -1,5 +1,5 @@
 <div class="row">
-    @each('partials.client.project.form.plan.card', $plans, 'plan')
+    @each('entity.project.partials.form.plan.card', $plans, 'plan')
 </div>
 <div class="panel panel-default" id="stripe-form-wrapper" style="display: none">
     <div class="panel-heading">

@@ -10,13 +10,12 @@
 @endsection
 
 @section('content')
-
     <div class="ibox-content">
-
     <div class="row">
         <div class="col-lg-12">
             <div class="m-b-md">
-                <a href="#" class="btn btn-white btn-xs pull-right">Edit project</a>
+                <a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">Edit project</a>
+
                 <h2>{{$project->name}}</h2>
             </div>
             <dl class="dl-horizontal">
@@ -53,7 +52,11 @@
                 <dt>Participants:</dt>
                 <dd class="project-people">
                     @foreach($project->workers as $worker)
-                        <span>{{$worker->name}}</span>
+                        <div>
+                            <a target="_blank" href="{{url()->action('UserController@show', $worker)}}">
+                                {{$worker->name}}
+                            </a>
+                        </div>
                     @endforeach
                 </dd>
             </dl>
@@ -73,7 +76,6 @@
             </dl>
         </div>
     </div>
-
     {{--Metadata block start--}}
     <div class="panel panel-default">
         <div data-toggle="collapse" href="#meta_data" class="panel-heading clickable">
@@ -114,11 +116,8 @@
             @endforeach
         </div>
     </div>
-
     {{--Metadata block end--}}
-
     {{--Media block start--}}
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
@@ -143,6 +142,5 @@
         </div>
     </div>
     {{--Media block end--}}
-
     </div>
 @endsection

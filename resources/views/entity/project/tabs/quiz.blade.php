@@ -1,4 +1,3 @@
-<br>
 {!! Form::model($project,
 ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@update', $project->id]])
 !!}

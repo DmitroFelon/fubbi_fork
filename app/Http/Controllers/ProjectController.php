@@ -65,7 +65,7 @@ class ProjectController extends Controller
 				break;
 		}
 
-		return view('pages.'.$role.'.projects.index', ['projects' => $projects]);
+		return view('entity.project.index', ['projects' => $projects]);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class ProjectController extends Controller
 			return $filtered_plans;
 		});
 
-		return view('pages.'.$this->request->user()->getRole().'.projects.create', [
+		return view('entity.project.create', [
 			'plans' => $public_plans,
 			'step'  => $step,
 		]);
@@ -150,7 +150,7 @@ class ProjectController extends Controller
 			return (in_array($item->key, $meta_to_skip)) ? null : $item;
 		});
 
-		return view('pages.'.$this->request->user()->getRole().'.projects.show', ['project' => $project]);
+		return view('entity.project.show', ['project' => $project]);
 	}
 
 	/**
@@ -161,7 +161,7 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-		return view('pages.'.$this->request->user()->getRole().'.projects.edit', [
+		return view('entity.project.edit', [
 			'keywords' => Keyword::all()->toArray(),
 			'articles' => Article::all(),
 			'project'  => $project,
