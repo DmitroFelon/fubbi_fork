@@ -17,6 +17,25 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
  * @property string $text
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereText($value)
+ * @property int $user_id
+ * @property int $project_id
+ * @property int $accepted
+ * @property int $attempts
+ * @property string $title
+ * @property string $body
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\User $author
+ * @property-read \Kalnoy\Nestedset\Collection|\BrianFaust\Commentable\Models\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereAccepted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereAttempts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereUserId($value)
  */
 class Article extends Model implements HasMedia
 {

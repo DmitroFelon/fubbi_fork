@@ -28,6 +28,8 @@ use Ghanem\Rating\Traits\Ratingable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereUpdatedAt($value)
+ * @property int|null $owner_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereOwnerId($value)
  */
 class Team extends Model
 {

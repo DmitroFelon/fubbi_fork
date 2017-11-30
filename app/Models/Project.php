@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Traits\Project\Articles;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\Keywords;
-use App\Models\Traits\Project\Oulines;
+use App\Models\Traits\Project\Outlines;
 use App\Models\Traits\Project\States;
 use App\Models\Traits\Project\Teams;
 use App\Models\Traits\Project\Workers;
@@ -47,6 +47,12 @@ use Venturecraft\Revisionable\Revision;
  * @method static Builder|\App\Models\Project whereState($value)
  * @method static Builder|\App\Models\Project whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @property int $subscription_id
+ * @property-read \Kalnoy\Nestedset\Collection|\BrianFaust\Commentable\Models\Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Outline[] $outlines
+ * @property-read \Laravel\Cashier\Subscription $subscription
+ * @property-read \App\Models\Task $task
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereSubscriptionId($value)
  */
 class Project extends Model implements HasMedia
 {
@@ -54,7 +60,7 @@ class Project extends Model implements HasMedia
 	use States;
 	use Workers;
 	use Teams;
-	use Oulines;
+	use Outlines;
 	use Articles;
 	use Metable;
 	use FormProjectAccessors;
@@ -111,6 +117,9 @@ class Project extends Model implements HasMedia
 	 */
 	const COMPLETED = 'completed';
 
+	/**
+	 * @var array
+	 */
 	public static $media_collections = [
 		'article_images',
 		'compliance_guideline',
@@ -150,22 +159,27 @@ class Project extends Model implements HasMedia
 		return $this->belongsTo(User::class, 'client_id');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
 	public function task()
 	{
 		return $this->hasOne(Task::class);
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function subscription()
 	{
 		return $this->belongsTo(Subscription::class);
 	}
 
-	public function outlines()
-	{
-		return $this->hasMany(Outline::class);
-	}
-	
-
+	/**
+	 * @param \Illuminate\Http\Request $request
+	 * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+	 * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+	 */
 	public function addFiles(Request $request)
 	{
 		foreach (self::$media_collections as $file_input) {
@@ -181,6 +195,9 @@ class Project extends Model implements HasMedia
 		}
 	}
 
+	/**
+	 * Fires model event "filled"
+	 */
 	public function filled(){
 
 		//TODO check project state if project filled, send events to workers

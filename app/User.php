@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Models\Annotation;
+use App\Models\Article;
+use App\Models\Outline;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
@@ -46,6 +48,15 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Annotation[] $annotations
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User withRole($role)
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $phone
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Outline[] $outlines
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
  */
 class User extends Authenticatable implements HasMedia
 {
@@ -77,21 +88,33 @@ class User extends Authenticatable implements HasMedia
 		'remember_token',
 	];
 
+	/**
+	 * @return string
+	 */
 	public function getNameAttribute()
 	{
 		return $this->first_name . ' ' . $this->last_name;
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function projects()
 	{
 		return $this->hasMany(Project::class, 'client_id');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
 	public function teams()
 	{
 		return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getRole()
 	{
 		foreach (Role::$roles as $r) {
@@ -103,8 +126,27 @@ class User extends Authenticatable implements HasMedia
 		return null;
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function annotations()
 	{
 		return $this->hasMany(Annotation::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function articles()
+	{
+		return $this->hasMany(Article::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function outlines()
+	{
+		return $this->hasMany(Outline::class);
 	}
 }

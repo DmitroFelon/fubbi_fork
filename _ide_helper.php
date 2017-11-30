@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.5.20 on 2017-11-10.
+ * Generated for Laravel 5.5.21 on 2017-11-30.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -375,6 +375,18 @@ namespace Illuminate\Support\Facades {
         public static function getProvider($provider)
         {
             return \Illuminate\Foundation\Application::getProvider($provider);
+        }
+        
+        /**
+         * Get the registered service provider instances if any exist.
+         *
+         * @param \Illuminate\Support\ServiceProvider|string $provider
+         * @return array 
+         * @static 
+         */ 
+        public static function getProviders($provider)
+        {
+            return \Illuminate\Foundation\Application::getProviders($provider);
         }
         
         /**
@@ -6328,7 +6340,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function size($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::size($queue);
+            return \Illuminate\Queue\DatabaseQueue::size($queue);
         }
         
         /**
@@ -6338,12 +6350,11 @@ namespace Illuminate\Support\Facades {
          * @param mixed $data
          * @param string $queue
          * @return mixed 
-         * @throws \Exception|\Throwable
          * @static 
          */ 
         public static function push($job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::push($job, $data, $queue);
+            return \Illuminate\Queue\DatabaseQueue::push($job, $data, $queue);
         }
         
         /**
@@ -6357,7 +6368,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function pushRaw($payload, $queue = null, $options = array())
         {
-            return \Illuminate\Queue\SyncQueue::pushRaw($payload, $queue, $options);
+            return \Illuminate\Queue\DatabaseQueue::pushRaw($payload, $queue, $options);
         }
         
         /**
@@ -6367,12 +6378,40 @@ namespace Illuminate\Support\Facades {
          * @param string $job
          * @param mixed $data
          * @param string $queue
-         * @return mixed 
+         * @return void 
          * @static 
          */ 
         public static function later($delay, $job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::later($delay, $job, $data, $queue);
+            \Illuminate\Queue\DatabaseQueue::later($delay, $job, $data, $queue);
+        }
+        
+        /**
+         * Push an array of jobs onto the queue.
+         *
+         * @param array $jobs
+         * @param mixed $data
+         * @param string $queue
+         * @return mixed 
+         * @static 
+         */ 
+        public static function bulk($jobs, $data = '', $queue = null)
+        {
+            return \Illuminate\Queue\DatabaseQueue::bulk($jobs, $data, $queue);
+        }
+        
+        /**
+         * Release a reserved job back onto the queue.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJobRecord $job
+         * @param int $delay
+         * @return mixed 
+         * @static 
+         */ 
+        public static function release($queue, $job, $delay)
+        {
+            return \Illuminate\Queue\DatabaseQueue::release($queue, $job, $delay);
         }
         
         /**
@@ -6384,7 +6423,43 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function pop($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::pop($queue);
+            return \Illuminate\Queue\DatabaseQueue::pop($queue);
+        }
+        
+        /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string $queue
+         * @param string $id
+         * @return void 
+         * @static 
+         */ 
+        public static function deleteReserved($queue, $id)
+        {
+            \Illuminate\Queue\DatabaseQueue::deleteReserved($queue, $id);
+        }
+        
+        /**
+         * Get the queue or return the default.
+         *
+         * @param string|null $queue
+         * @return string 
+         * @static 
+         */ 
+        public static function getQueue($queue)
+        {
+            return \Illuminate\Queue\DatabaseQueue::getQueue($queue);
+        }
+        
+        /**
+         * Get the underlying database instance.
+         *
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
+        public static function getDatabase()
+        {
+            return \Illuminate\Queue\DatabaseQueue::getDatabase();
         }
         
         /**
@@ -6399,7 +6474,7 @@ namespace Illuminate\Support\Facades {
         public static function pushOn($queue, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::pushOn($queue, $job, $data);
+            return \Illuminate\Queue\DatabaseQueue::pushOn($queue, $job, $data);
         }
         
         /**
@@ -6415,22 +6490,7 @@ namespace Illuminate\Support\Facades {
         public static function laterOn($queue, $delay, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::laterOn($queue, $delay, $job, $data);
-        }
-        
-        /**
-         * Push an array of jobs onto the queue.
-         *
-         * @param array $jobs
-         * @param mixed $data
-         * @param string $queue
-         * @return mixed 
-         * @static 
-         */ 
-        public static function bulk($jobs, $data = '', $queue = null)
-        {
-            //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::bulk($jobs, $data, $queue);
+            return \Illuminate\Queue\DatabaseQueue::laterOn($queue, $delay, $job, $data);
         }
         
         /**
@@ -6443,7 +6503,7 @@ namespace Illuminate\Support\Facades {
         public static function getJobExpiration($job)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getJobExpiration($job);
+            return \Illuminate\Queue\DatabaseQueue::getJobExpiration($job);
         }
         
         /**
@@ -6455,7 +6515,7 @@ namespace Illuminate\Support\Facades {
         public static function getConnectionName()
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getConnectionName();
+            return \Illuminate\Queue\DatabaseQueue::getConnectionName();
         }
         
         /**
@@ -6468,7 +6528,7 @@ namespace Illuminate\Support\Facades {
         public static function setConnectionName($name)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::setConnectionName($name);
+            return \Illuminate\Queue\DatabaseQueue::setConnectionName($name);
         }
         
         /**
@@ -6481,7 +6541,7 @@ namespace Illuminate\Support\Facades {
         public static function setContainer($container)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            \Illuminate\Queue\SyncQueue::setContainer($container);
+            \Illuminate\Queue\DatabaseQueue::setContainer($container);
         }
          
     }
@@ -7410,8 +7470,8 @@ namespace Illuminate\Support\Facades {
          * 
          * Order of precedence: PATH (routing placeholders or custom attributes), GET, BODY
          *
-         * @param string $key the key
-         * @param mixed $default the default value if the parameter key does not exist
+         * @param string $key The key
+         * @param mixed $default The default value if the parameter key does not exist
          * @return mixed 
          * @static 
          */ 
@@ -15653,6 +15713,317 @@ namespace Collective\Html {
  
 }
 
+namespace Laravelista\Ekko\Facades { 
+
+    class Ekko {
+        
+        /**
+         * Compares given route name with current route name.
+         * 
+         * Any section of the route name can be replaced with a * wildcard.
+         * Example: user.*
+         *
+         * @param string $routeName
+         * @param string $output
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isActiveRoute($routeName, $output = 'active')
+        {
+            return \Laravelista\Ekko\Ekko::isActiveRoute($routeName, $output);
+        }
+        
+        /**
+         * Compares given URL with current URL.
+         *
+         * @param string $url
+         * @param string $output
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isActiveURL($url, $output = 'active')
+        {
+            return \Laravelista\Ekko\Ekko::isActiveURL($url, $output);
+        }
+        
+        /**
+         * Detects if the given string is found in the current URL.
+         *
+         * @param string $string
+         * @param string $output
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isActiveMatch($string, $output = 'active')
+        {
+            return \Laravelista\Ekko\Ekko::isActiveMatch($string, $output);
+        }
+        
+        /**
+         * Compares given array of route names with current route name.
+         *
+         * @param array $routeNames
+         * @param string $output
+         * @return boolean 
+         * @static 
+         */ 
+        public static function areActiveRoutes($routeNames, $output = 'active')
+        {
+            return \Laravelista\Ekko\Ekko::areActiveRoutes($routeNames, $output);
+        }
+        
+        /**
+         * Compares given array of URLs with current URL.
+         *
+         * @param array $urls
+         * @param string $output
+         * @return boolean 
+         * @static 
+         */ 
+        public static function areActiveURLs($urls, $output = 'active')
+        {
+            return \Laravelista\Ekko\Ekko::areActiveURLs($urls, $output);
+        }
+         
+    }
+ 
+}
+
+namespace Intervention\Image\Facades { 
+
+    class Image {
+        
+        /**
+         * Overrides configuration settings
+         *
+         * @param array $config
+         * @static 
+         */ 
+        public static function configure($config = array())
+        {
+            return \Intervention\Image\ImageManager::configure($config);
+        }
+        
+        /**
+         * Initiates an Image instance from different input types
+         *
+         * @param mixed $data
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function make($data)
+        {
+            return \Intervention\Image\ImageManager::make($data);
+        }
+        
+        /**
+         * Creates an empty image canvas
+         *
+         * @param integer $width
+         * @param integer $height
+         * @param mixed $background
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function canvas($width, $height, $background = null)
+        {
+            return \Intervention\Image\ImageManager::canvas($width, $height, $background);
+        }
+        
+        /**
+         * Create new cached image and run callback
+         * (requires additional package intervention/imagecache)
+         *
+         * @param \Closure $callback
+         * @param integer $lifetime
+         * @param boolean $returnObj
+         * @return \Image 
+         * @static 
+         */ 
+        public static function cache($callback, $lifetime = null, $returnObj = false)
+        {
+            return \Intervention\Image\ImageManager::cache($callback, $lifetime, $returnObj);
+        }
+         
+    }
+ 
+}
+
+namespace Xinax\LaravelGettext\Facades { 
+
+    class LaravelGettext {
+        
+        /**
+         * Get the current encoding
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getEncoding()
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getEncoding();
+        }
+        
+        /**
+         * Set the current encoding
+         *
+         * @param string $encoding
+         * @return $this 
+         * @static 
+         */ 
+        public static function setEncoding($encoding)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::setEncoding($encoding);
+        }
+        
+        /**
+         * Gets the Current locale.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getLocale()
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getLocale();
+        }
+        
+        /**
+         * Set current locale
+         *
+         * @param string $locale
+         * @return $this 
+         * @throws Exceptions\LocaleNotSupportedException
+         * @throws \Exception
+         * @static 
+         */ 
+        public static function setLocale($locale)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::setLocale($locale);
+        }
+        
+        /**
+         * Get the language portion of the locale
+         * (ex. en_GB returns en)
+         *
+         * @param string|null $locale
+         * @return string|null 
+         * @static 
+         */ 
+        public static function getLocaleLanguage($locale = null)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getLocaleLanguage($locale);
+        }
+        
+        /**
+         * Get the language selector object
+         *
+         * @param array $labels
+         * @return \Xinax\LaravelGettext\LanguageSelector 
+         * @static 
+         */ 
+        public static function getSelector($labels = array())
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getSelector($labels);
+        }
+        
+        /**
+         * Sets the current domain
+         *
+         * @param string $domain
+         * @return $this 
+         * @static 
+         */ 
+        public static function setDomain($domain)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::setDomain($domain);
+        }
+        
+        /**
+         * Returns the current domain
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getDomain()
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getDomain();
+        }
+        
+        /**
+         * Translates a message with the current handler
+         *
+         * @param $message
+         * @return string 
+         * @static 
+         */ 
+        public static function translate($message)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::translate($message);
+        }
+        
+        /**
+         * Translates a plural string with the current handler
+         *
+         * @param $singular
+         * @param $plural
+         * @param $count
+         * @return string 
+         * @static 
+         */ 
+        public static function translatePlural($singular, $plural, $count)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::translatePlural($singular, $plural, $count);
+        }
+        
+        /**
+         * Returns the translator.
+         *
+         * @return \Xinax\LaravelGettext\TranslatorInterface 
+         * @static 
+         */ 
+        public static function getTranslator()
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getTranslator();
+        }
+        
+        /**
+         * Sets the translator
+         *
+         * @param \Xinax\LaravelGettext\TranslatorInterface $translator
+         * @return $this 
+         * @static 
+         */ 
+        public static function setTranslator($translator)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::setTranslator($translator);
+        }
+        
+        /**
+         * Returns supported locales
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getSupportedLocales()
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::getSupportedLocales();
+        }
+        
+        /**
+         * Indicates if given locale is supported
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function isLocaleSupported($locale)
+        {
+            return \Xinax\LaravelGettext\LaravelGettext::isLocaleSupported($locale);
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17773,6 +18144,12 @@ namespace  {
     class Form extends \Collective\Html\FormFacade {}
 
     class Html extends \Collective\Html\HtmlFacade {}
+
+    class Ekko extends \Laravelista\Ekko\Facades\Ekko {}
+
+    class Image extends \Intervention\Image\Facades\Image {}
+
+    class LaravelGettext extends \Xinax\LaravelGettext\Facades\LaravelGettext {}
  
 }
 

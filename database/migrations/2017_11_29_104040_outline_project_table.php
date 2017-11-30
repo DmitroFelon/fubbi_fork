@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOutlinesTable extends Migration
+class OutlineProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateOutlinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('outlines', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('title');
-            $table->string('body');
-            $table->timestamps();
+        Schema::create('outline_project', function (Blueprint $table) {
+            $table->integer('outline_id');
+            $table->integer('project_id');
+            $table->boolean('accepted')->default(false);
         });
     }
 
@@ -29,6 +27,6 @@ class CreateOutlinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('outlines');
+        //
     }
 }

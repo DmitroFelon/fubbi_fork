@@ -16,75 +16,30 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-/*function isRevisionArray(Revision $history, $model, $parameter)
-{
-    $new = $history->newValue();
-    $old = $history->oldValue();
-    $new_array = json_decode($new, true);
-    $old_array = json_decode($old, true);
+Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');
 
-    if (! is_array($new_array) and ! is_array($old_array)) {
-        return false;
-    }
+Route::middleware(['auth'])->group(function () {
 
-    if (empty($new_array) and empty($old_array)) {
-        return false;
-    }
+	Route::resource('projects', 'ProjectController');
 
-    $added_fields = array_values(array_diff($new_array, $old_array));
+	Route::resource('project.outlines', 'OutlineController');
 
-    $removed_fields = array_values(array_diff($old_array, $new_array));
+	Route::resource('project.articles', 'ArticlesController');
 
-    if (empty($added_fields) and empty($removed_fields)) {
-        return false;
-    }
+	Route::resource('annotations', 'AnnotationController'); //TODO remove it
 
-    $added_string = '';
+	Route::resource('teams', 'TeamController');
 
-    $removed_string = '';
+	Route::resource('users', 'UserController');
 
-    foreach ($model::find($added_fields) as $field) {
-        $added_string .= '`'.$field->$parameter.'`';
-    }
+	Route::post('subscribe', 'SubscriptionController@subscribe');
 
-    foreach ($model::find($removed_fields) as $field) {
-        $removed_string .= '`'.$field->$parameter.'`';
-    }
+	Route::get('notification/read/{id?}', 'NotificationController@read');
 
-    
-
-    $result = $history->userResponsible()->name;
-    $added_string_result = ($added_string != '') ? ' added '.$added_string : '';
-    $removed_string = ($removed_string != '') ? ' removed '.$removed_string : '';
-
-    return $result.$added_string_result.$removed_string;
-}*/
-
-
-Route::get('notification/read/{id?}', function ($id = null) {
-
-	if (! is_null($id)) {
-		$notification = Auth::user()->notifications()->where('id', $id)->first();
-		if (! is_null($notification)) {
-			$notification->markAsRead();
-		}
-	} else {
-		Auth::user()->unreadNotifications->markAsRead();
-	}
-
-	return redirect('alerts');
+	Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
 });
 
-Route::resource('projects', 'ProjectController')->middleware('auth');
 
-Route::resource('annotations', 'AnnotationController')->middleware('auth');
 
-Route::resource('teams', 'TeamController')->middleware('auth');
 
-Route::resource('users', 'UserController')->middleware('auth');
 
-Route::post('subscribe', 'SubscriptionController@subscribe')->middleware('auth');
-
-Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index')->middleware('auth');
-
-Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');

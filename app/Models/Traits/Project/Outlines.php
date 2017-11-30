@@ -15,12 +15,12 @@ use App\Models\Outline;
  *
  * @package App\Models\Traits\Project
  */
-trait Oulines
+trait Outlines
 {
 	/**
 	 * @return mixed
 	 */
-	public function oulines()
+	public function outlines()
 	{
 		return $this->belongsToMany(Outline::class);
 	}
