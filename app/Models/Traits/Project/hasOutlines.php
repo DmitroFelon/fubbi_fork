@@ -15,7 +15,7 @@ use App\Models\Outline;
  *
  * @package App\Models\Traits\Project
  */
-trait Outlines
+trait hasOutlines
 {
 	/**
 	 * @return mixed

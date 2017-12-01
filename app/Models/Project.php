@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Project\Articles;
+use App\Models\Traits\Project\hasArticles;
 use App\Models\Traits\Project\FormProjectAccessors;
-use App\Models\Traits\Project\Keywords;
-use App\Models\Traits\Project\Outlines;
-use App\Models\Traits\Project\States;
-use App\Models\Traits\Project\Teams;
-use App\Models\Traits\Project\Workers;
+use App\Models\Traits\Project\hasKeywords;
+use App\Models\Traits\Project\hasOutlines;
+use App\Models\Traits\Project\hasStates;
+use App\Models\Traits\Project\hasTeams;
+use App\Models\Traits\Project\hasWorkers;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,14 +54,14 @@ use Venturecraft\Revisionable\Revision;
  * @property-read \App\Models\Task $task
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereSubscriptionId($value)
  */
-class Project extends Model implements HasMedia
+class Project extends Model implements HasMedia, Invitable
 {
-	use Keywords;
-	use States;
-	use Workers;
-	use Teams;
-	use Outlines;
-	use Articles;
+	use hasKeywords;
+	use hasStates;
+	use hasWorkers;
+	use hasTeams;
+	use hasOutlines;
+	use hasArticles;
 	use Metable;
 	use FormProjectAccessors;
 	use HasMediaTrait;
@@ -201,6 +201,6 @@ class Project extends Model implements HasMedia
 	public function filled(){
 
 		//TODO check project state if project filled, send events to workers
-		$this->fireModelEvent('rejected', false);
+		$this->fireModelEvent('filled', false);
 	}
 }

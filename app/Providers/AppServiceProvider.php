@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-
+use App\Models\Invite;
 use App\Models\Project;
+use App\Observers\InviteObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
 use App\User;
@@ -32,30 +33,30 @@ class AppServiceProvider extends ServiceProvider
 	private function observers()
 	{
 		Project::observe(ProjectObserver::class);
-
+		Invite::observe(InviteObserver::class);
 		User::observe(UserObserver::class);
 	}
 
 	private function formComponents()
 	{
 		Form::component('bsText', 'components.form.text', [
-				'name',
-				'value',
-				'label',
-				'description',
-				'attributes' => [],
-				'type'       => '',
-			]);
+			'name',
+			'value',
+			'label',
+			'description',
+			'attributes' => [],
+			'type'       => '',
+		]);
 
 		Form::component('bsSelect', 'components.form.select', [
-				'name',
-				'list',
-				'selected',
-				'label',
-				'description',
-				'select_attributes' => [],
-				'options_attributes' => [],
-			]);
+			'name',
+			'list',
+			'selected',
+			'label',
+			'description',
+			'select_attributes'  => [],
+			'options_attributes' => [],
+		]);
 	}
 
 	/**

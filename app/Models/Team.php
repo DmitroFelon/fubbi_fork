@@ -31,7 +31,7 @@ use Ghanem\Rating\Traits\Ratingable;
  * @property int|null $owner_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereOwnerId($value)
  */
-class Team extends Model
+class Team extends Model implements Invitable
 {
     use Ratingable;
 

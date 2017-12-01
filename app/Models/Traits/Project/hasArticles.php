@@ -15,7 +15,7 @@ use App\Models\Article;
  *
  * @package App\Models\Traits\Project
  */
-trait Articles
+trait hasArticles
 {
 	/**
      * @return mixed

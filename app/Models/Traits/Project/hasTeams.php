@@ -3,20 +3,20 @@
  * Created by PhpStorm.
  * User: imad
  * Date: 08/11/17
- * Time: 11:30
+ * Time: 11:40
  */
 
 namespace App\Models\Traits\Project;
 
-use App\User;
+use App\Models\Team;
 
-trait Workers
+trait hasTeams
 {
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function workers()
+    public function teams()
     {
-        return $this->belongsToMany(User::class, 'project_worker', 'project_id', 'user_id');
+        return $this->belongsToMany(Team::class);
     }
 }

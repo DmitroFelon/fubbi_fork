@@ -12,7 +12,7 @@ use App\Models\Keyword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-trait Keywords
+trait hasKeywords
 {
     public function attachKeywords($args)
     {

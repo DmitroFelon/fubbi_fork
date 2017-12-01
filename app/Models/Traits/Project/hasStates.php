@@ -13,7 +13,7 @@ use App\Exceptions\Project\ImpossibleState;
 use App\Exceptions\Project\WrongTransition;
 
 
-trait States
+trait hasStates
 {
     protected $states = [
         'created',

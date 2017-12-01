@@ -4,6 +4,8 @@ namespace App;
 
 use App\Models\Annotation;
 use App\Models\Article;
+use App\Models\Invitable;
+use App\Models\Invite;
 use App\Models\Outline;
 use App\Models\Project;
 use App\Models\Role;
@@ -148,5 +150,35 @@ class User extends Authenticatable implements HasMedia
 	public function outlines()
 	{
 		return $this->hasMany(Outline::class);
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function invites()
+	{
+		return $this->hasMany(Invite::class);
+	}
+
+	public function inviteTo(Invitable $whereInvite)
+	{
+		throw_unless(
+			in_array(
+				get_class($whereInvite),
+				Invite::getAvailableInvites()
+			),
+			\Exception::class,  'Wrong Invitable Object'
+		);
+		
+		$relation = Invite::getInviteRelations()[get_class($whereInvite)];
+		
+		$invite = new Invite([
+			'type' => $relation,
+			'user_id' => $this->id,
+			$relation.'_id' => $whereInvite->id
+		]);
+
+		$invite->save();
+		
 	}
 }
