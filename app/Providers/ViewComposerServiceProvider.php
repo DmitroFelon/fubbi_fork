@@ -9,6 +9,7 @@
 namespace App\Providers;
 
 use App\ViewComposers\LeftMenuComposer;
+use App\ViewComposers\MasterComposer;
 use App\ViewComposers\TopMenuComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,7 @@ class ViewComposerServiceProvider extends ServiceProvider
          * */
         View::composer('layouts.navigation', LeftMenuComposer::class);
         View::composer('layouts.topnavbar', TopMenuComposer::class);
+        View::composer('*', MasterComposer::class);
 
     }
 

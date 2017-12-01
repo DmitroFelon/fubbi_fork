@@ -1,5 +1,6 @@
 @extends('master')
 
+
 @section('content')
-    <div class="ibox-content"></div>
+    <div class="ibox"></div>
 @endsection

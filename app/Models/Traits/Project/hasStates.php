@@ -8,54 +8,62 @@
 
 namespace App\Models\Traits\Project;
 
+use App\Exceptions\Project\ImpossibleProjectState;
+use App\Models\Project;
 
-use App\Exceptions\Project\ImpossibleState;
-use App\Exceptions\Project\WrongTransition;
-
-
+/**
+ * Class hasStates
+ *
+ * @package App\Models\Traits\Project
+ */
 trait hasStates
 {
-    protected $states = [
-        'created',
-        'plan',
-        'quiz',
-        'keywords',
-        'on_manager_review',
-        'processing',
-        'on_client_review',
-        'accepted_by_client',
-        'rejected_by_client',
-        'completed',
-    ];
+	/**
+	 * @var array
+	 */
+	protected $states = [
+		Project::CREATED,
+		Project::PLAN_SELECTION,
+		Project::QUIZ_FILLING,
+		Project::KEYWORDS_FILLING,
+		Project::MANAGER_REVIEW,
+		Project::PROCESSING,
+		Project::CLIENT_REVIEW,
+		Project::ACCEPTED_BY_CLIENT,
+		Project::REJECTED_BY_CLIENT,
+		Project::COMPLETED,
+	];
 
-    /**
-     * @param string $state
-     * @return App\Models\Project
-     * @throws \Exception
-     */
-    public function setState($state)
-    {
-        try {
-            $this->validateState($state);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+	/**
+	 * @param string $state
+	 * @return \App\Models\Project
+	 * @throws \Exception
+	 */
+	public function setState($state)
+	{
+		throw_unless(
+			$this->validateState($state),
+			ImpossibleProjectState::class,
+			__('Impossible state of project')
+		);
 
-        $this->state = $state;
+		$this->state = $state;
 
+		if ($this->isDirty()) {
+			$this->save();
+			$this->fireModelEvent('setState', false);
+		}
 
-        if ($this->isDirty()) {
-            $this->save();
-            $this->fireModelEvent('setState', false);
-        }
+		return $this;
+	}
 
-        return $this;
-    }
-
-    public function validateState($state)
-    {
-
-        throw_unless(in_array($state, $this->states), ImpossibleState::class, 'Impossible state of project');
-        throw_unless(true, WrongTransition::class, "Can't change from current state to: ".$state);
-    }
+	/**
+	 * @param $state
+	 * @throws \Throwable
+	 * @throws string
+	 */
+	public function validateState($state)
+	{
+		return in_array($state, $this->states);
+	}
 }

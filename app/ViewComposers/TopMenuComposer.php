@@ -8,7 +8,6 @@
 
 namespace App\ViewComposers;
 
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

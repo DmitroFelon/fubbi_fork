@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::post('subscribe', 'SubscriptionController@subscribe');
 
+	Route::get('alerts', 'NotificationController@show');
+
 	Route::get('notification/read/{id?}', 'NotificationController@read');
 
 	Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');

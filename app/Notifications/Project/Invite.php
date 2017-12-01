@@ -2,11 +2,11 @@
 
 namespace App\Notifications\Project;
 
+use App\Models\Invite as Invitation;
 use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use \App\Models\Invite as Invitation;
 
 class Invite extends Notification
 {
@@ -43,10 +43,14 @@ class Invite extends Notification
 	 */
 	public function toMail($notifiable)
 	{
-		return (new MailMessage)
-			->line(__('You have beed invited to project "%s". Please apply or decline it', $this->invite->project->name))
-			->action('Review Project', url()->action('ProjectController@show', $this->invite->project))
-			->line('Thank you for using our application!');
+		return (new MailMessage)->line(
+				__(
+					'You have beed invited to project "%s". Please apply or decline it',
+					$this->invite->invitable->getInvitableName()
+				)
+			)->action('Review Project', $this->invite->invitable->getInvitableUrl())->line(
+				'Thank you for using our application!'
+			);
 	}
 
 	/**
@@ -58,8 +62,14 @@ class Invite extends Notification
 	public function toArray($notifiable)
 	{
 		$notification = NotificationPayload::make(
-			__('You have beed invited to project "%s". Please apply or decline it',
-				$this->invite->project->name), url()->action('ProjectController@show', $this->invite->project), get_class($this->invite->project), $this->invite->project->id);
+			__(
+				'You have beed invited to project "%s". Please apply or decline it',
+				$this->invite->project->name
+			),
+			$this->invite->invitable->getInvitableUrl(),
+			get_class($this->invite->invitable),
+			$this->invite->invitable->getInvitableId
+		);
 
 		return $notification->toArray();
 	}

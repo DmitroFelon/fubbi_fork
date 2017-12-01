@@ -3,6 +3,9 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\Invitable;
+use App\Models\Traits\hasInvite;
+use App\Notifications\Team\Invite;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Ghanem\Rating\Traits\Ratingable;
@@ -34,10 +37,25 @@ use Ghanem\Rating\Traits\Ratingable;
 class Team extends Model implements Invitable
 {
     use Ratingable;
+    use hasInvite;
 
+	/**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users(){
         return $this->belongsToMany(User::class,  'team_user', 'team_id', 'user_id');
     }
-    
-    
+
+	/**
+     * @return string
+     */
+    public function getInvitableUrl():string
+    {
+        return url()->action('TeamController@show', $this);
+    }
+
+    public function getInvitableNotification()
+    {
+        return Invite::class;
+    }
 }

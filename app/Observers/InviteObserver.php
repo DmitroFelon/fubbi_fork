@@ -14,7 +14,8 @@ class InviteObserver
 {
 	public function created(Invite $invite)
 	{
-		$notification = Invite::getInviteNotifications()[$invite->type];
+
+		$notification = $invite->invitable->getInvitableNotification();
 
 		$invite->user->notify(
 			new $notification($invite)

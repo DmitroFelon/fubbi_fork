@@ -4,7 +4,7 @@
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-4">
-            <h2>Project detail</h2>
+            <h2>{{__('Project details')}}</h2>
         </div>
     </div>
 @endsection
@@ -14,13 +14,18 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="m-b-md">
-                <a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">Edit project</a>
-
+                <a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
+                    {{__('Edit project')}}
+                </a>
                 <h2>{{$project->name}}</h2>
             </div>
             <dl class="dl-horizontal">
-                <dt>Status:</dt>
-                <dd><span class="label label-primary">{{ucfirst(str_replace('_',' ',$project->state))}}</span></dd>
+                <dt>{{__('Status')}}:</dt>
+                <dd>
+                    <span class="label label-primary">
+                        {{ucfirst(str_replace('_',' ',$project->state))}}
+                    </span>
+                </dd>
             </dl>
         </div>
     </div>
@@ -28,28 +33,32 @@
         <div class="col-lg-5">
             <dl class="dl-horizontal">
                 <dt>Client:</dt>
-                <dd>{{$project->client->name}}</dd>
-                <dt>Subscription Plan:</dt>
+                <dd>
+                    <a target="_blank" href="{{url()->action('UserController@show', $project->client)}}">
+                        {{$project->client->name}}
+                    </a>
+                </dd>
+                <dt>{{__('Subscription Plan')}}:</dt>
                 <dd>{{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</dd>
-                <dt>Billing Cycle:</dt>
+                <dt>{{__('Billing Cycle')}}:</dt>
                 <dd>1 {{__('month')}}</dd>
-                <dt>Messages:</dt>
+                <dt>{{__('Messages')}}:</dt>
                 <dd>{{$project->commentCount()}}</dd>
             </dl>
         </div>
         <div class="col-lg-7" id="cluster_info">
             <dl class="dl-horizontal">
-                <dt>Last Updated:</dt>
+                <dt>{{__('Last Updated')}}:</dt>
                 <dd>
                     {{$project->updated_at}}
                     <small class="text-muted">({{$project->updated_at->diffForHumans()}})</small>
                 </dd>
-                <dt>Created:</dt>
+                <dt>{{__('Created')}}:</dt>
                 <dd>
                     {{$project->created_at}}
                     <small class="text-muted">({{$project->created_at->diffForHumans()}})</small>
                 </dd>
-                <dt>Participants:</dt>
+                <dt>{{__('Participants')}}:</dt>
                 <dd class="project-people">
                     @foreach($project->workers as $worker)
                         <div>
@@ -131,7 +140,7 @@
                         <div class="row">
                             <div class="col col-xs-12">
                                 <h3 class="text-center">{{title_case(str_replace('_',' ',$collection))}}</h3>
-                                @each('partials.client.project.files-row', $project->getMedia($collection), 'media', 'partials.client.project.form.plan.files-row-empty')
+                                @each('entity.project.partials.files-row', $project->getMedia($collection), 'media', 'entity.project.partials.files-row-empty')
                             </div>
 
                         </div>

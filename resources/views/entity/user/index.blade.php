@@ -1,22 +1,30 @@
 @extends('master')
 
+@section('before-content')
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>{{__('Users')}}</h2>
+        </div>
+    </div>
+@endsection
+
 @section('content')
     <div class="ibox-content">
-    <span class="text-muted small pull-right">Last modification: <i
-                class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>
-    <h2>Users</h2>
-    <p>
-        some text
-    </p>
+    <span class="text-muted small pull-right">
+        Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014
+    </span>
+    <br><br>
     <div class="input-group">
         <input type="text" placeholder="Search client"
                class="input form-control">
         <span class="input-group-btn">
-                <button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search</button>
+                <button type="button" class="btn btn btn-primary">
+                    <i class="fa fa-search"></i>{{__('Search')}}
+                </button>
         </span>
     </div>
     <div class="clients-list">
-        <span class="pull-right small text-muted">1406 Elements</span>
+        <span class="pull-right small text-muted">{{__('Total')}}: <small>{{$users_count}}</small></span>
         <ul class="nav nav-tabs">
             @foreach(\App\Models\Role::all() as $role)
                 <li class="{{$loop->first?'active':''}}">
@@ -45,7 +53,8 @@
                                         <td> {{$user->email}}</td>
                                         <td class="contact-type"><i class="fa fa-phone"> </i></td>
                                         <td> {{$user->phone}}</td>
-                                        <td class="client-status"><span class="label label-primary">Active</span></td>
+                                        <td class="contact-type"> <i class="fa fa-file-o"></i></td>
+                                        <td>{{$user->projects->count()}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -55,7 +64,6 @@
                 </div>
             @endforeach
         </div>
-
     </div>
     </div>
 @endsection

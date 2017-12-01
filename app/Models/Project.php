@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\Invitable;
+use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\hasArticles;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\hasKeywords;
@@ -9,6 +11,7 @@ use App\Models\Traits\Project\hasOutlines;
 use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
+use App\Notifications\Project\Invite;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Builder;
@@ -66,6 +69,7 @@ class Project extends Model implements HasMedia, Invitable
 	use FormProjectAccessors;
 	use HasMediaTrait;
 	use HasComments;
+	use hasInvite;
 
 	/**
 	 * @const string
@@ -202,5 +206,18 @@ class Project extends Model implements HasMedia, Invitable
 
 		//TODO check project state if project filled, send events to workers
 		$this->fireModelEvent('filled', false);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getInvitableUrl()
+	{
+		return url()->action('ProjectController@show', $this);
+	}
+
+	public function getInvitableNotification()
+	{
+		return Invite::class;
 	}
 }

@@ -35,4 +35,19 @@ class NotificationPayload
 	{
 		return get_object_vars($this);
 	}
+
+	public static function getIcon(string $type = '')
+	{
+		$relations = [
+			'App\Notifications\Client\Registered' => 'user-plus',
+			'App\Notifications\Project\Created' => 'file bg-success',
+			'App\Notifications\Project\Invite' => 'exclamation-circle bg-primary',
+			'App\Notifications\Team\Invite' => 'users bg-primary',
+		];
+
+		return (key_exists($type, $relations))
+			?$relations[$type]
+			:'circle';
+
+	}
 }

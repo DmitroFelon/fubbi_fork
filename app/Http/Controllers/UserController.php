@@ -35,16 +35,21 @@ class UserController extends Controller
 
 		$users = [];
 
+		$users_count = 0;
+
 		foreach ($roles as $role) {
 			$users[$role->name] = User::withRole($role->name)->get();
+			$users_count += count($users[$role->name]);
 		}
 
 		$data = [
-			'users' => $users,
-			'roles' => $roles,
+			'users'       => $users,
+			'roles'       => $roles,
+			'users_count' => $users_count,
+
 		];
 
-		return view('pages.'.$this->request->user()->getRole().'.users.index', $data);
+		return view('entity.user.index', $data);
 	}
 
 	/**
@@ -54,7 +59,7 @@ class UserController extends Controller
 	 */
 	public function create()
 	{
-		//
+		return view('entity.user.create');
 	}
 
 	/**
@@ -76,7 +81,7 @@ class UserController extends Controller
 	 */
 	public function show(User $user)
 	{
-		return $user;
+		return view('entity.user.show', ['user' => $user]);
 	}
 
 	/**
@@ -87,7 +92,7 @@ class UserController extends Controller
 	 */
 	public function edit($id)
 	{
-		//
+		return view('entity.user.edit');
 	}
 
 	/**

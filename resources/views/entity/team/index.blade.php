@@ -50,9 +50,11 @@
                                     {{$user->name}}
                                 </a>
                                 @if($user->id == $team->owner_id)
-                                    <span class="label label-primary pull-right">Owner</span>
+                                    <span class="label label-primary pull-right">{{__('Owner')}}</span>
                                 @else
-                                    <span class="label label-default pull-right">{{$user->getRole()}}</span>
+                                    <span class="label label-default pull-right">
+                                        {{$user->roles()->first()->display_name}}
+                                    </span>
                                 @endif
                                 <br>
                             @endforeach
@@ -62,8 +64,4 @@
             </div>
         @endforeach
     </div>
-@endsection
-
-@section('content')
-
 @endsection

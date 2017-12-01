@@ -1,15 +1,15 @@
 <li class="dropdown">
     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
         <i class="fa fa-bell"></i>
-        @if(count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications) > 0)
+        @if($notifications->count())
             <span class="label label-warning">
-                {{count(\Illuminate\Support\Facades\Auth::user()->unreadNotifications)}}
+                {{$notifications->count()}}
             </span>
         @endif
     </a>
     <ul class="dropdown-menu dropdown-messages">
         @each('partials.navbar-elements.alert-row',
-            \Illuminate\Support\Facades\Auth::user()->unreadNotifications,
+            $notifications,
              'notification',
              'partials.navbar-elements.alert-row-empty'
         )

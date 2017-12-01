@@ -4,7 +4,7 @@ namespace App;
 
 use App\Models\Annotation;
 use App\Models\Article;
-use App\Models\Invitable;
+use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
 use App\Models\Outline;
 use App\Models\Project;
@@ -103,7 +103,10 @@ class User extends Authenticatable implements HasMedia
 	 */
 	public function projects()
 	{
-		return $this->hasMany(Project::class, 'client_id');
+		if($this->getRole() == 'client'){
+			return $this->hasMany(Project::class, 'client_id');
+		}
+		return $this->belongsToMany(Project::class, 'project_worker', 'user_id', 'project_id');
 	}
 
 	/**
@@ -162,23 +165,12 @@ class User extends Authenticatable implements HasMedia
 
 	public function inviteTo(Invitable $whereInvite)
 	{
-		throw_unless(
-			in_array(
-				get_class($whereInvite),
-				Invite::getAvailableInvites()
-			),
-			\Exception::class,  'Wrong Invitable Object'
-		);
-		
-		$relation = Invite::getInviteRelations()[get_class($whereInvite)];
-		
 		$invite = new Invite([
-			'type' => $relation,
+			'invitable_type' => get_class($whereInvite),
+			'invitable_id' => $whereInvite->getInvitableId(),
 			'user_id' => $this->id,
-			$relation.'_id' => $whereInvite->id
 		]);
 
 		$invite->save();
-		
 	}
 }

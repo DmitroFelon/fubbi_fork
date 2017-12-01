@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Auth;
  */
 class NotificationController extends Controller
 {
+	
+	public function show()
+	{
+		
+		return view('entity.alerts.index');
+	}
+	
 	/**
 	 * @param null $id
 	 * @return mixed

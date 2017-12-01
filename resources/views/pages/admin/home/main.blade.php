@@ -8,7 +8,6 @@
     <?php
     foreach (\Illuminate\Support\Facades\Auth::user()->notifications as $notification) {
         echo $notification->type .  json_encode($notification->data)."<br>";
-        $notification->markAsRead();
     }
     ?>
     <hr>

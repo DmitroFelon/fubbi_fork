@@ -53,7 +53,7 @@ class TeamController extends Controller
                 break;
         }
 
-        return view('pages.'.$role.'.teams.index', ['teams' => $teams]);
+        return view('entity.team.index', ['teams' => $teams]);
     }
 
     /**
@@ -63,7 +63,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        //
+        return view('entity.team.create');
     }
 
     /**
@@ -85,7 +85,7 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        return $team;
+        return view('entity.team.show');
     }
 
     /**
@@ -96,7 +96,7 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        return $team;
+        return view('entity.team.edit');
     }
 
     /**

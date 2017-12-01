@@ -10,17 +10,13 @@
         </small>
     </td>
     <td class="project-completion">
-        <small>Completion with: 48%</small>
+        <small>{{__('Completion with')}}: 0%</small>
         <div class="progress progress-mini">
-            <div style="width: 48%;" class="progress-bar"></div>
+            <div style="width: 0%;" class="progress-bar"></div>
         </div>
     </td>
     <td class="project-people">
-        @foreach($project->workers as $worker)
-            <a target="_blank" href="">
-                {{$worker->name}}
-            </a>
-        @endforeach
+        {{__('Workers')}}: {{$project->workers->count()}}
     </td>
     <td class="project-actions">
 

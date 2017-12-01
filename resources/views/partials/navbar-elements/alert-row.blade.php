@@ -2,8 +2,15 @@
     <div class="dropdown-messages-box">
         <div>
             <small class="pull-right text-navy">{{$notification->created_at->diffForHumans()}}</small>
-            <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
-            <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+            @if(isset($notification->data['link']))
+                <a href="{{$notification->data['link']}}">
+                    {{$notification->data['message']}}.
+                </a>
+            @else
+                {{$notification->data['message']}}.
+            @endif
+            <br>
+            <small class="text-muted">{{$notification->created_at}}</small>
         </div>
     </div>
 </li>

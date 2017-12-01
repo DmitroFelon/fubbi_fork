@@ -1,5 +1,7 @@
 @extends('master')
 
 @section('content')
-plans
+    <div class="ibox-content">
+        settings
+    </div>
 @endsection
