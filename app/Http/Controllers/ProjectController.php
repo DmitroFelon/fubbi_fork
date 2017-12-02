@@ -35,6 +35,9 @@ class ProjectController extends Controller
 	{
 
 		$this->request = $request;
+
+
+
 		
 		$this->authorizeResource(Project::class);
 	}
