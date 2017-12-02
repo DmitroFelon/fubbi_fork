@@ -90,6 +90,16 @@ class User extends Authenticatable implements HasMedia
 		'remember_token',
 	];
 
+	public function routeNotificationForMail()
+	{
+		return $this->email;
+	}
+
+	public function routeNotificationForPhone()
+	{
+		return $this->phone;
+	}
+
 	/**
 	 * @return string
 	 */

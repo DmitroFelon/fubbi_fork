@@ -9,6 +9,7 @@ use App\Notifications\Team\Invite;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Ghanem\Rating\Traits\Ratingable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\Models\Team
@@ -38,12 +39,17 @@ class Team extends Model implements Invitable
 {
     use Ratingable;
     use hasInvite;
-
+    use Notifiable;
+    
 	/**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users(){
         return $this->belongsToMany(User::class,  'team_user', 'team_id', 'user_id');
+    }
+    
+    public function owner(){
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
 	/**
@@ -58,4 +64,16 @@ class Team extends Model implements Invitable
     {
         return Invite::class;
     }
+
+    public function routeNotificationForMail()
+    {
+        return $this->owner->email;
+    }
+
+    public function routeNotificationForPhone()
+    {
+        return $this->owner->phone;
+    }
+    
+    
 }
