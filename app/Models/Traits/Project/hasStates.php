@@ -40,7 +40,7 @@ trait hasStates
 	 * @throws \Exception
 	 */
 	public function setState($state)
-	{
+	{   
 		throw_unless(
 			$this->validateState($state),
 			ImpossibleProjectState::class,
@@ -49,7 +49,7 @@ trait hasStates
 
 		$this->state = $state;
 
-		
+
 
 		if ($this->isDirty()) {
 			$this->save();
