@@ -61,8 +61,7 @@ trait hasStates
 
 	/**
 	 * @param $state
-	 * @throws \Throwable
-	 * @throws string
+	 * @return bool
 	 */
 	public function validateState($state)
 	{
