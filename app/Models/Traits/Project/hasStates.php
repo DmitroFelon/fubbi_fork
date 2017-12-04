@@ -49,6 +49,8 @@ trait hasStates
 
 		$this->state = $state;
 
+		
+
 		if ($this->isDirty()) {
 			$this->save();
 			$this->fireModelEvent('setState', false);

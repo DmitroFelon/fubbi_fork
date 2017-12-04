@@ -33,7 +33,6 @@ class ProjectController extends Controller
 	 */
 	public function __construct(Request $request)
 	{
-
 		$this->request = $request;
 		
 		$this->authorizeResource(Project::class);
@@ -144,7 +143,6 @@ class ProjectController extends Controller
 			$item->value = (filter_var($item->value, FILTER_VALIDATE_URL)) ? '<a href="'.$item->value.'">'.$item->value.'</a>' : $item->value;
 
 			if (in_array($item->key, $meta_to_cast)) {
-				$v           = $item->value;
 				$item->value = explode(',', $item->value);
 			}
 
