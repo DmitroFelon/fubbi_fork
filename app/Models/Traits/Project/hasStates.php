@@ -19,7 +19,7 @@ use App\Models\Project;
 trait hasStates
 {
 	/**
-	 * @var array
+	 * @var
 	 */
 	protected $states = [
 		Project::CREATED,
