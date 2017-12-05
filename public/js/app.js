@@ -3314,6 +3314,7 @@ jQuery(document).ready(function ($) {
             } else {}
         },
         onFinishing: function (event, currentIndex) {
+            return true;
             //todo add validation
         },
         onFinished: function (event, currentIndex) {

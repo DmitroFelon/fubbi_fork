@@ -46,15 +46,23 @@ jQuery(document).ready(function ($) {
         showFinishButtonAlways: true, //todo make true only if admin or manager
         autoFocus: false,
         onInit: function (event, currentIndex) {
-            //todo restore state
+            if (typeof(Storage) !== "undefined") {
+                if (typeof(localStorage.getItem("quiz-form-step")) !== "undefined") {
+                    jQuery("#quiz-form-t-"+localStorage.getItem("quiz-form-step")).click();
+                }
+            } else {}
         },
         onStepChanging: function (event, currentIndex) {
             //todo add validation
         },
         onStepChanged: function (event, currentIndex) {
-            //todo save data to server, save current step
+            //todo save data to server
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setItem("quiz-form-step", currentIndex);
+            } else {}
         },
         onFinishing: function (event, currentIndex) {
+            return true;
             //todo add validation
         },
         onFinished: function (event, currentIndex) {
@@ -73,7 +81,6 @@ jQuery(document).ready(function ($) {
         showFinishButtonAlways: true, //todo make true only if admin or manager
         autoFocus: false,
         onInit: function (event, currentIndex) {
-            //todo restore state with jQuery("#keywords-form-t-0").click();
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
                     jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
