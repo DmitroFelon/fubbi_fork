@@ -1,5 +1,5 @@
 {!! Form::model($project,
-['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'project-form', 'action' => ['ProjectController@update', $project->id]])
+['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
 !!}
 {!! Form::hidden('_step', \App\Models\Project::QUIZ_FILLING) !!}
 {!! Form::hidden('themes_order', null, ['id'=>'themes_order']) !!}

@@ -10,18 +10,18 @@
             <span class="text-muted">
                <small>
 
-                   Create at: {{$project->subscription->created_at}}
+                   {{__('Create at')}}: {{$project->subscription->created_at}}
                </small>
             </span>
             <span class="text-muted">
                 <small>
-                    Selected plan: {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</small>
+                    {{__('Selected plan')}}: {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</small>
             </span>
 
         </div>
     </blockquote>
 
-    @include('pages.client.projects.form')
+    @include('entity.project.form')
     </div>
 @endsection
 

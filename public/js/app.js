@@ -3227,8 +3227,8 @@ function SmoothlyMenu() {
 jQuery(document).ready(function ($) {
 
     /*
-    * Init subscriptions form
-    * */
+     * Init subscriptions form
+     * */
     $(".subscribe-btn").on('click', function () {
         var amount = $(this).attr('data-amount');
         var plan_id = $(this).attr('data-plan');
@@ -3264,20 +3264,68 @@ jQuery(document).ready(function ($) {
     });
 
     /*
-    * Init quiz form with steps
-    * */
-    $("#project-form").steps({
-            bodyTag: "fieldset",
-            onFinished: function (event, currentIndex) {
-                var form = $(this);
-                form.submit();
-            }
-        });
+     * Init quiz form with steps
+     * */
+    $("#quiz-form").steps({
+        bodyTag: "fieldset",
+        enableAllSteps: true,
+        showFinishButtonAlways: true, //todo make true only if admin or manager
+        autoFocus: false,
+        onInit: function (event, currentIndex) {
+            //todo restore state
+        },
+        onStepChanging: function (event, currentIndex) {
+            //todo add validation
+        },
+        onStepChanged: function (event, currentIndex) {
+            //todo save data to server, save current step
+        },
+        onFinishing: function (event, currentIndex) {
+            //todo add validation
+        },
+        onFinished: function (event, currentIndex) {
+            var form = $(this);
+            form.submit();
+        },
+
+    });
+
+    /*
+     * Init keywords form with steps
+     * */
+    $("#keywords-form").steps({
+        bodyTag: "fieldset",
+        enableAllSteps: true,
+        showFinishButtonAlways: true, //todo make true only if admin or manager
+        autoFocus: false,
+        onInit: function (event, currentIndex) {
+            //todo restore state with jQuery("#keywords-form-t-0").click();
+            if (typeof(Storage) !== "undefined") {
+                if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
+                    jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
+                }
+
+            } else {}
+        },
+        onStepChanged: function (event, currentIndex) {
+            //todo save data to server
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setItem("keywords-form-step", currentIndex);
+            } else {}
+        },
+        onFinishing: function (event, currentIndex) {
+            //todo add validation
+        },
+        onFinished: function (event, currentIndex) {
+            var form = $(this);
+            form.submit();
+        },
+    });
 
 
     /*
-    * Init tags inputs
-    * */
+     * Init tags inputs
+     * */
 
     $('.tagsinput').tagsinput({
         tagClass: 'label label-primary'
@@ -3286,8 +3334,8 @@ jQuery(document).ready(function ($) {
     var tag_themes_input = $('#themes');
 
     /*
-    * Add item to from tags input to sortable list
-    * */
+     * Add item to from tags input to sortable list
+     * */
 
     tag_themes_input.on('itemAdded', function (event) {
         $("#themes-order-list-wrapper").removeClass('hide');
@@ -3309,8 +3357,8 @@ jQuery(document).ready(function ($) {
         }
     });
     /*
-    * Init sortable
-    * */
+     * Init sortable
+     * */
     $("#themes-order-list").sortable({
         axis: "y",
         cursor: "move",

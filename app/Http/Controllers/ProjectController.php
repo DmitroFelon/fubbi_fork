@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
+use PHPUnit\Runner\Exception;
 use Stripe\Plan;
 
 /**
@@ -194,11 +195,12 @@ class ProjectController extends Controller
 					'ready_content',
 				]));
 				$project->addFiles($request);
-				$project->state = Project::KEYWORDS_FILLING;
+				$project->setState(Project::KEYWORDS_FILLING);
 				break;
 			case Project::KEYWORDS_FILLING:
 				$project->keywords()->sync($request->input('keywords'));
-				$project->state = Project::MANAGER_REVIEW;
+				$project->setState(Project::MANAGER_REVIEW);
+				$project->filled();
 				break;
 			default:
 				abort(404);
@@ -219,5 +221,20 @@ class ProjectController extends Controller
 	public function destroy($id)
 	{
 		return redirect()->action('ProjectController@index');
+	}
+
+	public function accept_review(Project $project)
+	{
+		$project->setState(Project::ACCEPTED_BY_MANAGER);
+
+		return redirect()->action('ProjectController@show', [$project]);
+		
+	}
+
+	public function reject_review(Project $project)
+	{
+		$project->setState(Project::REJECTED_BY_MANAGER);
+
+		return redirect()->action('ProjectController@show', [$project]);
 	}
 }

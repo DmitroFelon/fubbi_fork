@@ -1,6 +1,5 @@
 @extends('master')
 
-
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-4">
@@ -14,11 +13,10 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="m-b-md">
-                <a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
-                    {{__('Edit project')}}
-                </a>
+                @include('entity.project.partials.form.action-buttons')
                 <h2>{{$project->name}}</h2>
             </div>
+            <div class="clear-both"></div>
             <dl class="dl-horizontal">
                 <dt>{{__('Status')}}:</dt>
                 <dd>

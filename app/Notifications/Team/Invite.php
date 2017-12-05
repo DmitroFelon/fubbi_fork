@@ -14,16 +14,16 @@ class Invite extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $invite;
+    protected $invitation;
 
     /**
      * Create a new notification instance.
      *
      * @param \App\Models\Invite $invite
      */
-    public function __construct(Invitation $invite)
+    public function __construct(Invitation $invitation)
     {
-       $this->invite = $invite;
+       $this->invitation = $invitation;
     }
 
     /**
@@ -48,9 +48,9 @@ class Invite extends Notification implements ShouldQueue
         return (new MailMessage)->line(
             __(
                 'You have beed invited to team "%s". Please apply or decline it',
-                $this->invite->invitable->getInvitableName()
+                $this->invitation->invitable->getInvitableName()
             )
-        )->action('Review Invitation', $this->invite->invitable->getInvitableUrl())->line(
+        )->action('Review Invitation', $this->invitation->invitable->getInvitableUrl())->line(
             'Thank you for using our application!'
         );
     }
@@ -67,11 +67,11 @@ class Invite extends Notification implements ShouldQueue
         $notification = NotificationPayload::make(
             __(
                 'You have beed invited to %s',
-                $this->invite->invitable->getInvitableName()
+                $this->invitation->invitable->getInvitableName()
             ),
-            $this->invite->invitable->getInvitableUrl(),
-            get_class($this->invite->invitable),
-            $this->invite->invitable->getInvitableId()
+            $this->invitation->invitable->getInvitableUrl(),
+            get_class($this->invitation->invitable),
+            $this->invitation->invitable->getInvitableId()
         );
 
         return $notification->toArray();

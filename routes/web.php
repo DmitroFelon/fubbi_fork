@@ -20,6 +20,11 @@ Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookControll
 
 Route::middleware(['auth'])->group(function () {
 
+	Route::prefix('project')->group(function (){
+		Route::get('accept_review/{project}', "ProjectController@accept_review");
+		Route::get('reject_review/{project}', "ProjectController@reject_review");
+	});
+
 	Route::resource('projects', 'ProjectController');
 
 	Route::resource('project.outlines', 'OutlineController');

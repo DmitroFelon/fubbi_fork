@@ -122,6 +122,15 @@ class Project extends Model implements HasMedia, Invitable
 	const COMPLETED = 'completed';
 
 	/**
+	 * @const string
+	 */
+	const ACCEPTED_BY_MANAGER = 'accepted_by_manager';
+	
+	/**
+	 * @const string
+	 */
+	const REJECTED_BY_MANAGER = 'rejected_by_manager';
+	/**
 	 * @var array
 	 */
 	public static $media_collections = [
@@ -203,7 +212,6 @@ class Project extends Model implements HasMedia, Invitable
 	 * Fires model event "filled"
 	 */
 	public function filled(){
-
 		//TODO check project state if project filled, send events to workers
 		$this->fireModelEvent('filled', false);
 	}

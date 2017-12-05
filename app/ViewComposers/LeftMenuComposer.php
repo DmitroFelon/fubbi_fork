@@ -137,7 +137,26 @@ class LeftMenuComposer
 	public function account_manager()
 	{
 		return [
-
+			[
+				'name' => 'Teams',
+				'url'  => '/teams',
+				'icon' => 'fa fa-users',
+			],
+			[
+				'name' => 'Projects',
+				'url'  => '/projects',
+				'icon' => 'fa fa-file-o',
+			],
+			[
+				'name' => 'Messages',
+				'url'  => '/messages',
+				'icon' => 'fa fa-envelope',
+			],
+			[
+				'name' => 'Settings',
+				'url'  => '/settings',
+				'icon' => 'fa fa-gear',
+			]
 		];
 	}
 

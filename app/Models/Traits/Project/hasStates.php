@@ -27,6 +27,8 @@ trait hasStates
 		Project::QUIZ_FILLING,
 		Project::KEYWORDS_FILLING,
 		Project::MANAGER_REVIEW,
+		Project::ACCEPTED_BY_MANAGER,
+		Project::REJECTED_BY_MANAGER,
 		Project::PROCESSING,
 		Project::CLIENT_REVIEW,
 		Project::ACCEPTED_BY_CLIENT,
@@ -48,8 +50,6 @@ trait hasStates
 		);
 
 		$this->state = $state;
-
-
 
 		if ($this->isDirty()) {
 			$this->save();

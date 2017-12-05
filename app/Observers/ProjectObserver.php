@@ -27,36 +27,50 @@ class ProjectObserver
 	public function created(Project $project)
 	{
 		$should_be_notified = [
-			'admin'           => \App\Notifications\Project\Created::class,
-			'account_manager' => \App\Notifications\Project\Invite::class,
+			'admin' => \App\Notifications\Project\Created::class,
+		];
+
+		$should_be_invited = [
+			'account_manager',
 		];
 
 		$this->user->notify(new \App\Notifications\Project\Created($project));
 
 		foreach ($should_be_notified as $role => $model) {
 			$users = User::withRole($role)->get();
-			$users->each(function (User $user, $key) use ($project, $model) {
-				$user->notify(new $model($project));
-			});
+			$users->each(
+				function (User $user, $key) use ($project, $model) {
+					$user->notify(new $model($project));
+				}
+			);
+		}
+
+		foreach ($should_be_invited as $role) {
+			$users = User::withRole($role)->get();
+			$users->each(
+				function (User $user, $key) use ($project) {
+					$user->inviteTo($project);
+				}
+			);
 		}
 	}
 
-
-	public function filled(Project $project) {
-		$should_be_notified = [
-			'account_manager' => \App\Notifications\Project\Invite::class,
-			'writer'          => \App\Notifications\Project\Invite::class,
-			'editor'          => \App\Notifications\Project\Invite::class,
-			'designer'        => \App\Notifications\Project\Invite::class,
+	public function filled(Project $project)
+	{
+		$should_be_invited = [
+			'account_manager',
+			'writer',
+			'editor',
+			'designer',
 		];
 
-		$this->user->notify(new \App\Notifications\Project\Created($project));
-
-		foreach ($should_be_notified as $role => $model) {
+		foreach ($should_be_invited as $role) {
 			$users = User::withRole($role)->get();
-			$users->each(function (User $user, $key) use ($project, $model) {
-				$user->notify(new $model($project));
-			});
+			$users->each(
+				function (User $user, $key) use ($project) {
+					$user->inviteTo($project);
+				}
+			);
 		}
 	}
 }

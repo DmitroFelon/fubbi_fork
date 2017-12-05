@@ -2,26 +2,27 @@
 
 namespace App\Notifications\Project;
 
-use App\Models\Invite as Invitation;
+use App\Models\Project;
 use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Invite extends Notification
+class Filled extends Notification implements ShouldQueue
 {
 	use Queueable;
 
-	protected $invitation;
+	protected $project;
 
 	/**
 	 * Create a new notification instance.
 	 *
-	 * @param \App\Models\Invite $invitation
+	 * @param \App\Models\Project $project
 	 */
-	public function __construct(Invitation $invitation)
+	public function __construct(Project $project)
 	{
-		$this->invitation = $invitation;
+		$this->project = $project;
 	}
 
 	/**
@@ -44,13 +45,11 @@ class Invite extends Notification
 	public function toMail($notifiable)
 	{
 		return (new MailMessage)->line(
-				__('Hello %s', $notifiable->name) 
-			)->line(
 				__(
-					'You have beed invited to project "%s". Please apply or decline it',
-					$this->invitation->invitable->getInvitableName()
+					'New project %s has beed filled.',
+					$this->project->name
 				)
-			)->action('Review Project', $this->invitation->invitable->getInvitableUrl())->line(
+			)->action('Review project', url()->action('ProjectController@show', $this->project))->line(
 				'Thank you for using our application!'
 			);
 	}
@@ -65,12 +64,12 @@ class Invite extends Notification
 	{
 		$notification = NotificationPayload::make(
 			__(
-				'You have beed invited to project "%s". Please apply or decline it',
-				$this->invitation->invitable->getInvitableName()
+				'New project %s has beed filled.',
+				$this->project->name
 			),
-			$this->invitation->invitable->getInvitableUrl(),
-			get_class($this->invitation->invitable),
-			$this->invitation->invitable->getInvitableId()
+			url()->action('ProjectController@show', $this->project),
+			get_class($this->project),
+			$this->project->id
 		);
 
 		return $notification->toArray();

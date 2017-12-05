@@ -24,12 +24,9 @@ class InviteObserver
 
 	public function accepted(Invite $invite)
 	{
-		
 	}
 
 	public function rejected(Invite $invite)
 	{
-
 	}
-	
 }
