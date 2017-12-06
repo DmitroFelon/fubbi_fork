@@ -11,13 +11,21 @@ class UserSeeder extends Seeder
 	 */
 	public function run()
 	{
-		DB::table('users')->insert([
+		DB::table('users')->insert(
+			[
 				[
 					'first_name' => 'Imad',
 					'last_name'  => 'Bazzal',
 					'phone'      => '123456789',
 					'email'      => 'imad.bazzal.93@gmail.com',
 					'password'   => Hash::make('8734969091'),
+				],
+				[
+					'first_name' => 'First',
+					'last_name'  => 'Client',
+					'phone'      => '123456789',
+					'email'      => 'client@example.com',
+					'password'   => Hash::make('secret'),
 				],
 				[
 					'first_name' => 'First',
@@ -48,7 +56,13 @@ class UserSeeder extends Seeder
 					'password'   => Hash::make('secret'),
 				],
 			]
-
 		);
+
+		App\User::where('email', 'imad.bazzal.93@gmail.com')->first()->roles()->attach(1);
+		App\User::where('email', 'client@example.com')->first()->roles()->attach(2);
+		App\User::where('email', 'manager@example.com')->first()->roles()->attach(3);
+		App\User::where('email', 'writer@example.com')->first()->roles()->attach(4);
+		App\User::where('email', 'editor@example.com')->first()->roles()->attach(5);
+		App\User::where('email', 'designer@example.com')->first()->roles()->attach(6);
 	}
 }

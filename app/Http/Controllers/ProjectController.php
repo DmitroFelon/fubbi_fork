@@ -6,13 +6,11 @@ use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
-use PHPUnit\Runner\Exception;
 use Stripe\Plan;
 
 /**
@@ -35,7 +33,7 @@ class ProjectController extends Controller
 	public function __construct(Request $request)
 	{
 		$this->request = $request;
-		
+
 		$this->authorizeResource(Project::class);
 	}
 
@@ -56,7 +54,7 @@ class ProjectController extends Controller
 				break;
 			case 'client':
 				$projects = $user->projects()->get();
-				if($projects->isEmpty()){
+				if ($projects->isEmpty()) {
 					return redirect()->action('ProjectController@create');
 				}
 				break;
@@ -78,29 +76,36 @@ class ProjectController extends Controller
 	{
 		$step = 'plan';
 
-		$public_plans = Cache::remember('public_plans', 60, function () {
-			$available_plans = [
-				'fubbi-basic-plan',
-				'fubbi-bronze-plan',
-				'fubbi-silver-plan',
-				'fubbi-gold-plan',
-			];
+		$public_plans = Cache::remember(
+			'public_plans',
+			60,
+			function () {
+				$available_plans = [
+					'fubbi-basic-plan',
+					'fubbi-bronze-plan',
+					'fubbi-silver-plan',
+					'fubbi-gold-plan',
+				];
 
-			$filtered_plans = [];
+				$filtered_plans = [];
 
-			foreach (Plan::all()->data as $plan) {
-				if (in_array($plan->id, $available_plans)) {
-					$filtered_plans[] = $plan;
+				foreach (Plan::all()->data as $plan) {
+					if (in_array($plan->id, $available_plans)) {
+						$filtered_plans[] = $plan;
+					}
 				}
+
+				return $filtered_plans;
 			}
+		);
 
-			return $filtered_plans;
-		});
-
-		return view('entity.project.create', [
-			'plans' => $public_plans,
-			'step'  => $step,
-		]);
+		return view(
+			'entity.project.create',
+			[
+				'plans' => $public_plans,
+				'step'  => $step,
+			]
+		);
 	}
 
 	/**
@@ -139,16 +144,21 @@ class ProjectController extends Controller
 			'themes_order',
 		];
 
-		$project->metas->transform(function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
+		$project->metas->transform(
+			function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
 
-			$item->value = (filter_var($item->value, FILTER_VALIDATE_URL)) ? '<a href="'.$item->value.'">'.$item->value.'</a>' : $item->value;
+				$item->value = (filter_var(
+					$item->value,
+					FILTER_VALIDATE_URL
+				)) ? '<a href="'.$item->value.'">'.$item->value.'</a>' : $item->value;
 
-			if (in_array($item->key, $meta_to_cast)) {
-				$item->value = explode(',', $item->value);
+				if (in_array($item->key, $meta_to_cast)) {
+					$item->value = explode(',', $item->value);
+				}
+
+				return (in_array($item->key, $meta_to_skip)) ? null : $item;
 			}
-
-			return (in_array($item->key, $meta_to_skip)) ? null : $item;
-		});
+		);
 
 		return view('entity.project.show', ['project' => $project]);
 	}
@@ -161,12 +171,15 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-		return view('entity.project.edit', [
-			'keywords' => Keyword::all()->toArray(),
-			'articles' => Article::all(),
-			'project'  => $project,
-			'step'     => $project->state,
-		]);
+		return view(
+			'entity.project.edit',
+			[
+				'keywords' => Keyword::all()->toArray(),
+				'articles' => Article::all(),
+				'project'  => $project,
+				'step'     => $project->state,
+			]
+		);
 	}
 
 	/**
@@ -185,15 +198,19 @@ class ProjectController extends Controller
 
 		switch ($request->input('_step')) {
 			case Project::QUIZ_FILLING:
-				$project->setMeta($request->except([
-					'_token',
-					'_step',
-					'_method',
-					'compliance_guideline',
-					'logo',
-					'article_images',
-					'ready_content',
-				]));
+				$project->setMeta(
+					$request->except(
+						[
+							'_token',
+							'_step',
+							'_method',
+							'compliance_guideline',
+							'logo',
+							'article_images',
+							'ready_content',
+						]
+					)
+				);
 				$project->addFiles($request);
 				$project->setState(Project::KEYWORDS_FILLING);
 				break;
@@ -228,7 +245,6 @@ class ProjectController extends Controller
 		$project->setState(Project::ACCEPTED_BY_MANAGER);
 
 		return redirect()->action('ProjectController@show', [$project]);
-		
 	}
 
 	public function reject_review(Project $project)
@@ -236,5 +252,35 @@ class ProjectController extends Controller
 		$project->setState(Project::REJECTED_BY_MANAGER);
 
 		return redirect()->action('ProjectController@show', [$project]);
+	}
+
+	public function apply_to_project(Project $project)
+	{
+		$message_key = 'info';
+		$user =  $this->request->user();
+
+		if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()){
+			$message_key = 'error';
+			$message     = __('You are too late. This project already has %s', $user->role);
+		} else {
+			$project->attachWorker($user->id);
+			$invite = $user->getInviteToProject($project->id);
+			$invite->accept();
+			$message = __('You are applied to this project');
+		}
+
+		return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
+	}
+
+	public function decline_project(Project $project)
+	{
+		$message_key = 'info';
+		$message     = __('You are declined this project');
+		$user =  $this->request->user();
+
+		$invite = $user->getInviteToProject($project->id);
+		$invite->decline();
+
+		return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
 	}
 }

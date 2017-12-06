@@ -30,7 +30,7 @@ class Invite extends Model
 	 */
 	public function scopeTeams($query)
 	{
-		return $query->where('type', '=', Team::class);
+		return $query->where('invitable_type', '=', Team::class);
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Invite extends Model
 	 */
 	public function scopeProjects($query)
 	{
-		return $query->where('type', '=', Project::class);
+		return $query->where('invitable_type', '=', Project::class);
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Invite extends Model
 	/**
 	 * @return bool
 	 */
-	public function reject()
+	public function decline()
 	{
 		$this->accepted = false;
 		$this->fireModelEvent('rejected', false);

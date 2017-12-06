@@ -3,7 +3,7 @@
         <div>
             <small class="pull-right text-navy">{{$notification->created_at->diffForHumans()}}</small>
             @if(isset($notification->data['link']))
-                <a href="{{$notification->data['link']}}">
+                <a href="{{url('notification/show/'.$notification->id)}}">
                     {{$notification->data['message']}}.
                 </a>
             @else

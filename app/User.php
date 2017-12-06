@@ -88,43 +88,30 @@ class User extends Authenticatable implements HasMedia
 	protected $hidden = [
 		'password',
 		'remember_token',
+		'stripe_id',
+		'card_brand',
+		'card_last_four',
+		'trial_ends_at',
 	];
 
-	public function routeNotificationForMail()
-	{
-		return $this->email;
-	}
-
-	public function routeNotificationForPhone()
-	{
-		return $this->phone;
-	}
+	/**
+	 * @var array
+	 */
+	protected $with = [
+		'roles',
+	];
 
 	/**
-	 * @return string
+	 * @var array
 	 */
-	public function getNameAttribute()
-	{
-		return $this->first_name . ' ' . $this->last_name;
-	}
+	protected $appends = ['role'];
 
 	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return null
 	 */
-	public function projects()
+	public function getRoleAttribute()
 	{
-		if($this->getRole() == 'client'){
-			return $this->hasMany(Project::class, 'client_id');
-		}
-		return $this->belongsToMany(Project::class, 'project_worker', 'user_id', 'project_id');
-	}
-
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function teams()
-	{
-		return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+		return $this->getRole();
 	}
 
 	/**
@@ -139,6 +126,50 @@ class User extends Authenticatable implements HasMedia
 		}
 
 		return null;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function routeNotificationForMail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function routeNotificationForPhone()
+	{
+		return $this->phone;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNameAttribute()
+	{
+		return $this->first_name.' '.$this->last_name;
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function projects()
+	{
+		if ($this->getRole() == 'client') {
+			return $this->hasMany(Project::class, 'client_id');
+		}
+
+		return $this->belongsToMany(Project::class, 'project_worker', 'user_id', 'project_id');
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function teams()
+	{
+		return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
 	}
 
 	/**
@@ -166,6 +197,27 @@ class User extends Authenticatable implements HasMedia
 	}
 
 	/**
+	 * @param \App\Models\Interfaces\Invitable $whereInvite
+	 */
+	public function inviteTo(Invitable $whereInvite)
+	{
+		$invite = new Invite(
+			[
+				'invitable_type' => get_class($whereInvite),
+				'invitable_id'   => $whereInvite->getInvitableId(),
+				'user_id'        => $this->id,
+			]
+		);
+
+		$invite->save();
+	}
+
+	public function hasInvitetoProject($project_id)
+	{
+		return $this->invites()->where('invitable_id', $project_id)->projects()->new()->get()->isNotEmpty();
+	}
+
+	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function invites()
@@ -173,14 +225,8 @@ class User extends Authenticatable implements HasMedia
 		return $this->hasMany(Invite::class);
 	}
 
-	public function inviteTo(Invitable $whereInvite)
+	public function getInviteToProject($project_id)
 	{
-		$invite = new Invite([
-			'invitable_type' => get_class($whereInvite),
-			'invitable_id' => $whereInvite->getInvitableId(),
-			'user_id' => $this->id,
-		]);
-
-		$invite->save();
+		return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
 	}
 }

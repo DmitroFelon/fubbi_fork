@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
@@ -41,6 +42,9 @@ class Article extends Model implements HasMedia
 {
     use HasMediaTrait;
     use HasComments;
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
     
 	/**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

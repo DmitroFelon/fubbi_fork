@@ -19,6 +19,7 @@ class CreateOutlinesTable extends Migration
             $table->string('title');
             $table->string('body');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

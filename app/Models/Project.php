@@ -16,6 +16,7 @@ use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Subscription;
@@ -70,6 +71,7 @@ class Project extends Model implements HasMedia, Invitable
 	use HasMediaTrait;
 	use HasComments;
 	use hasInvite;
+	use SoftDeletes;
 
 	/**
 	 * @const string
@@ -130,6 +132,7 @@ class Project extends Model implements HasMedia, Invitable
 	 * @const string
 	 */
 	const REJECTED_BY_MANAGER = 'rejected_by_manager';
+
 	/**
 	 * @var array
 	 */
@@ -153,6 +156,8 @@ class Project extends Model implements HasMedia, Invitable
 		'setState',
 		'filled'
 	];
+
+	protected $dates = ['deleted_at'];
 
 	/**
 	 * Project constructor.
@@ -209,14 +214,6 @@ class Project extends Model implements HasMedia, Invitable
 	}
 
 	/**
-	 * Fires model event "filled"
-	 */
-	public function filled(){
-		//TODO check project state if project filled, send events to workers
-		$this->fireModelEvent('filled', false);
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getInvitableUrl()
@@ -224,6 +221,9 @@ class Project extends Model implements HasMedia, Invitable
 		return url()->action('ProjectController@show', $this);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getInvitableNotification()
 	{
 		return Invite::class;

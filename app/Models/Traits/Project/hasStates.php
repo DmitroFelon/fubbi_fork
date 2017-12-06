@@ -19,7 +19,7 @@ use App\Models\Project;
 trait hasStates
 {
 	/**
-	 * @var
+	 * @var string[]
 	 */
 	protected $states = [
 		Project::CREATED,
@@ -66,5 +66,15 @@ trait hasStates
 	public function validateState($state)
 	{
 		return in_array($state, $this->states);
+	}
+
+	/**
+	 * Fires model event "filled" 
+	 * Called after client fill all necessary data
+	 * and project ready for manager review
+	 */
+	public function filled(){
+		//TODO check project state if project filled, send events to workers
+		$this->fireModelEvent('filled', false);
 	}
 }

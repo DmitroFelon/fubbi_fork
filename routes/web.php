@@ -18,33 +18,45 @@ Auth::routes();
 
 Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(
+	function () {
 
-	Route::prefix('project')->group(function (){
-		Route::get('accept_review/{project}', "ProjectController@accept_review");
-		Route::get('reject_review/{project}', "ProjectController@reject_review");
-	});
+		Route::prefix('notification')->group(
+			function () {
+				Route::get('show/{id}', 'NotificationController@show');
+				Route::get('read/{id?}', 'NotificationController@read');
+				Route::get('', 'NotificationController@index');
+			}
+		);
 
-	Route::resource('projects', 'ProjectController');
+		Route::prefix('project')->group(
+			function () {
+				Route::get('accept_review/{project}', "ProjectController@accept_review");
+				Route::get('reject_review/{project}', "ProjectController@reject_review");
+				Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+				Route::get('decline_project/{project}', "ProjectController@decline_project");
+			}
+		);
 
-	Route::resource('project.outlines', 'OutlineController');
+		Route::resource('projects', 'ProjectController');
 
-	Route::resource('project.articles', 'ArticlesController');
+		Route::resource('project.outlines', 'OutlineController');
 
-	Route::resource('annotations', 'AnnotationController'); //TODO remove it
+		Route::resource('project.articles', 'ArticlesController');
 
-	Route::resource('teams', 'TeamController');
+		Route::resource('annotations', 'AnnotationController'); //TODO remove it
 
-	Route::resource('users', 'UserController');
+		Route::resource('teams', 'TeamController');
 
-	Route::post('subscribe', 'SubscriptionController@subscribe');
+		Route::resource('users', 'UserController');
 
-	Route::get('alerts', 'NotificationController@show');
+		Route::post('subscribe', 'SubscriptionController@subscribe');
 
-	Route::get('notification/read/{id?}', 'NotificationController@read');
 
-	Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
-});
+
+		Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+	}
+);
 
 
 

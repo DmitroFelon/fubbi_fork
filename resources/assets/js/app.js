@@ -42,8 +42,8 @@ jQuery(document).ready(function ($) {
      * */
     $("#quiz-form").steps({
         bodyTag: "fieldset",
-        enableAllSteps: true,
-        showFinishButtonAlways: true, //todo make true only if admin or manager
+        enableAllSteps: user.role == 'client' ? false : true,
+        showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
@@ -54,6 +54,7 @@ jQuery(document).ready(function ($) {
         },
         onStepChanging: function (event, currentIndex) {
             //todo add validation
+            return true;
         },
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
@@ -77,15 +78,14 @@ jQuery(document).ready(function ($) {
      * */
     $("#keywords-form").steps({
         bodyTag: "fieldset",
-        enableAllSteps: true,
-        showFinishButtonAlways: true, //todo make true only if admin or manager
+        enableAllSteps: user.role == 'client' ? false : true,
+        showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
                     jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
                 }
-
             } else {}
         },
         onStepChanged: function (event, currentIndex) {

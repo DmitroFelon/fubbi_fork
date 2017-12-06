@@ -8,6 +8,13 @@
 
 namespace App\Models\Interfaces;
 
+/**
+ * Interface Invitable
+ * 
+ * Used in models which should be invitable 
+ *
+ * @package App\Models\Interfaces
+ */
 interface Invitable
 {
 	public function getInvitableName();

@@ -15,7 +15,7 @@
         )
         <li>
             <div class="text-center link-block">
-                <a href="{{url('alerts')}}">
+                <a href="{{url('notification')}}">
                     <strong>{{__('See All Alerts')}}</strong>
                     <i class="fa fa-angle-right"></i>
                 </a>

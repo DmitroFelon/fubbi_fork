@@ -12,8 +12,18 @@ use App\Models\Keyword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class hasKeywords
+ * 
+ * attach App\Models\Keyword to App\Models\Project
+ *
+ * @package App\Models\Traits\Project
+ */
 trait hasKeywords
 {
+	/**
+     * @param $args
+     */
     public function attachKeywords($args)
     {
         $this->keywords()->attach($args);
@@ -28,12 +38,18 @@ trait hasKeywords
         return $this->belongsToMany(Keyword::class);
     }
 
+	/**
+     * @param $args
+     */
     public function detachKeywords($args)
     {
         $this->keywords()->detach($args);
         $this->fireModelEvent('detachKeywords', false);
     }
 
+	/**
+     * @param $args
+     */
     public function syncKeywords($args)
     {
 
@@ -44,6 +60,13 @@ trait hasKeywords
         $this->fireModelEvent('syncKeywords', false);
     }
 
+	/**
+     * @param $obj
+     * @param $key
+     * @param null $old
+     * @param null $new
+     * @return bool|null
+     */
     public static function createRevisionRecord($obj, $key, $old = null, $new = null)
     {
 

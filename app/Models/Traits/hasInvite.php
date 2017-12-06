@@ -8,6 +8,14 @@
 
 namespace App\Models\Traits;
 
+/**
+ * Class hasInvite
+ * 
+ * Provides few necessary methods for implementation of
+ * @interface App\Models\Interfaces\Invitable
+ *
+ * @package App\Models\Traits
+ */
 trait hasInvite
 {
 	public function getInvitableName() {
@@ -15,6 +23,6 @@ trait hasInvite
 	}
 
 	public function getInvitableId(){
-		return $this->id;
+		return $this->getKey();
 	}
 }

@@ -27,34 +27,33 @@
     </div>
 
     <!-- Navigation -->
-    @include('layouts.navigation')
+@include('layouts.navigation')
 
 
 <!-- Page wraper -->
     <div id="page-wrapper" class="gray-bg">
 
-        @auth
-            @include('layouts.topnavbar')
-        @endauth
+    @auth
+    @include('layouts.topnavbar')
+    @endauth
 
+    @yield('before-content')
 
-        @yield('before-content')
+    @include('partials.messages')
 
-        <!-- Main view  -->
+    <!-- Main view  -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="wrapper wrapper-content animated fadeInUp">
-
-                        @yield('content')
-
+                    @yield('content')
                 </div>
             </div>
         </div>
         <!-- End Main view  -->
 
-        @yield('after-content')
+    @yield('after-content')
 
-        <!-- Footer -->
+    <!-- Footer -->
         @include('footer')
 
     </div>
@@ -64,7 +63,7 @@
 <!-- End wrapper-->
 <script>
     var stripe_pub = "{{config('services.stripe.key')}}";
-    var user = "{{(\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user()->toJson():'{}'}}";
+    var user = @json((\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user():'');
 </script>
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>

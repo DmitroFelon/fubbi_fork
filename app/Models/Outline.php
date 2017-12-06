@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
@@ -33,6 +34,11 @@ class Outline extends Model implements HasMedia
 {
 	use HasMediaTrait;
 	use HasComments;
+	use SoftDeletes;
+
+	protected $touches = ['project'];
+
+	protected $dates = ['deleted_at'];
 	
 	public function project()
 	{

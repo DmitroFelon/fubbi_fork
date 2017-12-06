@@ -5,8 +5,8 @@
     </div>
     <div class="stream-panel">
         <div class="stream-info">
-            @if(isset($notification->data['link']))
-                <a class="client-link" target="_blank" href="{{$notification->data['link']}}">
+            @if(isset($notification->data['link']) and $notification->unread())
+                <a class="client-link" target="_blank" href="{{url('notification/show/'.$notification->id)}}">
                     {{$notification->data['message']}}
                     <i class="fa fa-level-up"></i>
                 </a>

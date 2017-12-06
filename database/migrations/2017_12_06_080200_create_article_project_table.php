@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateArticlesTable extends Migration
+class CreateArticleProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class UpdateArticlesTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('article_project');
 
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('article_project', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('article_id')->index();
             $table->integer('project_id')->index();
-            $table->boolean('accepted')->default(false);
-            $table->tinyInteger('attempts')->default(0);
-            $table->string('title');
-            $table->string('body');
+            $table->boolean('accepted')->nullable();
+            $table->smallInteger('attempts')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -35,6 +32,6 @@ class UpdateArticlesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('article_project');
     }
 }

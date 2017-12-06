@@ -10,6 +10,13 @@ namespace App\Models\Traits\Project;
 
 use App\Models\Team;
 
+/**
+ * Class hasTeams
+ *
+ * attach App\Models\Team to App\Models\Project
+ * 
+ * @package App\Models\Traits\Project
+ */
 trait hasTeams
 {
     /**
