@@ -52,8 +52,6 @@ Route::middleware(['auth'])->group(
 
 		Route::post('subscribe', 'SubscriptionController@subscribe');
 
-
-
 		Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
 	}
 );

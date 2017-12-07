@@ -11,6 +11,7 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -229,4 +230,5 @@ class User extends Authenticatable implements HasMedia
 	{
 		return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
 	}
+
 }

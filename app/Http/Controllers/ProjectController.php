@@ -49,18 +49,17 @@ class ProjectController extends Controller
 
 		switch ($role) {
 			case 'admin':
-				$projects = Project::all();
+				$projects = Project::paginate(10);
 
 				break;
 			case 'client':
-				$projects = $user->projects()->get();
+				$projects = $user->projects()->paginate(10);
 				if ($projects->isEmpty()) {
 					return redirect()->action('ProjectController@create');
 				}
 				break;
 			default:
-				$projects = $user->projects()->get();
-
+				$projects = $user->projects()->paginate(10);
 				break;
 		}
 
@@ -160,7 +159,11 @@ class ProjectController extends Controller
 			}
 		);
 
-		return view('entity.project.show', ['project' => $project]);
+		$data = [
+			'project' => $project,
+		];
+
+		return view('entity.project.show', $data);
 	}
 
 	/**

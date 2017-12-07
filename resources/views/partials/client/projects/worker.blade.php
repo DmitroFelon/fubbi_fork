@@ -1,3 +1,0 @@
-<div>
-    {{$worker->name}}
-</div>

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class NotificationController
@@ -12,19 +12,26 @@ use Illuminate\Support\Facades\Auth;
  */
 class NotificationController extends Controller
 {
-	
 	public function index()
 	{
-		return view('entity.notification.index');
+		$user =  Auth::user();
+
+		$data = [
+			'page_notifications'       => $user->unreadNotifications->concat($user->readNotifications)->all(),
+			'has_unread_notifications' => $user->unreadNotifications->isNotEmpty(),
+		];
+
+		return view('entity.notification.index', $data);
 	}
 
 	public function show($id)
 	{
 		$notification = Auth::user()->unreadNotifications()->findOrFail($id);
 		$notification->markAsRead();
+
 		return redirect($notification->data['link']);
 	}
-	
+
 	/**
 	 * @param null $id
 	 * @return mixed
@@ -42,5 +49,4 @@ class NotificationController extends Controller
 
 		return redirect('notification');
 	}
-
 }

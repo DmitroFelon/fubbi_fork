@@ -8,6 +8,7 @@ use App\Models\Traits\Project\hasArticles;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\hasKeywords;
 use App\Models\Traits\Project\hasOutlines;
+use App\Models\Traits\Project\hasPlan;
 use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
@@ -71,7 +72,9 @@ class Project extends Model implements HasMedia, Invitable
 	use HasMediaTrait;
 	use HasComments;
 	use hasInvite;
+	use hasPlan;
 	use SoftDeletes;
+	
 
 	/**
 	 * @const string
