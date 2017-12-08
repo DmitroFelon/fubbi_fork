@@ -27,14 +27,22 @@ trait hasArticles
         return $this->belongsToMany(Article::class)->withPivot('accepted', 'attempts')->withTimestamps();
     }
 
+	/**
+     * @param $article_id
+     * @return mixed
+     */
     public function attachArticle($article_id)
     {
-        $this->articles()->attach($article_id, ['attempts' => 1]);
+        return $this->articles()->attach($article_id, ['attempts' => 1]);
     }
 
+	/**
+     * @param $article_id
+     * @return mixed
+     */
     public function detachArticle($article_id)
     {
-        $this->articles()->detach($article_id);
+        return $query = $this->articles()->detach($article_id);
     }
 
     /**
@@ -42,14 +50,20 @@ trait hasArticles
      */
     public function syncArticle($args)
     {
-        $this->articles()->sync($args);
+        return $this->articles()->sync($args);
     }
 
+	/**
+     * @param $article_id
+     */
     public function acceptArticle($article_id)
     {
         $this->articles()->updateExistingPivot($article_id, ['accepted' => true], true);
     }
 
+	/**
+     * @param $article_id
+     */
     public function declineArticle($article_id)
     {
 

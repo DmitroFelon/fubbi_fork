@@ -19,6 +19,7 @@
         "laravelcollective/html": "^5.4.0",
         "laravelista/ekko": "^1.4",
         "spatie/laravel-medialibrary": "^6.0.0",
+        "spatie/laravel-tags": "^2.0",
         "venturecraft/revisionable": "^1.28",
         "webmozart/assert": "^1.2",
         "xinax/laravel-gettext": "^4.0",

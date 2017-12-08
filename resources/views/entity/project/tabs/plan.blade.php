@@ -9,7 +9,7 @@
         <form accept-charset="UTF-8" action="/subscribe" class="require-validation"
               data-stripe-publishable-key="test_public_key"
               id="payment-form" method="post">
-            {!! Form::hidden('_step', \App\Models\Project::PLAN_SELECTION) !!}
+            {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::PLAN_SELECTION) !!}
 
             <input type="hidden" name="plan_id" id="plan_id" value="">
             {{ csrf_field() }}

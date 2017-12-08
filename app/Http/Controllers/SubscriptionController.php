@@ -23,7 +23,7 @@ class SubscriptionController extends Controller
 			//attach subscription
 			$project->subscription_id = $subscription->id;
 			//set state
-			$project->setState(Project::QUIZ_FILLING);
+			$project->setState(\App\Models\Helpers\ProjectStates::QUIZ_FILLING);
 
 			$project->save();
 

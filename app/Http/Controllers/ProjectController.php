@@ -200,7 +200,7 @@ class ProjectController extends Controller
 		}
 
 		switch ($request->input('_step')) {
-			case Project::QUIZ_FILLING:
+			case \App\Models\Helpers\ProjectStates::QUIZ_FILLING:
 				$project->setMeta(
 					$request->except(
 						[
@@ -215,11 +215,11 @@ class ProjectController extends Controller
 					)
 				);
 				$project->addFiles($request);
-				$project->setState(Project::KEYWORDS_FILLING);
+				$project->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
 				break;
-			case Project::KEYWORDS_FILLING:
+			case \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING:
 				$project->keywords()->sync($request->input('keywords'));
-				$project->setState(Project::MANAGER_REVIEW);
+				$project->setState(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW);
 				$project->filled();
 				break;
 			default:
@@ -245,14 +245,14 @@ class ProjectController extends Controller
 
 	public function accept_review(Project $project)
 	{
-		$project->setState(Project::ACCEPTED_BY_MANAGER);
+		$project->setState(\App\Models\Helpers\ProjectStates::ACCEPTED_BY_MANAGER);
 
 		return redirect()->action('ProjectController@show', [$project]);
 	}
 
 	public function reject_review(Project $project)
 	{
-		$project->setState(Project::REJECTED_BY_MANAGER);
+		$project->setState(\App\Models\Helpers\ProjectStates::REJECTED_BY_MANAGER);
 
 		return redirect()->action('ProjectController@show', [$project]);
 	}

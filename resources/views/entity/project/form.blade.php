@@ -7,21 +7,21 @@
 
 @role(['client'])
     @switch($step)
-    @case(\App\Models\Project::PLAN_SELECTION)
+    @case(\App\Models\Helpers\ProjectStates::PLAN_SELECTION)
         @include('entity.project.tabs.plan')
         @break
-    @case(\App\Models\Project::QUIZ_FILLING)
+    @case(\App\Models\Helpers\ProjectStates::QUIZ_FILLING)
         @include('entity.project.tabs.quiz')
         @break
-    @case(\App\Models\Project::KEYWORDS_FILLING)
+    @case(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING)
         @include('entity.project.tabs.keywords')
         @break
-    @case(\App\Models\Project::MANAGER_REVIEW)
+    @case(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW)
         <div class="text-primary">
             {{__('Project is on manager review.')}}
         </div>
         @break
-    @case(\App\Models\Project::PROCESSING)
+    @case(\App\Models\Helpers\ProjectStates::PROCESSING)
         <div class="text-primary">
             {{__('We are working on your project')}}
         </div>

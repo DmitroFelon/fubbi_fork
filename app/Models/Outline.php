@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Spatie\Tags\HasTags;
 
 /**
  * App\Models\Outline
@@ -29,12 +30,23 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Outline whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Outline whereUserId($value)
  * @mixin \Eloquent
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Tags\Tag[] $tags
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Outline onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Outline whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Outline withAllTags($tags, $type = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Outline withAnyTags($tags, $type = null)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Outline withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Outline withoutTrashed()
  */
 class Outline extends Model implements HasMedia
 {
 	use HasMediaTrait;
 	use HasComments;
 	use SoftDeletes;
+	use HasTags;
 
 	protected $touches = ['project'];
 

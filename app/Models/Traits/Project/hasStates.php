@@ -9,6 +9,7 @@
 namespace App\Models\Traits\Project;
 
 use App\Exceptions\Project\ImpossibleProjectState;
+use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 
 /**
@@ -18,23 +19,6 @@ use App\Models\Project;
  */
 trait hasStates
 {
-	/**
-	 * @var string[]
-	 */
-	protected $states = [
-		Project::CREATED,
-		Project::PLAN_SELECTION,
-		Project::QUIZ_FILLING,
-		Project::KEYWORDS_FILLING,
-		Project::MANAGER_REVIEW,
-		Project::ACCEPTED_BY_MANAGER,
-		Project::REJECTED_BY_MANAGER,
-		Project::PROCESSING,
-		Project::CLIENT_REVIEW,
-		Project::ACCEPTED_BY_CLIENT,
-		Project::REJECTED_BY_CLIENT,
-		Project::COMPLETED,
-	];
 
 	/**
 	 * @param string $state
@@ -65,7 +49,7 @@ trait hasStates
 	 */
 	public function validateState($state)
 	{
-		return in_array($state, $this->states);
+		return in_array($state, ProjectStates::$states);
 	}
 
 	/**
@@ -76,5 +60,14 @@ trait hasStates
 	public function filled(){
 		//TODO check project state if project filled, send events to workers
 		$this->fireModelEvent('filled', false);
+	}
+
+	public function isOnReview()
+	{
+		$reviewable_states = [
+			ProjectStates::MANAGER_REVIEW,
+		];
+
+		return in_array($this->state, $reviewable_states);
 	}
 }

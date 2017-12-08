@@ -27,6 +27,15 @@
         </div>
     </div>
 
+    @role(['account_manager'])
+    <div class="ibox">
+        <div class="ibox-content">
+            @include('entity.project.worker-area.writer.main')
+        </div>
+    </div>
+    @endrole
+
+
     @role(['writer'])
     <div class="ibox">
         <div class="ibox-content">

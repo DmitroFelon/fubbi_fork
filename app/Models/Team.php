@@ -34,6 +34,11 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereUpdatedAt($value)
  * @property int|null $owner_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereOwnerId($value)
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \App\User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Team whereDeletedAt($value)
  */
 class Team extends Model implements Invitable
 {
@@ -47,9 +52,20 @@ class Team extends Model implements Invitable
     public function users(){
         return $this->belongsToMany(User::class,  'team_user', 'team_id', 'user_id');
     }
-    
+
+	/**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function owner(){
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+	/**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
     }
 
 	/**
@@ -60,16 +76,25 @@ class Team extends Model implements Invitable
         return url()->action('TeamController@show', $this);
     }
 
+	/**
+     * @return mixed
+     */
     public function getInvitableNotification()
     {
         return Invite::class;
     }
 
+	/**
+     * @return mixed
+     */
     public function routeNotificationForMail()
     {
         return $this->owner->email;
     }
 
+	/**
+     * @return mixed
+     */
     public function routeNotificationForPhone()
     {
         return $this->owner->phone;

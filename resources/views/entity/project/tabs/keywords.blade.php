@@ -32,7 +32,7 @@
 {!! Form::model($project,
 ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'keywords-form', 'action' => ['ProjectController@update', $project->id]])
 !!}
-{!! Form::hidden('_step', \App\Models\Project::KEYWORDS_FILLING) !!}
+{!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING) !!}
 
 @for($i=1;$i<9;$i++)
     <h1>Overview {{$i}}</h1>

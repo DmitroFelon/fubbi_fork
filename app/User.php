@@ -60,6 +60,10 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
+ * @property string|null $deleted_at
+ * @property-read null $role
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Invite[] $invites
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
  */
 class User extends Authenticatable implements HasMedia
 {

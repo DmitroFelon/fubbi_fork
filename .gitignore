@@ -1,6 +1,6 @@
 /.env
 /.idea/
-/.htaccess
 /.node_modules
-.env
-_ide_helper.php
+/.env
+/_ide_helper.php
+/.phpstorm.meta.php

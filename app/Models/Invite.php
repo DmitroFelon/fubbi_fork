@@ -5,6 +5,31 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Invite
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $invitable_type
+ * @property string $invitable_id
+ * @property int|null $accepted
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite accepted()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite new()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite projects()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite rejected()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite teams()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereAccepted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereInvitableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereInvitableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Invite whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Invite extends Model
 {
 	/**

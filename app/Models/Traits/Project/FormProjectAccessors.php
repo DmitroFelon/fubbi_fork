@@ -13,6 +13,7 @@ trait FormProjectAccessors
 
 	public function formClientIdAttribute($value)
 	{
+		//for tests
 		return \GuzzleHttp\json_decode($value);
 	}
 

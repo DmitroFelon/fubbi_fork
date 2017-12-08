@@ -58,6 +58,15 @@ use Venturecraft\Revisionable\Revision;
  * @property-read \Laravel\Cashier\Subscription $subscription
  * @property-read \App\Models\Task $task
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereSubscriptionId($value)
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read mixed $plan
+ * @property-read mixed $plan_metadata
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
  */
 class Project extends Model implements HasMedia, Invitable
 {
@@ -74,67 +83,6 @@ class Project extends Model implements HasMedia, Invitable
 	use hasInvite;
 	use hasPlan;
 	use SoftDeletes;
-	
-
-	/**
-	 * @const string
-	 */
-	const CREATED = 'created';
-
-	/**
-	 * @const string
-	 */
-	const PLAN_SELECTION = 'plan';
-
-	/**
-	 * @const string
-	 */
-	const QUIZ_FILLING = 'quiz';
-
-	/**
-	 * @const string
-	 */
-	const KEYWORDS_FILLING = 'keywords';
-
-	/**
-	 * @const string
-	 */
-	const MANAGER_REVIEW = 'on_manager_review';
-
-	/**
-	 * @const string
-	 */
-	const PROCESSING = 'processing';
-
-	/**
-	 * @const string
-	 */
-	const CLIENT_REVIEW = 'on_client_review';
-
-	/**
-	 * @const string
-	 */
-	const ACCEPTED_BY_CLIENT = 'accepted_by_client';
-
-	/**
-	 * @const string
-	 */
-	const REJECTED_BY_CLIENT = 'rejected_by_client';
-
-	/**
-	 * @const string
-	 */
-	const COMPLETED = 'completed';
-
-	/**
-	 * @const string
-	 */
-	const ACCEPTED_BY_MANAGER = 'accepted_by_manager';
-	
-	/**
-	 * @const string
-	 */
-	const REJECTED_BY_MANAGER = 'rejected_by_manager';
 
 	/**
 	 * @var array
@@ -160,17 +108,10 @@ class Project extends Model implements HasMedia, Invitable
 		'filled'
 	];
 
-	protected $dates = ['deleted_at'];
-
 	/**
-	 * Project constructor.
-	 *
-	 * @param array $attributes
+	 * @var string[]
 	 */
-	public function __construct(array $attributes = [])
-	{
-		parent::__construct($attributes);
-	}
+	protected $dates = ['deleted_at'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
