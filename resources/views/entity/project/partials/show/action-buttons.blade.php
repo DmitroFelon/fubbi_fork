@@ -1,7 +1,3 @@
-<a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
-    {{__('Edit project')}}
-</a>
-
 @role(['account_manager', 'admin'])
 @if($project->isOnReview())
     <a href="{{url("project/accept_review/{$project->id}")}}" class="btn btn-primary btn-xs pull-right">
