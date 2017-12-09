@@ -2,9 +2,7 @@
 
 namespace App\Models\Traits\Project;
 
-use App\Models\Article;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Tags\Tag;
 use Stripe\Plan;
 
 /**
@@ -17,9 +15,9 @@ trait hasPlan
 	/**
 	 * @param $value
 	 * @return mixed
-	 * 
-	 * 
-	 * Get Plan from Stripe api 
+	 *
+	 *
+	 * Get Plan from Stripe api
 	 */
 	public function getPlanAttribute($value)
 	{
@@ -35,8 +33,8 @@ trait hasPlan
 	/**
 	 * @param $value
 	 * @return array|mixed
-	 * 
-	 * Get metadata from Stripe Plan 
+	 *
+	 * Get metadata from Stripe Plan
 	 */
 	public function getPlanMetadataAttribute($value)
 	{
@@ -49,10 +47,10 @@ trait hasPlan
 
 	/**
 	 * @param $service
-	 * 
+	 *
 	 * Get each metadata as Project service
 	 */
-	public function getServiceName($service)
+	public function getServiceName($service, $countable = false)
 	{
 		$plan_services = [
 			'articles_count'     => __('Articles Count'),
@@ -68,12 +66,30 @@ trait hasPlan
 			'medium'             => __('Medium'),
 			'quora'              => __('Quora'),
 		];
+
+		return $plan_services[$service] ?? '';
+	}
+
+	public function getCountableServices()
+	{
+		return [
+			'articles_words',
+			'facebook_posts',
+			'instagram_posts',
+			'twitter_posts',
+			'pinterest_posts',
+			'linkedin_posts',
+			'linkedin_articles',
+			'slideshare',
+			'medium',
+			'quora',
+		];
 	}
 
 	/**
 	 * @param $service
 	 * @return mixed
-	 * 
+	 *
 	 * Get existed enity of service for current project
 	 */
 	public function getServiceResult($service)
@@ -84,11 +100,12 @@ trait hasPlan
 	/**
 	 * @param $service
 	 * @return mixed
-	 * 
+	 *
 	 * Get outlined enity of service for current project
 	 */
 	public function getServiceOutlines($service)
 	{
-		return $this->outlines()->withAnyTags([$service], 'service_type')->get();
+		$r = $this->outlines()->withAnyTags([$service], 'service_type')->get();
+		return $r;
 	}
 }

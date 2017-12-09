@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\Tags\HasTags;
+use Spatie\Tags\Tag;
 
 /**
  * App\Models\Outline
@@ -60,5 +61,10 @@ class Outline extends Model implements HasMedia
 	public function author()
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	public function attachTagsHelper($tag)
+	{
+		$this->attachTag(Tag::findOrCreate($tag, 'service_type'));
 	}
 }
