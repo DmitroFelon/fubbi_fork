@@ -4,7 +4,7 @@
         <div class="file">
             <span class="corner"></span>
             <div class="icon">
-                @if($media->mime_type == 'image/jpeg' or $media->mime_type = 'image/png')
+                @if($media->mime_type == 'image/jpeg' or $media->mime_type == 'image/png')
                     <a href="{{$media->getFullUrl()}}"
                        target="_blank"
                        data-gallery="{{$media->collection_name}}">
