@@ -4,6 +4,7 @@ namespace Laravel\Cashier\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Stripe\Event as StripeEvent;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,8 @@ class WebhookController extends Controller
     public function handleWebhook(Request $request)
     {
         $payload = json_decode($request->getContent(), true);
+
+        Log::debug('webhook catched');
 
         if (! $this->isInTestingEnvironment() && ! $this->eventExistsOnStripe($payload['id'])) {
             return;
