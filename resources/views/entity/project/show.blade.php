@@ -28,10 +28,12 @@
                 @include('entity.project.partials.show.head')
 
                 {{--Metadata block start--}}
+
                 @include('entity.project.partials.show.metadata')
                 {{--Metadata block end--}}
 
                 {{--Media block start--}}
+
                 @include('entity.project.partials.show.media')
                 {{--Media block end--}}
             </div>
