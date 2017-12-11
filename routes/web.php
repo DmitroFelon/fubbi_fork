@@ -44,8 +44,6 @@ Route::middleware(['auth'])->group(
 
 		Route::resource('project.articles', 'ArticlesController');
 
-		Route::resource('annotations', 'AnnotationController'); //TODO remove it
-
 		Route::resource('teams', 'TeamController');
 
 		Route::resource('users', 'UserController');

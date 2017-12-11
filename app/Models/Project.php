@@ -98,12 +98,6 @@ class Project extends Model implements HasMedia, Invitable
 	 * Additional observable events.
 	 */
 	protected $observables = [
-		'attachKeywords',
-		'detachKeywords',
-		'syncKeywords',
-		'attachWorkers',
-		'detachWorkers',
-		'syncWorkers',
 		'setState',
 		'filled'
 	];

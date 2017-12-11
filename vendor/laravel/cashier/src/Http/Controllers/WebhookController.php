@@ -21,6 +21,7 @@ class WebhookController extends Controller
     {
         $payload = json_decode($request->getContent(), true);
 
+        
         if (! $this->isInTestingEnvironment() && ! $this->eventExistsOnStripe($payload['id'])) {
             return;
         }

@@ -47,7 +47,7 @@
                             <a>{{__('Completed')}}: {{$project->getServiceResult($key)->count()}} </a>
                         </dd>
                     @else
-                        <dt>-</dt>
+                        <dt>{{ucwords( str_replace('_',' ',$key) )}}:</dt>
                         <dd>-</dd>
                     @endif
 
