@@ -24,6 +24,7 @@ class WebhookController extends Controller
         Log::debug('webhook catched');
 
         if (! $this->isInTestingEnvironment() && ! $this->eventExistsOnStripe($payload['id'])) {
+            Log::debug('webhook is in test mode');
             return;
         }
 
