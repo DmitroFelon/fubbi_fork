@@ -114,6 +114,9 @@ class Invite extends Model
 		return $this->save();
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function invitable()
 	{
 		return $this->belongsTo(
@@ -122,6 +125,9 @@ class Invite extends Model
 		);
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function user()
 	{
 		return $this->belongsTo(User::class);

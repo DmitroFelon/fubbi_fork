@@ -49,22 +49,37 @@ class Outline extends Model implements HasMedia
 	use SoftDeletes;
 	use HasTags;
 
+	/**
+	 * @var array
+	 */
 	protected $touches = ['project'];
 
+	/**
+	 * @var array
+	 */
 	protected $dates = ['deleted_at'];
-	
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
 	public function project()
 	{
 		return $this->belongsToMany(Project::class);
-    }
+	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function author()
 	{
 		return $this->belongsTo(User::class);
 	}
 
+	/**
+	 * @param string $tag
+	 */
 	public function attachTagsHelper($tag)
 	{
-		$this->attachTag(Tag::findOrCreate($tag, 'service_type'));
+		$this->attachTag(Tag::findOrCreate($tag, Project::TAG_CATEGORY));
 	}
 }

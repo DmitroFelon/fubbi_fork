@@ -15,7 +15,13 @@
                         {{ucwords( str_replace('_',' ',$key) )}}:
                     </dt>
                     <dd>
-                        {{ (is_bool($value)) ? ($value) ?__('Yes') : __('No') : $value  }}
+                        @if($project->isModified($key))
+                            {{ (is_bool($project->getModified($key)['value']))
+                            ? ($project->getModified($key)['value']) ?__('Yes') : __('No') : $project->getModified($key)['value']  }}
+                        @else
+                            {{ (is_bool($value)) ? ($value) ?__('Yes') : __('No') : $value  }}
+                        @endif
+
                     </dd>
                 @endforeach
             </dl>

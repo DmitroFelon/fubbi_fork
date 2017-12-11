@@ -11,7 +11,7 @@ namespace App\Models\Traits\Project;
 use App\Models\Outline;
 
 /**
- * Class Oulines
+ * trait Oulines
  *
  * attach App\Models\Outline to App\Models\Project
  *

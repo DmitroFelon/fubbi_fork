@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Keyword extends Model
 {
+	/**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function projects()
     {
         return $this->belongsToMany(Project::class);

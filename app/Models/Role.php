@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Role extends Model
 {
+	/**
+     * @var array
+     */
     public static $roles = [
         'admin',
         'client',
@@ -34,14 +37,39 @@ class Role extends Model
         'designer'
     ];
 
+	/**
+     * @const string
+     */
     const ADMIN = 'admin';
+
+	/**
+     * @const string
+     */
     const CLIENT = 'client';
+
+	/**
+     * @const string
+     */
     const ACCOUNT_MANAGER = 'account_manager';
+
+	/**
+     * @const string  
+     */
     const WRITER = 'writer';
+
+	/**
+     * @const string 
+     */
     const EDITOR = 'editor';
+
+	/**
+     * @const string
+     */
     const DESIGNER = 'designer';
 
-
+	/**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users(){
         return $this->belongsToMany(User::class);
     }

@@ -7,6 +7,7 @@ use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\hasArticles;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\hasKeywords;
+use App\Models\Traits\Project\hasModifications;
 use App\Models\Traits\Project\hasOutlines;
 use App\Models\Traits\Project\hasPlan;
 use App\Models\Traits\Project\hasStates;
@@ -83,9 +84,16 @@ class Project extends Model implements HasMedia, Invitable
 	use hasInvite;
 	use hasPlan;
 	use SoftDeletes;
+	use hasModifications;
+
+	const TAG_CATEGORY = 'service_type';
 
 	/**
-	 * @var array
+	 * Collections of project files
+	 * May contain results of quiz
+	 * and worker's metarials
+	 *
+	 * @var string[]
 	 */
 	public static $media_collections = [
 		'article_images',
@@ -107,7 +115,12 @@ class Project extends Model implements HasMedia, Invitable
 	 */
 	protected $dates = ['deleted_at'];
 
+	protected $metaTable = 'projects_meta';
+
 	/**
+	 * Project's owner
+	 *
+	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function client()
@@ -124,6 +137,8 @@ class Project extends Model implements HasMedia, Invitable
 	}
 
 	/**
+	 * Project's Stripe subscription
+	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function subscription()
@@ -132,6 +147,10 @@ class Project extends Model implements HasMedia, Invitable
 	}
 
 	/**
+	 * Upload user's quiz files
+	 * May contain logo, ready content, images etc
+	 *
+	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
 	 * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
@@ -152,6 +171,9 @@ class Project extends Model implements HasMedia, Invitable
 	}
 
 	/**
+	 * Implementation of App\Models\Interfaces\Invitable interface
+	 * Used to show project's url in notification
+	 *
 	 * @return string
 	 */
 	public function getInvitableUrl()
@@ -160,6 +182,9 @@ class Project extends Model implements HasMedia, Invitable
 	}
 
 	/**
+	 * Implementation of App\Models\Interfaces\Invitable interface
+	 * Used to invite someone to join this project
+	 *
 	 * @return string
 	 */
 	public function getInvitableNotification()

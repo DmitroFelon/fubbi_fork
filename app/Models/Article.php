@@ -52,47 +52,68 @@ use Spatie\Tags\Tag;
  */
 class Article extends Model implements HasMedia
 {
-    use HasMediaTrait;
-    use HasComments;
-    use SoftDeletes;
-    use HasTags;
-
-    protected $dates = ['deleted_at'];
-    
-	/**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function projects()
-    {
-        return $this->belongsToMany(Project::class);
-    }
+	use HasMediaTrait;
+	use HasComments;
+	use SoftDeletes;
+	use HasTags;
 
 	/**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
-    {
-        return $this->belongsTo(User::class);
-    }
+	 * @var array
+	 */
+	protected $dates = ['deleted_at'];
 
-    public function scopeAccepted($query)
-    {
-        return $query->where('accepted', '=', true);
-    }
+	/**
+	 * One article may belong to many projects
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function projects()
+	{
+		return $this->belongsToMany(Project::class);
+	}
 
-    public function scopeDeclined($query)
-    {
-        return $query->where('accepted', '=', false);
-    }
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function author()
+	{
+		return $this->belongsTo(User::class);
+	}
 
-    public function scopeNew($query)
-    {
-        return $query->where('accepted', '=', null);
-    }
+	/**
+	 * @param $query
+	 * @return mixed
+	 */
+	public function scopeAccepted($query)
+	{
+		return $query->where('accepted', '=', true);
+	}
 
-    public function attachTagsHelper($tag)
-    {
-        $this->attachTag(Tag::findOrCreate($tag, 'service_type'));
-    }
+	/**
+	 * @param $query
+	 * @return mixed
+	 */
+	public function scopeDeclined($query)
+	{
+		return $query->where('accepted', '=', false);
+	}
 
+	/**
+	 * @param $query
+	 * @return mixed
+	 */
+	public function scopeNew($query)
+	{
+		return $query->where('accepted', '=', null);
+	}
+
+	/**
+	 * Attach specific service tag to article
+	 *
+	 * @param string $tag
+	 */
+	public function attachTagsHelper($tag)
+	{
+		$this->attachTag(Tag::findOrCreate($tag, Project::TAG_CATEGORY));
+	}
 }
