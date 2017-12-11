@@ -12,18 +12,18 @@ class WebhookController extends CashierController
 	public function handleInvoicePaymentSucceeded($payload)
 	{
 		Log::debug(\GuzzleHttp\json_encode($payload));
-		return Response::json(['status' => 'recieved']);
+		return ['ok'];
 	}
 
 	public function handleInvoiceUpcoming($payload)
 	{
 		Log::debug(\GuzzleHttp\json_encode($payload));
-		return Response::json(['status' => 'recieved']);
+		return ['ok'];
 	}
 
 	public function handleInvoiceCreated($payload)
 	{
 		Log::debug(\GuzzleHttp\json_encode($payload));
-		return Response::json(['status' => 'recieved']);
+		return ['ok'];
 	}
 }
