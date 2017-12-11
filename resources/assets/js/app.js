@@ -11,6 +11,7 @@ jQuery(document).ready(function ($) {
         $(".amount").html(amount);
 
         $("#stripe-form-wrapper").show();
+        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
     });
     var $form = $("#payment-form");
     $form.on('submit', function (e) {

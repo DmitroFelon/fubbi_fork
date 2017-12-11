@@ -3237,6 +3237,7 @@ jQuery(document).ready(function ($) {
         $(".amount").html(amount);
 
         $("#stripe-form-wrapper").show();
+        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
     });
     var $form = $("#payment-form");
     $form.on('submit', function (e) {
@@ -3304,7 +3305,7 @@ jQuery(document).ready(function ($) {
      * */
     $("#keywords-form").steps({
         bodyTag: "fieldset",
-        enableAllSteps: true,
+        enableAllSteps: user.role == 'client' ? false : true,
         showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
         onInit: function (event, currentIndex) {
@@ -3312,7 +3313,6 @@ jQuery(document).ready(function ($) {
                 if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
                     jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
                 }
-
             } else {}
         },
         onStepChanged: function (event, currentIndex) {

@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
@@ -75,6 +76,7 @@ class ProjectController extends Controller
 	{
 		$step = 'plan';
 
+
 		$public_plans = Cache::remember(
 			'public_plans',
 			60,
@@ -86,15 +88,15 @@ class ProjectController extends Controller
 					'fubbi-gold-plan',
 				];
 
-				$filtered_plans = [];
+				$filtered_plans = Collection::make();
 
 				foreach (Plan::all()->data as $plan) {
 					if (in_array($plan->id, $available_plans)) {
-						$filtered_plans[] = $plan;
+						$filtered_plans->push($plan);
 					}
 				}
 
-				return $filtered_plans;
+				return $filtered_plans->reverse();
 			}
 		);
 
