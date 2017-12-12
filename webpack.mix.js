@@ -32,6 +32,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',
             'resources/assets/js/plugins/sweetalert/sweetalert.min.js',
             'resources/assets/js/plugins/footable/footable.all.min.js',
+            'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],

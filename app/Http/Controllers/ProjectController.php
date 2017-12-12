@@ -51,7 +51,6 @@ class ProjectController extends Controller
 		switch ($role) {
 			case 'admin':
 				$projects = Project::paginate(10);
-
 				break;
 			case 'client':
 				$projects = $user->projects()->paginate(10);

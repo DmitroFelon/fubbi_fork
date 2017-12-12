@@ -117,6 +117,8 @@ class Project extends Model implements HasMedia, Invitable
 
 	protected $metaTable = 'projects_meta';
 
+	protected $with = ['client', 'comments'];
+
 	/**
 	 * Project's owner
 	 *

@@ -8,7 +8,7 @@
     </div>
 @endsection
 
-@section('content')composer require laravel/scout
+@section('content')
     <div class="ibox">
         <div class="ibox-title">
             <h5>{{__('All projects assigned to this account')}}</h5>

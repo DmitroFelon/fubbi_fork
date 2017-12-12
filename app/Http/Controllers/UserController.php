@@ -33,6 +33,7 @@ class UserController extends Controller
 	public function index()
 	{
 
+		//get roles
 		$roles = Cache::remember(
 			'role_names',
 			60 * 60 * 60,
@@ -41,21 +42,41 @@ class UserController extends Controller
 			}
 		);
 
-		if ($this->request->input('user-search')) {
-			$users = User::search($this->request->input('user-search'))->get();
+		//process search
+		if ($this->request->input('s')) {
+			$users = User::search($this->request->input('s'))->get();
 		} else {
 			$users = User::all();
 		}
 
-		$groupedByRoles = $users->groupBy('role');
+		$search_suggestions = Cache::remember(
+			'user_search_suggestions',
+			60 * 60 * 60,
+			function () {
+				$search_suggestions = collect();
+				User::all()->map(
+					function (User $user) use ($search_suggestions) {
+						$search_suggestions->push($user->name);
+						$search_suggestions->push($user->email);
+					}
+				);
+				$search_suggestions = $search_suggestions->toArray();
 
-		$data = [
-			'users'          => $users,
-			'groupedByRoles' => $groupedByRoles,
-			'roles'          => $roles,
-		];
+				return '["'.implode('", "', $search_suggestions).'"]';
+			}
+		);
 
-		return view('entity.user.index', $data);
+		//separate users by roles
+		$groupedByRoles               = $users->groupBy('role');
+		$groupedByRoles['researcher'] = collect();
+
+		//fill emprty roles by emprty collection
+		foreach ($roles as $role) {
+			$groupedByRoles[$role->name] = (isset($groupedByRoles[$role->name])) ? $groupedByRoles[$role->name] : collect(
+			);
+		}
+
+		return view('entity.user.index', compact(['users', 'groupedByRoles', 'roles', 'search_suggestions']));
 	}
 
 	/**
