@@ -10,60 +10,47 @@
 
 @section('content')
     <div class="ibox-content">
-    <span class="text-muted small pull-right">
-        Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014
-    </span>
-    <br><br>
-    <div class="input-group">
-        <input type="text" placeholder="Search client"
-               class="input form-control">
-        <span class="input-group-btn">
-                <button type="button" class="btn btn btn-primary">
-                    <i class="fa fa-search"></i>{{__('Search')}}
-                </button>
-        </span>
-    </div>
-    <div class="clients-list">
-        <span class="pull-right small text-muted">{{__('Total')}}: <small>{{$users_count}}</small></span>
-        <ul class="nav nav-tabs">
-            @foreach(\App\Models\Role::all() as $role)
-                <li class="{{$loop->first?'active':''}}">
-                    <a data-toggle="tab" href="#tab-{{$role->name}}">
-                        <i class="fa fa-user"></i> {{$role->display_name}}
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-        <div class="tab-content">
-            @foreach(\App\Models\Role::all() as $role)
-                <div id="tab-{{$role->name}}" class="tab-pane {{$loop->first?'active':''}}">
-                    <div class="full-height-scroll">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <tbody>
-                                @foreach($users[$role->name] as $user)
-                                    <tr>
-                                        <td class="client-avatar"><i class="fa fa-user fa-2x"></i></td>
-                                        <td>
-                                            <a target="_blank" href="{{url()->action('UserController@show', $user)}}">
-                                                {{$user->name}}
-                                            </a>
-                                        </td>
-                                        <td class="contact-type"><i class="fa fa-envelope"> </i></td>
-                                        <td> {{$user->email}}</td>
-                                        <td class="contact-type"><i class="fa fa-phone"> </i></td>
-                                        <td> {{$user->phone}}</td>
-                                        <td class="contact-type"> <i class="fa fa-file-o"></i></td>
-                                        <td>{{$user->projects->count()}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+        <form method="get" class="input-group">
+            <input type="hidden" name="user-role" id="user-role" value="admin">
+            <input type="text"
+                   value="{{\Illuminate\Support\Facades\Request::input('user-search')}}"
+                   name="user-search"
+                   placeholder="{{__('Search user')}}"
+                   class="input form-control">
+            <span class="input-group-btn">
+                        <button type="submit" class="btn btn btn-primary">
+                            <i class="fa fa-search"></i>{{__('Search')}}
+                        </button>
+                </span>
+        </form>
+        <div class="clients-list">
+            <span class="pull-right small text-muted">{{__('Total')}}: <small>{{$users->count()}}</small></span>
+            <ul class="nav nav-tabs">
+                @foreach($roles as $role)
+                    <li class="{{(request()->input('user-role') == $role->name or !request()->input('user-role') and $loop->first)
+                                    ?'active'
+                                    :''}}">
+                        <a class="no-paddings" onclick="$('#user-role').val('{{$role->name}}')" data-toggle="tab"
+                           href="#tab-{{$role->name}}">
+                            <i class="fa fa-user"></i> {{$role->display_name}}
+                            @if(isset($groupedByRoles[$role->name]) and $groupedByRoles[$role->name]->count()>0)
+                                <span class="badge badge-primary">
+                                    {{$groupedByRoles[$role->name]->count()}}
+                                </span>
+                            @else
+                                <span class="badge">
+                                    0
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+            <div class="tab-content">
+                @foreach($groupedByRoles as $role => $users)
+                    @include('entity.user.partials.tab')
+                @endforeach
+            </div>
         </div>
-    </div>
     </div>
 @endsection

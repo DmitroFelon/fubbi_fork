@@ -1,8 +1,14 @@
 @extends('master')
 
-@section('content')
+@section('before-content')
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>{{__('Projects')}}</h2>
+        </div>
+    </div>
+@endsection
 
-
+@section('content')composer require laravel/scout
     <div class="ibox">
         <div class="ibox-title">
             <h5>{{__('All projects assigned to this account')}}</h5>

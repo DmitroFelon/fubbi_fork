@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -71,6 +72,7 @@ class User extends Authenticatable implements HasMedia
 	use Billable;
 	use EntrustUserTrait;
 	use HasMediaTrait;
+	use Searchable;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -84,6 +86,8 @@ class User extends Authenticatable implements HasMedia
 		'email',
 		'password',
 	];
+	
+	protected $searchble = [];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -104,12 +108,25 @@ class User extends Authenticatable implements HasMedia
 	 */
 	protected $with = [
 		'roles',
+		'projects',
+		'invites',
+		'notifications'
 	];
 
 	/**
 	 * @var array
 	 */
 	protected $appends = ['role'];
+
+	public function toSearchableArray()
+	{
+
+		return [
+			'first_name' => $this->first_name,
+			'last_name' => $this->last_name,
+			'email' => $this->email,
+		];
+	}
 
 	/**
 	 * @return null

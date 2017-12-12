@@ -15,6 +15,7 @@
         "kodeine/laravel-meta": "dev-master",
         "laravel/cashier": "~7.0",
         "laravel/framework": "5.5.*",
+        "laravel/scout": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "laravelista/ekko": "^1.4",
@@ -23,6 +24,7 @@
         "venturecraft/revisionable": "^1.28",
         "webmozart/assert": "^1.2",
         "xinax/laravel-gettext": "^4.0",
+        "yab/laravel-scout-mysql-driver": "^2.0",
         "zizaco/entrust": "^1.8"
     },
     "require-dev": {

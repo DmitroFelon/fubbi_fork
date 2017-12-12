@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -31,22 +32,27 @@ class UserController extends Controller
 	 */
 	public function index()
 	{
-		$roles = Role::all();
 
-		$users = [];
+		$roles = Cache::remember(
+			'role_names',
+			60 * 60 * 60,
+			function () {
+				return Role::all();
+			}
+		);
 
-		$users_count = 0;
-
-		foreach ($roles as $role) {
-			$users[$role->name] = User::withRole($role->name)->get();
-			$users_count += count($users[$role->name]);
+		if ($this->request->input('user-search')) {
+			$users = User::search($this->request->input('user-search'))->get();
+		} else {
+			$users = User::all();
 		}
 
-		$data = [
-			'users'       => $users,
-			'roles'       => $roles,
-			'users_count' => $users_count,
+		$groupedByRoles = $users->groupBy('role');
 
+		$data = [
+			'users'          => $users,
+			'groupedByRoles' => $groupedByRoles,
+			'roles'          => $roles,
 		];
 
 		return view('entity.user.index', $data);
