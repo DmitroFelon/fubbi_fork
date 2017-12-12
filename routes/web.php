@@ -47,6 +47,8 @@ Route::middleware(['auth'])->group(
 		Route::resource('teams', 'TeamController');
 
 		Route::resource('users', 'UserController');
+		
+		Route::resource('plans', 'PlanController');
 
 		Route::post('subscribe', 'SubscriptionController@subscribe');
 

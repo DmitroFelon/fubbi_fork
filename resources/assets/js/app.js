@@ -153,5 +153,11 @@ jQuery(document).ready(function ($) {
             $("#themes_order").val(sorted.join());
         }
     });
+
+    /*
+    * Init footable table
+    * */
+
+    $('.footable').footable();
 });
 

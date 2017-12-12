@@ -95,6 +95,11 @@ class LeftMenuComposer
 				'icon' => 'fa fa-file-o',
 			],
 			[
+				'name' => 'Plans',
+				'url'  => '/plans',
+				'icon' => 'fa fa-gear',
+			],
+			[
 				'name' => 'Messages',
 				'url'  => '/messages',
 				'icon' => 'fa fa-envelope',
@@ -104,6 +109,7 @@ class LeftMenuComposer
 				'url'  => '/settings',
 				'icon' => 'fa fa-gear',
 			]
+
 		];
 	}
 

@@ -14,6 +14,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/sass/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css',
             'resources/assets/sass/plugins/blueimp/css/blueimp-gallery.min.css',
             'resources/assets/sass/plugins/sweetalert/sweetalert.css',
+            'resources/assets/sass/plugins/footable/footable.core.css',
         ],
         'public/css/vendor.css')
     .scripts(
@@ -30,6 +31,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
             'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',
             'resources/assets/js/plugins/sweetalert/sweetalert.min.js',
+            'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],
