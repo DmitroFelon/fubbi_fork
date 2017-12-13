@@ -79,7 +79,11 @@ class PlanController extends Controller
 
 		$diff->each(
 			function ($item, $key) use ($project, $input_metadata) {
-				$project->modify($key, $input_metadata->get($key), false);
+				$project->modify(
+					$key,
+					$input_metadata->get($key),
+					false
+				);
 			}
 		);
 

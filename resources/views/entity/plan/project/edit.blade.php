@@ -12,7 +12,7 @@
 @section('content')
     <div class="ibox">
         <div class="ibox-title">
-            <h5>{{__('')}}</h5>
+            <h5>{{__('Modify "%s" plan for project "%s"', $plan->name, $project->name)}}</h5>
             <div class="ibox-tools">
                 <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
                    class="btn btn-primary btn-xs">{{__('Edit plan')}}</a>
