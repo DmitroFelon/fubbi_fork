@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(
 			function () {
 				Route::resource('project.outlines', 'OutlineController');
 				Route::resource('project.articles', 'ArticlesController');
-				Route::resource('project.plan', 'PlanController')->only(['index', 'update', 'edit']);
+				Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
 			}
 		);
 

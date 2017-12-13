@@ -8,7 +8,6 @@
 
 namespace App\Models\Traits\Project;
 
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Used to modify projects services related
@@ -38,13 +37,15 @@ trait hasModifications
 	/**
 	 * @param $service
 	 * @param $value
-	 * @param null $default
+	 * @param bool $save
+	 * @internal param null $default
 	 */
-	public function modify($service, $value)
+	public function modify($service, $value, $save = true)
 	{
-		Cache::forget('project_plan_'.$this->id);
 		$this->setMeta($this->modificator_slug.$service, $value);
-		$this->save();
+		if($save){
+			$this->save();
+		}
 	}
 
 	/**
@@ -52,7 +53,6 @@ trait hasModifications
 	 */
 	public function unmodify($service)
 	{
-		Cache::forget('project_plan_'.$this->id);
 		$this->unsetMeta($this->modificator_slug.$service);
 		$this->save();
 	}
@@ -63,7 +63,7 @@ trait hasModifications
 	 */
 	public function getModified($service)
 	{
-		return ($this->isModified($this->modificator_slug.$service))
+		return ($this->isModified($service))
 			? $this->{$this->modificator_slug.$service}
 			: false;
 	}

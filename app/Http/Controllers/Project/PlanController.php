@@ -25,6 +25,11 @@ class PlanController extends Controller
 		return $project->plan->id;
 	}
 
+	public function show(Project $project, $id)
+	{
+		return redirect()->action('Project\PlanController@edit', [$project, $id]);
+	}
+
 	/**
 	 * Show the form for editing the specified resource.
 	 *
@@ -35,8 +40,23 @@ class PlanController extends Controller
 	public function edit(Project $project, $id = null)
 	{
 		$data = $this->output($project);
-		
+
 		return view('entity.plan.project.edit', $data);
+	}
+
+	private function output(Project $project)
+	{
+		$plan           = $project->plan;
+		$plan->metadata = collect($plan->metadata);
+
+		$plan->metadata->transform(
+			function ($item, $key) use ($project) {
+				$modif = $project->getModified($key);
+				return ($project->isModified($key)) ? $modif : $item;
+			}
+		);
+
+		return compact(['plan', 'project']);
 	}
 
 	/**
@@ -57,29 +77,18 @@ class PlanController extends Controller
 
 		$diff = $plan->metadata->diffAssoc($input_metadata);
 
-		$diff->each(function ($item, $key) use ($project){
-			$project->modify($key, $item);
-		});
+		$diff->each(
+			function ($item, $key) use ($project, $input_metadata) {
+				$project->modify($key, $input_metadata->get($key), false);
+			}
+		);
+
+		unset($project->plan);
+
+		$project->save();
 
 		$data = $this->output($project);
 
 		return view('entity.plan.project.edit', $data);
-	}
-
-	private function output (Project $project) {
-		$plan = $project->plan;
-		
-		$plan->metadata = collect($plan->metadata);
-		
-		$plan->metadata->transform(function ($item, $key) use ($project){
-			return ($project->isModified($key))
-				?$project->getModified($key)
-				:$item;
-		});
-		
-		return [
-			'plan'    => $plan,
-			'project' => $project,
-		];
 	}
 }
