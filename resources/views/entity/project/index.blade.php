@@ -22,7 +22,7 @@
                 <table class="table table-hover">
                     <tbody>
                     @foreach($projects as $project)
-                        @include('entity.project.partials.card')
+                        @include('entity.project.partials.row')
                     @endforeach
                     </tbody>
                 </table>

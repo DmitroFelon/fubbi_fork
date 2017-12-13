@@ -8,6 +8,8 @@
 
 namespace App\Models\Traits\Project;
 
+use Illuminate\Support\Facades\Cache;
+
 /**
  * Used to modify projects services related
  * to selected Stripe plan.
@@ -38,22 +40,11 @@ trait hasModifications
 	 * @param $value
 	 * @param null $default
 	 */
-	public function modify($service, $value, $default = null)
+	public function modify($service, $value)
 	{
-		$this->setMeta(
-			$this->modificator_slug.$service,
-			$this->payload([$service, $value, $default])
-		);
+		Cache::forget('project_plan_'.$this->id);
+		$this->setMeta($this->modificator_slug.$service, $value);
 		$this->save();
-	}
-
-	/**
-	 * @param $data
-	 * @return array
-	 */
-	private function payload($data)
-	{
-		return array_combine($this->modificator_fields, $data);
 	}
 
 	/**
@@ -61,19 +52,20 @@ trait hasModifications
 	 */
 	public function unmodify($service)
 	{
+		Cache::forget('project_plan_'.$this->id);
 		$this->unsetMeta($this->modificator_slug.$service);
 		$this->save();
 	}
 
 	/**
 	 * @param $service
-	 * @return bool
+	 * @return array|bool
 	 */
 	public function getModified($service)
 	{
-		$key = $this->modificator_slug.$service;
-
-		return ($this->isModified($service)) ? $this->$key : false;
+		return ($this->isModified($this->modificator_slug.$service))
+			? $this->{$this->modificator_slug.$service}
+			: false;
 	}
 
 	/**
@@ -82,13 +74,13 @@ trait hasModifications
 	 */
 	public function isModified($service)
 	{
-		$key = $this->modificator_slug.$service;
-
-		return (isset($this->$key) and ! is_null($this->$key));
+		return (
+			isset($this->{$this->modificator_slug.$service}) and ! is_null($this->{$this->modificator_slug.$service})
+		);
 	}
 
 	/**
-	 * @return mixed
+	 * @return \Illuminate\Support\Collection
 	 */
 	public function getModifications()
 	{

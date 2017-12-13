@@ -84,7 +84,6 @@ class Project extends Model implements HasMedia, Invitable
 	use hasInvite;
 	use hasPlan;
 	use SoftDeletes;
-	use hasModifications;
 
 	const TAG_CATEGORY = 'service_type';
 

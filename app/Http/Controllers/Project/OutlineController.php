@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Project;
 
-use App\Models\Ouline;
+use App\Http\Controllers\Controller;
 use App\Models\Outline;
 use App\Models\Project;
 use Illuminate\Http\Request;

@@ -141,9 +141,9 @@ class User extends Authenticatable implements HasMedia
 	 */
 	public function getRole()
 	{
-		foreach (Role::$roles as $r) {
-			if ($this->hasRole($r)) {
-				return $r;
+		foreach ($this->roles as $role) {
+			if ($this->hasRole($role->name)) {
+				return $role->name;
 			}
 		}
 

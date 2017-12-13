@@ -34,7 +34,8 @@ class Role extends Model
         'account_manager',
         'writer',
         'editor',
-        'designer'
+        'designer',
+        'researcher'
     ];
 
 	/**

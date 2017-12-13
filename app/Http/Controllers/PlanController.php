@@ -84,7 +84,10 @@ class PlanController extends Controller
 
 		$plan->meta = collect($plan->metadata->jsonSerialize());
 
-		$plan->projects = Project::whereIn('subscription_id', Subscription::select('id')->where('stripe_plan', $plan->id)->get())->get();
+		$plan->projects = Project::whereIn(
+			'subscription_id',
+			Subscription::select('id')->where('stripe_plan', $plan->id)->get()
+		)->get();
 
 		$data['plan'] = $plan;
 
@@ -101,9 +104,13 @@ class PlanController extends Controller
 	{
 		$data = [];
 
-		$data['plan'] = Plan::retrieve($id);
+		$plan = Plan::retrieve($id);
 
-		return view('entity.plan.show', $data);
+		$plan->meta = collect($plan->metadata->jsonSerialize());
+
+		$data['plan'] = $plan;
+
+		return view('entity.plan.edit', $data);
 	}
 
 	/**
@@ -115,7 +122,24 @@ class PlanController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		//
+
+		$input = collect($request->except(['_token', '_method']));
+
+		$input->transform(
+			function ($item, $key) {
+				if ($item == 'true' or $item == false) {
+					return ($item == 'true') ? true : false;
+				}
+
+				return $item;
+			}
+		);
+
+		$plan           = Plan::retrieve($id);
+		$plan->metadata = $input->toArray();
+		$plan->save();
+
+		return redirect()->action('PlanController@show', $id);
 	}
 
 	/**

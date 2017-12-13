@@ -9,17 +9,16 @@
             Created {{$project->created_at->format('Y-m-d')}}
         </small>
     </td>
+    <td class="">
+        <strong>{{__('Client')}}:</strong> {{$project->client->name}}
+    </td>
     <td class="project-completion">
         <small>{{__('Completion with')}}: 0%</small>
         <div class="progress progress-mini">
             <div style="width: 0%;" class="progress-bar"></div>
         </div>
     </td>
-    <td class="project-people">
-        {{__('Workers')}}: {{$project->workers->count()}}
-    </td>
     <td class="project-actions">
-
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm">
             <i class="fa fa-folder"></i> View
         </a>

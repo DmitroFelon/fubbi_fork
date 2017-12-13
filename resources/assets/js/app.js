@@ -159,5 +159,15 @@ jQuery(document).ready(function ($) {
     * */
 
     $('.footable').footable();
+
+
+    /*
+    * iChecks
+    * */
+
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
 });
 

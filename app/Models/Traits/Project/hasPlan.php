@@ -12,6 +12,8 @@ use Stripe\Plan;
  */
 trait hasPlan
 {
+	use hasModifications;
+
 	/**
 	 * @param $value
 	 * @return mixed
@@ -21,9 +23,11 @@ trait hasPlan
 	 */
 	public function getPlanAttribute($value)
 	{
+		Cache::forget('project_plan_'.$this->id);
+
 		return Cache::remember(
 			'project_plan_'.$this->id,
-			100,
+			1,
 			function () {
 				return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
 			}
@@ -39,10 +43,10 @@ trait hasPlan
 	public function getPlanMetadataAttribute($value)
 	{
 		if (isset($this->plan) and ! is_null($this->plan)) {
-			return $this->plan->metadata->jsonSerialize();
+			return collect($this->plan->metadata->jsonSerialize());
 		}
 
-		return Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize();
+		return collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
 	}
 
 	/**
@@ -106,6 +110,7 @@ trait hasPlan
 	public function getServiceOutlines($service)
 	{
 		$r = $this->outlines()->withAnyTags([$service], 'service_type')->get();
+
 		return $r;
 	}
 }

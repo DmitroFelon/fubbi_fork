@@ -34,6 +34,7 @@ class UserController extends Controller
 	{
 
 		//get roles
+
 		$roles = Cache::remember(
 			'role_names',
 			60 * 60 * 60,
@@ -67,8 +68,7 @@ class UserController extends Controller
 		);
 
 		//separate users by roles
-		$groupedByRoles               = $users->groupBy('role');
-		$groupedByRoles['researcher'] = collect();
+		$groupedByRoles = $users->groupBy('role');
 
 		//fill emprty roles by emprty collection
 		foreach ($roles as $role) {

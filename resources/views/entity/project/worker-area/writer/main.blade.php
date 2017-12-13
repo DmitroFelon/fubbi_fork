@@ -16,8 +16,8 @@
                     </dt>
                     <dd>
                         @if($project->isModified($key))
-                            {{ (is_bool($project->getModified($key)['value']))
-                            ? ($project->getModified($key)['value']) ?__('Yes') : __('No') : $project->getModified($key)['value']  }}
+                            {{ (is_bool($project->getModified($key)))
+                            ? ($project->getModified($key)) ?__('Yes') : __('No') : $project->getModified($key)  }}
                         @else
                             {{ (is_bool($value)) ? ($value) ?__('Yes') : __('No') : $value  }}
                         @endif

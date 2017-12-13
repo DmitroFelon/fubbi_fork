@@ -40,14 +40,18 @@ Route::middleware(['auth'])->group(
 
 		Route::resource('projects', 'ProjectController');
 
-		Route::resource('project.outlines', 'OutlineController');
-
-		Route::resource('project.articles', 'ArticlesController');
+		Route::namespace('Project')->group(
+			function () {
+				Route::resource('project.outlines', 'OutlineController');
+				Route::resource('project.articles', 'ArticlesController');
+				Route::resource('project.plan', 'PlanController')->only(['index', 'update', 'edit']);
+			}
+		);
 
 		Route::resource('teams', 'TeamController');
 
 		Route::resource('users', 'UserController');
-		
+
 		Route::resource('plans', 'PlanController');
 
 		Route::post('subscribe', 'SubscriptionController@subscribe');
