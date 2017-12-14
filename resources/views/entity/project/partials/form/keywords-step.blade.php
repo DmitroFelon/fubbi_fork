@@ -1,8 +1,21 @@
 @foreach($keywords as $keyword)
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-        <label>
-            <input {{($keyword['accepted'])?'checked':''}} name="keywords[{{$keyword['theme']}}][]" type="checkbox" value="{{$keyword['text']}}">
-            {{ucfirst($keyword['text'])}}
-        </label>
+        <div class="i-checks">
+            <label>
+                <input
+                        class="keywords-checkbox"
+                        {{($keyword['accepted'])?'checked':''}}
+                        type="checkbox"
+                        name="keywords[{{$keyword['theme']}}][{{$keyword['text']}}]"
+                        value="true"> <i></i>
+                {{ucfirst($keyword['text'])}}
+            </label>
+        </div>
     </div>
 @endforeach
+<script>
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+</script>

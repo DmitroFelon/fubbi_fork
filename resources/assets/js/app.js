@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
         $(".amount").html(amount);
 
         $("#stripe-form-wrapper").show();
-        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+        $("html, body").animate({scrollTop: $(document).height() - $(window).height()});
     });
     var $form = $("#payment-form");
     $form.on('submit', function (e) {
@@ -49,9 +49,10 @@ jQuery(document).ready(function ($) {
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("quiz-form-step")) !== "undefined") {
-                    jQuery("#quiz-form-t-"+localStorage.getItem("quiz-form-step")).click();
+                    jQuery("#quiz-form-t-" + localStorage.getItem("quiz-form-step")).click();
                 }
-            } else {}
+            } else {
+            }
         },
         onStepChanging: function (event, currentIndex) {
             //todo add validation
@@ -61,7 +62,8 @@ jQuery(document).ready(function ($) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("quiz-form-step", currentIndex);
-            } else {}
+            } else {
+            }
         },
         onFinishing: function (event, currentIndex) {
             return true;
@@ -71,7 +73,6 @@ jQuery(document).ready(function ($) {
             var form = $(this);
             form.submit();
         },
-
     });
 
     /*
@@ -85,18 +86,30 @@ jQuery(document).ready(function ($) {
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
-                    jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
+                    jQuery("#keywords-form-t-" + localStorage.getItem("keywords-form-step")).click();
                 }
-            } else {}
+            } else {
+            }
         },
         onStepChanging: function (event, currentIndex) {
             //todo load new keywords from Keywordtools
+            var formData = $("#keywords-form").serialize();
+            var _project_id = $("input[name=_project_id]").val();
+
+            jQuery.ajax('/projects/' + _project_id + '/prefill', {
+                processData: false,
+                contentType: false,
+                data: formData
+            });
+
+            return true;
         },
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("keywords-form-step", currentIndex);
-            } else {}
+            } else {
+            }
         },
         onFinishing: function (event, currentIndex) {
             return true;
@@ -158,15 +171,15 @@ jQuery(document).ready(function ($) {
     });
 
     /*
-    * Init footable table
-    * */
+     * Init footable table
+     * */
 
     $('.footable').footable();
 
 
     /*
-    * iChecks
-    * */
+     * iChecks
+     * */
 
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',

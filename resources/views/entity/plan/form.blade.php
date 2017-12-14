@@ -20,7 +20,6 @@
                                                 value="true"
                                                 {{($value == 'true')?'checked="checked"':''}}> <i></i>
                                     </label>
-
                                 </div>
                             @else
                                 <input class="form-control" id="{{$key}}" name="{{$key}}"

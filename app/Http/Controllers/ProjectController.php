@@ -75,7 +75,6 @@ class ProjectController extends Controller
 	{
 		$step = 'plan';
 
-
 		$public_plans = Cache::remember(
 			'public_plans',
 			60,
@@ -233,9 +232,9 @@ class ProjectController extends Controller
 	public function apply_to_project(Project $project)
 	{
 		$message_key = 'info';
-		$user =  $this->request->user();
+		$user        = $this->request->user();
 
-		if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()){
+		if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()) {
 			$message_key = 'error';
 			$message     = __('You are too late. This project already has %s', $user->role);
 		} else {
@@ -252,11 +251,48 @@ class ProjectController extends Controller
 	{
 		$message_key = 'info';
 		$message     = __('You are declined this project');
-		$user =  $this->request->user();
+		$user        = $this->request->user();
 
 		$invite = $user->getInviteToProject($project->id);
 		$invite->decline();
 
 		return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
+	}
+
+	public function prefill(Project $project, Request $request)
+	{
+		if ($request->input('keywords')) {
+			$keywords_input = collect($request->input('keywords'));
+			$keywords_input->transform(
+				function ($item, $key) {
+					return array_keys($item);
+				}
+			);
+
+			$keywords_old = $project->getMeta('keywords');
+
+			if ($keywords_old) {
+				$keywords_old = collect($keywords_old);
+
+				$keywords_old->each(
+					function ($item, $key) use ($keywords_input) {
+						return (isset($keywords_input[$key]));
+					}
+				);
+			}
+		}
+
+		return $request->except(
+			[
+				'_token',
+				'_project_id',
+				'_step',
+				'_method',
+				'compliance_guideline',
+				'logo',
+				'article_images',
+				'ready_content',
+			]
+		);
 	}
 }
