@@ -71,7 +71,6 @@ use Venturecraft\Revisionable\Revision;
  */
 class Project extends Model implements HasMedia, Invitable
 {
-	use hasKeywords;
 	use hasStates;
 	use hasWorkers;
 	use hasTeams;

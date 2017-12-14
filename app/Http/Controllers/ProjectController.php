@@ -178,7 +178,7 @@ class ProjectController extends Controller
 		return view(
 			'entity.project.edit',
 			[
-				'keywords' => Keyword::all()->toArray(),
+				'keywords' => $project->getMeta('keywords'),
 				'articles' => Article::all(),
 				'project'  => $project,
 				'step'     => $project->state,
@@ -200,35 +200,7 @@ class ProjectController extends Controller
 			abort(404);
 		}
 
-		switch ($request->input('_step')) {
-			case \App\Models\Helpers\ProjectStates::QUIZ_FILLING:
-				$project->setMeta(
-					$request->except(
-						[
-							'_token',
-							'_step',
-							'_method',
-							'compliance_guideline',
-							'logo',
-							'article_images',
-							'ready_content',
-						]
-					)
-				);
-				$project->addFiles($request);
-				$project->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
-				break;
-			case \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING:
-				$project->keywords()->sync($request->input('keywords'));
-				$project->setState(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW);
-				$project->filled();
-				break;
-			default:
-				abort(404);
-				break;
-		}
-
-		$project->save();
+		$project = $project->filling($request);
 
 		return redirect()->action('ProjectController@edit', [$project]);
 	}

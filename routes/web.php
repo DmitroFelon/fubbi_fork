@@ -18,6 +18,14 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
+Route::get(
+	'test',
+	function () {
+
+		
+	}
+);
+
 Route::middleware(['auth'])->group(
 	function () {
 
@@ -28,7 +36,6 @@ Route::middleware(['auth'])->group(
 				Route::get('', 'NotificationController@index');
 			}
 		);
-
 		Route::prefix('project')->group(
 			function () {
 				Route::get('accept_review/{project}', "ProjectController@accept_review");
@@ -37,9 +44,7 @@ Route::middleware(['auth'])->group(
 				Route::get('decline_project/{project}', "ProjectController@decline_project");
 			}
 		);
-
 		Route::resource('projects', 'ProjectController');
-
 		Route::namespace('Project')->group(
 			function () {
 				Route::resource('project.outlines', 'OutlineController');
@@ -47,15 +52,11 @@ Route::middleware(['auth'])->group(
 				Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
 			}
 		);
-
 		Route::resource('teams', 'TeamController');
-
 		Route::resource('users', 'UserController');
-
 		Route::resource('plans', 'PlanController');
-
 		Route::post('subscribe', 'SubscriptionController@subscribe');
-
+		Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
 		Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
 	}
 );

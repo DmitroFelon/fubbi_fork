@@ -8,16 +8,31 @@
 
 namespace App\Services\Api;
 
+use Exception;
 use GuzzleHttp\Client;
 
 class AbstractApi
 {
+	protected $client;
 
-    protected $client;
+	public function __construct($base_uri, $defaults)
+	{
+		$this->client = new Client(
+			[
+				'base_uri' => $base_uri,
+				'timeout'  => 2.0,
+				$defaults
+			]
+		);
+	}
 
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
+	public function request($uri, $params = [], $method = 'GET')
+	{
+		try {
+			$this->client->request($method, $uri, [
+				'query' => ['foo' => 'bar']
+			]);
+		} catch (Exception $e) {
+		}
+	}
 }

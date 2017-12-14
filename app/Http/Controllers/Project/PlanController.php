@@ -77,6 +77,7 @@ class PlanController extends Controller
 
 		$diff = $plan->metadata->diffAssoc($input_metadata);
 
+		//check true false values 
 		$diff->each(
 			function ($item, $key) use ($project, $input_metadata) {
 				$project->modify(

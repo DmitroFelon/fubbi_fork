@@ -89,6 +89,9 @@ jQuery(document).ready(function ($) {
                 }
             } else {}
         },
+        onStepChanging: function (event, currentIndex) {
+            //todo load new keywords from Keywordtools
+        },
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
