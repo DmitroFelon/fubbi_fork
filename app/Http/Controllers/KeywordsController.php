@@ -9,15 +9,31 @@ class KeywordsController extends Controller
 {
 	public function index(Project $project, string $theme)
 	{
+		$keywords = [];
+
+		for ($i = 0; $i < 11; $i++) {
+			$keywords[] = [
+				'text'     => "keyword - {$i}",
+				'accepted' => true,
+				'theme'    => $theme,
+			];
+		}
 
 		try {
 			$api      = new KeywordTool();
 			$result   = collect();
 			$response = $api->suggestions(trim($theme));
-			
 
-			if(!isset($response[$theme])){
-				return \GuzzleHttp\json_encode($response);
+
+
+			if (! isset($response[$theme])) {
+				return view(
+					'entity.project.partials.form.keywords-step',
+					[
+						'project'  => $project,
+						'keywords' => $keywords,
+					]
+				);
 			}
 
 			$response       = collect($response[$theme]);
@@ -31,7 +47,13 @@ class KeywordsController extends Controller
 				]
 			);
 		} catch (\Exception $e) {
-			return $e->getMessage();
+			return view(
+				'entity.project.partials.form.keywords-step',
+				[
+					'project'  => $project,
+					'keywords' => $keywords,
+				]
+			);
 		}
 	}
 }
