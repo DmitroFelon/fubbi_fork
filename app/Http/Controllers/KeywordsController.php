@@ -45,7 +45,7 @@ class KeywordsController extends Controller
 
 				echo 'before dd'."<br>";
 
-				dd($keywords, $keywords_full);
+				dd($keywords, $keywords_full, $response);
 
 				//$project->setMeta('keywords', $keywords_full);
 
