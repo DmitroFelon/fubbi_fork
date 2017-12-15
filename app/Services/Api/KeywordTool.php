@@ -10,6 +10,7 @@ namespace App\Services\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use PHPUnit\Runner\Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -42,27 +43,44 @@ class KeywordTool
 		);
 	}
 
+	public function test($keyword){
+		$apikey = config('keywordtool.apikey');
+
+		$params = array(
+			'apikey' => $apikey,
+			'keyword' => $keyword,
+			'metrics_network' => 'googlesearchnetwork',
+			'output' => 'json',
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://api.keywordtool.io/v2/search/suggestions/google?' . http_build_query($params));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		$output = curl_exec($ch);
+		return json_decode($output, TRUE);
+	}
+
 	/**
-	 * @param array $keywords
+	 * @param $keyword
 	 * @param string $country
 	 * @param string $language
-	 * @return mixed
+	 * @return \Illuminate\Support\Collection
 	 */
-	public function volume(array $keywords, $country = 'au', $language = 'en')
+	public function suggestions($keyword, $country = 'au', $language = 'en')
 	{
-
 		$body = [
-			'apikey'           => config('keywordtool.apikey'),
-			'keyword'          => json_encode($keywords),
-			'metrics_language' => $language,
-			'metrics_network'  => 'googlesearchnetwork',
-			'country'          => $country,
-			'output'           => 'json',
+			'apikey'  => config('keywordtool.apikey'),
+			'keyword' => trim($keyword),
 		];
+		try {
+			$response = $this->request('search/suggestions/google', $body);
 
-		$response = $this->request('search/volume/google', $body);
-
-		return $this->response($response);
+			return $this->response($response);
+		} catch (RequestException $e) {
+			throw $e;
+		} catch (\Exception $e) {
+			throw $e;
+		}
 	}
 
 	/**
@@ -73,11 +91,7 @@ class KeywordTool
 	private function request($uri, $body)
 	{
 		try {
-			return $this->client->request(
-				'GET',
-				$uri,
-				['query' => $body]
-			);
+			return $this->client->request('GET', $uri, ['query' => $body]);
 		} catch (RequestException $e) {
 			throw $e;
 		}
@@ -89,69 +103,19 @@ class KeywordTool
 	 */
 	private function response(ResponseInterface $response)
 	{
-
-		$body   = json_decode($response->getBody()->getContents(), true);
-		$notice = isset($body['notice']['message']) ? $body['notice']['message'] : '';
-
-		throw_unless(
-			(isset($body['results']) or !(empty($body['results'] ))),
-			new \Exception("KeywordTool returns an error: {$notice}")
-		);
-
-		return collect($body['results']);
-	}
-
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function suggestions($keyword, $country = 'au', $language = 'en')
-	{
-
-		$body = [
-			'apikey'           => config('keywordtool.apikey'),
-			'keyword'          => $keyword,
-			'metrics_language' => $language,
-			'metrics_network'  => 'googlesearchnetwork',
-			'country'          => $country,
-			'output'           => 'json',
-			'complete'         => true,
-			'type'             => 'suggestions',
-		];
 		try {
-			return $this->response(
-				$this->request('search/suggestions/google', $body)
-			);
-		} catch (RequestException $e) {
-			throw $e;
-		}
-	}
 
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return mixed
-	 */
-	public function questions($keyword, $country = 'au', $language = 'en')
-	{
-		$body = [
-			'apikey'           => config('keywordtool.apikey'),
-			'keyword'          => $keyword,
-			'metrics_language' => $language,
-			'metrics_network'  => 'googlesearchnetwork',
-			'country'          => $country,
-			'output'           => 'json',
-			'type'             => 'questions',
-		];
+			$body = \GuzzleHttp\json_decode($response->getBody()->getContents(), true);
 
-		try {
-			return $this->response(
-				$this->request('search/suggestions/google', $body)
+			$notice = isset($body['notice']['message']) ? $body['notice']['message'] : '';
+
+			throw_if(
+				(!isset($body['results']) or (empty($body['results']))),
+				new \Exception("KeywordTool returns an error: {$notice}, response: ".json_encode($response))
 			);
-		} catch (RequestException $e) {
+
+			return collect($body['results']);
+		} catch (Exception $e) {
 			throw $e;
 		}
 	}

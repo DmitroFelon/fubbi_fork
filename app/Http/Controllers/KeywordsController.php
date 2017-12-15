@@ -4,55 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Services\Api\KeywordTool;
+use Illuminate\Support\Facades\Session;
 
 class KeywordsController extends Controller
 {
 	public function index(Project $project, string $theme)
 	{
-		$keywords = [];
-
-		//TODO store data from KeywordTool in meta data
-
-		for ($i = 0; $i < 11; $i++) {
-			$keywords["keyword - {$i}"] = true;
-		}
-
 		try {
-			$api      = new KeywordTool();
-			$result   = collect();
-			$response = $api->suggestions(trim($theme));
+			$keywords_full = ($project->getMeta('keywords')) ? collect($project->getMeta('keywords')) : collect();
 
-			if (! isset($response[$theme])) {
-				return view(
-					'entity.project.partials.form.keywords-step',
-					[
-						'project'  => $project,
-						'keywords' => $keywords,
-						'theme'    => $theme,
-					]
+			if ($keywords_full->has($theme) and ! empty($keywords_full->get($theme))) {
+				$keywords = $keywords_full->get($theme);
+			} else {
+
+				$api      = new KeywordTool();
+
+				$re = $api->test($theme);
+
+				dd($re);
+
+				$response = $api->suggestions($theme);
+
+				Session::put('keywords', $response);
+
+				$keywords = collect($response->keyBy('string'))->transform(
+					function ($item, $key) {
+						return false;
+					}
 				);
+
+				$keywords_full->put($theme, $keywords->toArray());
+
+				//$project->setMeta('keywords', $keywords_full);
+
+				//$project->save();
 			}
 
-			$response       = collect($response[$theme]);
-			$result[$theme] = collect($response->pluck('string'));
+			$data = compact(
+				[
+					'project',
+					'keywords',
+					'theme',
+				]
+			);
 
-			return view(
-				'entity.project.partials.form.keywords-step',
-				[
-					'project'  => $project,
-					'keywords' => $keywords,
-					'theme'    => $theme,
-				]
-			);
+			return view('entity.project.partials.form.keywords-step', $data);
 		} catch (\Exception $e) {
-			return view(
-				'entity.project.partials.form.keywords-step',
-				[
-					'project'  => $project,
-					'keywords' => $keywords,
-					'theme'    => $theme,
-				]
-			);
+			return $e->getMessage();
 		}
 	}
 }

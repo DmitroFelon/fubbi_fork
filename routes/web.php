@@ -21,77 +21,16 @@ Auth::routes();
 Route::get(
 	'test',
 	function () {
-
-		//TODO use on for pre-filling
-
-		//from database if exist
 		$c1 = collect(
 			[
-				'theme1' => [
-					'word 1' => false,
-					'word 2' => true,
-					'word 3' => true,
-					'word 4' => false,
-				],
-				'theme2' => [
-					'word 1' => false,
-					'word 2' => false,
-					'word 3' => false,
-					'word 4' => false,
-				],
-				'theme3' => [
-					'word 1' => true,
-					'word 2' => true,
-					'word 3' => true,
-					'word 4' => true,
-				],
+				'key1' => 'value1',
+				'key2' => 'value2',
 			]
 		);
 
-		//user's input
-		$c2 = collect(
-			[
-				'theme1' => [
-					'word 1',
-					'word 2',
-				],
-				'theme2' => [
-					'word 2',
-					'word 4',
-				],
-				'theme4' => [
-					'word 1',
-					'word 4',
-					'word 3',
-				],
-			]
-		);
+		$c1->put('key1', 'value3');
 
-		//fill by new keywords if necessary
-		$c2->each(function($item, $k) use ($c1){
-			if(!$c1->has($k)){
-				$c1->put($k, []);
-			}
-		});
-
-		$c1->transform(
-			function ($item, $k) use ($c2, &$c1) {
-				if ($c2->has($k)) {
-					//set all to false
-					foreach ($item as $i => $keyword) {
-						$item[$i] = false;
-					}
-					//set true at existed
-					foreach ($c2->get($k) as $i => $keyword) {
-						$item[$keyword] = true;
-					}
-				}
-
-				return $item;
-			}
-		);
-
-		dd($c1->toArray());
+		dd($c1);
 	}
 );
 

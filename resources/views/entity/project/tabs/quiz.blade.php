@@ -2,7 +2,7 @@
 ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
 !!}
 {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::QUIZ_FILLING) !!}
-{!! Form::hidden('_project_id', $project->id !!}
+{!! Form::hidden('_project_id', $project->id ) !!}
 {!! Form::hidden('themes_order', null, ['id'=>'themes_order']) !!}
 <h1>Step 1</h1>
 <fieldset>

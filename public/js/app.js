@@ -3326,7 +3326,6 @@ jQuery(document).ready(function ($) {
             var form = $(this);
             form.submit();
         },
-
     });
 
     /*
