@@ -17,17 +17,21 @@ class KeywordsController extends Controller
 				$keywords = $keywords_full->get($theme);
 			} else {
 
+				echo 'before api call'."<br>";
+
 				$api      = new KeywordTool();
 
-				$re = $api->test($theme);
-
 				$response = $api->suggestions($theme);
-				
+
+				echo 'after api call'."<br>";
+
 				$response = collect($response->get('results'));
 
 				$response = collect($response->get($theme));
 
 				Session::put('keywords', $response);
+
+				echo 'before transform'."<br>";
 
 				$keywords = collect($response->keyBy('string'))->transform(
 					function ($item, $key) {
@@ -35,7 +39,13 @@ class KeywordsController extends Controller
 					}
 				);
 
+				echo 'after transform'."<br>";
+
 				$keywords_full->put($theme, $keywords->toArray());
+
+				echo 'before dd'."<br>";
+
+				dd($keywords, $keywords_full);
 
 				//$project->setMeta('keywords', $keywords_full);
 
