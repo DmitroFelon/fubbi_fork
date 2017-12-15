@@ -21,6 +21,8 @@ class KeywordsController extends Controller
 
 				$api      = new KeywordTool();
 
+				$rk = $api->test($theme);
+
 				$response = $api->suggestions($theme);
 
 				echo 'after api call'."<br>";
@@ -45,7 +47,7 @@ class KeywordsController extends Controller
 
 				echo 'before dd'."<br>";
 
-				dd($keywords, $keywords_full,$response1, $response);
+				dd($keywords, $keywords_full,$response1, $response, $rk);
 
 				//$project->setMeta('keywords', $keywords_full);
 
