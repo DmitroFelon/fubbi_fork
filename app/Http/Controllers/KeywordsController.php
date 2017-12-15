@@ -25,9 +25,9 @@ class KeywordsController extends Controller
 
 				echo 'after api call'."<br>";
 
-				$response = collect($response->get('results'));
+				$response1 = collect($response->get('results'));
 
-				$response = collect($response->get($theme));
+				$response = collect($response1->get($theme));
 
 				Session::put('keywords', $response);
 
@@ -45,7 +45,7 @@ class KeywordsController extends Controller
 
 				echo 'before dd'."<br>";
 
-				dd($keywords, $keywords_full, $response);
+				dd($keywords, $keywords_full,$response1, $response);
 
 				//$project->setMeta('keywords', $keywords_full);
 
