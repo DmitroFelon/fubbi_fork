@@ -1,14 +1,14 @@
-@foreach($keywords as $keyword)
+@foreach($keywords as $keyword => $accepted)
     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <div class="i-checks">
             <label>
                 <input
                         class="keywords-checkbox"
-                        {{($keyword['accepted'])?'checked':''}}
+                        {{($accepted)?'checked':''}}
                         type="checkbox"
-                        name="keywords[{{$keyword['theme']}}][{{$keyword['text']}}]"
+                        name="keywords[{{$theme}}][{{$keyword}}]"
                         value="true"> <i></i>
-                {{ucfirst($keyword['text'])}}
+                {{ucfirst($keyword)}}
             </label>
         </div>
     </div>

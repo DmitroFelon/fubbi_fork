@@ -11,12 +11,10 @@ class KeywordsController extends Controller
 	{
 		$keywords = [];
 
+		//TODO store data from KeywordTool in meta data
+
 		for ($i = 0; $i < 11; $i++) {
-			$keywords[] = [
-				'text'     => "keyword - {$i}",
-				'accepted' => true,
-				'theme'    => $theme,
-			];
+			$keywords["keyword - {$i}"] = true;
 		}
 
 		try {
@@ -24,14 +22,13 @@ class KeywordsController extends Controller
 			$result   = collect();
 			$response = $api->suggestions(trim($theme));
 
-
-
 			if (! isset($response[$theme])) {
 				return view(
 					'entity.project.partials.form.keywords-step',
 					[
 						'project'  => $project,
 						'keywords' => $keywords,
+						'theme'    => $theme,
 					]
 				);
 			}
@@ -43,7 +40,8 @@ class KeywordsController extends Controller
 				'entity.project.partials.form.keywords-step',
 				[
 					'project'  => $project,
-					'keywords' => $result,
+					'keywords' => $keywords,
+					'theme'    => $theme,
 				]
 			);
 		} catch (\Exception $e) {
@@ -52,6 +50,7 @@ class KeywordsController extends Controller
 				[
 					'project'  => $project,
 					'keywords' => $keywords,
+					'theme'    => $theme,
 				]
 			);
 		}
