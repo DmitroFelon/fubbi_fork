@@ -21,9 +21,11 @@ class KeywordsController extends Controller
 
 				$re = $api->test($theme);
 
-				dd($re);
-
 				$response = $api->suggestions($theme);
+				
+				$response = collect($response->get('results'));
+
+				$response = collect($response->get($theme));
 
 				Session::put('keywords', $response);
 
