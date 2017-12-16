@@ -19,7 +19,7 @@
                                 <small> {{ucwords( str_replace('_',' ',$key) )}}:</small>
                             </th>
                             <td>
-                                <small>{{ (is_bool($value)) ? ($value) ?__('Yes') : __('No') : $value  }}</small>
+                                <small>{{ (is_bool($value)) ? ($value) ?_i('Yes') : _i('No') : $value  }}</small>
                             </td>
                         </tr>
                     @endforeach

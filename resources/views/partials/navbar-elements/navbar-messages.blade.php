@@ -24,7 +24,7 @@
         <li>
             <div class="text-center link-block">
                 <a href="{{url('messages')}}">
-                    <strong>{{__('See All Messages')}}</strong>
+                    <strong>{{_i('See All Messages')}}</strong>
                     <i class="fa fa-angle-right"></i>
                 </a>
             </div>

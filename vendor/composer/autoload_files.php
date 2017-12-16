@@ -19,7 +19,7 @@ return array(
     '37a3dc5111fe8f707ab4c132ef1dbc62' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
     'e7223560d890eab89cda23685e711e2c' => $vendorDir . '/psy/psysh/src/Psy/functions.php',
     'f18cc91337d49233e5754e93f3ed9ec3' => $vendorDir . '/laravelcollective/html/src/helpers.php',
-    '790c540df67e811a16f8c0516d09d7b4' => $vendorDir . '/xinax/laravel-gettext/src/Xinax/LaravelGettext/Support/helpers.php',
     '270f70f51ae43c09211e3bc9af77115a' => $vendorDir . '/laravelista/ekko/src/Laravelista/Ekko/helpers.php',
     '67969b779fc2b57b79f39cdaef36a10e' => $vendorDir . '/yab/laravel-scout-mysql-driver/src/helpers.php',
+    '8eca5ed3358a8cf297784e906ef521b5' => $vendorDir . '/belphemur/laravel-gettext/src/Xinax/LaravelGettext/Support/helpers.php',
 );

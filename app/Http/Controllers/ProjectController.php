@@ -46,9 +46,8 @@ class ProjectController extends Controller
 	public function index()
 	{
 		$user = $this->request->user();
-		$role = $user->getRole();
 
-		switch ($role) {
+		switch ($user->role) {
 			case 'admin':
 				$projects = Project::paginate(10);
 				break;
@@ -261,38 +260,8 @@ class ProjectController extends Controller
 
 	public function prefill(Project $project, Request $request)
 	{
-		if ($request->input('keywords')) {
-			$keywords_input = collect($request->input('keywords'));
-			$keywords_input->transform(
-				function ($item, $key) {
-					return array_keys($item);
-				}
-			);
+		$keywords = $project->prefill($request);
 
-			$keywords_old = $project->getMeta('keywords');
-
-			if ($keywords_old) {
-				$keywords_old = collect($keywords_old);
-
-				$keywords_old->each(
-					function ($item, $key) use ($keywords_input) {
-						return (isset($keywords_input[$key]));
-					}
-				);
-			}
-		}
-
-		return $request->except(
-			[
-				'_token',
-				'_project_id',
-				'_step',
-				'_method',
-				'compliance_guideline',
-				'logo',
-				'article_images',
-				'ready_content',
-			]
-		);
+		return ['result' => $keywords];
 	}
 }

@@ -8,10 +8,10 @@
         <small>{{$plan->id}}</small>
     </td>
     <td class="project-people">
-        {{__('Amount')}}: ${{$plan->amount/100}}
+        {{_i('Amount')}}: ${{$plan->amount/100}}
     </td>
     <td class="project-people">
-        {{__('Projects')}}: {{$plan->projects}}
+        {{_i('Projects')}}: {{$plan->projects}}
     </td>
     <td class="project-actions">
         <a href="{{action('PlanController@show', ['id' => $plan->id])}}" class="btn btn-white btn-sm">

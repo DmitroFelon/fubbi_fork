@@ -13,7 +13,7 @@
                                     </strong>
                                 </span>
                                 <span class="text-muted text-xs block">
-                                    {{__('Fast actions')}}<b class="caret"></b>
+                                    {{_i('Fast actions')}}<b class="caret"></b>
                                 </span>
                             </span>
                         </a>
@@ -59,13 +59,13 @@
             <li class="{{isActiveRoute('login')}}">
                 <a href="{{url('login')}}">
                     <i class="fa fa-sign-in"></i>
-                    <span class="nav-label">{{__('Login')}}</span>
+                    <span class="nav-label">{{_i('Login')}}</span>
                 </a>
             </li>
             <li class="{{isActiveRoute('register')}}">
                 <a href="{{url('register')}}">
                     <i class="fa fa-plus"></i>
-                    <span class="nav-label">{{__('Registration')}}</span>
+                    <span class="nav-label">{{_i('Registration')}}</span>
                 </a>
             </li>
             @endguest

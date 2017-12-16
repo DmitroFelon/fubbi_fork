@@ -2,6 +2,8 @@
 
 return [
 
+	'keywords_count' => 25,
+
 	'form' => [
 		'quiz' => [
 			'writing_style' => [
@@ -20,5 +22,5 @@ return [
 				'Boxed Text'  => 'Boxed Text',
 			],
 		],
-	]
+	],
 ];

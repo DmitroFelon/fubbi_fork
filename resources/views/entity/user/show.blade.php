@@ -20,7 +20,7 @@
                         <tr>
                             <td>
                                 <strong>
-                                    {{__('Phone:')}}
+                                    {{_i('Phone:')}}
                                 </strong>
                                 {{$user->phone}}
                             </td>
@@ -28,7 +28,7 @@
                         <tr>
                             <td>
                                 <strong>
-                                    {{__('Email:')}}
+                                    {{_i('Email:')}}
                                 </strong>
                                 {{$user->email}}
                             </td>
@@ -38,7 +38,7 @@
                                 <strong>
                                     {{$user->projects->count()}}
                                 </strong>
-                                {{__('Projects')}}
+                                {{_i('Projects')}}
                             </td>
                         </tr>
                         </tbody>

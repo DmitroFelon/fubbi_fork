@@ -4,11 +4,11 @@
            name="s"
            data-provide="typeahead"
            data-source='{{$search_suggestions}}'
-           placeholder="{{__('Search user')}}"
+           placeholder="{{_i('Search user')}}"
            class="input form-control">
     <span class="input-group-btn">
         <button type="submit" class="btn btn btn-primary">
-            <i class="fa fa-search"></i>{{__('Search')}}
+            <i class="fa fa-search"></i>{{_i('Search')}}
         </button>
     </span>
 </form>

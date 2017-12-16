@@ -7,11 +7,18 @@ use App\Models\Project;
 use App\Observers\InviteObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
+use App\Services\Api\Keywords\KeywordsFactoryInterface;
+use App\Services\Api\Keywords\LocalKeywords;
 use App\User;
 use Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ *
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
 	/**
@@ -39,24 +46,32 @@ class AppServiceProvider extends ServiceProvider
 
 	private function formComponents()
 	{
-		Form::component('bsText', 'components.form.text', [
-			'name',
-			'value',
-			'label',
-			'description',
-			'attributes' => [],
-			'type'       => '',
-		]);
+		Form::component(
+			'bsText',
+			'components.form.text',
+			[
+				'name',
+				'value',
+				'label',
+				'description',
+				'attributes' => [],
+				'type'       => '',
+			]
+		);
 
-		Form::component('bsSelect', 'components.form.select', [
-			'name',
-			'list',
-			'selected',
-			'label',
-			'description',
-			'select_attributes'  => [],
-			'options_attributes' => [],
-		]);
+		Form::component(
+			'bsSelect',
+			'components.form.select',
+			[
+				'name',
+				'list',
+				'selected',
+				'label',
+				'description',
+				'select_attributes'  => [],
+				'options_attributes' => [],
+			]
+		);
 	}
 
 	/**
@@ -66,6 +81,6 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		//
+		$this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
 	}
 }

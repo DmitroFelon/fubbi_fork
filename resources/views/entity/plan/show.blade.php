@@ -8,7 +8,7 @@
             <h5>{{ucfirst($plan->name)}}</h5>
             <div class="ibox-tools">
                 <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
-                   class="btn btn-primary btn-xs">{{__('Edit plan')}}</a>
+                   class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>
         <div class="ibox-content">
@@ -24,9 +24,9 @@
                                         </th>
                                         <td>
                                             @if($value == 'true')
-                                                {{__('Yes')}}
+                                                {{_i('Yes')}}
                                             @elseif($value == 'false')
-                                                {{__('No')}}
+                                                {{_i('No')}}
                                             @else
                                                 {{$value}}
                                             @endif
@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h5>{{__('Projects with this plan')}}</h5>
+                        <h5>{{_i('Projects with this plan')}}</h5>
                         <ul>
                             @foreach($plan->projects as $project)
                                 <li>

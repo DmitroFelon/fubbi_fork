@@ -3,7 +3,7 @@
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-4">
-            <h2>{{__('Users')}}</h2>
+            <h2>{{_i('Users')}}</h2>
         </div>
     </div>
 @endsection
@@ -20,7 +20,7 @@
         <div class="ibox-content">
             @include('entity.user.partials.search')
             <div class="clients-list">
-                <span class="pull-right small text-muted">{{__('Total')}}: <small>{{$users->count()}}</small></span>
+                <span class="pull-right small text-muted">{{_i('Total')}}: <small>{{$users->count()}}</small></span>
                 <ul class="nav nav-tabs">
                     @foreach($roles as $role)
                         @include('entity.user.partials.top-tab')

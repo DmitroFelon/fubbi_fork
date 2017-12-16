@@ -5,7 +5,7 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="ibox" id="stripe-form-wrapper" style="display: none">
         <div class="ibox-title">
-            <h5>{{__('Subscribe')}}</h5>
+            <h5>{{_i('Subscribe')}}</h5>
         </div>
         <div class="ibox-content">
             <div class="row">
@@ -34,7 +34,7 @@
                         </div>
                         <div class='form-row'>
                             <div class='col-xs-12 form-group card required'>
-                                <label class='control-label'>{{__('Card Number')}}</label>
+                                <label class='control-label'>{{_i('Card Number')}}</label>
                                 <input value="4242424242424242"
                                        data-mask="9999-9999-9999-9999"
                                        maxlength="16" minlength="16" autocomplete='off' class='form-control card-number'
@@ -50,12 +50,12 @@
                                        type='text'>
                             </div>
                             <div class='col-xs-4 form-group expiration required'>
-                                <label class='control-label'>{{__('Expiration year')}}</label>
+                                <label class='control-label'>{{_i('Expiration year')}}</label>
                                 <input value="2020" maxlength="4" minlength="4" class='form-control card-expiry-year'
                                        placeholder='YYYY' size='4' type='text'>
                             </div>
                             <div class='col-xs-4 form-group expiration required'>
-                                <label class='control-label'>{{__('Expiration month')}}</label>
+                                <label class='control-label'>{{_i('Expiration month')}}</label>
                                 <input value="12" maxlength="2" minlength="1" class='form-control card-expiry-month'
                                        placeholder='MM' size='2' type='text'>
                             </div>
@@ -69,7 +69,7 @@
                                         type='submit' style="margin-top: 10px;">
                                     <strong>
                                         <span>$ </span><span class='amount'></span>
-                                        {{__('Subscribe')}}
+                                        {{_i('Subscribe')}}
                                         <i class="fa fa-long-arrow-right"></i>
                                     </strong>
                                 </button>
@@ -78,7 +78,7 @@
                         <div class='form-row'>
                             <div class='col-md-12 error form-group hide'>
                                 <div class='alert-danger alert'>
-                                    {{__('Please correct the errors and try again.')}}
+                                    {{_i('Please correct the errors and try again.')}}
                                 </div>
                             </div>
                         </div>

@@ -3,7 +3,7 @@
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-12">
-            <h2>{{__('Notifications')}}</h2>
+            <h2>{{_i('Notifications')}}</h2>
         </div>
     </div>
 @endsection
@@ -17,7 +17,7 @@
                     <div class="row">
                         @if($has_unread_notifications)
                             <a href="{{url('notification/read/')}}" class="btn btn-default btn-xs pull-right">
-                                {{__('Mart all as read')}}
+                                {{_i('Mart all as read')}}
                             </a>
                             <br>
                         @endif

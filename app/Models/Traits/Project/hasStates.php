@@ -14,6 +14,7 @@ use App\Models\Keyword;
 use App\Services\Api\KeywordTool;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Class hasStates
@@ -138,12 +139,14 @@ trait hasStates
 	public function prefill(Request $request)
 	{
 		if ($request->input('keywords')) {
-			$this->prefillKeywords($request);
+			return $this->prefillKeywords($request);
 		}
 
 		if ($request->input('themes')) {
-			$this->prefillQuiz($request);
+			return $this->prefillQuiz($request);
 		}
+
+		return false;
 	}
 
 	private function prefillKeywords(Request $request)
@@ -155,7 +158,11 @@ trait hasStates
 			}
 		);
 
-		$keywords_old = ($this->getMeta('keywords')) ? $this->getMeta('keywords') : collect();
+
+		$keywords_old = ($this->getMeta('keywords')) ? collect($this->getMeta('keywords')) : collect();
+
+		Session::put('keywords_old', $keywords_old);
+
 
 		//fill by new keywords if necessary
 		$keywords_input->each(
@@ -171,20 +178,28 @@ trait hasStates
 				if ($keywords_input->has($k)) {
 					//set all to false
 					foreach ($item as $i => $keyword) {
-						$item[$i] = false;
+						$item->$i = false;
 					}
 					//set true at existed
 					foreach ($keywords_input->get($k) as $i => $keyword) {
-						$item[$keyword] = true;
+						$item->$keyword = true;
 					}
 				}
 
 				return $item;
 			}
 		);
+
+		$this->setMeta('keywords', $keywords_old);
+		$this->save();
+
+
+		return true;
+
 	}
 
 	private function prefillQuiz(Request $request)
 	{
+		return true;
 	}
 }

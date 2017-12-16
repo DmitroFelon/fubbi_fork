@@ -3,68 +3,55 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Services\Api\KeywordTool;
+use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class KeywordsController
+ *
+ * @package App\Http\Controllers
+ */
 class KeywordsController extends Controller
 {
-	public function index(Project $project, string $theme)
+	/**
+	 * @param \App\Models\Project $project
+	 * @param string $theme
+	 * @param \App\Services\Api\Keywords\KeywordsFactoryInterface $api
+	 * @return string
+	 */
+	public function index(Project $project, string $theme, KeywordsFactoryInterface $api)
 	{
 		try {
 			$keywords_full = ($project->getMeta('keywords')) ? collect($project->getMeta('keywords')) : collect();
 
 			if ($keywords_full->has($theme) and ! empty($keywords_full->get($theme))) {
+				// get from database  if exist
 				$keywords = $keywords_full->get($theme);
 			} else {
+				// load from api,
+				// "KeywordTool" by default
+				$keywords = $api->suggestions($theme);
 
-				echo 'before api call'."<br>";
-
-				$api      = new KeywordTool();
-
-				$rk = $api->test($theme);
-
-				$response = $api->suggestions($theme);
-
-				echo 'after api call'."<br>";
-
-				$response1 = collect($response->get('results'));
-
-				$response = collect($response1->get($theme));
-
-				Session::put('keywords', $response);
-
-				echo 'before transform'."<br>";
-
-				$keywords = collect($response->keyBy('string'))->transform(
-					function ($item, $key) {
-						return false;
-					}
-				);
-
-				echo 'after transform'."<br>";
+				if ($keywords->count() > config('fubbi.keywords_count')) {
+					$keywords = $keywords->random(config('fubbi.keywords_count'));
+				}
 
 				$keywords_full->put($theme, $keywords->toArray());
 
-				echo 'before dd'."<br>";
+				$project->setMeta('keywords', $keywords_full);
 
-				dd($keywords, $keywords_full,$response1, $response, $rk);
-
-				//$project->setMeta('keywords', $keywords_full);
-
-				//$project->save();
+				$project->save();
 			}
 
-			$data = compact(
-				[
-					'project',
-					'keywords',
-					'theme',
-				]
-			);
+			$data = [
+				'project'  => $project,
+				'keywords' => $keywords,
+				'theme'    => $theme,
+			];
 
 			return view('entity.project.partials.form.keywords-step', $data);
 		} catch (\Exception $e) {
-			return $e->getMessage();
+			return '<div class="alert alert-danger">'.$e->getMessage().'</div>';
 		}
 	}
 }

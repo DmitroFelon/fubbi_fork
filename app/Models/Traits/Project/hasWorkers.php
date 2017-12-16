@@ -65,7 +65,7 @@ trait hasWorkers
 	public function hasWorker($role = null)
 	{
 		return !array_key_exists(
-			(is_null($role)) ? Auth::user()->getRole() : $role,
+			(is_null($role)) ? Auth::user()->role : $role,
 			$this->requireWorkers()
 		);
 	}
@@ -88,7 +88,7 @@ trait hasWorkers
 
 		$this->workers()->each(
 			function (User $user, $key) use (&$has_worker, $required_workers) {
-				$has_worker[$user->getRole()] = $required_workers[$user->getRole()];
+				$has_worker[$user->role] = $required_workers[$user->role];
 			}
 		);
 

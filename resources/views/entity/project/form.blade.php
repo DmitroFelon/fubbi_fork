@@ -18,15 +18,15 @@
         @break
     @case(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW)
         <div class="text-primary">
-            {{__('Project is on manager review.')}}
+            {{_i('Project is on manager review.')}}
         </div>
         @break
     @case(\App\Models\Helpers\ProjectStates::PROCESSING)
         <div class="text-primary">
-            {{__('We are working on your project')}}
+            {{_i('We are working on your project')}}
         </div>
         <div class="text-primary">
-            <a href="#">{{__('See results')}}</a>
+            <a href="#">{{_i('See results')}}</a>
         </div>
         @break
     @default

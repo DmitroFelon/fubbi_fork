@@ -10,10 +10,10 @@
         </small>
     </td>
     <td class="">
-        <strong>{{__('Client')}}:</strong> {{$project->client->name}}
+        <strong>{{_i('Client')}}:</strong> {{$project->client->name}}
     </td>
     <td class="project-completion">
-        <small>{{__('Completion with')}}: 0%</small>
+        <small>{{_i('Completion with')}}: 0%</small>
         <div class="progress progress-mini">
             <div style="width: 0%;" class="progress-bar"></div>
         </div>

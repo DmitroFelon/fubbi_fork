@@ -11,8 +11,10 @@
 |
 */
 
+use App\Services\Api\KeywordTool;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
@@ -20,17 +22,10 @@ Auth::routes();
 
 Route::get(
 	'test',
-	function () {
-		$c1 = collect(
-			[
-				'key1' => 'value1',
-				'key2' => 'value2',
-			]
-		);
+	function ( KeywordTool $api ) {
+		$r =  $api->test2('classic music');
+		dd($r);
 
-		$c1->put('key1', 'value3');
-
-		dd($c1);
 	}
 );
 

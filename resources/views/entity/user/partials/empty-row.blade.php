@@ -1,3 +1,3 @@
 <tr>
-    <td>{{__('No users found')}}</td>
+    <td>{{_i('No users found')}}</td>
 </tr>

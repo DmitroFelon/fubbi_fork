@@ -53,7 +53,7 @@ class LeftMenuComposer
 	{
 
 		if (Auth::check()) {
-			$role  = $this->user->getRole();
+			$role  = $this->user->role;
 			$links = $this->{$role}();
 		} else {
 			$links = $this->guest();
@@ -98,6 +98,11 @@ class LeftMenuComposer
 				'name' => 'Plans',
 				'url'  => '/plans',
 				'icon' => 'fa fa-gear',
+			],
+			[
+				'name' => 'Meterials',
+				'url'  => '/materials',
+				'icon' => 'fa fa-file-word-o',
 			],
 			[
 				'name' => 'Messages',

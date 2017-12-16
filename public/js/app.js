@@ -3336,6 +3336,9 @@ jQuery(document).ready(function ($) {
         enableAllSteps: user.role == 'client' ? false : true,
         showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
+        labels: {
+            loading: "Loading related keywords..."
+        },
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {

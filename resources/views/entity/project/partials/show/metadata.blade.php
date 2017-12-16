@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div data-toggle="collapse" href="#meta_data" class="panel-heading clickable">
-        <span class="text-center">{{__('Project quiz result')}}</span>
+        <span class="text-center">{{_i('Project quiz result')}}</span>
         <i class="pull-right fa fa-expand" aria-hidden="true"></i>
     </div>
     <div id="meta_data" class="panel-collapse panel-body collapse">

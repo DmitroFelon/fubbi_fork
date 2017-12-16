@@ -1,1 +1,1 @@
-<span class="text-muted">{{__('empty')}}</span>
+<span class="text-muted">{{_i('empty')}}</span>
