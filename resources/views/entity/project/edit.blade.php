@@ -1,27 +1,32 @@
 @extends('master')
 
-@section('content')
-    <div class="ibox-content">
-    <blockquote>
-        <div>
-            <a class="lead" target="_blank" href="{{url()->action('ProjectController@show', $project)}}">
-                {{title_case($project->subscription->name)}}
-            </a>
-            <span class="text-muted">
-               <small>
+@section('before-content')
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4 p-md">
+            <div>
+                <a class="lead" target="_blank" href="{{url()->action('ProjectController@show', $project)}}">
+                    {{title_case($project->subscription->name)}}
+                </a><br>
+                <small class="text-muted">
+                    {{_i('Created')}}: {{$project->subscription->created_at->diffForHumans()}}
+                    <small>
+                        ({{$project->subscription->created_at}})
+                    </small>
+                </small><br>
+                <small class="text-muted">
+                    {{_i('Selected plan')}}
+                    : {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
+                </small>
 
-                   {{__('Create at')}}: {{$project->subscription->created_at}}
-               </small>
-            </span>
-            <span class="text-muted">
-                <small>
-                    {{__('Selected plan')}}: {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</small>
-            </span>
-
+            </div>
         </div>
-    </blockquote>
-
-    @include('entity.project.form')
     </div>
+@endsection
+
+@section('content')
+    <div class="ibox">
+        @include('entity.project.form')
+    </div>
+
 @endsection
 

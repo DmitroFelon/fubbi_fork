@@ -52,7 +52,7 @@ class TopMenuComposer
     {
 
         if(Auth::check()){
-            $role = $this->user->getRole();
+            $role = $this->user->role;
             $links = $this->{$role}();
         }else{
             $links = $this->guest();

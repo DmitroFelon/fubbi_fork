@@ -3,7 +3,7 @@
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-4">
-            <h2>{{__('All plans')}}</h2>
+            <h2>{{_i('All plans')}}</h2>
         </div>
     </div>
 
@@ -13,10 +13,10 @@
 
         <div class="ibox">
             <div class="ibox-title">
-                <h5>{{__('')}}</h5>
+                <h5>{{_i('')}}</h5>
                 <div class="ibox-tools">
                     <a target="_blank" href="{{route('plans.create')}}"
-                       class="btn btn-primary btn-xs">{{__('Create new plan')}}</a>
+                       class="btn btn-primary btn-xs">{{_i('Create new plan')}}</a>
                 </div>
             </div>
             <div class="ibox-content">

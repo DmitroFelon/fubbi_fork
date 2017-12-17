@@ -86,7 +86,10 @@ class User extends Authenticatable implements HasMedia
 		'email',
 		'password',
 	];
-	
+
+	/**
+	 * @var array
+	 */
 	protected $searchble = [];
 
 	/**
@@ -108,7 +111,6 @@ class User extends Authenticatable implements HasMedia
 	 */
 	protected $with = [
 		'roles',
-		'projects',
 		'invites',
 		'notifications'
 	];
@@ -118,6 +120,9 @@ class User extends Authenticatable implements HasMedia
 	 */
 	protected $appends = ['role'];
 
+	/**
+	 * @return array
+	 */
 	public function toSearchableArray()
 	{
 
@@ -133,21 +138,7 @@ class User extends Authenticatable implements HasMedia
 	 */
 	public function getRoleAttribute()
 	{
-		return $this->getRole();
-	}
-
-	/**
-	 * @return null
-	 */
-	public function getRole()
-	{
-		foreach ($this->roles as $role) {
-			if ($this->hasRole($role->name)) {
-				return $role->name;
-			}
-		}
-
-		return null;
+		return $this->roles->first()->name;
 	}
 
 	/**
@@ -179,7 +170,7 @@ class User extends Authenticatable implements HasMedia
 	 */
 	public function projects()
 	{
-		if ($this->getRole() == 'client') {
+		if ($this->role == 'client') {
 			return $this->hasMany(Project::class, 'client_id');
 		}
 
@@ -234,6 +225,10 @@ class User extends Authenticatable implements HasMedia
 		$invite->save();
 	}
 
+	/**
+	 * @param $project_id
+	 * @return mixed
+	 */
 	public function hasInvitetoProject($project_id)
 	{
 		return $this->invites()->where('invitable_id', $project_id)->projects()->new()->get()->isNotEmpty();
@@ -247,6 +242,10 @@ class User extends Authenticatable implements HasMedia
 		return $this->hasMany(Invite::class);
 	}
 
+	/**
+	 * @param $project_id
+	 * @return mixed
+	 */
 	public function getInviteToProject($project_id)
 	{
 		return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();

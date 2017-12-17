@@ -5,7 +5,7 @@
         </div>
         <div class="clear-both"></div>
         <dl class="dl-horizontal">
-            <dt>{{__('Status')}}:</dt>
+            <dt>{{_i('Status')}}:</dt>
             <dd>
                     <span class="label label-primary">
                         {{ucfirst(str_replace('_',' ',$project->state))}}
@@ -23,27 +23,32 @@
                     {{$project->client->name}}
                 </a>
             </dd>
-            <dt>{{__('Subscription Plan')}}:</dt>
-            <dd>{{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}</dd>
-            <dt>{{__('Billing Cycle')}}:</dt>
-            <dd>1 {{__('month')}}</dd>
-            <dt>{{__('Messages')}}:</dt>
+            <dt>{{_i('Subscription Plan')}}:</dt>
+            <dd>
+                {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
+                @if($project->getModifications())
+                    <small>({{_i('modified')}})</small>
+                @endif
+            </dd>
+            <dt>{{_i('Billing Cycle')}}:</dt>
+            <dd>1 {{_i('month')}}</dd>
+            <dt>{{_i('Messages')}}:</dt>
             <dd>{{$project->commentCount()}}</dd>
         </dl>
     </div>
     <div class="col-lg-7" id="cluster_info">
         <dl class="dl-horizontal">
-            <dt>{{__('Last Updated')}}:</dt>
+            <dt>{{_i('Last Updated')}}:</dt>
             <dd>
                 {{$project->updated_at}}
                 <small class="text-muted">({{$project->updated_at->diffForHumans()}})</small>
             </dd>
-            <dt>{{__('Created')}}:</dt>
+            <dt>{{_i('Created')}}:</dt>
             <dd>
                 {{$project->created_at}}
                 <small class="text-muted">({{$project->created_at->diffForHumans()}})</small>
             </dd>
-            <dt>{{__('Participants')}}:</dt>
+            <dt>{{_i('Participants')}}:</dt>
             <dd class="project-people">
                 @foreach($project->workers as $worker)
                     <div>
@@ -59,7 +64,7 @@
 <div class="row">
     <div class="col-lg-12">
         <dl class="dl-horizontal">
-            <dt>{{__('Completed')}}:</dt>
+            <dt>{{_i('Completed')}}:</dt>
             <dd>
                 <div class="progress progress-striped active m-b-sm">
                     <div style="width: 0.5%;" class="progress-bar">

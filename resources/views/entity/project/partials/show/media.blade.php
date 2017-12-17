@@ -2,7 +2,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="panel panel-default">
             <div data-toggle="collapse" href="#media_collection" class="panel-heading clickable">
-                <span class="text-center">{{__('Attached media files')}}</span>
+                <span class="text-center">{{_i('Attached media files')}}</span>
                 <i class="pull-right fa fa-expand" aria-hidden="true"></i>
             </div>
             <div id="media_collection" class="panel-collapse panel-body collapse">

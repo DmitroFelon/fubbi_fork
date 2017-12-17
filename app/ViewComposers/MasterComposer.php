@@ -36,21 +36,22 @@ class MasterComposer
 	 */
 	public function __construct(Request $request)
 	{
-		$this->page = $request->path();
-		$this->user = Auth::user();
+		$this->page    = $request->path();
+		$this->user    = Auth::user();
 		$this->request = $request;
 	}
 
-	public function compose(View $view){
+	public function compose(View $view)
+	{
 
-		if(!Auth::check()){
+		if (! Auth::check()) {
 			return;
 		}
 
 		$data = [
-			'notifications' => $this->user->unreadNotifications,
+			'notifications'     => $this->user->unreadNotifications,
 			'old_notifications' => $this->user->readNotifications,
-			'messages' => []
+			'messages'          => [],
 		];
 
 		return $view->with($data);

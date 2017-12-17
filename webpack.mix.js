@@ -16,6 +16,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/sass/plugins/sweetalert/sweetalert.css',
             'resources/assets/sass/plugins/footable/footable.core.css',
             'resources/assets/sass/plugins/iCheck/custom.css',
+            'resources/assets/sass/plugins/toastr/toastr.min.css',
             'resources/assets/sass/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
         ],
         'public/css/vendor.css')
@@ -36,6 +37,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
             'resources/assets/js/plugins/iCheck/icheck.min.js',
+            'resources/assets/js/plugins/toastr/toastr.min.js',
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],

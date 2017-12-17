@@ -14,6 +14,7 @@ use App\Models\Keyword;
 use App\Services\Api\KeywordTool;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Class hasStates
@@ -66,6 +67,7 @@ trait hasStates
 			$request->except(
 				[
 					'_token',
+					'_project_id',
 					'_step',
 					'_method',
 					'compliance_guideline',
@@ -75,45 +77,10 @@ trait hasStates
 				]
 			)
 		);
-		//$this->addFiles($request);
-		$this->loadKeywords();
+		$this->addFiles($request);
 		$this->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
 	}
-
-	/**
-	 *
-	 */
-	private function loadKeywords()
-	{
-		$themes = collect(
-			explode(',', $this->getMeta('themes'))
-		);
-
-		$api = new KeywordTool();
-
-		$keywords = collect();
-
-		$keywords = $themes->each(
-			function ($theme, $key) use ($api) {
-				if($key > 0){
-					return false;
-				}
-
-				try {
-					$result = collect();
-
-					$response = $api->suggestions(trim($theme));
-					$response = collect($response[$theme]);
-					$result[$theme] = collect($response->pluck('string'));
-
-				} catch (RequestException $e) {
-					//todo handle KeywordTool error
-				}
-			}
-		);
-
-		dd($keywords);
-	}
+	
 
 	/**
 	 * @param string $state
@@ -167,5 +134,72 @@ trait hasStates
 	{
 		//TODO check project state if project filled, send events to workers
 		$this->fireModelEvent('filled', false);
+	}
+
+	public function prefill(Request $request)
+	{
+		if ($request->input('keywords')) {
+			return $this->prefillKeywords($request);
+		}
+
+		if ($request->input('themes')) {
+			return $this->prefillQuiz($request);
+		}
+
+		return false;
+	}
+
+	private function prefillKeywords(Request $request)
+	{
+		$keywords_input = collect($request->input('keywords'));
+		$keywords_input->transform(
+			function ($item, $key) {
+				return array_keys($item);
+			}
+		);
+
+
+		$keywords_old = ($this->getMeta('keywords')) ? collect($this->getMeta('keywords')) : collect();
+
+		Session::put('keywords_old', $keywords_old);
+
+
+		//fill by new keywords if necessary
+		$keywords_input->each(
+			function ($item, $k) use ($keywords_old) {
+				if (! $keywords_old->has($k)) {
+					$keywords_old->put($k, []);
+				}
+			}
+		);
+
+		$keywords_old->transform(
+			function ($item, $k) use ($keywords_input, &$keywords_old) {
+				if ($keywords_input->has($k)) {
+					//set all to false
+					foreach ($item as $i => $keyword) {
+						$item->$i = false;
+					}
+					//set true at existed
+					foreach ($keywords_input->get($k) as $i => $keyword) {
+						$item->$keyword = true;
+					}
+				}
+
+				return $item;
+			}
+		);
+
+		$this->setMeta('keywords', $keywords_old);
+		$this->save();
+
+
+		return true;
+
+	}
+
+	private function prefillQuiz(Request $request)
+	{
+		return true;
 	}
 }

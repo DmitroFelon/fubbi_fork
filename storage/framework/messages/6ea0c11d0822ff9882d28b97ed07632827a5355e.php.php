@@ -18,12 +18,6 @@ class StoreProject extends FormRequest
 	 */
 	public function rules()
 	{
-		return [
-			'themes'    => 'required',
-			'questions' => 'required',
-			'relevance' => 'required',
-			'audience'  => 'required',
-			'homepage'  => 'required',
-		];
+		return [];
 	}
 }

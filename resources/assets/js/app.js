@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
         $(".amount").html(amount);
 
         $("#stripe-form-wrapper").show();
-        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+        $("html, body").animate({scrollTop: $(document).height() - $(window).height()});
     });
     var $form = $("#payment-form");
     $form.on('submit', function (e) {
@@ -49,9 +49,10 @@ jQuery(document).ready(function ($) {
         onInit: function (event, currentIndex) {
             if (typeof(Storage) !== "undefined") {
                 if (typeof(localStorage.getItem("quiz-form-step")) !== "undefined") {
-                    jQuery("#quiz-form-t-"+localStorage.getItem("quiz-form-step")).click();
+                    jQuery("#quiz-form-t-" + localStorage.getItem("quiz-form-step")).click();
                 }
-            } else {}
+            } else {
+            }
         },
         onStepChanging: function (event, currentIndex) {
             //todo add validation
@@ -61,7 +62,8 @@ jQuery(document).ready(function ($) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("quiz-form-step", currentIndex);
-            } else {}
+            } else {
+            }
         },
         onFinishing: function (event, currentIndex) {
             return true;
@@ -71,7 +73,6 @@ jQuery(document).ready(function ($) {
             var form = $(this);
             form.submit();
         },
-
     });
 
     /*
@@ -82,25 +83,36 @@ jQuery(document).ready(function ($) {
         enableAllSteps: user.role == 'client' ? false : true,
         showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
-        onInit: function (event, currentIndex) {
-            if (typeof(Storage) !== "undefined") {
-                if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
-                    jQuery("#keywords-form-t-"+localStorage.getItem("keywords-form-step")).click();
-                }
-            } else {}
+        labels: {
+            loading: "Loading related keywords..."
         },
+        onInit: function (event, currentIndex) {},
         onStepChanging: function (event, currentIndex) {
-            //todo load new keywords from Keywordtools
+            if (!validateKeywords(event, currentIndex)) {
+                return false;
+            }
+
+            preUploadKeywords();
+
+
+            return true;
         },
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("keywords-form-step", currentIndex);
-            } else {}
+            } else {
+            }
         },
         onFinishing: function (event, currentIndex) {
+            if (!validateKeywords(event, currentIndex)) {
+                return false;
+            }
+
+            preUploadKeywords();
+
+
             return true;
-            //todo add validation
         },
         onFinished: function (event, currentIndex) {
             var form = $(this);
@@ -158,19 +170,69 @@ jQuery(document).ready(function ($) {
     });
 
     /*
-    * Init footable table
-    * */
+     * Init footable table
+     * */
 
     $('.footable').footable();
 
 
     /*
-    * iChecks
-    * */
+     * iChecks
+     * */
 
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',
     });
+
+    function showToastError(message, title = '') {
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "7000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+
+        toastr.error(title, message);
+    }
+
+    function validateKeywords(event, currentIndex) {
+        var section = $("#keywords-form-p-" + currentIndex);
+        var theme = section.attr('data-theme');
+        var total_keywords = jQuery('[name^="keywords[' + theme + ']"]').length;
+        var checked_keywords = jQuery('[name^="keywords[' + theme + ']"]:checked').length;
+
+        if (total_keywords >= 5 && checked_keywords < 5) {
+            showToastError('Form filling error', 'Please, chose at least 10 keywords');
+            return false;
+        }
+
+        return true;
+    }
+
+    function preUploadKeywords() {
+        var formData = $("#keywords-form").serialize();
+        var _project_id = $("input[name=_project_id]").val();
+
+        jQuery.ajax('/projects/' + _project_id + '/prefill', {
+            processData: false,
+            contentType: false,
+            data: formData
+        });
+    }
 });
+
+
 

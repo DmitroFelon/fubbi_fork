@@ -904,10 +904,10 @@ if (! function_exists('__')) {
      * @param  string  $locale
      * @return string|array|null
      */
-   /* function __($key, $replace = [], $locale = null)
+    function __($key, $replace = [], $locale = null)
     {
         return app('translator')->getFromJson($key, $replace, $locale);
-    }*/
+    }
 }
 
 if (! function_exists('url')) {

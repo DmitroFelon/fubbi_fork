@@ -3,35 +3,55 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Services\Api\KeywordTool;
+use App\Services\Api\Keywords\KeywordsFactoryInterface;
+use Illuminate\Support\Facades\Session;
 
+/**
+ * Class KeywordsController
+ *
+ * @package App\Http\Controllers
+ */
 class KeywordsController extends Controller
 {
-	public function index(Project $project, string $theme)
+	/**
+	 * @param \App\Models\Project $project
+	 * @param string $theme
+	 * @param \App\Services\Api\Keywords\KeywordsFactoryInterface $api
+	 * @return string
+	 */
+	public function index(Project $project, string $theme, KeywordsFactoryInterface $api)
 	{
-
 		try {
-			$api      = new KeywordTool();
-			$result   = collect();
-			$response = $api->suggestions(trim($theme));
-			
+			$keywords_full = ($project->getMeta('keywords')) ? collect($project->getMeta('keywords')) : collect();
 
-			if(!isset($response[$theme])){
-				return \GuzzleHttp\json_encode($response);
+			if ($keywords_full->has($theme) and ! empty($keywords_full->get($theme))) {
+				// get from database  if exist
+				$keywords = $keywords_full->get($theme);
+			} else {
+				// load from api,
+				// "KeywordTool" by default
+				$keywords = $api->suggestions($theme);
+
+				if ($keywords->count() > config('fubbi.keywords_count')) {
+					$keywords = $keywords->random(config('fubbi.keywords_count'));
+				}
+
+				$keywords_full->put($theme, $keywords->toArray());
+
+				$project->setMeta('keywords', $keywords_full);
+
+				$project->save();
 			}
 
-			$response       = collect($response[$theme]);
-			$result[$theme] = collect($response->pluck('string'));
+			$data = [
+				'project'  => $project,
+				'keywords' => $keywords,
+				'theme'    => $theme,
+			];
 
-			return view(
-				'entity.project.partials.form.keywords-step',
-				[
-					'project'  => $project,
-					'keywords' => $result,
-				]
-			);
+			return view('entity.project.partials.form.keywords-step', $data);
 		} catch (\Exception $e) {
-			return $e->getMessage();
+			return '<div class="alert alert-danger">'.$e->getMessage().'</div>';
 		}
 	}
 }

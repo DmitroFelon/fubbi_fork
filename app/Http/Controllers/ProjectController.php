@@ -46,9 +46,8 @@ class ProjectController extends Controller
 	public function index()
 	{
 		$user = $this->request->user();
-		$role = $user->getRole();
 
-		switch ($role) {
+		switch ($user->role) {
 			case 'admin':
 				$projects = Project::paginate(10);
 				break;
@@ -74,7 +73,6 @@ class ProjectController extends Controller
 	public function create()
 	{
 		$step = 'plan';
-
 
 		$public_plans = Cache::remember(
 			'public_plans',
@@ -233,9 +231,9 @@ class ProjectController extends Controller
 	public function apply_to_project(Project $project)
 	{
 		$message_key = 'info';
-		$user =  $this->request->user();
+		$user        = $this->request->user();
 
-		if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()){
+		if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()) {
 			$message_key = 'error';
 			$message     = __('You are too late. This project already has %s', $user->role);
 		} else {
@@ -252,11 +250,18 @@ class ProjectController extends Controller
 	{
 		$message_key = 'info';
 		$message     = __('You are declined this project');
-		$user =  $this->request->user();
+		$user        = $this->request->user();
 
 		$invite = $user->getInviteToProject($project->id);
 		$invite->decline();
 
 		return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
+	}
+
+	public function prefill(Project $project, Request $request)
+	{
+		$keywords = $project->prefill($request);
+
+		return ['result' => $keywords];
 	}
 }

@@ -3,7 +3,7 @@
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-4">
-            <h2>{{__('plans')}}</h2>
+            <h2>{{_i('plans')}}</h2>
         </div>
     </div>
 
@@ -12,10 +12,10 @@
 @section('content')
     <div class="ibox">
         <div class="ibox-title">
-            <h5>{{__('')}}</h5>
+            <h5></h5>
             <div class="ibox-tools">
                 <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
-                   class="btn btn-primary btn-xs">{{__('Edit plan')}}</a>
+                   class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>
         <div class="ibox-content">

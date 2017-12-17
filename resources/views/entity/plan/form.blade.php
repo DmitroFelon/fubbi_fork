@@ -20,14 +20,13 @@
                                                 value="true"
                                                 {{($value == 'true')?'checked="checked"':''}}> <i></i>
                                     </label>
-
                                 </div>
                             @else
                                 <input class="form-control" id="{{$key}}" name="{{$key}}"
                                        value="{{$value}}">
                             @endif
                             <small>
-                                {{__('Default value: %s', $project->plan->metadata->$key)}}
+                                {{ _i('Default value: %s', [$project->plan->metadata->$key]) }}
                             </small>
                         </td>
                     </tr>
@@ -37,5 +36,7 @@
     @endforeach
 </div>
 <div class="row">
-    {!! Form::submit('Update', ['class'=>'']) !!}
+    <div class="p-sm">
+        {!! Form::submit('Update', ['class'=>'btn btn-primary']) !!}
+    </div>
 </div>

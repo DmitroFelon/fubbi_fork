@@ -9,6 +9,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Services\FlashMessage;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
@@ -19,13 +22,16 @@ use Illuminate\Support\Facades\View;
  */
 class DashboardController extends Controller
 {
+    
+    protected $request;
+    
     /**
      * DashboardController constructor.
      *
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-
+        $this->request = $request;
     }
 
     /**
@@ -36,8 +42,8 @@ class DashboardController extends Controller
     public function index($page = 'home', $action = 'main', $id = null)
     {
         $user = Auth::user();
-        
-        $role = $user->getRole();
+
+        $role = $user->role;
         
         $action = (isset($action)) ? '.'.$action : '';
         
@@ -45,8 +51,6 @@ class DashboardController extends Controller
             return view("pages.{$role}.{$page}{$action}");
         }
 
-        abort(404);
-
-        return null;
+        return abort(404);
     }
 }

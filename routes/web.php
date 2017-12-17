@@ -11,8 +11,10 @@
 |
 */
 
+use App\Services\Api\KeywordTool;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
@@ -20,9 +22,10 @@ Auth::routes();
 
 Route::get(
 	'test',
-	function () {
+	function ( KeywordTool $api ) {
+		$r =  $api->test2('classic music');
+		dd($r);
 
-		
 	}
 );
 
@@ -44,6 +47,8 @@ Route::middleware(['auth'])->group(
 				Route::get('decline_project/{project}', "ProjectController@decline_project");
 			}
 		);
+
+		Route::get('projects/{project}/prefill', 'ProjectController@prefill');
 		Route::resource('projects', 'ProjectController');
 		Route::namespace('Project')->group(
 			function () {

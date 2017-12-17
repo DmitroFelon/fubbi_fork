@@ -43,7 +43,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        $role = $user->getRole();
+        $role = $user->role;
         
         $action = (isset($action)) ? '.'.$action : '';
         
