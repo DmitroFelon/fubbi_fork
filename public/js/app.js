@@ -3341,15 +3341,7 @@ jQuery(document).ready(function ($) {
         labels: {
             loading: "Loading related keywords..."
         },
-        onInit: function (event, currentIndex) {
-            if (typeof(Storage) !== "undefined") {
-                if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
-                    jQuery("#keywords-form-t-" + localStorage.getItem("keywords-form-step")).click();
-                }
-            } else {
-            }
-        },
-
+        onInit: function (event, currentIndex) {},
         onStepChanging: function (event, currentIndex) {
             if (!validateKeywords(event, currentIndex)) {
                 return false;
@@ -3477,7 +3469,7 @@ jQuery(document).ready(function ($) {
         var total_keywords = jQuery('[name^="keywords[' + theme + ']"]').length;
         var checked_keywords = jQuery('[name^="keywords[' + theme + ']"]:checked').length;
 
-        if (total_keywords > 10 && checked_keywords < 10) {
+        if (total_keywords >= 5 && checked_keywords < 5) {
             showToastError('Form filling error', 'Please, chose at least 10 keywords');
             return false;
         }
