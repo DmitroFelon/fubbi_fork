@@ -21,6 +21,8 @@ class KeywordsController extends Controller
 	 */
 	public function index(Project $project, string $theme, KeywordsFactoryInterface $api)
 	{
+
+		//test
 		try {
 			$keywords_full = ($project->getMeta('keywords')) ? collect($project->getMeta('keywords')) : collect();
 
