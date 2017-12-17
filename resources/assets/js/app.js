@@ -94,16 +94,14 @@ jQuery(document).ready(function ($) {
             } else {
             }
         },
-        onStepChanging: function (event, currentIndex) {
-            //todo load new keywords from Keywordtools
-            var formData = $("#keywords-form").serialize();
-            var _project_id = $("input[name=_project_id]").val();
 
-            jQuery.ajax('/projects/' + _project_id + '/prefill', {
-                processData: false,
-                contentType: false,
-                data: formData
-            });
+        onStepChanging: function (event, currentIndex) {
+            if (!validateKeywords(event, currentIndex)) {
+                return false;
+            }
+
+            preUploadKeywords();
+
 
             return true;
         },
@@ -115,8 +113,14 @@ jQuery(document).ready(function ($) {
             }
         },
         onFinishing: function (event, currentIndex) {
+            if (!validateKeywords(event, currentIndex)) {
+                return false;
+            }
+
+            preUploadKeywords();
+
+
             return true;
-            //todo add validation
         },
         onFinished: function (event, currentIndex) {
             var form = $(this);
@@ -188,5 +192,55 @@ jQuery(document).ready(function ($) {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',
     });
+
+    function showToastError(message, title = '') {
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "7000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+
+        toastr.error(title, message);
+    }
+
+    function validateKeywords(event, currentIndex) {
+        var section = $("#keywords-form-p-" + currentIndex);
+        var theme = section.attr('data-theme');
+        var total_keywords = jQuery('[name^="keywords[' + theme + ']"]').length;
+        var checked_keywords = jQuery('[name^="keywords[' + theme + ']"]:checked').length;
+
+        if (total_keywords > 10 && checked_keywords < 10) {
+            showToastError('Form filling error', 'Please, chose at least 10 keywords');
+            return false;
+        }
+
+        return true;
+    }
+
+    function preUploadKeywords() {
+        var formData = $("#keywords-form").serialize();
+        var _project_id = $("input[name=_project_id]").val();
+
+        jQuery.ajax('/projects/' + _project_id + '/prefill', {
+            processData: false,
+            contentType: false,
+            data: formData
+        });
+    }
 });
+
+
 
