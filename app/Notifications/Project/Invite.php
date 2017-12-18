@@ -44,11 +44,11 @@ class Invite extends Notification
 	public function toMail($notifiable)
 	{
 		return (new MailMessage)->line(
-				__('Hello %s', $notifiable->name) 
+				_i('Hello %s', [$notifiable->name]) 
 			)->line(
-				__(
+				_i(
 					'You have beed invited to project "%s". Please apply or decline it',
-					$this->invitation->invitable->getInvitableName()
+					[$this->invitation->invitable->getInvitableName()]
 				)
 			)->action('Review Project', $this->invitation->invitable->getInvitableUrl())->line(
 				'Thank you for using our application!'
@@ -64,9 +64,9 @@ class Invite extends Notification
 	public function toArray($notifiable)
 	{
 		$notification = NotificationPayload::make(
-			__(
+			_i(
 				'You have beed invited to project "%s". Please apply or decline it',
-				$this->invitation->invitable->getInvitableName()
+				[$this->invitation->invitable->getInvitableName()]
 			),
 			$this->invitation->invitable->getInvitableUrl(),
 			get_class($this->invitation->invitable),

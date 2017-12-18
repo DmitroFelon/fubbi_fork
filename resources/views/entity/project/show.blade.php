@@ -25,22 +25,44 @@
             </div>
             <div class="ibox-content">
                 @include('entity.project.partials.show.head')
+            </div>
+        </div>
+    </div>
 
-                {{--Metadata block start--}}
-
+    <div class="col col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>{{_i('Quiz result')}}</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
                 @include('entity.project.partials.show.metadata')
-                {{--Metadata block end--}}
+            </div>
+        </div>
+    </div>
 
-                {{--Media block start--}}
-
+    <div class="col col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>{{_i('Media files')}}</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
                 @include('entity.project.partials.show.media')
-                {{--Media block end--}}
             </div>
         </div>
     </div>
 
     @role(['account_manager', 'admin', 'writer'])
-    @include('entity.project.worker-area.writer.main')
+        @include('entity.project.worker-area.writer.main')
     @endrole
 
     @include('entity.comment.component', ['comments' => $project->comments])

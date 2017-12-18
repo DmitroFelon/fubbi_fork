@@ -11,32 +11,44 @@
 |
 */
 
-use App\Services\Api\KeywordTool;
 use App\Services\Google\Drive;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
-Route::get(
-    'test',
-    function (Drive $api) {
-        $files = $api->getFiles();
+Route::get('test', function (Drive $api) {
 
-        $id = '';
-        foreach ($files as $file) {
-            $id = $file->id;
-        }
-
-        $perm = $api->addPermission($id, 'imad.bazzal.93@gmail.com', 'user', 'writer');
-
-        dd($perm);
-
+/*
+    foreach ($api->getFiles() as $file) {
+        $api->deleteFile($file->id);
     }
-);
+
+
+    $folder = $api->addFolder('projects folder');
+
+    echo  'folder id:'.$folder->id. '<br>';
+
+    $file1 = $api->uploadFile(storage_path('app/google/test.docx'), 'first file', $folder);
+
+    echo  'file 1 id:'.$file1->id. '<br>';
+
+    $file2 = $api->uploadFile(storage_path('app/google/test2.docx'), 'second file', $folder);
+
+    echo  'file 1 id:'.$file2->id. '<br>';*/
+
+    $files = $api->getFilesInFolder('1xAu071rn6WC_uRzzmkRLzUMgDorkF9pZ');
+
+    $files->each(function($item){
+        echo $item->name."<br>";
+        echo $item->id."<br>";
+    });
+
+
+
+});
 
 Route::middleware(['auth'])->group(
     function () {

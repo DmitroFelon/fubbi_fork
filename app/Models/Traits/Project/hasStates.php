@@ -119,9 +119,8 @@ trait hasStates
 	 */
 	public function fillKeywords(Request $request)
 	{
-		dd($request->input('keywords'));
-		$this->setMeta('keywords', $request->input('keywords'));
 		$this->setState(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW);
+		$this->save();
 		$this->filled();
 	}
 
@@ -161,9 +160,6 @@ trait hasStates
 
 		$keywords_old = ($this->getMeta('keywords')) ? collect($this->getMeta('keywords')) : collect();
 
-		Session::put('keywords_old', $keywords_old);
-
-
 		//fill by new keywords if necessary
 		$keywords_input->each(
 			function ($item, $k) use ($keywords_old) {
@@ -192,7 +188,6 @@ trait hasStates
 
 		$this->setMeta('keywords', $keywords_old);
 		$this->save();
-
 
 		return true;
 

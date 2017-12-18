@@ -262,6 +262,6 @@ class ProjectController extends Controller
 	{
 		$keywords = $project->prefill($request);
 
-		return ['result' => $keywords];
+		return true;
 	}
 }

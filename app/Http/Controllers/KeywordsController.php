@@ -34,6 +34,8 @@ class KeywordsController extends Controller
 				// "KeywordTool" by default
 				$keywords = $api->suggestions($theme);
 
+				$max_count = config('fubbi.keywords_count');
+
 				if ($keywords->count() > config('fubbi.keywords_count')) {
 					$keywords = $keywords->random(config('fubbi.keywords_count'));
 				}

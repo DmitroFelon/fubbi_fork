@@ -14,7 +14,9 @@ use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use Google_Service_Drive_Permission;
 use Google_Service_Exception;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Mockery\CountValidator\Exception;
 
 /**
  * Class Drive
@@ -55,16 +57,16 @@ class Drive
     {
 
         $this->client_secret_path = storage_path('app/google/client_secret.json');
-        $this->app_name = 'Drive API PHP Quickstart';
-        $this->credentials_path = storage_path('app/google/.credentials/drive-php-quickstart.json');
-        $this->scopes = implode(' ',
+        $this->app_name           = 'Drive API PHP Quickstart';
+        $this->credentials_path   = storage_path('app/google/.credentials/drive-php-quickstart.json');
+        $this->scopes             = implode(' ',
             [
                 Google_Service_Drive::DRIVE
             ]
         );
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/google/service_account.json'));
 
-        $this->client = $this->getClient();
+        $this->client  = $this->getClient();
         $this->service = $this->getService();
     }
 
@@ -96,7 +98,7 @@ class Drive
     {
         $optParams = array(
             'pageSize' => 10,
-            'fields' => 'nextPageToken, files(id, name)'
+            'fields' => 'nextPageToken, files(id, name, parents)'
         );
         return $this->service->files->listFiles($optParams);
 
@@ -112,23 +114,32 @@ class Drive
      * @param $path
      * @return mixed
      */
-    public function uploadFile($path)
+    public function uploadFile($path, $name, Google_Service_Drive_DriveFile $folder)
     {
-        $fileMetadata = new Google_Service_Drive_DriveFile(
-            [
-                'name' => 'Testing file',
-                'mimeType' => 'application/vnd.google-apps.document']
-        );
+        try {
+            $fileMetadataCollection = collect();
 
-        $content = file_get_contents($path);
+            $fileMetadataCollection->put('name', $name);
+            $fileMetadataCollection->put('parents', [$folder->id]);
+            $fileMetadataCollection->put('mimeType', 'application/vnd.google-apps.document');
 
-        $file = $this->service->files->create($fileMetadata, [
-            'data' => $content,
-            'mimeType' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'uploadType' => 'multipart',
-            'fields' => 'id']);
+            $fileMetadata = new Google_Service_Drive_DriveFile($fileMetadataCollection->toArray());
 
-        return $file->id;
+            $data           = File::get($path);
+            $bodyCollectiob = collect();
+            $bodyCollectiob->put('data', $data);
+            $bodyCollectiob->put('mimeType', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            $bodyCollectiob->put('uploadType', 'multipart');
+            $bodyCollectiob->put('fields', 'id, name, parents');
+
+
+            $file = $this->service->files->create($fileMetadata, $bodyCollectiob->toArray());
+
+            return $file;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
     }
 
     /**
@@ -138,9 +149,13 @@ class Drive
      */
     public function getFile($id, $mime = 'application/pdf')
     {
-
         $response = $this->service->files->export($id, $mime, ['alt' => 'media']);
         return $response->getBody()->getContents();
+    }
+
+    public function getFolder($id)
+    {
+        return $this->service->files->get($id);
     }
 
     /**
@@ -156,12 +171,14 @@ class Drive
     {
         $this->service->getClient()->setUseBatch(true);
         $batch = $this->service->createBatch();
-        $userPermission = new Google_Service_Drive_Permission(array(
-            'type' => $type,
-            'role' => $role,
-            'emailAddress' => $email
-        ));
-        $request = $this->service->permissions->create(
+
+        $userPermissionCollection = collect();
+        $userPermissionCollection->put('type', $type);
+        $userPermissionCollection->put('role', $role);
+        $userPermissionCollection->put('emailAddress', $email);
+
+        $userPermission = new Google_Service_Drive_Permission($userPermissionCollection->toArray());
+        $request        = $this->service->permissions->create(
             $file_id, $userPermission, ['fields' => 'id']);
         $batch->add($request, 'user');
 
@@ -180,12 +197,58 @@ class Drive
     public function addFolder($name)
     {
         $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => 'Invoices',
-            'mimeType' => 'application/vnd.google-apps.folder']);
+            'name' => $name,
+            'mimeType' => 'application/vnd.google-apps.folder',
 
-        $file = $this->service->files->create($fileMetadata, ['fields' => 'id']);
-        
+        ]);
 
-        return $file->id;
+        $file = $this->service->files->create($fileMetadata, ['fields' => 'id, name, parents']);
+
+        return $file;
+    }
+
+    public function getChanges($file_id = null)
+    {
+        $response = $this->service->changes->getStartPageToken();
+
+        $pageToken = $response->startPageToken;
+
+        while ($pageToken != null) {
+            $response = $this->service->changes->listChanges($pageToken, [
+                'spaces' => 'drive'
+            ]);
+            foreach ($response->changes as $change) {
+                // Process change
+                printf("Change found for file: %s", $change->fileId);
+            }
+            if ($response->newStartPageToken != null) {
+                // Last page, save this token for the next polling interval
+                $savedStartPageToken = $response->newStartPageToken;
+            }
+            $pageToken = $response->nextPageToken;
+        }
+    }
+
+    public function getFilesInFolder($folder_id)
+    {
+        $pageToken = NULL;
+        $files     = collect();
+
+        $pageToken = null;
+
+        do {
+            $response = $this->service->files->listFiles([
+                'q' => "'{$folder_id}' in parents",
+                'pageToken' => $pageToken,
+                'fields' => 'nextPageToken, files(id, name)',
+            ]);
+            foreach ($response->files as $file) {
+                $files->push($file);
+            }
+
+            $pageToken = $response->nextPageToken;
+        } while ($pageToken != null);
+
+        return $files;
     }
 }
