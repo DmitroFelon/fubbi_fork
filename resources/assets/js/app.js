@@ -86,7 +86,8 @@ jQuery(document).ready(function ($) {
         labels: {
             loading: "Loading related keywords..."
         },
-        onInit: function (event, currentIndex) {},
+        onInit: function (event, currentIndex) {
+        },
         onStepChanging: function (event, currentIndex) {
             if (!validateKeywords(event, currentIndex)) {
                 return false;
@@ -232,6 +233,19 @@ jQuery(document).ready(function ($) {
             data: formData
         });
     }
+
+    /*
+     * Article textarea
+     * */
+    $("#article-textarea").markdown(
+        {
+            autofocus: false,
+            savable: false,
+            resize: 'vertical',
+            fullscreen: {enable: false},
+            hiddenButtons: ['Image', 'Url']
+        }
+    );
 });
 
 

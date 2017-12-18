@@ -8,6 +8,7 @@
 
 namespace App\Services\Api;
 
+use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Collection;

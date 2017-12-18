@@ -49,6 +49,9 @@ use Spatie\Tags\Tag;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article withAnyTags($tags, $type = null)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Article withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Article withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article accepted()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article declined()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article new()
  */
 class Article extends Model implements HasMedia
 {

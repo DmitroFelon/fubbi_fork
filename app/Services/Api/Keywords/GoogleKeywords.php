@@ -8,6 +8,7 @@
 
 namespace App\Services\Api;
 
+use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use Illuminate\Support\Collection;
 
 class GoogleKeywords implements KeywordsFactoryInterface
