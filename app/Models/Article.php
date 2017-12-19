@@ -6,6 +6,7 @@ use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kodeine\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\Tags\HasTags;
@@ -55,68 +56,100 @@ use Spatie\Tags\Tag;
  */
 class Article extends Model implements HasMedia
 {
-	use HasMediaTrait;
-	use HasComments;
-	use SoftDeletes;
-	use HasTags;
+    use HasMediaTrait;
+    use HasComments;
+    use SoftDeletes;
+    use Metable;
+    use HasTags;
 
-	/**
-	 * @var array
-	 */
-	protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'title',
+        'body',
+        'user_id',
+        'project_id'
+    ];
 
-	/**
-	 * One article may belong to many projects
-	 * 
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function projects()
-	{
-		return $this->belongsToMany(Project::class);
-	}
+    /**
+     * @var string
+     */
+    protected $metaTable = 'article_meta';
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function author()
-	{
-		return $this->belongsTo(User::class);
-	}
+    /**
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
-	/**
-	 * @param $query
-	 * @return mixed
-	 */
-	public function scopeAccepted($query)
-	{
-		return $query->where('accepted', '=', true);
-	}
+    /**
+     * One article may belong to many projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
 
-	/**
-	 * @param $query
-	 * @return mixed
-	 */
-	public function scopeDeclined($query)
-	{
-		return $query->where('accepted', '=', false);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-	/**
-	 * @param $query
-	 * @return mixed
-	 */
-	public function scopeNew($query)
-	{
-		return $query->where('accepted', '=', null);
-	}
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeAccepted($query)
+    {
+        return $query->where('accepted', '=', true);
+    }
 
-	/**
-	 * Attach specific service tag to article
-	 *
-	 * @param string $tag
-	 */
-	public function attachTagsHelper($tag)
-	{
-		$this->attachTag(Tag::findOrCreate($tag, Project::TAG_CATEGORY));
-	}
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeDeclined($query)
+    {
+        return $query->where('accepted', '=', false);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeNew($query)
+    {
+        return $query->where('accepted', '=', null);
+    }
+
+    /**
+     * Attach specific service tag to article
+     *
+     * @param string $tag
+     */
+    public function attachTagsHelper($tag)
+    {
+        $this->attachTag(Tag::findOrCreate($tag, Project::TAG_CATEGORY));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGooglePath()
+    {
+        return $this->getMeta('google_path');
+    }
+
+
+    /**
+     * @param array $google_path
+     */
+    public function setGooglePath(array $google_path)
+    {
+        $this->setMeta('google_path', $google_path);
+        $this->save();
+
+    }
 }

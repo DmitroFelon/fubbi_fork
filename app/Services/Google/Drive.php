@@ -15,6 +15,7 @@ use Google_Service_Drive_DriveFile;
 use Google_Service_Drive_Permission;
 use Google_Service_Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Mockery\CountValidator\Exception;
 
@@ -56,17 +57,19 @@ class Drive
     public function __construct()
     {
 
+        Log::debug(storage_path());
         $this->client_secret_path = storage_path('app/google/client_secret.json');
-        $this->app_name           = 'Drive API PHP Quickstart';
+        $this->app_name           = 'Fubbi Service Storage';
         $this->credentials_path   = storage_path('app/google/.credentials/drive-php-quickstart.json');
         $this->scopes             = implode(' ',
             [
                 Google_Service_Drive::DRIVE
             ]
         );
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/google/service_account.json'));
 
-        $this->client  = $this->getClient();
+        $this->client = $this->getClient();
+        $this->client->setAuthConfig(storage_path('app/google/service_account.json'));
+        $this->client->useApplicationDefaultCredentials(true);
         $this->service = $this->getService();
     }
 
@@ -104,23 +107,20 @@ class Drive
 
     }
 
-    public function watchFile($id)
-    {
-        $response = $this->service->files->watch($id);
-        return $response->getBody()->getContents();
-    }
-
     /**
      * @param $path
+     * @param $name
+     * @param $folder_id
      * @return mixed
+     * @throws \Exception
      */
-    public function uploadFile($path, $name, Google_Service_Drive_DriveFile $folder)
+    public function uploadFile($path, $name, $folder_id)
     {
         try {
             $fileMetadataCollection = collect();
 
             $fileMetadataCollection->put('name', $name);
-            $fileMetadataCollection->put('parents', [$folder->id]);
+            $fileMetadataCollection->put('parents', [$folder_id]);
             $fileMetadataCollection->put('mimeType', 'application/vnd.google-apps.document');
 
             $fileMetadata = new Google_Service_Drive_DriveFile($fileMetadataCollection->toArray());
@@ -153,6 +153,10 @@ class Drive
         return $response->getBody()->getContents();
     }
 
+    /**
+     * @param $id
+     * @return Google_Service_Drive_DriveFile
+     */
     public function getFolder($id)
     {
         return $this->service->files->get($id);
@@ -167,37 +171,43 @@ class Drive
         return $this->service->files->delete($id);
     }
 
-    public function addPermission($file_id, $email, $type, $role)
+    /**
+     * @param $file_id
+     * @param $emails
+     * @param string $type
+     */
+    public function addPermission($file_id, $emails, $type = 'user')
     {
         $this->service->getClient()->setUseBatch(true);
         $batch = $this->service->createBatch();
 
-        $userPermissionCollection = collect();
-        $userPermissionCollection->put('type', $type);
-        $userPermissionCollection->put('role', $role);
-        $userPermissionCollection->put('emailAddress', $email);
+        foreach ($emails as $email => $role) {
+            $userPermissionCollection = collect();
+            $userPermissionCollection->put('type', $type);
+            $userPermissionCollection->put('role', $role);
+            $userPermissionCollection->put('emailAddress', $email);
 
-        $userPermission = new Google_Service_Drive_Permission($userPermissionCollection->toArray());
-        $request        = $this->service->permissions->create(
-            $file_id, $userPermission, ['fields' => 'id']);
-        $batch->add($request, 'user');
-
-        $results = $batch->execute();
-        foreach ($results as $result) {
-            if ($result instanceof Google_Service_Exception) {
-                // Handle error
-                return false;
-            } else {
-                return $result;
-            }
+            $userPermission = new Google_Service_Drive_Permission($userPermissionCollection->toArray());
+            $request        = $this->service->permissions->create(
+                $file_id, $userPermission);
+            $batch->add($request, $email);
         }
 
+        $result = $batch->execute();
+
+        return $result;
     }
 
-    public function addFolder($name)
+    /**
+     * @param $name
+     * @param null $parent
+     * @return Google_Service_Drive_DriveFile
+     */
+    public function addFolder($name, $parent = null)
     {
         $fileMetadata = new Google_Service_Drive_DriveFile([
             'name' => $name,
+            'parents' => [$parent],
             'mimeType' => 'application/vnd.google-apps.folder',
 
         ]);
@@ -207,6 +217,9 @@ class Drive
         return $file;
     }
 
+    /**
+     * @param null $file_id
+     */
     public function getChanges($file_id = null)
     {
         $response = $this->service->changes->getStartPageToken();
@@ -229,6 +242,10 @@ class Drive
         }
     }
 
+    /**
+     * @param $folder_id
+     * @return \Illuminate\Support\Collection
+     */
     public function getFilesInFolder($folder_id)
     {
         $pageToken = NULL;
@@ -251,4 +268,41 @@ class Drive
 
         return $files;
     }
+
+    /**
+     * @param array $path
+     * @return array
+     * @throws \Exception
+     */
+    public function isPathExist(array $path)
+    {
+        $this->service->getClient()->setUseBatch(true);
+        $batch = $this->service->createBatch();
+        foreach ($path as $folder) {
+            $request = $this->service->files->listFiles([
+                'q' => "name = '{$folder}'",
+                'fields' => 'files(id, name)',
+            ]);
+            $batch->add($request, $folder);
+        }
+        $results = $batch->execute();
+        $ids     = [];
+        foreach ($results as $folder => $result) {
+            if ($result instanceof Google_Service_Exception) {
+                throw new \Exception('Google API error');
+            } else {
+                if ($result->files) {
+                    foreach ($result->files as $key => $file) {
+                        $ids[$folder] = $file->id;
+                        continue;
+                    }
+                } else {
+                    $ids[$folder] = false;
+                }
+            }
+        }
+        $this->service->getClient()->setUseBatch(false);
+        return $ids;
+    }
+
 }

@@ -21,33 +21,6 @@ Auth::routes();
 
 Route::get('test', function (Drive $api) {
 
-/*
-    foreach ($api->getFiles() as $file) {
-        $api->deleteFile($file->id);
-    }
-
-
-    $folder = $api->addFolder('projects folder');
-
-    echo  'folder id:'.$folder->id. '<br>';
-
-    $file1 = $api->uploadFile(storage_path('app/google/test.docx'), 'first file', $folder);
-
-    echo  'file 1 id:'.$file1->id. '<br>';
-
-    $file2 = $api->uploadFile(storage_path('app/google/test2.docx'), 'second file', $folder);
-
-    echo  'file 1 id:'.$file2->id. '<br>';*/
-
-    $files = $api->getFilesInFolder('1xAu071rn6WC_uRzzmkRLzUMgDorkF9pZ');
-
-    $files->each(function($item){
-        echo $item->name."<br>";
-        echo $item->id."<br>";
-    });
-
-
-
 });
 
 Route::middleware(['auth'])->group(

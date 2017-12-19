@@ -8,7 +8,9 @@ use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
 use Carbon\Carbon;
+use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
@@ -20,7 +22,7 @@ class ArticlesController extends Controller
      */
     public function index(Project $project)
     {
-        return view('entity.article.index', ['project' => $project]);
+        return view('entity.article.index', compact('project'));
     }
 
     /**
@@ -30,7 +32,7 @@ class ArticlesController extends Controller
      */
     public function create(Project $project)
     {
-        return view('entity.article.create', ['project' => $project]);
+        return view('entity.article.create', compact('project'));
     }
 
     /**
@@ -39,20 +41,30 @@ class ArticlesController extends Controller
      * @param \App\Models\Project $project
      * @param \App\Models\Article $article
      * @param  \Illuminate\Http\Request $request
-     * @param Drive $google
      * @return \Illuminate\Http\Response
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+     * @internal param Drive $google
      */
     public function store(Project $project, Article $article, Request $request)
     {
 
+        $article->fill(
+            $request->except(['_token', '_method'])
+        );
+
+        $article->project_id = $project->id;
+        $article->user_id    = Auth::user()->id;
+
+        $article->save();
+
         if ($request->hasFile('file')) {
-            $file = $article->addMedia('file')->toMediaCollection('file');
-            $file->getPath();
-
-            GoogleDriveUpload::dispatch($project, $file);
-            
-
+            $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
+            $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
+            GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
         }
+
+        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
 
     }
 
@@ -65,7 +77,7 @@ class ArticlesController extends Controller
      */
     public function show(Project $project, Article $article)
     {
-        return view('entity.article.show');
+        return view('entity.article.show', compact('project', 'article'));
     }
 
     /**
