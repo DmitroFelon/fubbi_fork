@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "belphemur/laravel-gettext": "^6.0",
+        "chumper/zipper": "^1.0",
         "faustbrian/laravel-commentable": "^3.0",
         "fideloper/proxy": "~3.3",
         "garf/laravel-conf": "3.*",

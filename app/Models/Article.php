@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Kodeine\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
@@ -65,8 +67,7 @@ class Article extends Model implements HasMedia
     protected $fillable = [
         'title',
         'body',
-        'user_id',
-        'project_id'
+        'user_id'
     ];
 
     /**
@@ -86,7 +87,7 @@ class Article extends Model implements HasMedia
      */
     public function projects()
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class)->withPivot('accepted', 'attempts')->withTimestamps();
     }
 
     /**
@@ -142,7 +143,6 @@ class Article extends Model implements HasMedia
         return $this->getMeta('google_path');
     }
 
-
     /**
      * @param array $google_path
      */
@@ -151,5 +151,20 @@ class Article extends Model implements HasMedia
         $this->setMeta('google_path', $google_path);
         $this->save();
 
+    }
+
+    public function export($as = Drive::MS_WORD)
+    {
+        $api = new Drive();
+
+        $file = $api->exportFile($this->google_id, $as);
+
+        $file_name = $this->google_id . '.' . Drive::getExtension($as);
+
+        file_put_contents(storage_path('app/temp/' . $file_name), $file);
+
+        $media = $this->addMedia(storage_path('app/temp/' . $file_name))->toMediaCollection('google_export');
+
+        return $media;
     }
 }

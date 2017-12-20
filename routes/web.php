@@ -20,7 +20,9 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (Drive $api) {
+        $project = \App\Models\Project::find(3);
 
+        echo $project->exportProject();
 });
 
 Route::middleware(['auth'])->group(
@@ -47,6 +49,8 @@ Route::middleware(['auth'])->group(
         Route::namespace('Project')->group(
             function () {
                 Route::resource('project.outlines', 'OutlineController');
+                    Route::get('project/{project}/articles/{article}/accept', 'ArticlesController@accept');
+                    Route::get('project/{project}/articles/{article}/decline', 'ArticlesController@decline');
                 Route::resource('project.articles', 'ArticlesController');
                 Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
             }

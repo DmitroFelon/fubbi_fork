@@ -6,12 +6,11 @@ use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\Media;
 
@@ -44,7 +43,6 @@ class GoogleDriveUpload implements ShouldQueue
      */
     protected $drive;
 
-
     /**
      * Create a new job instance.
      *
@@ -75,11 +73,15 @@ class GoogleDriveUpload implements ShouldQueue
             //get the top folder
             $file_parent = last($this->createPath($expected_path));
 
-            $this->drive->uploadFile(
+            $file = $this->drive->uploadFile(
                 $this->file->getPath(),
                 $this->name,
                 $file_parent
             );
+
+
+            $this->article->google_id = $file->id;
+            $this->article->save();
 
             $permissions = $this->createPermissions();
 
@@ -96,11 +98,17 @@ class GoogleDriveUpload implements ShouldQueue
      */
     private function composePath()
     {
+        $client_name        = $this->project->client->name;
+        $project_name       = $this->project->name;
+        $subscription_year  = $this->project->subscription->updated_at->format('Y');
+        $subscription_month = $this->project->subscription->updated_at->format('F');
+
+
         $google_docs_folders = [
-            $this->project->client->name,
-            $this->project->name,
-            Carbon::now()->format('Y'),
-            Carbon::now()->format('F'),
+            $client_name,
+            implode(' - ', [$client_name, $project_name]),
+            implode(' - ', [$client_name, $project_name, $subscription_year]),
+            implode(' - ', [$client_name, $project_name, $subscription_year, $subscription_month]),
         ];
 
         return $google_docs_folders;
@@ -148,9 +156,8 @@ class GoogleDriveUpload implements ShouldQueue
     {
         $permissions = collect();
 
-
         //set article uploader as owner
-        $permissions->put($this->article->author->email, 'owner');
+        $permissions->put($this->article->author->email, 'writer');
         //set project client as commenter
         $permissions->put($this->project->client->email, 'commenter');
 

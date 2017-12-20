@@ -15,10 +15,9 @@
             </div>
             <div class="ibox-content">
                 {{Form::open(['id' => 'article-form', 'enctype'=>"multipart/form-data",  'role'=>'form', 'multipart', 'route'=>['project.articles.store', $project->id] ])}}
-
                 {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
-                {!! Form::bsText('body', null, _i('Article Body'), null, ['id' => 'article-textarea'], 'textarea') !!}
-                {!! Form::bsText('file', null, _i('Article File'), null, ['multiple'], 'file') !!}
+                {!! Form::bsText('body', null, _i('Article Body'), _i('Keep empty if You will upload file to Google Docs'), ['id' => 'article-textarea'], 'textarea') !!}
+                {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs'), ['multiple'], 'file') !!}
                 {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
             </div>
         </div>

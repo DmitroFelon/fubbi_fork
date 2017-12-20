@@ -73,7 +73,6 @@ trait hasPlan
 	public function getCountableServices()
 	{
 		return [
-			'articles_words',
 			'facebook_posts',
 			'instagram_posts',
 			'twitter_posts',

@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Jobs\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
-use App\Services\Google\Drive;
-use Carbon\Carbon;
-use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,10 +50,12 @@ class ArticlesController extends Controller
             $request->except(['_token', '_method'])
         );
 
-        $article->project_id = $project->id;
-        $article->user_id    = Auth::user()->id;
+
+        $article->user_id = Auth::user()->id;
 
         $article->save();
+
+        $project->articles()->attach($article->id);
 
         if ($request->hasFile('file')) {
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
@@ -64,7 +63,7 @@ class ArticlesController extends Controller
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
         }
 
-        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
+        return redirect()->action('Project\ArticlesController@index');
 
     }
 
@@ -77,6 +76,7 @@ class ArticlesController extends Controller
      */
     public function show(Project $project, Article $article)
     {
+        $article = $project->articles()->find($article->id);
         return view('entity.article.show', compact('project', 'article'));
     }
 
@@ -89,7 +89,8 @@ class ArticlesController extends Controller
      */
     public function edit(Project $project, Article $article)
     {
-        return view('entity.article.edit');
+        $article = $project->articles()->find($article->id);
+        return view('entity.article.edit', compact('project', 'article'));
     }
 
     /**
@@ -115,5 +116,22 @@ class ArticlesController extends Controller
     public function destroy(Project $project, Article $article)
     {
         //
+    }
+
+
+    public function accept(Project $project, Article $article)
+    {
+        $project->acceptArticle($article->id);
+
+        $article = $project->articles()->find($article->id);
+        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
+    }
+
+    public function decline(Project $project, Article $article)
+    {
+        $project->declineArticle($article->id);
+
+        $article = $project->articles()->find($article->id);
+        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
     }
 }

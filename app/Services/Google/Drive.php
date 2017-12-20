@@ -17,7 +17,6 @@ use Google_Service_Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Mockery\CountValidator\Exception;
 
 /**
  * Class Drive
@@ -25,6 +24,11 @@ use Mockery\CountValidator\Exception;
  */
 class Drive
 {
+
+    const MS_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const PDF = 'application/pdf';
+    const HTML = 'text/html';
+    const TEXT = 'text/plain';
 
     /**
      * @var
@@ -92,6 +96,18 @@ class Drive
     private function getService()
     {
         return new Google_Service_Drive($this->client);
+    }
+
+    public static function getExtension($format)
+    {
+        $extensions = [
+            self::MS_WORD => 'docx',
+            self::PDF => 'pdf',
+            self::HTML => 'html',
+            self::TEXT => 'txt',
+        ];
+
+        return (isset($extensions[$format])) ? $extensions[$format] : '';
     }
 
     /**
@@ -303,6 +319,17 @@ class Drive
         }
         $this->service->getClient()->setUseBatch(false);
         return $ids;
+    }
+
+    public function exportFile($file_id, $as = self::MS_WORD)
+    {
+        $response = $this->service->files->export($file_id, $as, [
+            'alt' => 'media'
+        ]);
+
+        $content = $response->getBody()->getContents();
+
+        return $content;
     }
 
 }

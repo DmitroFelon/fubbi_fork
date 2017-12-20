@@ -13,10 +13,14 @@
         <strong>{{_i('Client')}}:</strong> {{$project->client->name}}
     </td>
     <td class="project-completion">
-        <small>{{_i('Completion with')}}: 0%</small>
+        <small>{{_i('Completion with')}}: {{$project->getProgress()}}%</small>
         <div class="progress progress-mini">
-            <div style="width: 0%;" class="progress-bar"></div>
+            <div style="width: {{$project->getProgress()}}%;" class="progress-bar"></div>
         </div>
+    </td>
+    <td class="project-completion">
+        <strong>{{_i('Articles')}}:</strong> {{_i('Total')}}:{{$project->articles()->count()}}, {{_i('Accepted')}}
+        :{{$project->articles()->accepted()->count()}}
     </td>
     <td class="project-actions">
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm">
