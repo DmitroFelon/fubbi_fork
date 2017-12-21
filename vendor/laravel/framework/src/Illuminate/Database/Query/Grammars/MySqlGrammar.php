@@ -2,10 +2,10 @@
 
 namespace Illuminate\Database\Query\Grammars;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JsonExpression;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class MySqlGrammar extends Grammar
 {
@@ -46,19 +46,6 @@ class MySqlGrammar extends Grammar
     }
 
     /**
-     * Compile a single union statement.
-     *
-     * @param  array  $union
-     * @return string
-     */
-    protected function compileUnion(array $union)
-    {
-        $conjuction = $union['all'] ? ' union all ' : ' union ';
-
-        return $conjuction.'('.$union['query']->toSql().')';
-    }
-
-    /**
      * Compile the random statement into SQL.
      *
      * @param  string  $seed
@@ -67,22 +54,6 @@ class MySqlGrammar extends Grammar
     public function compileRandom($seed)
     {
         return 'RAND('.$seed.')';
-    }
-
-    /**
-     * Compile the lock into SQL.
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  bool|string  $value
-     * @return string
-     */
-    protected function compileLock(Builder $query, $value)
-    {
-        if (! is_string($value)) {
-            return $value ? 'for update' : 'lock in share mode';
-        }
-
-        return $value;
     }
 
     /**
@@ -145,10 +116,21 @@ class MySqlGrammar extends Grammar
         return collect($values)->map(function ($value, $key) {
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($key, new JsonExpression($value));
-            } else {
-                return $this->wrap($key).' = '.$this->parameter($value);
             }
+
+            return $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
+    }
+
+    /**
+     * Determine if the given string is a JSON selector.
+     *
+     * @param  string $value
+     * @return bool
+     */
+    protected function isJsonSelector($value)
+    {
+        return Str::contains($value, '->');
     }
 
     /**
@@ -167,6 +149,45 @@ class MySqlGrammar extends Grammar
         $accessor = "'$.\"".implode('"."', $path)."\"'";
 
         return "{$field} = json_set({$field}, {$accessor}, {$value->getValue()})";
+    }
+
+    /**
+     * Wrap a single string in keyword identifiers.
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function wrapValue($value)
+    {
+        if ($value === '*') {
+            return $value;
+        }
+
+        // If the given value is a JSON selector we will wrap it differently than a
+        // traditional value. We will need to split this path and wrap each part
+        // wrapped, etc. Otherwise, we will simply wrap the value as a string.
+        if ($this->isJsonSelector($value)) {
+            return $this->wrapJsonSelector($value);
+        }
+
+        return '`' . str_replace('`', '``', $value) . '`';
+    }
+
+    /**
+     * Wrap the given JSON selector.
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected function wrapJsonSelector($value)
+    {
+        $path = explode('->', $value);
+
+        $field = $this->wrapValue(array_shift($path));
+
+        return sprintf('%s->\'$.%s\'', $field, collect($path)->map(function ($part) {
+            return '"' . $part . '"';
+        })->implode('.'));
     }
 
     /**
@@ -206,18 +227,21 @@ class MySqlGrammar extends Grammar
     }
 
     /**
-     * Prepare the bindings for a delete statement.
+     * Compile a delete query that uses joins.
      *
-     * @param  array  $bindings
-     * @return array
+     * @param  \Illuminate\Database\Query\Builder $query
+     * @param  string $table
+     * @param  array $where
+     * @return string
      */
-    public function prepareBindingsForDelete(array $bindings)
+    protected function compileDeleteWithJoins($query, $table, $where)
     {
-        $cleanBindings = Arr::except($bindings, ['join', 'select']);
+        $joins = ' ' . $this->compileJoins($query, $query->joins);
 
-        return array_values(
-            array_merge($bindings['join'], Arr::flatten($cleanBindings))
-        );
+        $alias = strpos(strtolower($table), ' as ') !== false
+            ? explode(' as ', $table)[1] : $table;
+
+        return trim("delete {$alias} from {$table}{$joins} {$where}");
     }
 
     /**
@@ -247,70 +271,46 @@ class MySqlGrammar extends Grammar
     }
 
     /**
-     * Compile a delete query that uses joins.
+     * Prepare the bindings for a delete statement.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  string  $table
-     * @param  array  $where
-     * @return string
+     * @param  array $bindings
+     * @return array
      */
-    protected function compileDeleteWithJoins($query, $table, $where)
+    public function prepareBindingsForDelete(array $bindings)
     {
-        $joins = ' '.$this->compileJoins($query, $query->joins);
+        $cleanBindings = Arr::except($bindings, ['join', 'select']);
 
-        $alias = strpos(strtolower($table), ' as ') !== false
-                ? explode(' as ', $table)[1] : $table;
-
-        return trim("delete {$alias} from {$table}{$joins} {$where}");
+        return array_values(
+            array_merge($bindings['join'], Arr::flatten($cleanBindings))
+        );
     }
 
     /**
-     * Wrap a single string in keyword identifiers.
+     * Compile a single union statement.
      *
-     * @param  string  $value
+     * @param  array $union
      * @return string
      */
-    protected function wrapValue($value)
+    protected function compileUnion(array $union)
     {
-        if ($value === '*') {
-            return $value;
+        $conjuction = $union['all'] ? ' union all ' : ' union ';
+
+        return $conjuction . '(' . $union['query']->toSql() . ')';
+    }
+
+    /**
+     * Compile the lock into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder $query
+     * @param  bool|string $value
+     * @return string
+     */
+    protected function compileLock(Builder $query, $value)
+    {
+        if (!is_string($value)) {
+            return $value ? 'for update' : 'lock in share mode';
         }
 
-        // If the given value is a JSON selector we will wrap it differently than a
-        // traditional value. We will need to split this path and wrap each part
-        // wrapped, etc. Otherwise, we will simply wrap the value as a string.
-        if ($this->isJsonSelector($value)) {
-            return $this->wrapJsonSelector($value);
-        }
-
-        return '`'.str_replace('`', '``', $value).'`';
-    }
-
-    /**
-     * Wrap the given JSON selector.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    protected function wrapJsonSelector($value)
-    {
-        $path = explode('->', $value);
-
-        $field = $this->wrapValue(array_shift($path));
-
-        return sprintf('%s->\'$.%s\'', $field, collect($path)->map(function ($part) {
-            return '"'.$part.'"';
-        })->implode('.'));
-    }
-
-    /**
-     * Determine if the given string is a JSON selector.
-     *
-     * @param  string  $value
-     * @return bool
-     */
-    protected function isJsonSelector($value)
-    {
-        return Str::contains($value, '->');
+        return $value;
     }
 }

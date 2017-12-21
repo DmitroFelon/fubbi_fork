@@ -2,11 +2,12 @@
 
 namespace Illuminate\Queue;
 
-use Illuminate\Support\Carbon;
+use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\Jobs\DatabaseJob;
 use Illuminate\Queue\Jobs\DatabaseJobRecord;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
+use Illuminate\Support\Carbon;
+use Throwable;
 
 class DatabaseQueue extends Queue implements QueueContract
 {
@@ -69,6 +70,17 @@ class DatabaseQueue extends Queue implements QueueContract
     }
 
     /**
+     * Get the queue or return the default.
+     *
+     * @param  string|null $queue
+     * @return string
+     */
+    public function getQueue($queue)
+    {
+        return $queue ?: $this->default;
+    }
+
+    /**
      * Push a new job onto the queue.
      *
      * @param  string  $job
@@ -79,6 +91,43 @@ class DatabaseQueue extends Queue implements QueueContract
     public function push($job, $data = '', $queue = null)
     {
         return $this->pushToDatabase($queue, $this->createPayload($job, $data));
+    }
+
+    /**
+     * Push a raw payload to the database with a given delay.
+     *
+     * @param  string|null $queue
+     * @param  string $payload
+     * @param  \DateTimeInterface|\DateInterval|int $delay
+     * @param  int $attempts
+     * @return mixed
+     */
+    protected function pushToDatabase($queue, $payload, $delay = 0, $attempts = 0)
+    {
+        return $this->database->table($this->table)->insertGetId($this->buildDatabaseRecord(
+            $this->getQueue($queue), $payload, $this->availableAt($delay), $attempts
+        ));
+    }
+
+    /**
+     * Create an array to insert for the given job.
+     *
+     * @param  string|null $queue
+     * @param  string $payload
+     * @param  int $availableAt
+     * @param  int $attempts
+     * @return array
+     */
+    protected function buildDatabaseRecord($queue, $payload, $availableAt, $attempts = 0)
+    {
+        return [
+            'queue' => $queue,
+            'attempts' => $attempts,
+            'reserved_at' => null,
+            'available_at' => $availableAt,
+            'created_at' => $this->currentTime(),
+            'payload' => $payload,
+        ];
     }
 
     /**
@@ -143,59 +192,29 @@ class DatabaseQueue extends Queue implements QueueContract
     }
 
     /**
-     * Push a raw payload to the database with a given delay.
-     *
-     * @param  string|null  $queue
-     * @param  string  $payload
-     * @param  \DateTimeInterface|\DateInterval|int  $delay
-     * @param  int  $attempts
-     * @return mixed
-     */
-    protected function pushToDatabase($queue, $payload, $delay = 0, $attempts = 0)
-    {
-        return $this->database->table($this->table)->insertGetId($this->buildDatabaseRecord(
-            $this->getQueue($queue), $payload, $this->availableAt($delay), $attempts
-        ));
-    }
-
-    /**
-     * Create an array to insert for the given job.
-     *
-     * @param  string|null  $queue
-     * @param  string  $payload
-     * @param  int  $availableAt
-     * @param  int  $attempts
-     * @return array
-     */
-    protected function buildDatabaseRecord($queue, $payload, $availableAt, $attempts = 0)
-    {
-        return [
-            'queue' => $queue,
-            'attempts' => $attempts,
-            'reserved_at' => null,
-            'available_at' => $availableAt,
-            'created_at' => $this->currentTime(),
-            'payload' => $payload,
-        ];
-    }
-
-    /**
      * Pop the next job off of the queue.
      *
      * @param  string  $queue
      * @return \Illuminate\Contracts\Queue\Job|null
+     * @throws \Exception|\Throwable
      */
     public function pop($queue = null)
     {
         $queue = $this->getQueue($queue);
 
-        $this->database->beginTransaction();
+        try {
+            $this->database->beginTransaction();
 
-        if ($job = $this->getNextAvailableJob($queue)) {
-            return $this->marshalJob($queue, $job);
+            if ($job = $this->getNextAvailableJob($queue)) {
+                return $this->marshalJob($queue, $job);
+            }
+
+            $this->database->commit();
+        } catch (Throwable $e) {
+            $this->database->rollBack();
+
+            throw $e;
         }
-
-        $this->database->commit();
     }
 
     /**
@@ -288,27 +307,15 @@ class DatabaseQueue extends Queue implements QueueContract
      * @param  string  $queue
      * @param  string  $id
      * @return void
+     * @throws \Exception|\Throwable
      */
     public function deleteReserved($queue, $id)
     {
-        $this->database->beginTransaction();
-
-        if ($this->database->table($this->table)->lockForUpdate()->find($id)) {
-            $this->database->table($this->table)->where('id', $id)->delete();
-        }
-
-        $this->database->commit();
-    }
-
-    /**
-     * Get the queue or return the default.
-     *
-     * @param  string|null  $queue
-     * @return string
-     */
-    public function getQueue($queue)
-    {
-        return $queue ?: $this->default;
+        $this->database->transaction(function () use ($queue, $id) {
+            if ($this->database->table($this->table)->lockForUpdate()->find($id)) {
+                $this->database->table($this->table)->where('id', $id)->delete();
+            }
+        });
     }
 
     /**

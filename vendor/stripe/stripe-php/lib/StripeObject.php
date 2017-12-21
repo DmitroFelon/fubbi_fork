@@ -22,6 +22,34 @@ class StripeObject implements ArrayAccess, JsonSerializable
      *    the parent class's URL (e.g. metadata).
      */
     public static $nestedUpdatableAttributes;
+    protected $_opts;
+    protected $_values;
+    protected $_unsavedValues;
+    protected $_transientValues;
+    protected $_retrieveOptions;
+    protected $_lastResponse;
+
+    public function __construct($id = null, $opts = null)
+    {
+        $this->_opts            = $opts ? $opts : new Util\RequestOptions();
+        $this->_values          = array();
+        $this->_unsavedValues   = new Util\Set();
+        $this->_transientValues = new Util\Set();
+
+        $this->_retrieveOptions = array();
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                if ($key != 'id') {
+                    $this->_retrieveOptions[$key] = $value;
+                }
+            }
+            $id = $id['id'];
+        }
+
+        if ($id !== null) {
+            $this->id = $id;
+        }
+    }
 
     public static function init()
     {
@@ -52,135 +80,6 @@ class StripeObject implements ArrayAccess, JsonSerializable
             'transfer_schedule',
             'verification',
         ));
-    }
-
-    /**
-     * @return object The last response from the Stripe API
-     */
-    public function getLastResponse()
-    {
-        return $this->_lastResponse;
-    }
-
-    /**
-     * @param ApiResponse
-     *
-     * @return void Set the last response from the Stripe API
-     */
-    public function setLastResponse($resp)
-    {
-        $this->_lastResponse = $resp;
-    }
-
-    protected $_opts;
-    protected $_values;
-    protected $_unsavedValues;
-    protected $_transientValues;
-    protected $_retrieveOptions;
-    protected $_lastResponse;
-
-    public function __construct($id = null, $opts = null)
-    {
-        $this->_opts = $opts ? $opts : new Util\RequestOptions();
-        $this->_values = array();
-        $this->_unsavedValues = new Util\Set();
-        $this->_transientValues = new Util\Set();
-
-        $this->_retrieveOptions = array();
-        if (is_array($id)) {
-            foreach ($id as $key => $value) {
-                if ($key != 'id') {
-                    $this->_retrieveOptions[$key] = $value;
-                }
-            }
-            $id = $id['id'];
-        }
-
-        if ($id !== null) {
-            $this->id = $id;
-        }
-    }
-
-    // Standard accessor magic methods
-    public function __set($k, $v)
-    {
-        if ($v === "") {
-            throw new InvalidArgumentException(
-                'You cannot set \''.$k.'\'to an empty string. '
-                .'We interpret empty strings as NULL in requests. '
-                .'You may set obj->'.$k.' = NULL to delete the property'
-            );
-        }
-
-        if (self::$nestedUpdatableAttributes->includes($k)
-                && isset($this->$k) && $this->$k instanceof AttachedObject && is_array($v)) {
-            $this->$k->replaceWith($v);
-        } else {
-            // TODO: may want to clear from $_transientValues (Won't be user-visible).
-            $this->_values[$k] = $v;
-        }
-        if (!self::$permanentAttributes->includes($k)) {
-            $this->_unsavedValues->add($k);
-        }
-    }
-
-    public function __isset($k)
-    {
-        return isset($this->_values[$k]);
-    }
-    public function __unset($k)
-    {
-        unset($this->_values[$k]);
-        $this->_transientValues->add($k);
-        $this->_unsavedValues->discard($k);
-    }
-    public function &__get($k)
-    {
-        // function should return a reference, using $nullval to return a reference to null
-        $nullval = null;
-        if (!empty($this->_values) && array_key_exists($k, $this->_values)) {
-            return $this->_values[$k];
-        } else if (!empty($this->_transientValues) && $this->_transientValues->includes($k)) {
-            $class = get_class($this);
-            $attrs = join(', ', array_keys($this->_values));
-            $message = "Stripe Notice: Undefined property of $class instance: $k. "
-                    . "HINT: The $k attribute was set in the past, however. "
-                    . "It was then wiped when refreshing the object "
-                    . "with the result returned by Stripe's API, "
-                    . "probably as a result of a save(). The attributes currently "
-                    . "available on this object are: $attrs";
-            Stripe::getLogger()->error($message);
-            return $nullval;
-        } else {
-            $class = get_class($this);
-            Stripe::getLogger()->error("Stripe Notice: Undefined property of $class instance: $k");
-            return $nullval;
-        }
-    }
-
-    // ArrayAccess methods
-    public function offsetSet($k, $v)
-    {
-        $this->$k = $v;
-    }
-
-    public function offsetExists($k)
-    {
-        return array_key_exists($k, $this->_values);
-    }
-
-    public function offsetUnset($k)
-    {
-        unset($this->$k);
-    }
-    public function offsetGet($k)
-    {
-        return array_key_exists($k, $this->_values) ? $this->_values[$k] : null;
-    }
-
-    public function keys()
-    {
-        return array_keys($this->_values);
     }
 
     /**
@@ -246,6 +145,119 @@ class StripeObject implements ArrayAccess, JsonSerializable
         }
     }
 
+    // Standard accessor magic methods
+
+    /**
+     * @return object The last response from the Stripe API
+     */
+    public function getLastResponse()
+    {
+        return $this->_lastResponse;
+    }
+
+    /**
+     * @param ApiResponse
+     *
+     * @return void Set the last response from the Stripe API
+     */
+    public function setLastResponse($resp)
+    {
+        $this->_lastResponse = $resp;
+    }
+
+    public function __isset($k)
+    {
+        return isset($this->_values[$k]);
+    }
+
+    public function __unset($k)
+    {
+        unset($this->_values[$k]);
+        $this->_transientValues->add($k);
+        $this->_unsavedValues->discard($k);
+    }
+
+    // Magic method for var_dump output. Only works with PHP >= 5.6
+
+    public function &__get($k)
+    {
+        // function should return a reference, using $nullval to return a reference to null
+        $nullval = null;
+        if (!empty($this->_values) && array_key_exists($k, $this->_values)) {
+            return $this->_values[$k];
+        } else if (!empty($this->_transientValues) && $this->_transientValues->includes($k)) {
+            $class = get_class($this);
+            $attrs = join(', ', array_keys($this->_values));
+            $message = "Stripe Notice: Undefined property of $class instance: $k. "
+                    . "HINT: The $k attribute was set in the past, however. "
+                    . "It was then wiped when refreshing the object "
+                    . "with the result returned by Stripe's API, "
+                    . "probably as a result of a save(). The attributes currently "
+                    . "available on this object are: $attrs";
+            Stripe::getLogger()->error($message);
+            return $nullval;
+        } else {
+            $class = get_class($this);
+            Stripe::getLogger()->error("Stripe Notice: Undefined property of $class instance: $k");
+            return $nullval;
+        }
+    }
+
+    // ArrayAccess methods
+
+    public function __set($k, $v)
+    {
+        if ($v === "") {
+            throw new InvalidArgumentException(
+                'You cannot set \'' . $k . '\'to an empty string. '
+                . 'We interpret empty strings as NULL in requests. '
+                . 'You may set obj->' . $k . ' = NULL to delete the property'
+            );
+        }
+
+        if (self::$nestedUpdatableAttributes->includes($k)
+            && isset($this->$k) && $this->$k instanceof AttachedObject && is_array($v)
+        ) {
+            $this->$k->replaceWith($v);
+        } else {
+            // TODO: may want to clear from $_transientValues (Won't be user-visible).
+            $this->_values[$k] = $v;
+        }
+        if (!self::$permanentAttributes->includes($k)) {
+            $this->_unsavedValues->add($k);
+        }
+    }
+
+    public function __debugInfo()
+    {
+        return $this->_values;
+    }
+
+    public function offsetSet($k, $v)
+    {
+        $this->$k = $v;
+    }
+
+    public function offsetExists($k)
+    {
+        return array_key_exists($k, $this->_values);
+    }
+
+    public function offsetUnset($k)
+    {
+        unset($this->$k);
+    }
+
+    public function offsetGet($k)
+    {
+        return array_key_exists($k, $this->_values) ? $this->_values[$k] : null;
+    }
+
+    public function keys()
+    {
+        return array_keys($this->_values);
+    }
+
     /**
      * @return array A recursive mapping of attributes to values for this object,
      *    including the proper value for deleted attributes.
@@ -284,12 +296,12 @@ class StripeObject implements ArrayAccess, JsonSerializable
         return $this->__toArray(true);
     }
 
-    public function __toJSON()
+    public function __toArray($recursive = false)
     {
-        if (defined('JSON_PRETTY_PRINT')) {
-            return json_encode($this->__toArray(true), JSON_PRETTY_PRINT);
+        if ($recursive) {
+            return Util\Util::convertStripeObjectToArray($this->_values);
         } else {
-            return json_encode($this->__toArray(true));
+            return $this->_values;
         }
     }
 
@@ -299,12 +311,12 @@ class StripeObject implements ArrayAccess, JsonSerializable
         return $class . ' JSON: ' . $this->__toJSON();
     }
 
-    public function __toArray($recursive = false)
+    public function __toJSON()
     {
-        if ($recursive) {
-            return Util\Util::convertStripeObjectToArray($this->_values);
+        if (defined('JSON_PRETTY_PRINT')) {
+            return json_encode($this->__toArray(true), JSON_PRETTY_PRINT);
         } else {
-            return $this->_values;
+            return json_encode($this->__toArray(true));
         }
     }
 }

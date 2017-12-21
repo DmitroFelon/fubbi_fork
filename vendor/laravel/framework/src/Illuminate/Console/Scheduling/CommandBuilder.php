@@ -3,7 +3,7 @@
 namespace Illuminate\Console\Scheduling;
 
 use Illuminate\Console\Application;
-use Symfony\Component\Process\ProcessUtils;
+use Illuminate\Support\ProcessUtils;
 
 class CommandBuilder
 {
@@ -17,24 +17,9 @@ class CommandBuilder
     {
         if ($event->runInBackground) {
             return $this->buildBackgroundCommand($event);
-        } else {
-            return $this->buildForegroundCommand($event);
         }
-    }
 
-    /**
-     * Build the command for running the event in the foreground.
-     *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
-     * @return string
-     */
-    protected function buildForegroundCommand(Event $event)
-    {
-        $output = ProcessUtils::escapeArgument($event->output);
-
-        return $this->ensureCorrectUser(
-            $event, $event->command.($event->shouldAppendOutput ? ' >> ' : ' > ').$output.' 2>&1'
-        );
+        return $this->buildForegroundCommand($event);
     }
 
     /**
@@ -67,5 +52,20 @@ class CommandBuilder
     protected function ensureCorrectUser(Event $event, $command)
     {
         return $event->user && ! windows_os() ? 'sudo -u '.$event->user.' -- sh -c \''.$command.'\'' : $command;
+    }
+
+    /**
+     * Build the command for running the event in the foreground.
+     *
+     * @param  \Illuminate\Console\Scheduling\Event $event
+     * @return string
+     */
+    protected function buildForegroundCommand(Event $event)
+    {
+        $output = ProcessUtils::escapeArgument($event->output);
+
+        return $this->ensureCorrectUser(
+            $event, $event->command . ($event->shouldAppendOutput ? ' >> ' : ' > ') . $output . ' 2>&1'
+        );
     }
 }

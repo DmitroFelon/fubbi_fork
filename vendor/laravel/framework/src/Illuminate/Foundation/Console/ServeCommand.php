@@ -3,7 +3,7 @@
 namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\ProcessUtils;
+use Illuminate\Support\ProcessUtils;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\PhpExecutableFinder;
 
@@ -40,21 +40,6 @@ class ServeCommand extends Command
     }
 
     /**
-     * Get the full server command.
-     *
-     * @return string
-     */
-    protected function serverCommand()
-    {
-        return sprintf('%s -S %s:%s %s/server.php',
-            ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)),
-            $this->host(),
-            $this->port(),
-            ProcessUtils::escapeArgument($this->laravel->basePath())
-        );
-    }
-
-    /**
      * Get the host for the command.
      *
      * @return string
@@ -72,6 +57,21 @@ class ServeCommand extends Command
     protected function port()
     {
         return $this->input->getOption('port');
+    }
+
+    /**
+     * Get the full server command.
+     *
+     * @return string
+     */
+    protected function serverCommand()
+    {
+        return sprintf('%s -S %s:%s %s/server.php',
+            ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)),
+            $this->host(),
+            $this->port(),
+            ProcessUtils::escapeArgument($this->laravel->basePath())
+        );
     }
 
     /**

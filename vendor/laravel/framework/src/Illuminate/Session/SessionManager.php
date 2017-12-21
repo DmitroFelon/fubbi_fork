@@ -7,6 +7,37 @@ use Illuminate\Support\Manager;
 class SessionManager extends Manager
 {
     /**
+     * Get the session configuration.
+     *
+     * @return array
+     */
+    public function getSessionConfig()
+    {
+        return $this->app['config']['session'];
+    }
+
+    /**
+     * Get the default session driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver()
+    {
+        return $this->app['config']['session.driver'];
+    }
+
+    /**
+     * Set the default session driver name.
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function setDefaultDriver($name)
+    {
+        $this->app['config']['session.driver'] = $name;
+    }
+
+    /**
      * Call a custom driver creator.
      *
      * @param  string  $driver
@@ -15,6 +46,34 @@ class SessionManager extends Manager
     protected function callCustomCreator($driver)
     {
         return $this->buildSession(parent::callCustomCreator($driver));
+    }
+
+    /**
+     * Build the session instance.
+     *
+     * @param  \SessionHandlerInterface $handler
+     * @return \Illuminate\Session\Store
+     */
+    protected function buildSession($handler)
+    {
+        if ($this->app['config']['session.encrypt']) {
+            return $this->buildEncryptedSession($handler);
+        }
+
+        return new Store($this->app['config']['session.cookie'], $handler);
+    }
+
+    /**
+     * Build the encrypted session instance.
+     *
+     * @param  \SessionHandlerInterface $handler
+     * @return \Illuminate\Session\EncryptedStore
+     */
+    protected function buildEncryptedSession($handler)
+    {
+        return new EncryptedStore(
+            $this->app['config']['session.cookie'], $handler, $this->app['encrypter']
+        );
     }
 
     /**
@@ -102,32 +161,6 @@ class SessionManager extends Manager
     }
 
     /**
-     * Create an instance of the Memcached session driver.
-     *
-     * @return \Illuminate\Session\Store
-     */
-    protected function createMemcachedDriver()
-    {
-        return $this->createCacheBased('memcached');
-    }
-
-    /**
-     * Create an instance of the Redis session driver.
-     *
-     * @return \Illuminate\Session\Store
-     */
-    protected function createRedisDriver()
-    {
-        $handler = $this->createCacheHandler('redis');
-
-        $handler->getCache()->getStore()->setConnection(
-            $this->app['config']['session.connection']
-        );
-
-        return $this->buildSession($handler);
-    }
-
-    /**
      * Create an instance of a cache driven driver.
      *
      * @param  string  $driver
@@ -155,61 +188,28 @@ class SessionManager extends Manager
     }
 
     /**
-     * Build the session instance.
+     * Create an instance of the Memcached session driver.
      *
-     * @param  \SessionHandlerInterface  $handler
      * @return \Illuminate\Session\Store
      */
-    protected function buildSession($handler)
+    protected function createMemcachedDriver()
     {
-        if ($this->app['config']['session.encrypt']) {
-            return $this->buildEncryptedSession($handler);
-        } else {
-            return new Store($this->app['config']['session.cookie'], $handler);
-        }
+        return $this->createCacheBased('memcached');
     }
 
     /**
-     * Build the encrypted session instance.
+     * Create an instance of the Redis session driver.
      *
-     * @param  \SessionHandlerInterface  $handler
-     * @return \Illuminate\Session\EncryptedStore
+     * @return \Illuminate\Session\Store
      */
-    protected function buildEncryptedSession($handler)
+    protected function createRedisDriver()
     {
-        return new EncryptedStore(
-            $this->app['config']['session.cookie'], $handler, $this->app['encrypter']
+        $handler = $this->createCacheHandler('redis');
+
+        $handler->getCache()->getStore()->setConnection(
+            $this->app['config']['session.connection']
         );
-    }
 
-    /**
-     * Get the session configuration.
-     *
-     * @return array
-     */
-    public function getSessionConfig()
-    {
-        return $this->app['config']['session'];
-    }
-
-    /**
-     * Get the default session driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return $this->app['config']['session.driver'];
-    }
-
-    /**
-     * Set the default session driver name.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function setDefaultDriver($name)
-    {
-        $this->app['config']['session.driver'] = $name;
+        return $this->buildSession($handler);
     }
 }

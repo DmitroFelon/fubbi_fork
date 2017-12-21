@@ -2,8 +2,8 @@
 
 namespace Illuminate\Foundation\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 
 class TestMakeCommand extends GeneratorCommand
 {
@@ -37,9 +37,9 @@ class TestMakeCommand extends GeneratorCommand
     {
         if ($this->option('unit')) {
             return __DIR__.'/stubs/unit-test.stub';
-        } else {
-            return __DIR__.'/stubs/test.stub';
         }
+
+        return __DIR__ . '/stubs/test.stub';
     }
 
     /**
@@ -56,6 +56,16 @@ class TestMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get the root namespace for the class.
+     *
+     * @return string
+     */
+    protected function rootNamespace()
+    {
+        return 'Tests';
+    }
+
+    /**
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
@@ -68,15 +78,5 @@ class TestMakeCommand extends GeneratorCommand
         } else {
             return $rootNamespace.'\Feature';
         }
-    }
-
-    /**
-     * Get the root namespace for the class.
-     *
-     * @return string
-     */
-    protected function rootNamespace()
-    {
-        return 'Tests';
     }
 }

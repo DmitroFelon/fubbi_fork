@@ -2,8 +2,8 @@
 
 namespace Illuminate\Foundation\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class ListenerMakeCommand extends GeneratorCommand
@@ -67,11 +67,11 @@ class ListenerMakeCommand extends GeneratorCommand
             return $this->option('event')
                         ? __DIR__.'/stubs/listener-queued.stub'
                         : __DIR__.'/stubs/listener-queued-duck.stub';
-        } else {
-            return $this->option('event')
-                        ? __DIR__.'/stubs/listener.stub'
-                        : __DIR__.'/stubs/listener-duck.stub';
         }
+
+        return $this->option('event')
+            ? __DIR__ . '/stubs/listener.stub'
+            : __DIR__ . '/stubs/listener-duck.stub';
     }
 
     /**

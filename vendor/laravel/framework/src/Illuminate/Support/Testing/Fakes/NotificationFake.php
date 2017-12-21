@@ -2,12 +2,13 @@
 
 namespace Illuminate\Support\Testing\Fakes;
 
-use Ramsey\Uuid\Uuid;
+use Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
+use Illuminate\Contracts\Notifications\Factory as NotificationFactory;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Illuminate\Contracts\Notifications\Factory as NotificationFactory;
+use Ramsey\Uuid\Uuid;
 
-class NotificationFake implements NotificationFactory
+class NotificationFake implements NotificationFactory, NotificationDispatcher
 {
     /**
      * All of the notifications that have been sent.
@@ -61,40 +62,6 @@ class NotificationFake implements NotificationFactory
     }
 
     /**
-     * Determine if a notification was sent based on a truth-test callback.
-     *
-     * @param  mixed  $notifiable
-     * @param  string  $notification
-     * @param  callable|null  $callback
-     * @return void
-     */
-    public function assertNotSentTo($notifiable, $notification, $callback = null)
-    {
-        if (is_array($notifiable) || $notifiable instanceof Collection) {
-            foreach ($notifiable as $singleNotifiable) {
-                $this->assertNotSentTo($singleNotifiable, $notification, $callback);
-            }
-
-            return;
-        }
-
-        PHPUnit::assertTrue(
-            $this->sent($notifiable, $notification, $callback)->count() === 0,
-            "The unexpected [{$notification}] notification was sent."
-        );
-    }
-
-    /**
-     * Assert that no notifications were sent.
-     *
-     * @return void
-     */
-    public function assertNothingSent()
-    {
-        PHPUnit::assertEmpty($this->notifications, 'Notifications were sent unexpectedly.');
-    }
-
-    /**
      * Get all of the notifications matching a truth-test callback.
      *
      * @param  mixed  $notifiable
@@ -145,6 +112,40 @@ class NotificationFake implements NotificationFactory
         }
 
         return [];
+    }
+
+    /**
+     * Determine if a notification was sent based on a truth-test callback.
+     *
+     * @param  mixed $notifiable
+     * @param  string $notification
+     * @param  callable|null $callback
+     * @return void
+     */
+    public function assertNotSentTo($notifiable, $notification, $callback = null)
+    {
+        if (is_array($notifiable) || $notifiable instanceof Collection) {
+            foreach ($notifiable as $singleNotifiable) {
+                $this->assertNotSentTo($singleNotifiable, $notification, $callback);
+            }
+
+            return;
+        }
+
+        PHPUnit::assertTrue(
+            $this->sent($notifiable, $notification, $callback)->count() === 0,
+            "The unexpected [{$notification}] notification was sent."
+        );
+    }
+
+    /**
+     * Assert that no notifications were sent.
+     *
+     * @return void
+     */
+    public function assertNothingSent()
+    {
+        PHPUnit::assertEmpty($this->notifications, 'Notifications were sent unexpectedly.');
     }
 
     /**

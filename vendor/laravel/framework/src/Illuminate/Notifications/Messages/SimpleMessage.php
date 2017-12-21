@@ -2,6 +2,7 @@
 
 namespace Illuminate\Notifications\Messages;
 
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Notifications\Action;
 
 class SimpleMessage
@@ -141,7 +142,7 @@ class SimpleMessage
     /**
      * Add a line of text to the notification.
      *
-     * @param  \Illuminate\Notifications\Action|string  $line
+     * @param  mixed $line
      * @return $this
      */
     public function line($line)
@@ -152,7 +153,7 @@ class SimpleMessage
     /**
      * Add a line of text to the notification.
      *
-     * @param  \Illuminate\Notifications\Action|string|array  $line
+     * @param  mixed $line
      * @return $this
      */
     public function with($line)
@@ -169,21 +170,6 @@ class SimpleMessage
     }
 
     /**
-     * Format the given line of text.
-     *
-     * @param  string|array  $line
-     * @return string
-     */
-    protected function formatLine($line)
-    {
-        if (is_array($line)) {
-            return implode(' ', array_map('trim', $line));
-        }
-
-        return trim(implode(' ', array_map('trim', preg_split('/\\r\\n|\\r|\\n/', $line))));
-    }
-
-    /**
      * Configure the "call to action" button.
      *
      * @param  string  $text
@@ -196,6 +182,25 @@ class SimpleMessage
         $this->actionUrl = $url;
 
         return $this;
+    }
+
+    /**
+     * Format the given line of text.
+     *
+     * @param  \Illuminate\Contracts\Support\Htmlable|string|array $line
+     * @return \Illuminate\Contracts\Support\Htmlable|string
+     */
+    protected function formatLine($line)
+    {
+        if ($line instanceof Htmlable) {
+            return $line;
+        }
+
+        if (is_array($line)) {
+            return implode(' ', array_map('trim', $line));
+        }
+
+        return trim(implode(' ', array_map('trim', preg_split('/\\r\\n|\\r|\\n/', $line))));
     }
 
     /**

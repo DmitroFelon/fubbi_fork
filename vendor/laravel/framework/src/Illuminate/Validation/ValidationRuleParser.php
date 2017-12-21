@@ -3,11 +3,11 @@
 namespace Illuminate\Validation;
 
 use Closure;
+use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Unique;
-use Illuminate\Contracts\Validation\Rule as RuleContract;
 
 class ValidationRuleParser
 {
@@ -34,6 +34,96 @@ class ValidationRuleParser
     public function __construct(array $data)
     {
         $this->data = $data;
+    }
+
+    /**
+     * Extract the rule name and parameters from a rule.
+     *
+     * @param  array|string $rules
+     * @return array
+     */
+    public static function parse($rules)
+    {
+        if ($rules instanceof RuleContract) {
+            return [$rules, []];
+        }
+
+        if (is_array($rules)) {
+            $rules = static::parseArrayRule($rules);
+        } else {
+            $rules = static::parseStringRule($rules);
+        }
+
+        $rules[0] = static::normalizeRule($rules[0]);
+
+        return $rules;
+    }
+
+    /**
+     * Parse an array based rule.
+     *
+     * @param  array $rules
+     * @return array
+     */
+    protected static function parseArrayRule(array $rules)
+    {
+        return [Str::studly(trim(Arr::get($rules, 0))), array_slice($rules, 1)];
+    }
+
+    /**
+     * Parse a string based rule.
+     *
+     * @param  string $rules
+     * @return array
+     */
+    protected static function parseStringRule($rules)
+    {
+        $parameters = [];
+
+        // The format for specifying validation rules and parameters follows an
+        // easy {rule}:{parameters} formatting convention. For instance the
+        // rule "Max:3" states that the value may only be three letters.
+        if (strpos($rules, ':') !== false) {
+            list($rules, $parameter) = explode(':', $rules, 2);
+
+            $parameters = static::parseParameters($rules, $parameter);
+        }
+
+        return [Str::studly(trim($rules)), $parameters];
+    }
+
+    /**
+     * Parse a parameter list.
+     *
+     * @param  string $rule
+     * @param  string $parameter
+     * @return array
+     */
+    protected static function parseParameters($rule, $parameter)
+    {
+        if (strtolower($rule) == 'regex') {
+            return [$parameter];
+        }
+
+        return str_getcsv($parameter);
+    }
+
+    /**
+     * Normalizes a rule so that we can accept short types.
+     *
+     * @param  string $rule
+     * @return string
+     */
+    protected static function normalizeRule($rule)
+    {
+        switch ($rule) {
+            case 'Int':
+                return 'Integer';
+            case 'Bool':
+                return 'Boolean';
+            default:
+                return $rule;
+        }
     }
 
     /**
@@ -73,45 +163,6 @@ class ValidationRuleParser
         }
 
         return $rules;
-    }
-
-    /**
-     * Explode the explicit rule into an array if necessary.
-     *
-     * @param  mixed  $rule
-     * @return array
-     */
-    protected function explodeExplicitRule($rule)
-    {
-        if (is_string($rule)) {
-            return explode('|', $rule);
-        } elseif (is_object($rule)) {
-            return [$this->prepareRule($rule)];
-        } else {
-            return array_map([$this, 'prepareRule'], $rule);
-        }
-    }
-
-    /**
-     * Prepare the given rule for the Validator.
-     *
-     * @param  mixed  $rule
-     * @return mixed
-     */
-    protected function prepareRule($rule)
-    {
-        if ($rule instanceof Closure) {
-            $rule = new ClosureValidationRule($rule);
-        }
-
-        if (! is_object($rule) ||
-            $rule instanceof RuleContract ||
-            ($rule instanceof Exists && $rule->queryCallbacks()) ||
-            ($rule instanceof Unique && $rule->queryCallbacks())) {
-            return $rule;
-        }
-
-        return (string) $rule;
     }
 
     /**
@@ -184,92 +235,42 @@ class ValidationRuleParser
     }
 
     /**
-     * Extract the rule name and parameters from a rule.
+     * Explode the explicit rule into an array if necessary.
      *
-     * @param  array|string  $rules
+     * @param  mixed $rule
      * @return array
      */
-    public static function parse($rules)
+    protected function explodeExplicitRule($rule)
     {
-        if ($rules instanceof RuleContract) {
-            return [$rules, []];
+        if (is_string($rule)) {
+            return explode('|', $rule);
+        } elseif (is_object($rule)) {
+            return [$this->prepareRule($rule)];
         }
 
-        if (is_array($rules)) {
-            $rules = static::parseArrayRule($rules);
-        } else {
-            $rules = static::parseStringRule($rules);
-        }
-
-        $rules[0] = static::normalizeRule($rules[0]);
-
-        return $rules;
+        return array_map([$this, 'prepareRule'], $rule);
     }
 
     /**
-     * Parse an array based rule.
+     * Prepare the given rule for the Validator.
      *
-     * @param  array  $rules
-     * @return array
+     * @param  mixed $rule
+     * @return mixed
      */
-    protected static function parseArrayRule(array $rules)
+    protected function prepareRule($rule)
     {
-        return [Str::studly(trim(Arr::get($rules, 0))), array_slice($rules, 1)];
-    }
-
-    /**
-     * Parse a string based rule.
-     *
-     * @param  string  $rules
-     * @return array
-     */
-    protected static function parseStringRule($rules)
-    {
-        $parameters = [];
-
-        // The format for specifying validation rules and parameters follows an
-        // easy {rule}:{parameters} formatting convention. For instance the
-        // rule "Max:3" states that the value may only be three letters.
-        if (strpos($rules, ':') !== false) {
-            list($rules, $parameter) = explode(':', $rules, 2);
-
-            $parameters = static::parseParameters($rules, $parameter);
+        if ($rule instanceof Closure) {
+            $rule = new ClosureValidationRule($rule);
         }
 
-        return [Str::studly(trim($rules)), $parameters];
-    }
-
-    /**
-     * Parse a parameter list.
-     *
-     * @param  string  $rule
-     * @param  string  $parameter
-     * @return array
-     */
-    protected static function parseParameters($rule, $parameter)
-    {
-        if (strtolower($rule) == 'regex') {
-            return [$parameter];
+        if (!is_object($rule) ||
+            $rule instanceof RuleContract ||
+            ($rule instanceof Exists && $rule->queryCallbacks()) ||
+            ($rule instanceof Unique && $rule->queryCallbacks())
+        ) {
+            return $rule;
         }
 
-        return str_getcsv($parameter);
-    }
-
-    /**
-     * Normalizes a rule so that we can accept short types.
-     *
-     * @param  string  $rule
-     * @return string
-     */
-    protected static function normalizeRule($rule)
-    {
-        switch ($rule) {
-            case 'Int':
-                return 'Integer';
-            case 'Bool':
-                return 'Boolean';
-            default:
-                return $rule;
-        }
+        return (string)$rule;
     }
 }
