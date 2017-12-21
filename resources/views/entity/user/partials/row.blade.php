@@ -10,7 +10,6 @@
     <td> {{$user->email}}</td>
     <td class="contact-type"><i class="fa fa-phone"> </i></td>
     <td> {{$user->phone}}</td>
-
     @if($user->projects->count())
         <td class="contact-type"><i class="fa fa-file-o"></i></td>
         <td><strong>{{_i('Projects count')}} : </strong>{{$user->projects->count()}}</td>
@@ -18,6 +17,8 @@
         <td></td>
         <td></td>
     @endif
+
+    <td> {{_i('Registered')}} {{$user->create_at}}</td>
 
 
 </tr>
