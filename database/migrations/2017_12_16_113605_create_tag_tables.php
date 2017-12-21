@@ -1,12 +1,15 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTagTables extends Migration
 {
     public function up()
     {
+        Schema::dropIfExists('taggables');
+        Schema::dropIfExists('tags');
+
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
             $table->json('name');
