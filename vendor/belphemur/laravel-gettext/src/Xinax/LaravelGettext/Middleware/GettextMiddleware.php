@@ -3,7 +3,8 @@
 namespace Xinax\LaravelGettext\Middleware;
 
 use Closure;
-use \LaravelGettext;
+use Xinax\LaravelGettext\LaravelGettext;
+
 
 class GettextMiddleware
 {
