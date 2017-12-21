@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateArticleProjectTable extends Migration
 {
@@ -13,8 +13,6 @@ class CreateArticleProjectTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('article_project');
-
         Schema::create('article_project', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('article_id')->index();

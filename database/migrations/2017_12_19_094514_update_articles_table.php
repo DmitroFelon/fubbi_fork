@@ -14,7 +14,6 @@ class UpdateArticlesTable extends Migration
     public function up()
     {
 
-        Schema::dropIfExists('articles');
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
