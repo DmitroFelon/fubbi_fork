@@ -212,7 +212,7 @@ class User extends Authenticatable implements HasMedia
 	/**
 	 * @param \App\Models\Interfaces\Invitable $whereInvite
 	 */
-	/*public function inviteTo(Invitable $whereInvite)
+	public function inviteTo(Invitable $whereInvite)
 	{
 		$invite = new Invite(
 			[
@@ -223,7 +223,7 @@ class User extends Authenticatable implements HasMedia
 		);
 
 		$invite->save();
-	}*/
+	}
 
 	/**
 	 * @param $project_id
