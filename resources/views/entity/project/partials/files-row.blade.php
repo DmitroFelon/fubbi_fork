@@ -16,7 +16,7 @@
             @endif
         </div>
         <div class="file-name">
-            <a target="_blank" href="{{url($media->getFullUrl())}}">
+            <a target="_blank" href="{{url().$media->getFullUrl()}}">
                 {{$media->file_name}}
             </a>
             <br/>
