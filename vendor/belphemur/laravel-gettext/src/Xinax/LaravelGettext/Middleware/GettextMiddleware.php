@@ -23,7 +23,7 @@ class GettextMiddleware
          * async calls in your project, this filter starts the
          * locale environment before each request.
          */
-        \LaravelGettext::getLocale();
+        LaravelGettext::getLocale();
 
         return $next($request);
     }
