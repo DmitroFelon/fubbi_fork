@@ -204,7 +204,7 @@ class Project extends Model implements HasMedia, Invitable
             ? $total_articles_accepted / $require_articles * 100 : 0;
     }
 
-    public function exportProject()
+    public function export()
     {
 
         $ready_export = $this->getMeta('export');
@@ -303,15 +303,12 @@ class Project extends Model implements HasMedia, Invitable
         $zipper->make($full_path)->folder($main_folder)->addString('main info', $string)
                ->addString('quiz result', $meta_string);
 
-        $data['media'] = [];
-
+        //set media
         foreach ($data['media'] as $collection => $files) {
             $zipper->folder($main_folder . '/' . $collection)->add($files);
         }
 
         $zipper->close();
-
-        File::chmod($full_path, 0755);
 
         //save path to zip to metadata
         $this->setMeta('export', $full_path);

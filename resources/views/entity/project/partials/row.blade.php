@@ -24,12 +24,20 @@
     </td>
     <td class="project-actions">
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm">
-            <i class="fa fa-folder"></i> View
+            <i class="fa fa-folder"></i> {{_i('View')}}
         </a>
         @role('client')
         <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm">
-            <i class="fa fa-pencil"></i> Edit
+            <i class="fa fa-pencil"></i> {{_i('Edit')}}
         </a>
         @endrole
+        <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm">
+            <i class="fa fa-download"></i> {{_i('Export')}}
+        </a>
+        @role(['admin', 'client'])
+        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm">
+            <i class="fa fa-trash"></i> {{_i('Delete')}}
+        </a>
+        @endrole()
     </td>
 </tr>

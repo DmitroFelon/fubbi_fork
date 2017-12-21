@@ -60,8 +60,6 @@ class Drive
      */
     public function __construct()
     {
-
-        Log::debug(storage_path());
         $this->client_secret_path = storage_path('app/google/client_secret.json');
         $this->app_name           = 'Fubbi Service Storage';
         $this->credentials_path   = storage_path('app/google/.credentials/drive-php-quickstart.json');

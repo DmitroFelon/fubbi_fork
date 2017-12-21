@@ -100,8 +100,8 @@ class LeftMenuComposer
 				'icon' => 'fa fa-gear',
 			],
 			[
-				'name' => 'Meterials',
-				'url'  => '/materials',
+				'name' => 'Articles',
+				'url' => '/articles',
 				'icon' => 'fa fa-file-word-o',
 			],
 			[

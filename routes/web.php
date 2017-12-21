@@ -20,14 +20,12 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (Drive $api) {
-        $project = \App\Models\Project::find(3);
+    
 
-        echo $project->exportProject();
 });
 
 Route::middleware(['auth'])->group(
     function () {
-
         Route::prefix('notification')->group(
             function () {
                 Route::get('show/{id}', 'NotificationController@show');
@@ -43,8 +41,8 @@ Route::middleware(['auth'])->group(
                 Route::get('decline_project/{project}', "ProjectController@decline_project");
             }
         );
-
         Route::get('projects/{project}/prefill', 'ProjectController@prefill');
+            Route::get('projects/{project}/export', 'ProjectController@export');
         Route::resource('projects', 'ProjectController');
         Route::namespace('Project')->group(
             function () {
@@ -58,6 +56,7 @@ Route::middleware(['auth'])->group(
         Route::resource('teams', 'TeamController');
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
+            Route::resource('articles', 'ArticlesController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
         Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
