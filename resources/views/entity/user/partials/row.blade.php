@@ -11,5 +11,11 @@
     <td class="contact-type"><i class="fa fa-phone"> </i></td>
     <td> {{$user->phone}}</td>
     <td class="contact-type"><i class="fa fa-file-o"></i></td>
-    <td>{{$user->projects->count()}}</td>
+    @if($user->projects->count())
+        <td><strong>{{_i('Projects count')}}</strong>{{$user->projects->count()}}</td>
+    @else
+        <td></td>
+    @endif
+
+
 </tr>
