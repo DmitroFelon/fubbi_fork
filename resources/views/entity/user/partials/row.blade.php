@@ -10,10 +10,12 @@
     <td> {{$user->email}}</td>
     <td class="contact-type"><i class="fa fa-phone"> </i></td>
     <td> {{$user->phone}}</td>
-    <td class="contact-type"><i class="fa fa-file-o"></i></td>
+
     @if($user->projects->count())
-        <td><strong>{{_i('Projects count')}}</strong>{{$user->projects->count()}}</td>
+        <td class="contact-type"><i class="fa fa-file-o"></i></td>
+        <td><strong>{{_i('Projects count')}} : </strong>{{$user->projects->count()}}</td>
     @else
+        <td></td>
         <td></td>
     @endif
 
