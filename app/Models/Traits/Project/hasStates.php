@@ -173,12 +173,12 @@ trait hasStates
 			function ($item, $k) use ($keywords_input, &$keywords_old) {
 				if ($keywords_input->has($k)) {
 					//set all to false
-					foreach ($item as $i => $keyword) {
-						$item->$i = false;
+					foreach ($item as $status => $status) {
+						$item->$status = false;
 					}
 					//set true at existed
-					foreach ($keywords_input->get($k) as $i => $keyword) {
-						$item->$keyword = true;
+					foreach ($keywords_input->get($k) as $status => $status) {
+						$item->$status = true;
 					}
 				}
 

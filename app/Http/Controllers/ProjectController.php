@@ -262,7 +262,7 @@ class ProjectController extends Controller
     {
         $project->prefill($request);
 
-        return true;
+        return ['ok'];
     }
 
     public function export(Project $project)
