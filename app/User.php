@@ -138,6 +138,7 @@ class User extends Authenticatable implements HasMedia
 	 */
 	public function getRoleAttribute()
 	{
+		dd($this->roles);
 		return $this->roles->first()->name;
 	}
 

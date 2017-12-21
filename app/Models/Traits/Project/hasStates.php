@@ -185,7 +185,7 @@ trait hasStates
                         $item->$keyword = false;
                     }
                     //set true at existed
-                    foreach ($keywords_input->get($k) as $keyword => $state) {
+                    foreach ($keywords_input->get($k) as $i => $keyword) {
                         $item->$keyword = true;
                     }
                 }
