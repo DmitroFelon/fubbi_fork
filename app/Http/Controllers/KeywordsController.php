@@ -32,18 +32,16 @@ class KeywordsController extends Controller
                 if ($keywords->count() > $max_count) {
                     $keywords->shuffle();
                     $keywords = $keywords->take($max_count);
-                    $test = '';
                 }
             } else {
                 // load from api,
                 // "KeywordTool" by default
                 $keywords = $api->suggestions($theme);
 
-
-                /*
-                                if ($keywords->count() > config('fubbi.keywords_count')) {
-                                    $keywords = $keywords->random(config('fubbi.keywords_count'));
-                                }*/
+                if ($keywords->count() > $max_count) {
+                    $keywords->shuffle();
+                    $keywords = $keywords->take($max_count);
+                }
 
                 $keywords_full->put($theme, $keywords->toArray());
 
