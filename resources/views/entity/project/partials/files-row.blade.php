@@ -3,20 +3,20 @@
         <span class="corner"></span>
         <div class="icon">
             @if($media->mime_type == 'image/jpeg' or $media->mime_type == 'image/png')
-                <a href="{{$media->getFullUrl()}}"
+                <a href="{{url($media->getFullUrl())}}"
                    target="_blank"
                    data-gallery="{{$media->collection_name}}">
                     <img class="blueimp-gallery-image"
-                         src="{{$media->getFullUrl()}}">
+                         src="{{url($media->getFullUrl())}}">
                 </a>
             @else
-                <a target="_blank" href="{{$media->getFullUrl()}}">
+                <a target="_blank" href="{{url($media->getFullUrl())}}">
                     <i class="fa fa-file"></i>
                 </a>
             @endif
         </div>
         <div class="file-name">
-            <a target="_blank" href="{{$media->getFullUrl()}}">
+            <a target="_blank" href="{{url($media->getFullUrl())}}">
                 {{$media->file_name}}
             </a>
             <br/>
