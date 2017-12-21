@@ -96,40 +96,6 @@ class KeywordTool implements KeywordsFactoryInterface
 
 	/**
 	 * @param $keyword
-	 * @return mixed
-	 * @throws \Exception
-	 */
-	public function test2($keyword)
-	{
-		$params = [
-			'cx'     => '014431535617793814068:kmrzg_w7iqo',
-			'key'    => 'AIzaSyAzD1oduAfxtYOf4y1Jc9KON_DkrgbT99U',
-			'q'      => $keyword,
-			'gl'     => 'au',
-			'fields' => 'items(title)',
-			'number' => 20,
-		];
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'https://www.googleapis.com/customsearch/v1?'.http_build_query($params));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$output = curl_exec($ch);
-
-		if (curl_error($ch)) {
-			throw new \Exception(curl_error($ch));
-		}
-
-		$results = json_decode($output, true);
-
-		$results['results'] = $results['items'];
-
-		unset($results['items']);
-
-		return $results;
-	}
-
-	/**
-	 * @param $keyword
 	 * @param string $country
 	 * @param string $language
 	 * @return \Illuminate\Support\Collection
@@ -139,40 +105,4 @@ class KeywordTool implements KeywordsFactoryInterface
 		return collect();
 	}
 
-	/**
-	 * @param $uri
-	 * @param $body
-	 * @return mixed|\Psr\Http\Message\ResponseInterface
-	 */
-	private function request($uri, $body)
-	{
-		try {
-			return $this->client->request('GET', $uri, ['query' => $body]);
-		} catch (RequestException $e) {
-			throw $e;
-		}
-	}
-
-	/**
-	 * @param \Psr\Http\Message\ResponseInterface $response
-	 * @return \Illuminate\Support\Collection
-	 */
-	private function response(ResponseInterface $response)
-	{
-		try {
-
-			$body = \GuzzleHttp\json_decode($response->getBody()->getContents(), true);
-
-			$notice = isset($body['notice']['message']) ? $body['notice']['message'] : '';
-
-			throw_if(
-				(! isset($body['results']) or (empty($body['results']))),
-				new \Exception("KeywordTool returns an error: {$notice}, response: ".json_encode($response))
-			);
-
-			return collect($body['results']);
-		} catch (Exception $e) {
-			throw $e;
-		}
-	}
 }
