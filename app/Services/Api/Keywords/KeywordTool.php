@@ -91,7 +91,7 @@ class KeywordTool implements KeywordsFactoryInterface
 			return $keywords;
 		}
 
-		throw new \Exception(\GuzzleHttp\json_encode($results));
+		throw new \Exception(\GuzzleHttp\json_encode($output));
 	}
 
 	/**
