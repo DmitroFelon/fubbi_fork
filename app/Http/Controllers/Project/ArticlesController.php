@@ -133,7 +133,6 @@ class ArticlesController extends Controller
     {
         $project->acceptArticle($article->id);
 
-        $article = $project->articles()->find($article->id);
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 
@@ -145,8 +144,7 @@ class ArticlesController extends Controller
     public function decline(Project $project, Article $article)
     {
         $project->declineArticle($article->id);
-
-        $article = $project->articles()->find($article->id);
+        
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 }

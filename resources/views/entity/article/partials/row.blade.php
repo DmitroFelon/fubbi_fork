@@ -37,7 +37,7 @@
         @endif
     </td>
     <td class="project-actions">
-        <a href="{{action('ProjectController@show', ['id' => $article->id])}}" class="btn btn-white btn-sm">
+        <a href="{{action('Project\ArticlesController@show@show', [$article->project, $article])}}" class="btn btn-white btn-sm">
             <i class="fa fa-folder"></i> {{_i('View')}}
         </a>
     </td>

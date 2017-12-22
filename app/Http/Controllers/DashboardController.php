@@ -23,11 +23,14 @@ use Illuminate\Support\Facades\View;
 class DashboardController extends Controller
 {
 
+    /**
+     * @var Request
+     */
     protected $request;
 
     /**
      * DashboardController constructor.
-     *
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -45,12 +48,13 @@ class DashboardController extends Controller
 
         $role = $user->role;
 
-        $redirect = $this->composeRedirect();
-
-        if ($redirect) {
-            return $redirect;
+        if ($page == 'home') {
+            //set dynamic home page by role
+            $redirect = $this->composeRedirect();
+            if ($redirect) {
+                return $redirect;
+            }
         }
-
 
         $action = (isset($action)) ? '.' . $action : '';
 
@@ -62,6 +66,9 @@ class DashboardController extends Controller
     }
 
 
+    /**
+     * @return null
+     */
     private function composeRedirect()
     {
         $user = Auth::user();
@@ -91,6 +98,9 @@ class DashboardController extends Controller
 
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     private function client()
     {
         $user = Auth::user();
@@ -104,6 +114,9 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     private function admin()
     {
         return redirect()->action("ProjectController@index");
