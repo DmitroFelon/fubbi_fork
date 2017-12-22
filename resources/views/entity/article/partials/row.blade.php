@@ -1,5 +1,6 @@
 <tr>
 
+    @isset($article->pivot->accepted)
     @if($article->pivot->accepted === 1)
         <td>
             <span class="badge badge-primary">{{_i('Accepted')}}</span>
@@ -13,6 +14,8 @@
             <span class="badge">{{_i('Review')}}</span>
         </td>
     @endif
+    @endisset()
+
     <td class="project-title">
         @if(isset($project))
             <a href="{{action('Project\ArticlesController@show', [$project, $article])}}">{{$article->title}}</a>
