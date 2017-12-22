@@ -1,4 +1,18 @@
 <tr>
+
+    @if($article->pivot->accepted === 1)
+        <td>
+            <span class="badge badge-primary">{{_i('Accepted')}}</span>
+        </td>
+    @elseif($article->pivot->accepted === 0)
+        <td>
+            <span class="badge badge-danger">{{_i('Rejected')}}</span>
+        </td>
+    @else
+        <td>
+            <span class="badge">{{_i('Review')}}</span>
+        </td>
+    @endif
     <td class="project-title">
         @if(isset($project))
             <a href="{{action('Project\ArticlesController@show', [$project, $article])}}">{{$article->title}}</a>
@@ -15,17 +29,6 @@
         <strong>{{_i('Author')}}:</strong> <a
                 href="{{action('UserController@show', $article->author)}}">{{$article->author->name}}</a>
     </td>
-
-    @if($article->pivot->accepted)
-        <td>
-            <span class="text-success">
-                {{_i('Accepted')}}
-            </span>
-        </td>
-    @else
-        <td></td>
-    @endif
-
 
     <td class="">
         @if($article->google_id)
