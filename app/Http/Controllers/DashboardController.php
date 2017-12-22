@@ -94,11 +94,11 @@ class DashboardController extends Controller
         $user = Auth::user();
         $role = $user->role;
         if ($user->projects()->count() > 0) {
-            return action("ProjectController@index");
+            return redirect()->action("ProjectController@index");
         } elseif ($user->projects()->count() == 1) {
-            return action("ProjectController@show", $user->projects()->first());
+            return redirect()->action("ProjectController@show", $user->projects()->first());
         } else {
-            return action("ProjectController@create");
+            return redirect()->action("ProjectController@create");
         }
     }
 }
