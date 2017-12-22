@@ -15,6 +15,14 @@
         <strong>{{_i('Author')}}:</strong> <a
                 href="{{action('UserController@show', $article->author)}}">{{$article->author->name}}</a>
     </td>
+
+    @if($article->accepted)
+        <td>{{_i('Accepted')}}</td>
+    @else
+        <td></td>
+    @endif
+
+
     <td class="">
         @if($article->google_id)
             <strong>{{_i('Google docs')}}:</strong> <a target="_blank"
