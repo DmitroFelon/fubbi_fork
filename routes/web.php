@@ -12,6 +12,7 @@
 */
 
 use App\Services\Google\Drive;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +21,11 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (Drive $api) {
-    
 
+    $listOfTags = Illuminate\Support\Arr::pluck(\App\Models\Role::all([
+            'id', 'display_name'
+        ]), 'display_name', 'id') + ['' => 'select role'];
+    dd($listOfTags);
 });
 
 Route::middleware(['auth'])->group(
@@ -42,13 +46,13 @@ Route::middleware(['auth'])->group(
             }
         );
         Route::get('projects/{project}/prefill', 'ProjectController@prefill');
-            Route::get('projects/{project}/export', 'ProjectController@export');
+        Route::get('projects/{project}/export', 'ProjectController@export');
         Route::resource('projects', 'ProjectController');
         Route::namespace('Project')->group(
             function () {
                 Route::resource('project.outlines', 'OutlineController');
-                    Route::get('project/{project}/articles/{article}/accept', 'ArticlesController@accept');
-                    Route::get('project/{project}/articles/{article}/decline', 'ArticlesController@decline');
+                Route::get('project/{project}/articles/{article}/accept', 'ArticlesController@accept');
+                Route::get('project/{project}/articles/{article}/decline', 'ArticlesController@decline');
                 Route::resource('project.articles', 'ArticlesController');
                 Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
             }
@@ -56,9 +60,11 @@ Route::middleware(['auth'])->group(
         Route::resource('teams', 'TeamController');
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
-            Route::resource('articles', 'ArticlesController');
+        Route::resource('articles', 'ArticlesController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+        Route::post('settings', 'SettingsController@save');
+        Route::get('settings', 'SettingsController@index');
         Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
     }
 );

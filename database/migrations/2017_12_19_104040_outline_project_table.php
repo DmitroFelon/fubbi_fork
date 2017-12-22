@@ -13,6 +13,7 @@ class OutlineProjectTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('outline_project');
         Schema::create('outline_project', function (Blueprint $table) {
             $table->integer('outline_id');
             $table->integer('project_id');
@@ -27,6 +28,6 @@ class OutlineProjectTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('outline_project');
     }
 }

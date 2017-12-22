@@ -62,193 +62,195 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
  * @property string|null $deleted_at
- * @property-read null $role
+ * @property null $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Invite[] $invites
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
  */
 class User extends Authenticatable implements HasMedia
 {
-	use Notifiable;
-	use Billable;
-	use EntrustUserTrait;
-	use HasMediaTrait;
-	use Searchable;
+    use Notifiable;
+    use Billable;
+    use EntrustUserTrait;
+    use HasMediaTrait;
+    use Searchable;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = [
-		'first_name',
-		'last_name',
-		'phone',
-		'email',
-		'password',
-	];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'phone',
+        'email',
+        'password',
+    ];
 
-	/**
-	 * @var array
-	 */
-	protected $searchble = [];
+    /**
+     * @var array
+     */
+    protected $searchble = [];
 
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
-		'password',
-		'remember_token',
-		'stripe_id',
-		'card_brand',
-		'card_last_four',
-		'trial_ends_at',
-	];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'stripe_id',
+        'card_brand',
+        'card_last_four',
+        'trial_ends_at',
+    ];
 
-	/**
-	 * @var array
-	 */
-	protected $with = [
-		'roles',
-		'invites',
-		'notifications'
-	];
+    /**
+     * @var array
+     */
+    protected $with = [
+        'roles',
+        'invites',
+        'notifications'
+    ];
 
-	/**
-	 * @var array
-	 */
-	protected $appends = ['role'];
+    /**
+     * @var array
+     */
+    protected $appends = ['role'];
 
-	/**
-	 * @return array
-	 */
-	public function toSearchableArray()
-	{
+    /**
+     * @return array
+     */
+    public function toSearchableArray()
+    {
 
-		return [
-			'first_name' => $this->first_name,
-			'last_name' => $this->last_name,
-			'email' => $this->email,
-		];
-	}
+        return [
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+        ];
+    }
 
-	/**
-	 * @return null
-	 */
-	public function getRoleAttribute()
-	{
-		return $this->roles->first()->name;
-	}
+    /**
+     * @return null
+     */
+    public function getRoleAttribute()
+    {
+        return ($this->roles->first())
+            ? $this->roles->first()->name :
+            null;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function routeNotificationForMail()
-	{
-		return $this->email;
-	}
+    /**
+     * @return string
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->email;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function routeNotificationForPhone()
-	{
-		return $this->phone;
-	}
+    /**
+     * @return string
+     */
+    public function routeNotificationForPhone()
+    {
+        return $this->phone;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getNameAttribute()
-	{
-		return $this->first_name.' '.$this->last_name;
-	}
+    /**
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function projects()
-	{
-		if ($this->role == 'client') {
-			return $this->hasMany(Project::class, 'client_id');
-		}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        if ($this->role == 'client') {
+            return $this->hasMany(Project::class, 'client_id');
+        }
 
-		return $this->belongsToMany(Project::class, 'project_worker', 'user_id', 'project_id');
-	}
+        return $this->belongsToMany(Project::class, 'project_worker', 'user_id', 'project_id');
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function teams()
-	{
-		return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function annotations()
-	{
-		return $this->hasMany(Annotation::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function annotations()
+    {
+        return $this->hasMany(Annotation::class);
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function articles()
-	{
-		return $this->hasMany(Article::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function outlines()
-	{
-		return $this->hasMany(Outline::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function outlines()
+    {
+        return $this->hasMany(Outline::class);
+    }
 
-	/**
-	 * @param \App\Models\Interfaces\Invitable $whereInvite
-	 */
-	public function inviteTo(Invitable $whereInvite)
-	{
-		$invite = new Invite(
-			[
-				'invitable_type' => get_class($whereInvite),
-				'invitable_id'   => $whereInvite->getInvitableId(),
-				'user_id'        => $this->id,
-			]
-		);
+    /**
+     * @param \App\Models\Interfaces\Invitable $whereInvite
+     */
+    public function inviteTo(Invitable $whereInvite)
+    {
+        $invite = new Invite(
+            [
+                'invitable_type' => get_class($whereInvite),
+                'invitable_id' => $whereInvite->getInvitableId(),
+                'user_id' => $this->id,
+            ]
+        );
 
-		$invite->save();
-	}
+        $invite->save();
+    }
 
-	/**
-	 * @param $project_id
-	 * @return mixed
-	 */
-	public function hasInvitetoProject($project_id)
-	{
-		return $this->invites()->where('invitable_id', $project_id)->projects()->new()->get()->isNotEmpty();
-	}
+    /**
+     * @param $project_id
+     * @return mixed
+     */
+    public function hasInvitetoProject($project_id)
+    {
+        return $this->invites()->where('invitable_id', $project_id)->projects()->new()->get()->isNotEmpty();
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function invites()
-	{
-		return $this->hasMany(Invite::class);
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invites()
+    {
+        return $this->hasMany(Invite::class);
+    }
 
-	/**
-	 * @param $project_id
-	 * @return mixed
-	 */
-	public function getInviteToProject($project_id)
-	{
-		return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
-	}
+    /**
+     * @param $project_id
+     * @return mixed
+     */
+    public function getInviteToProject($project_id)
+    {
+        return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
+    }
 
 }
