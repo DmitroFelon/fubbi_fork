@@ -8,30 +8,30 @@
     </div>
 @endsection
 
-@swection('content')
-    <div class="ibox">
-        <div class="ibox-title">
-            <div class="ibox-tools">
-                <a class="collapse-link">
-                    <i class="fa fa-chevron-up"></i>
-                </a>
-            </div>
+@section('content')
+<div class="ibox">
+    <div class="ibox-title">
+        <div class="ibox-tools">
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
         </div>
-        <div class="ibox-content">
-            @include('entity.user.partials.search')
-            <div class="clients-list">
-                <span class="pull-right small text-muted">{{_i('Total')}}: <small>{{$users->count()}}</small></span>
-                <ul class="nav nav-tabs">
-                    @foreach($roles as $role)
-                        @include('entity.user.partials.top-tab')
-                    @endforeach
-                </ul>
-                <div class="tab-content">
-                    @foreach($groupedByRoles as $role => $users)
-                        @include('entity.user.partials.tab')
-                    @endforeach
-                </div>
+    </div>
+    <div class="ibox-content">
+        @include('entity.user.partials.search')
+        <div class="clients-list">
+            <span class="pull-right small text-muted">{{_i('Total')}}: <small>{{$users->count()}}</small></span>
+            <ul class="nav nav-tabs">
+                @foreach($roles as $role)
+                    @include('entity.user.partials.top-tab')
+                @endforeach
+            </ul>
+            <div class="tab-content">
+                @foreach($groupedByRoles as $role => $users)
+                    @include('entity.user.partials.tab')
+                @endforeach
             </div>
         </div>
     </div>
+</div>
 @endsection
