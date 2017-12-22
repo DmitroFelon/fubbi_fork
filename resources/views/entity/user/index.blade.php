@@ -8,7 +8,7 @@
     </div>
 @endsection
 
-@section('content')
+@swection('content')
     <div class="ibox">
         <div class="ibox-title">
             <div class="ibox-tools">

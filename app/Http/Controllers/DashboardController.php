@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\View;
  */
 class DashboardController extends Controller
 {
-    
+
     protected $request;
-    
+
     /**
      * DashboardController constructor.
      *
@@ -44,13 +44,61 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $role = $user->role;
-        
-        $action = (isset($action)) ? '.'.$action : '';
-        
+
+        $redirect = $this->composeRedirect();
+
+        if ($redirect) {
+            return $redirect;
+        }
+
+
+        $action = (isset($action)) ? '.' . $action : '';
+
         if (View::exists("pages.{$role}.{$page}{$action}")) {
             return view("pages.{$role}.{$page}{$action}");
         }
 
         return abort(404);
+    }
+
+
+    private function composeRedirect()
+    {
+        $user = Auth::user();
+        $role = $user->role;
+
+        switch ($role) {
+            case 'client':
+                return $this->client();
+                break;
+            case 'admin':
+                break;
+            case 'account_manager':
+                break;
+            case 'researcher':
+                break;
+            case 'writer':
+                break;
+            case 'designer':
+                break;
+            default:
+                return null;
+
+        }
+
+
+    }
+
+    private function client()
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        if ($user->projects()->count() > 0) {
+            return action("ProjectController@index");
+        } elseif ($user->projects()->count() == 1) {
+            return action("ProjectController@show", $user->projects()->first());
+        } else {
+            return action("ProjectController@create");
+        }
     }
 }
