@@ -72,12 +72,14 @@ class DashboardController extends Controller
                 return $this->client();
                 break;
             case 'admin':
+                return $this->admin();
                 break;
             case 'account_manager':
                 break;
             case 'researcher':
                 break;
             case 'writer':
+                return $this->admin();
                 break;
             case 'designer':
                 break;
@@ -100,5 +102,10 @@ class DashboardController extends Controller
         } else {
             return redirect()->action("ProjectController@create");
         }
+    }
+
+    private function admin()
+    {
+        return redirect()->action("ProjectController@index");
     }
 }

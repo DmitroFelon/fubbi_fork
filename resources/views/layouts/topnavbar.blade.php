@@ -7,7 +7,7 @@
         </div>
         @auth
         <ul class="nav navbar-top-links navbar-right">
-            @include('partials.navbar-elements.navbar-messages')
+
             @include('partials.navbar-elements.navbar-alerts')
             <li>
                 <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="#">

@@ -63,7 +63,7 @@ class ArticlesController extends Controller
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
         }
 
-        return redirect()->action('Project\ArticlesController@index');
+        return redirect()->action('Project\ArticlesController@index', $project);
 
     }
 
