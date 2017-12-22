@@ -17,7 +17,11 @@
     </td>
 
     @if($article->pivot->accepted)
-        <td>{{_i('Accepted')}}</td>
+        <td>
+            <span class="text-success">
+                {{_i('Accepted')}}
+            </span>
+        </td>
     @else
         <td></td>
     @endif
