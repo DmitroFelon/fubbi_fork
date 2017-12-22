@@ -63,6 +63,7 @@ Route::middleware(['auth'])->group(
         Route::resource('articles', 'ArticlesController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+        Route::post('settings/billing', 'SettingsController@billing');
         Route::post('settings', 'SettingsController@save');
         Route::get('settings', 'SettingsController@index');
         Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');

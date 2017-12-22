@@ -6258,6 +6258,12 @@ function SmoothlyMenu() {
 }
 jQuery(document).ready(function ($) {
 
+
+    /*
+    * Hide notifications
+    * */
+    $(".head-notification").show(0).delay(5000).hide(150);
+    
     /*
      * Init subscriptions form
      * */
@@ -6292,6 +6298,34 @@ jQuery(document).ready(function ($) {
                 $form.find('input[type=text]').empty();
                 $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
                 $form.get(0).submit();
+            }
+        });
+    });
+
+    /*
+    * Update billing info form
+    * */
+    var $update_card_form = $("#update-card-form");
+    $update_card_form.on('submit', function (e) {
+        e.preventDefault();
+        Stripe.setPublishableKey(stripe_pub);
+        Stripe.createToken({
+            number: $('.card-number').val(),
+            cvc: $('.card-cvc').val(),
+            exp_month: $('.card-expiry-month').val(),
+            exp_year: $('.card-expiry-year').val()
+        }, function (status, response) {
+            if (response.error) {
+                $('.error')
+                    .removeClass('hide')
+                    .find('.alert')
+                    .text(response.error.message);
+            } else {
+                // token contains id, last4, and card type
+                var token = response['id'];
+                $('#stripeToken').val(token);
+                $update_card_form.unbind('submit');
+                $update_card_form.submit();
             }
         });
     });

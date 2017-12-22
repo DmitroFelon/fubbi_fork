@@ -13,6 +13,7 @@ use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
+use Kodeine\Metable\Metable;
 use Laravel\Cashier\Billable;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -73,6 +74,7 @@ class User extends Authenticatable implements HasMedia
     use EntrustUserTrait;
     use HasMediaTrait;
     use Searchable;
+    use Metable;
 
     /**
      * The attributes that are mass assignable.
@@ -86,6 +88,11 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
     ];
+
+    /**
+     * @var string
+     */
+    protected $metaTable = 'user_meta';
 
     /**
      * @var array
@@ -165,6 +172,13 @@ class User extends Authenticatable implements HasMedia
     public function getNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getDisabledNotificationsAttribute()
+    {
+        return ($this->getMeta('disabled_notifications'))
+            ? collect($this->getMeta('disabled_notifications'))
+            : collect();
     }
 
     /**

@@ -13,7 +13,10 @@ class OutlineProjectTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('outline_project');
+        if(Schema::hasTable('article_meta')){
+            return;
+        }
+        
         Schema::create('outline_project', function (Blueprint $table) {
             $table->integer('outline_id');
             $table->integer('project_id');

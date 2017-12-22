@@ -13,6 +13,11 @@ class CreateArticleMetaTable extends Migration
      */
     public function up()
     {
+
+        if(Schema::hasTable('article_meta')){
+            return;
+        }
+        
         Schema::create('article_meta', function (Blueprint $table) {
             $table->increments('id');
 
