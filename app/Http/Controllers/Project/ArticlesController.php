@@ -9,6 +9,10 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class ArticlesController
+ * @package App\Http\Controllers\Project
+ */
 class ArticlesController extends Controller
 {
     /**
@@ -77,7 +81,7 @@ class ArticlesController extends Controller
     public function show(Project $project, Article $article)
     {
         $article = $project->articles()->find($article->id);
-        
+
         return view('entity.article.show', compact('project', 'article'));
     }
 
@@ -120,19 +124,29 @@ class ArticlesController extends Controller
     }
 
 
+    /**
+     * @param Project $project
+     * @param Article $article
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function accept(Project $project, Article $article)
     {
         $project->acceptArticle($article->id);
 
         $article = $project->articles()->find($article->id);
-        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
+        return redirect()->action('Project\ArticlesController@index', $project);
     }
 
+    /**
+     * @param Project $project
+     * @param Article $article
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function decline(Project $project, Article $article)
     {
         $project->declineArticle($article->id);
 
         $article = $project->articles()->find($article->id);
-        return redirect()->action('Project\ArticlesController@show', [$project, $article]);
+        return redirect()->action('Project\ArticlesController@index', $project);
     }
 }
