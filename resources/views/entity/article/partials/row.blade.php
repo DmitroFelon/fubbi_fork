@@ -41,7 +41,7 @@
     </td>
     <td class="project-actions">
         @if(isset($project))
-            <a href="{{action('Project\ArticlesController@show@show', [$project, $article])}}"
+            <a href="{{action('Project\ArticlesController@show', [$project, $article])}}"
                class="btn btn-white btn-sm">
                 <i class="fa fa-folder"></i> {{_i('View')}}
             </a>
