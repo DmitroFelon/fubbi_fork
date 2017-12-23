@@ -22,10 +22,9 @@ Auth::routes();
 
 Route::get('test', function (Drive $api) {
 
-    $listOfTags = Illuminate\Support\Arr::pluck(\App\Models\Role::all([
-            'id', 'display_name'
-        ]), 'display_name', 'id') + ['' => 'select role'];
-    dd($listOfTags);
+    $revisions = $api->retrieveRevisions('1WYqtwgjZdYn5zVjmR57ED5lcN1afARp11mFvHZITNqQ');
+
+    dd($revisions);
 });
 
 Route::middleware(['auth'])->group(
