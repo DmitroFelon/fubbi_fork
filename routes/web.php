@@ -22,7 +22,8 @@ Auth::routes();
 
 Route::get('test', function (Drive $api) {
 
-    $revisions = $api->retrieveRevisions('1WYqtwgjZdYn5zVjmR57ED5lcN1afARp11mFvHZITNqQ');
+    $revisions = $api->retrieveRevision('1Uol2CLVxjnIXKeMIN_bwrAHbM-a1G-p24tf4Oek3ihc', 6);
+    //$revisions = $api->retrieveRevisions('1Uol2CLVxjnIXKeMIN_bwrAHbM-a1G-p24tf4Oek3ihc');
 
     dd($revisions);
 });

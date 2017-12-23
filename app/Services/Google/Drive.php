@@ -330,15 +330,26 @@ class Drive
         return $content;
     }
 
-    function retrieveRevisions($fileId)
+    public function retrieveRevisions($file_id)
     {
         try {
-            $revisions = $this->service->revisions->listRevisions($fileId);
+            $revisions = $this->service->revisions->listRevisions($file_id);
             return $revisions->getRevisions();
         } catch (\Exception $e) {
             print "An error occurred: " . $e->getMessage();
         }
-        return NULL;
+        return null;
+    }
+
+
+    public function retrieveRevision($file_id, $revision_id)
+    {
+        try {
+            return $this->service->revisions->get($file_id, $revision_id);
+        } catch (\Exception $e) {
+            print "An error occurred: " . $e->getMessage();
+        }
+        return null;
     }
 
 

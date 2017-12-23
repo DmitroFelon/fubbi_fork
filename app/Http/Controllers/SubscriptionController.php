@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
 
 			$project->save();
 
-			FlashMessage::make(__('Your subscribtion created successfully'), FlashMessage::SUCCESS);
+			FlashMessage::make(_i('Your subscribtion created successfully'), FlashMessage::SUCCESS);
 
 			return redirect()->action('ProjectController@edit', [$project]);
 

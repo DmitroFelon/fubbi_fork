@@ -77,11 +77,11 @@ trait hasWorkers
 	{
 
 		$required_workers = [
-			'writer'          => __('Writer'),
-			'designer'        => __('Designer'),
-			'account_manager' => __('Account manager'),
-			'editor'          => __('Editor'),
-			'researcher'      => __('Researcher'),
+			'writer'          => _i('Writer'),
+			'designer'        => _i('Designer'),
+			'account_manager' => _i('Account manager'),
+			'editor'          => _i('Editor'),
+			'researcher'      => _i('Researcher'),
 		];
 
 		$has_worker = [];

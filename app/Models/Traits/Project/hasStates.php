@@ -92,7 +92,7 @@ trait hasStates
         throw_unless(
             $this->validateState($state),
             ImpossibleProjectState::class,
-            __('Impossible state of project')
+            _i('Impossible state of project')
         );
 
         $this->state = $state;

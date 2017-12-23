@@ -45,9 +45,9 @@ class Filled extends Notification implements ShouldQueue
 	public function toMail($notifiable)
 	{
 		return (new MailMessage)->line(
-				__(
+				_i(
 					'New project %s has beed filled.',
-					$this->project->name
+					[$this->project->name]
 				)
 			)->action('Review project', url()->action('ProjectController@show', $this->project))->line(
 				'Thank you for using our application!'
@@ -63,9 +63,9 @@ class Filled extends Notification implements ShouldQueue
 	public function toArray($notifiable)
 	{
 		$notification = NotificationPayload::make(
-			__(
+			_i(
 				'New project %s has beed filled.',
-				$this->project->name
+				[$this->project->name]
 			),
 			url()->action('ProjectController@show', $this->project),
 			get_class($this->project),

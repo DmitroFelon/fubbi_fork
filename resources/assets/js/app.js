@@ -153,11 +153,9 @@ jQuery(document).ready(function ($) {
         },
     });
 
-
     /*
      * Init tags inputs
      * */
-
     $('.tagsinput').tagsinput({
         tagClass: 'label label-primary'
     });
@@ -167,7 +165,6 @@ jQuery(document).ready(function ($) {
     /*
      * Add item to from tags input to sortable list
      * */
-
     tag_themes_input.on('itemAdded', function (event) {
         $("#themes-order-list-wrapper").removeClass('hide');
         $('#themes-order-list').append('' +
@@ -200,22 +197,6 @@ jQuery(document).ready(function ($) {
             var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
             $("#themes_order").val(sorted.join());
         }
-    });
-
-    /*
-     * Init footable table
-     * */
-
-    $('.footable').footable();
-
-
-    /*
-     * iChecks
-     * */
-
-    $('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',
     });
 
     function showToastError(message, title = '') {
@@ -278,6 +259,19 @@ jQuery(document).ready(function ($) {
             hiddenButtons: ['Image', 'Url']
         }
     );
+
+    /*
+     * Init footable table
+     * */
+    $('.footable').footable();
+
+    /*
+     * iChecks
+     * */
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
 });
 
 

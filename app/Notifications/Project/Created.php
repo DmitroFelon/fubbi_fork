@@ -59,9 +59,9 @@ class Created extends Notification  implements ShouldQueue
 	public function toArray($notifiable)
 	{
 		$notification = NotificationPayload::make(
-			__(
+			_i(
 				'New project %s has beed created.',
-				$this->project->name
+				[$this->project->name]
 			),
 			url()->action('ProjectController@show', $this->project),
 			get_class($this->project),

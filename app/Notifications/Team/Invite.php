@@ -46,9 +46,9 @@ class Invite extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)->line(
-            __(
+            _i(
                 'You have beed invited to team "%s". Please apply or decline it',
-                $this->invitation->invitable->getInvitableName()
+                [$this->invitation->invitable->getInvitableName()]
             )
         )->action('Review Invitation', $this->invitation->invitable->getInvitableUrl())->line(
             'Thank you for using our application!'
@@ -65,9 +65,9 @@ class Invite extends Notification implements ShouldQueue
     {
 
         $notification = NotificationPayload::make(
-            __(
+            _i(
                 'You have beed invited to %s',
-                $this->invitation->invitable->getInvitableName()
+                [$this->invitation->invitable->getInvitableName()]
             ),
             $this->invitation->invitable->getInvitableUrl(),
             get_class($this->invitation->invitable),

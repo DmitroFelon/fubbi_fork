@@ -171,8 +171,17 @@ class ProjectController extends Controller
      * @param \App\Models\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project)
+    public function edit(Project $project, Request $request)
     {
+        $step = ($request->has('s'))
+            ? $request->input('s')
+            : false;
+
+
+        if ($step) {
+            $project->setState($step);
+        }
+
         return view(
             'entity.project.edit',
             [
@@ -235,12 +244,12 @@ class ProjectController extends Controller
 
         if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()) {
             $message_key = 'error';
-            $message     = __('You are too late. This project already has %s', $user->role);
+            $message     = _i('You are too late. This project already has %s', [$user->role]);
         } else {
             $project->attachWorker($user->id);
             $invite = $user->getInviteToProject($project->id);
             $invite->accept();
-            $message = __('You are applied to this project');
+            $message = _i('You are applied to this project');
         }
 
         return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
@@ -249,7 +258,7 @@ class ProjectController extends Controller
     public function decline_project(Project $project)
     {
         $message_key = 'info';
-        $message     = __('You are declined this project');
+        $message     = _i('You are declined this project');
         $user        = $this->request->user();
 
         $invite = $user->getInviteToProject($project->id);

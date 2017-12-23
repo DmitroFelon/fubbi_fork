@@ -1,8 +1,5 @@
 <div class="row">
     <div class="col-lg-12">
-        <div class="m-b-md">
-            @include('entity.project.partials.show.action-buttons')
-        </div>
         <div class="clear-both"></div>
         <dl class="dl-horizontal">
             <dt>{{_i('Status')}}:</dt>

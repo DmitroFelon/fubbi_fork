@@ -53,18 +53,18 @@ trait hasPlan
 	public function getServiceName($service, $countable = false)
 	{
 		$plan_services = [
-			'articles_count'     => __('Articles Count'),
-			'articles_words'     => __('Articles Words'),
-			'facebook_posts'     => __('Facebook Posts'),
-			'instagram_posts'    => __('Instagram Posts'),
-			'twitter_posts'      => __('Twitter Posts'),
-			'pinterest_posts'    => __('Pinterest Posts'),
-			'linkedin_posts'     => __('Linkedin Posts'),
-			'marketing_calendar' => __('Marketing Calendar'),
-			'linkedin_articles'  => __('Linkedin Articles'),
-			'slideshare'         => __('Slideshare'),
-			'medium'             => __('Medium'),
-			'quora'              => __('Quora'),
+			'articles_count'     => _i('Articles Count'),
+			'articles_words'     => _i('Articles Words'),
+			'facebook_posts'     => _i('Facebook Posts'),
+			'instagram_posts'    => _i('Instagram Posts'),
+			'twitter_posts'      => _i('Twitter Posts'),
+			'pinterest_posts'    => _i('Pinterest Posts'),
+			'linkedin_posts'     => _i('Linkedin Posts'),
+			'marketing_calendar' => _i('Marketing Calendar'),
+			'linkedin_articles'  => _i('Linkedin Articles'),
+			'slideshare'         => _i('Slideshare'),
+			'medium'             => _i('Medium'),
+			'quora'              => _i('Quora'),
 		];
 
 		return $plan_services[$service] ?? '';
