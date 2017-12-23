@@ -1,20 +1,25 @@
 <tr>
 
-    @isset($article->pivot->accepted)
-    @if($article->pivot->accepted === 1)
-        <td>
-            <span class="badge badge-primary">{{_i('Accepted')}}</span>
-        </td>
-    @elseif($article->pivot->accepted === 0)
-        <td>
-            <span class="badge badge-danger">{{_i('Rejected')}}</span>
-        </td>
+    @if(isset($article->pivot->accepted))
+        @if($article->pivot->accepted === 1)
+            <td>
+                <span class="badge badge-primary">{{_i('Accepted')}}</span>
+            </td>
+        @elseif($article->pivot->accepted === 0)
+            <td>
+                <span class="badge badge-danger">{{_i('Rejected')}}</span>
+            </td>
+        @else
+            <td>
+                <span class="badge">{{_i('Review')}}</span>
+            </td>
+        @endif
     @else
         <td>
             <span class="badge">{{_i('Review')}}</span>
         </td>
     @endif
-    @endisset()
+
 
     <td class="project-title">
         @if(isset($project))
