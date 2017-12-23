@@ -112,7 +112,7 @@ jQuery(document).ready(function ($) {
      * */
     $("#keywords-form").steps({
         bodyTag: "fieldset",
-        enableAllSteps: user.role == 'client' ? false : true,
+        enableAllSteps: true,
         showFinishButtonAlways: user.role == 'client' ? false : true,
         autoFocus: false,
         labels: {
@@ -121,36 +121,67 @@ jQuery(document).ready(function ($) {
         onInit: function (event, currentIndex) {
         },
         onStepChanging: function (event, currentIndex) {
-            if (!validateKeywords(event, currentIndex)) {
-                return false;
-            }
+            /*if (!validateKeywords(event, currentIndex)) {
+             return false;
+             }*/
 
             preUploadKeywords();
-
 
             return true;
         },
         onStepChanged: function (event, currentIndex) {
-            //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("keywords-form-step", currentIndex);
             } else {
             }
         },
         onFinishing: function (event, currentIndex) {
-            if (!validateKeywords(event, currentIndex)) {
-                return false;
-            }
+            /*if (!validateKeywords(event, currentIndex)) {
+             return false;
+             }*/
 
             preUploadKeywords();
-
-
             return true;
+        },
+        onContentLoaded: function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
         },
         onFinished: function (event, currentIndex) {
             var form = $(this);
             form.submit();
         },
+    });
+
+    /*
+    * Add manual keyword
+    * todo save manual keyword alongside with keywords from keywordtool
+    * */
+    $(document).on("click", "button.keyword-input-submit", function (e) {
+        e.preventDefault();
+        var theme = $(this).attr('data-theme');
+        var input = $('input[data-theme="' + theme + '"]').val();
+        var wrapper = $('div[data-theme="' + theme + '"]');
+
+        wrapper.append(
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
+            '<div class="i-checks">' +
+            '<label><input class="keywords-checkbox" checked ' +
+            'type="checkbox" name="keywords[' + theme + '][' + input + ']" ' +
+            'value="true"> <i></i>' + input + '</label></div></div>'
+        );
+
+        $('input[data-theme="' + theme + '"]').val('');
+
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+
     });
 
     /*
