@@ -157,16 +157,16 @@ class GoogleDriveUpload implements ShouldQueue
         $permissions = collect();
 
         //set article uploader as owner
-        $permissions->put($this->article->author->email, 'commenter');
+        $permissions->put($this->article->author->email, 'owner');
         //set project client as commenter
-        $permissions->put($this->project->client->email, 'commenter');
+        $permissions->put($this->project->client->email, 'writer');
 
         //set other workers as writer
         $this->project->workers->each(function (User $worker) use ($permissions) {
             if ($worker->email == $this->article->author->email) {
                 return;
             }
-            $permissions->put($worker->email, 'commenter');
+            $permissions->put($worker->email, 'writer');
         });
 
         $admins = User::withRole('admin')->get();
@@ -176,7 +176,7 @@ class GoogleDriveUpload implements ShouldQueue
             if ($admin->email == $this->article->author->email) {
                 return;
             }
-            $permissions->put($admin->email, 'commenter');
+            $permissions->put($admin->email, 'writer');
         });
 
         return $permissions;
