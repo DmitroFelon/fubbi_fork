@@ -176,7 +176,7 @@ class GoogleDriveUpload implements ShouldQueue
             if ($admin->email == $this->article->author->email) {
                 return;
             }
-            $permissions->put($admin->email, 'reader');
+            $permissions->put($admin->email, 'commenter');
         });
 
         return $permissions;
