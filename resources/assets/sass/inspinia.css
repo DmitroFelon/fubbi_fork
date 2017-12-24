@@ -2939,12 +2939,10 @@ a.forum-item-title:hover {
   width: 20%;
 }
 .tabs-container .tabs-left .panel-body {
-  width: 80%;
-  margin-left: 20%;
+
 }
 .tabs-container .tabs-right .panel-body {
-  width: 80%;
-  margin-right: 20%;
+
 }
 .tabs-container .tab-content > .tab-pane,
 .tabs-container .pill-content > .pill-pane {
