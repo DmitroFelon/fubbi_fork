@@ -208,6 +208,10 @@ return [
          * GetText
          * */
         Xinax\LaravelGettext\LaravelGettextServiceProvider::class,
+        /*
+         * Chat
+         * */
+        Musonza\Chat\ChatServiceProvider::class
     ],
 
     /*
@@ -278,6 +282,10 @@ return [
         * Theme dependency
         * */
         'Ekko' => Laravelista\Ekko\Facades\Ekko::class,
+        /*
+         * Chat
+         * */
+        'Chat' => Musonza\Chat\Facades\ChatFacade::class
     ],
 
 ];

@@ -5307,11 +5307,9 @@ dd.project-people {
 }
 .chat-discussion .chat-message.left .message {
   text-align: left;
-  margin-left: 55px;
 }
 .chat-discussion .chat-message.right .message {
   text-align: right;
-  margin-right: 55px;
 }
 .message-date {
   font-size: 10px;

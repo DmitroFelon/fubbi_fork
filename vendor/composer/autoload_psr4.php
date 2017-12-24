@@ -46,6 +46,7 @@ return array(
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'Musonza\\Chat\\' => array($vendorDir . '/musonza/chat/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'League\\Glide\\' => array($vendorDir . '/league/glide/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),

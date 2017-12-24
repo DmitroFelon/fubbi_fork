@@ -6413,6 +6413,10 @@ jQuery(document).ready(function ($) {
         },
     });
 
+    /*
+    * Add manual keyword
+    * todo save manual keyword alongside with keywords from keywordtool
+    * */
     $(document).on("click", "button.keyword-input-submit", function (e) {
         e.preventDefault();
         var theme = $(this).attr('data-theme');
@@ -6423,9 +6427,8 @@ jQuery(document).ready(function ($) {
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
             '<div class="i-checks">' +
             '<label><input class="keywords-checkbox" checked ' +
-            'type="checkbox" name="keywords[' + theme + '][' + input + ']"' +
-            'value="true"> <i></i>' + input +
-            '</label></div></div>'
+            'type="checkbox" name="keywords[' + theme + '][' + input + ']" ' +
+            'value="true"> <i></i>' + input + '</label></div></div>'
         );
 
         $('input[data-theme="' + theme + '"]').val('');

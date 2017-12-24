@@ -29,10 +29,6 @@ class KeywordsController extends Controller
             if ($keywords_full->has($theme) and !empty($keywords_full->get($theme))) {
                 // get from database if exist
                 $keywords = collect($keywords_full->get($theme));
-                if ($keywords->count() > $max_count) {
-                    $keywords->shuffle();
-                    $keywords = $keywords->take($max_count);
-                }
             } else {
                 // load from api,
                 // "KeywordTool" by default
@@ -50,10 +46,17 @@ class KeywordsController extends Controller
                 $project->save();
             }
 
+            $keywords_meta = $project->getMeta('keywords_meta');
+
+            $meta = (isset($keywords_meta[$theme]))
+                ? collect($keywords_meta[$theme])
+                : collect();
+
             $data = [
                 'project' => $project,
                 'keywords' => $keywords,
                 'theme' => $theme,
+                'meta' => $meta
             ];
 
             return view('entity.project.partials.form.keywords-step', $data);

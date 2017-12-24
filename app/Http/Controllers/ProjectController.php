@@ -182,14 +182,16 @@ class ProjectController extends Controller
             $project->setState($step);
         }
 
+        $data = [
+            'keywords' => $project->getMeta('keywords'),
+            'articles' => Article::all(),
+            'project' => $project,
+            'step' => $project->state,
+        ];
+
         return view(
             'entity.project.edit',
-            [
-                'keywords' => $project->getMeta('keywords'),
-                'articles' => Article::all(),
-                'project' => $project,
-                'step' => $project->state,
-            ]
+            $data
         );
     }
 

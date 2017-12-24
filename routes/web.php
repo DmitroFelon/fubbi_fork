@@ -20,12 +20,8 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
-Route::get('test', function (Drive $api) {
+Route::get('test', function () {
 
-    $revisions = $api->retrieveRevision('1Uol2CLVxjnIXKeMIN_bwrAHbM-a1G-p24tf4Oek3ihc', 6);
-    //$revisions = $api->retrieveRevisions('1Uol2CLVxjnIXKeMIN_bwrAHbM-a1G-p24tf4Oek3ihc');
-
-    dd($revisions);
 });
 
 Route::middleware(['auth'])->group(
@@ -61,6 +57,7 @@ Route::middleware(['auth'])->group(
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
         Route::resource('articles', 'ArticlesController');
+        Route::resource('messages', 'MessageController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
         Route::post('settings/billing', 'SettingsController@billing');

@@ -16,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Billable;
 use Laravel\Scout\Searchable;
+use Musonza\Chat\Conversations\Conversation;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -265,6 +266,16 @@ class User extends Authenticatable implements HasMedia
     public function getInviteToProject($project_id)
     {
         return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(
+            Conversation::class,
+            'mc_conversation_user',
+            'user_id',
+            'conversation_id'
+        )->withTimestamps();
     }
 
 }

@@ -120,7 +120,6 @@ trait hasStates
     public function fillKeywords(Request $request)
     {
         $this->setState(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW);
-        $this->save();
         $this->filled();
     }
 
@@ -159,12 +158,12 @@ trait hasStates
     private function prefillKeywords(Request $request)
     {
         $keywords_input = collect($request->input('keywords'));
+
         $keywords_input->transform(
             function ($item, $key) {
                 return array_keys($item);
             }
         );
-
 
         $keywords_old = ($this->getMeta('keywords')) ? collect($this->getMeta('keywords')) : collect();
 
@@ -195,6 +194,9 @@ trait hasStates
         );
 
         $this->setMeta('keywords', $keywords_old);
+
+        $this->setMeta('keywords_meta', $request->input('meta'));
+
         $this->save();
 
         return true;

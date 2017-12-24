@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Musonza\Chat\Notifications\MessageSent;
 
 /**
  * Class NotificationController
@@ -12,41 +13,50 @@ use Illuminate\Support\Facades\DB;
  */
 class NotificationController extends Controller
 {
-	public function index()
-	{
-		$user =  Auth::user();
+    public function index()
+    {
+        $user = Auth::user();
 
-		$data = [
-			'page_notifications'       => $user->unreadNotifications->concat($user->readNotifications)->all(),
-			'has_unread_notifications' => $user->unreadNotifications->isNotEmpty(),
-		];
+        $page_notifications = $user->unreadNotifications()->where('type', '!=', MessageSent::class)
+                                   ->get()->concat(
+                $user->readNotifications()
+                     ->where('type', '!=', MessageSent::class)->get()
+            )->all();
 
-		return view('entity.notification.index', $data);
-	}
+        $has_unread_notifications = $user->unreadNotifications()->where('type', '!=', MessageSent::class)->get()
+                                         ->isNotEmpty();
 
-	public function show($id)
-	{
-		$notification = Auth::user()->unreadNotifications()->findOrFail($id);
-		$notification->markAsRead();
+        $data = [
+            'page_notifications' => $page_notifications,
+            'has_unread_notifications' => $has_unread_notifications,
+        ];
 
-		return redirect($notification->data['link']);
-	}
+        return view('entity.notification.index', $data);
+    }
 
-	/**
-	 * @param null $id
-	 * @return mixed
-	 */
-	public function read($id = null)
-	{
-		if (! is_null($id)) {
-			$notification = Auth::user()->notifications()->where('id', $id)->first();
-			if (! is_null($notification)) {
-				$notification->markAsRead();
-			}
-		} else {
-			Auth::user()->unreadNotifications->markAsRead();
-		}
+    public function show($id)
+    {
+        $notification = Auth::user()->unreadNotifications()->findOrFail($id);
+        $notification->markAsRead();
 
-		return redirect('notification');
-	}
+        return redirect($notification->data['link']);
+    }
+
+    /**
+     * @param null $id
+     * @return mixed
+     */
+    public function read($id = null)
+    {
+        if (!is_null($id)) {
+            $notification = Auth::user()->notifications()->where('id', $id)->first();
+            if (!is_null($notification)) {
+                $notification->markAsRead();
+            }
+        } else {
+            Auth::user()->unreadNotifications->markAsRead();
+        }
+
+        return redirect('notification');
+    }
 }
