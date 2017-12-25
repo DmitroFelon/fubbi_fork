@@ -2,6 +2,27 @@
     @if($meta_value == '' or empty($meta_value) or is_object($meta_value))
         @continue
     @endif
+
+    @if($meta_key == 'keywords_meta')
+        @continue
+    @endif
+
+    @if($meta_key == 'article_images_links' and is_array($meta_value) and empty($meta_value[0]))
+        @continue
+    @endif
+
+    @if($meta_key == 'avoid_keywords' and is_array($meta_value) and empty($meta_value[0]))
+        @continue
+    @endif
+
+    @if($meta_key == 'image_pages' and is_array($meta_value) and empty($meta_value[0]))
+        @continue
+    @endif
+
+    @if($meta_key == 'google_access' and is_array($meta_value) and empty($meta_value[0]))
+        @continue
+    @endif
+
     <div class="panel-group">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -13,10 +34,8 @@
             </div>
             <div id="collapse-{{$meta_key}}" class="panel-collapse collapse">
                 <div class="p-md">
-
                     @if(is_array($meta_value) and !empty($meta_value))
                         <div>
-                            <h4>{{ title_case( str_replace('_', ' ', $meta_key)) }}</h4>
                             <ul>
                                 @foreach((array) $meta_value as $sub_key => $sub_value)
                                     @if(isset($sub_value))
@@ -32,7 +51,6 @@
                         </div>
                     @else
                         <div>
-                            <strong>{{ title_case( str_replace('_', ' ', $meta_key)) }}:</strong>
                             {!! $meta_value !!}
                         </div>
                     @endif

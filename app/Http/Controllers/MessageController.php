@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Musonza\Chat\Chat;
 
+use Musonza\Chat\Chat;
 
 class MessageController extends Controller
 {
@@ -16,6 +16,7 @@ class MessageController extends Controller
      */
     public function index(Chat $chat)
     {
+
         $data = [
             'conversations' => Auth::user()->conversations
         ];
@@ -56,11 +57,13 @@ class MessageController extends Controller
      */
     public function show($id, Chat $chat)
     {
-        $conversation = $chat->conversation($id);
-
         $user = Auth::user();
 
-        $messages = $chat->conversations($conversation)->for($user)->getMessages(20, 0);
+        $conversation = $chat->conversation($id);
+
+        //$conversation->readAll($user);
+
+        $messages = $chat->conversations($conversation)->for($user)->getMessages(100, 0);
 
         $data = [
             'chat_messages' => $messages,

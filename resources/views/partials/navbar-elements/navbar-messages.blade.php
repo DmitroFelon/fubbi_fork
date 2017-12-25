@@ -1,26 +1,11 @@
 <li class="dropdown">
     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-        <i class="fa fa-envelope"></i>  <span class="label label-primary">2</span>
+        <i class="fa fa-envelope"></i>  <span class="label label-primary">{{($messages->count() > 0) ? $messages->count() : ''}}</span>
     </a>
     <ul class="dropdown-menu dropdown-alerts">
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                    <span class="pull-right text-muted small">4 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                    <span class="pull-right text-muted small">12 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
+
+        @each('partials.navbar-elements.message-row', $messages, 'message', 'partials.navbar-elements.message-row-empty')
+
         <li>
             <div class="text-center link-block">
                 <a href="{{url('messages')}}">

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Activity;
 use App\Models\Annotation;
 use App\Models\Article;
 use App\Models\Interfaces\Invitable;
@@ -175,6 +176,9 @@ class User extends Authenticatable implements HasMedia
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getDisabledNotificationsAttribute()
     {
         return ($this->getMeta('disabled_notifications'))
@@ -268,6 +272,9 @@ class User extends Authenticatable implements HasMedia
         return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function conversations()
     {
         return $this->belongsToMany(
@@ -276,6 +283,41 @@ class User extends Authenticatable implements HasMedia
             'user_id',
             'conversation_id'
         )->withTimestamps();
+    }
+
+    /**
+     * @param int $minutes
+     * @return mixed
+     */
+    public function isActive($minutes = 5)
+    {
+        return $us = Activity::users($minutes)->where('user_id', $this->id)->first();
+    }
+
+    /**
+     * @return string
+     */
+    public function getBadgeColor()
+    {
+        switch ($this->role) {
+            case Role::ADMIN:
+                return 'blue-bg';
+                break;
+            case Role::ACCOUNT_MANAGER:
+                return 'red-bg';
+                break;
+            case Role::CLIENT:
+                return 'navy-bg';
+                break;
+            case Role::WRITER:
+            case Role::DESIGNER:
+            case Role::RESEARCHER:
+                return 'yellow-bg';
+                break;
+            default:
+                return 'lazur-bg';
+                break;
+        }
     }
 
 }

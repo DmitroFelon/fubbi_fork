@@ -278,7 +278,7 @@ class Project extends Model implements HasMedia, Invitable
             if (is_array($meta_value) and !empty($meta_value)) {
                 $meta_string .= title_case(str_replace('_', ' ', $meta_key)) . PHP_EOL;
                 foreach ($meta_value as $sub_key => $sub_value) {
-                    if ($sub_value == '') {
+                    if ($sub_value == '' or is_array($sub_value)) {
                         continue;
                     }
                     $meta_string .= '   ' . title_case(str_replace('_', ' ', $sub_key)) . ' : ' . $sub_value . PHP_EOL;

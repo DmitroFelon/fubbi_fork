@@ -23,21 +23,24 @@
         :{{$project->articles()->accepted()->count()}}
     </td>
     <td class="project-actions">
-        <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm">
+        <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm navy-bg">
             <i class="fa fa-folder"></i> {{_i('View')}}
         </a>
         @role('client')
-        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm">
+        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm blue-bg">
             <i class="fa fa-pencil"></i> {{_i('Edit')}}
         </a>
         @endrole
-        <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm">
+        <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
             <i class="fa fa-download"></i> {{_i('Export')}}
         </a>
         @role(['admin', 'client'])
-        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm">
+        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm red-bg">
             <i class="fa fa-trash"></i> {{_i('Delete')}}
         </a>
         @endrole()
+        <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm lazur-bg">
+            <i class="fa fa-cloud"></i> {{_i('Chat')}}
+        </a>
     </td>
 </tr>
