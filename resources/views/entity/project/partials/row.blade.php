@@ -39,7 +39,7 @@
             <i class="fa fa-trash"></i> {{_i('Delete')}}
         </a>
         @endrole()
-        <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm lazur-bg">
+        <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}" class="btn btn-white btn-sm lazur-bg">
             <i class="fa fa-cloud"></i> {{_i('Chat')}}
         </a>
     </td>

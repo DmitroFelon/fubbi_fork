@@ -104,7 +104,9 @@ class Project extends Model implements HasMedia, Invitable
      */
     protected $observables = [
         'setState',
-        'filled'
+        'filled',
+        'attachWorker',
+        'detachWorker'
     ];
 
     /**

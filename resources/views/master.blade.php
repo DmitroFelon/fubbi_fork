@@ -64,20 +64,32 @@
 <script>
     var stripe_pub = "{{config('services.stripe.key')}}";
     var user = @json((\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user():'');
+    var conversation_id = null;
+    var is_chat = false;
 </script>
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+@yield('before-scripts')
 
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 
-@section('scripts')
-@show
+@yield('scripts')
 
 <script>
     Echo.private('App.User.' + user.id)
             .notification(function (notification) {
-                if(notification.type == 'Musonza\\Chat\\Notifications\\MessageSent'){
-                    $('#message-notifications-content').html(notification.navbar_content);
+                if (notification.type == 'App\\Notifications\\Chat\\Message') {
+                    if (conversation_id != notification.conversation_id) {
+                        $('#topnav-messages-list').prepend(notification.navbar_message);
+                        var messages_count_wrapper = $("#message-notifications-count");
+                        var count = parseInt(messages_count_wrapper.html());
+                        if (!count) {
+                            count = 0;
+                        }
+                        messages_count_wrapper.html(count + 1)
+                    } else {
+                        $.get("{{url('messages/read/')}}/" + notification.conversation_id);
+
+                    }
                 }
             });
 </script>

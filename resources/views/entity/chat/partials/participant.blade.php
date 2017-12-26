@@ -1,10 +1,8 @@
 <div class="chat-user">
 
-    @if($user->isActive())
-        <span class="pull-right label label-primary">{{_i('Online')}}</span>
-    @else
-        <span class="pull-right label label-danger">{{_i('Offline')}}</span>
-    @endif
+    <span data-user-id="{{$user->id}}"  class="chat-user-status pull-right label label-danger">
+        {{($user->isActive())?'Online':'Offline'}}
+    </span>
 
     <div class="chat-user-name">
         <a href="#">{{$user->name}}</a>

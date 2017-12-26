@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Billable;
 use Laravel\Scout\Searchable;
@@ -330,17 +331,9 @@ class User extends Authenticatable implements HasMedia
      */
     public function getNotifications()
     {
-        return $this->unreadNotifications()->where('type', '!=', MessageSent::class)->get();
+        return $this->unreadNotifications()->where('type', '!=', MessageSent::class)->orderBy('created_at', 'asc')
+                    ->get();
     }
-
-    /**
-     * @return mixed
-     */
-    public function getNewMessagesCount()
-    {
-        return $this->unreadNotifications()->where('type', '=', MessageSent::class)->count();
-    }
-
 
     /**
      * @return Collection
@@ -351,9 +344,14 @@ class User extends Authenticatable implements HasMedia
 
         $messages->transform(function ($notification, $key) use ($messages) {
             $message = Message::find($notification->data['message_id']);
-            
+
             if (!$message) {
                 return;
+            }
+
+            if ($message->sender->id == Auth::user()->id) {
+                $notification->markAsRead();
+                return null;
             }
 
             $notification->message = \Musonza\Chat\Messages\Message::find($message->id);

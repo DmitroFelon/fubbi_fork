@@ -20,78 +20,85 @@ use Illuminate\Support\Facades\Auth;
  */
 trait hasWorkers
 {
-	/**
-	 * @param $args
-	 */
-	public function attachWorker($args)
-	{
-		$this->workers()->attach($args);
 
-		$this->fireModelEvent('attachWorkers', false);
-	}
+    public $eventData = [];
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function workers()
-	{
-		return $this->belongsToMany(User::class, 'project_worker', 'project_id', 'user_id');
-	}
+    /**
+     * @param $worker_id
+     */
+    public function attachWorker($worker_id)
+    {
+        $this->workers()->attach($worker_id);
 
-	/**
-	 * @param $args
-	 */
-	public function detachWorker($args)
-	{
-		$this->workers()->detach($args);
+        $this->eventData['attachWorker'] = $worker_id;
 
-		$this->fireModelEvent('detachWorkers', false);
-	}
+        $this->fireModelEvent('attachWorker', false);
+    }
 
-	/**
-	 * @param $args
-	 */
-	public function syncWorkers($args)
-	{
-		$this->workers()->sync($args);
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function workers()
+    {
+        return $this->belongsToMany(User::class, 'project_worker', 'project_id', 'user_id');
+    }
 
-		$this->fireModelEvent('syncWorkers', false);
-	}
+    /**
+     * @param $args
+     */
+    public function detachWorker($worker_id)
+    {
+        $this->workers()->detach($worker_id);
 
-	/**
-	 * @param null $role
-	 * @return bool
-	 */
-	public function hasWorker($role = null)
-	{
-		return !array_key_exists(
-			(is_null($role)) ? Auth::user()->role : $role,
-			$this->requireWorkers()
-		);
-	}
+        $this->eventData['detachWorker'] = $worker_id;
 
-	/**
-	 * @return array
-	 */
-	public function requireWorkers()
-	{
+        $this->fireModelEvent('detachWorker', false);
+    }
 
-		$required_workers = [
-			'writer'          => _i('Writer'),
-			'designer'        => _i('Designer'),
-			'account_manager' => _i('Account manager'),
-			'editor'          => _i('Editor'),
-			'researcher'      => _i('Researcher'),
-		];
+    /**
+     * @param $args
+     */
+    public function syncWorkers($args)
+    {
+        $this->workers()->sync($args);
 
-		$has_worker = [];
+        $this->fireModelEvent('syncWorkers', false);
+    }
 
-		$this->workers()->each(
-			function (User $user, $key) use (&$has_worker, $required_workers) {
-				$has_worker[$user->role] = $required_workers[$user->role];
-			}
-		);
+    /**
+     * @param null $role
+     * @return bool
+     */
+    public function hasWorker($role = null)
+    {
+        return !array_key_exists(
+            (is_null($role)) ? Auth::user()->role : $role,
+            $this->requireWorkers()
+        );
+    }
 
-		return array_diff($required_workers, $has_worker);
-	}
+    /**
+     * @return array
+     */
+    public function requireWorkers()
+    {
+
+        $required_workers = [
+            'writer' => _i('Writer'),
+            'designer' => _i('Designer'),
+            'account_manager' => _i('Account manager'),
+            'editor' => _i('Editor'),
+            'researcher' => _i('Researcher'),
+        ];
+
+        $has_worker = [];
+
+        $this->workers()->each(
+            function (User $user, $key) use (&$has_worker, $required_workers) {
+                $has_worker[$user->role] = $required_workers[$user->role];
+            }
+        );
+
+        return array_diff($required_workers, $has_worker);
+    }
 }

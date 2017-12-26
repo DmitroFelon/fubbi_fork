@@ -27,7 +27,6 @@ Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
 });
 
 Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
-
     $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);
     if (!$conversation) {
         return false;
@@ -36,11 +35,20 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
         ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
-
 Route::get('test', function () {
+    
+    $collection = collect([
+        ['id' => 1, 'name' => 'test1' ],
+        ['id' => 2, 'name' => 'test2' ],
+        ['id' => 3, 'name' => 'test3' ],
+        ['id' => 2, 'name' => 'test4' ],
+    ]);
 
-    $user = \App\User::find(2);
-    $user->notify(new \App\Notifications\Test);
+    $f = $collection->first(function ($item){
+        return $item['id'] == 2;
+    });
+
+    dd($f);
 
 });
 
@@ -77,7 +85,7 @@ Route::middleware(['auth'])->group(
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
         Route::resource('articles', 'ArticlesController');
-        Route::get('messages/{chat_id}/{last_message_id}', 'MessageController@get_new');
+        Route::get('messages/read/{id}', 'MessageController@read');
         Route::resource('messages', 'MessageController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');

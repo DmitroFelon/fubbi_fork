@@ -12,7 +12,8 @@
                     <small>
                         ({{$project->subscription->created_at}})
                     </small>
-                </small><br>
+                </small>
+                <br>
                 <small class="text-muted">
                     {{_i('Selected plan')}}
                     : {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
@@ -30,3 +31,9 @@
 
 @endsection
 
+
+@section('before-scripts')
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+@endsection

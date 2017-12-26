@@ -8,7 +8,7 @@
 </a>
 <ul class="dropdown-menu dropdown-messages">
     @each('partials.navbar-elements.alert-row',
-        $notifications,
+        $notifications->take(5),
          'notification',
          'partials.navbar-elements.alert-row-empty'
     )

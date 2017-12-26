@@ -64,3 +64,34 @@
     margin: 0;
   }
 }
+
+.message-switcher{
+  cursor: pointer;
+}
+
+.role-placeholder {
+  border-radius: 50%;
+  padding: 0.4vw;
+  color: white;
+  text-align: center;
+  font: 2vw Arial, sans-serif;
+  width: 3vw;
+  height: 3vw;
+}
+
+.sk-spinner-big {
+  width: 30px !important;
+  height: 100px !important;
+}
+
+.spinner-big {
+  padding-top: 130px;
+}
+
+.chat-message.right > div > div > .message {
+  margin-left: 100px;
+}
+
+.chat-message.left > div > div > .message {
+  margin-right: 100px;
+}

@@ -38,7 +38,6 @@ class ChatMessage implements ShouldBroadcastNow
      */
     public function broadcastWith()
     {
-
         $data = [
             'message' => View::make('entity.chat.partials.message', ['chat_message' => $this->message])->render(),
             'sender_id' => Auth::user()->id,

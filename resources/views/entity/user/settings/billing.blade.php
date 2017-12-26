@@ -42,3 +42,4 @@
 
 {{Form::submit(_i('Save'), ['class' => 'btn btn-primary'])}}
 {{Form::close()}}
+

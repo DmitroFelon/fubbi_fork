@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Musonza\Chat\Facades\ChatFacade;
 
 /**
  * Class ProjectObserver
@@ -80,6 +81,26 @@ class ProjectObserver
                 }
             );
         }
+
+        /*
+         * Create chat conversation
+         * */
+
+        $participants = User::withRole('admin')->get(['id'])->pluck('id');
+
+        $participants->push($project->client->id);
+
+        $conversation = ChatFacade::createConversation($participants->toArray());
+
+        $conversation->update([
+            'data' => [
+                'project_id' => $project->id,
+                'title' => $project->name
+            ]
+        ]);
+
+        $project->setMeta('conversation_id', $conversation->id);
+        $project->save();
     }
 
     /**
@@ -106,5 +127,29 @@ class ProjectObserver
                 }
             );
         }
+    }
+
+    public function attachWorker(Project $project)
+    {
+
+        if (!isset($project->eventData['attachWorker'])) {
+            return;
+        }
+
+        $worker       = $project->eventData['attachWorker'];
+        $conversation = ChatFacade::conversation($project->conversation_id);
+        ChatFacade::addParticipants($conversation, $worker);
+    }
+
+    public function detachWorker(Project $project)
+    {
+        if (!isset($project->eventData['detachWorker'])) {
+            return;
+        }
+
+        $worker       = $project->eventData['detachWorker'];
+        $conversation = ChatFacade::conversation($project->conversation_id);
+        ChatFacade::removeParticipants($conversation, $worker);
+
     }
 }

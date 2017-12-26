@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\ChatMessage;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Musonza\Chat\Chat;
+use Musonza\Chat\Facades\ChatFacade;
+use Musonza\Chat\Messages\Message;
 
 
 class MessageController extends Controller
@@ -17,20 +20,15 @@ class MessageController extends Controller
      */
     public function index(Chat $chat, Request $request)
     {
-
-        $user = Auth::user();
-
+        $user          = Auth::user();
         $conversations = $user->conversations;
-
         if ($conversations->count() == 1 and !$request->has('c')) {
             return redirect()->action('MessageController@index', ['c' => $conversations->first()->id]);
         }
 
-        $data = [
-            'conversations' => $conversations
-        ];
-
-        return view('entity.chat.index', $data);
+        return view('entity.chat.index', [
+            'conversations' => $conversations, 'has_conversations' => $conversations->isNotEmpty()
+        ]);
     }
 
     /**
@@ -93,5 +91,14 @@ class MessageController extends Controller
         ];
 
         return view('entity.chat.show', $data);
+    }
+
+    public function read($id)
+    {
+        $user         = Auth::user();
+        $conversation = ChatFacade::conversation($id);
+        $conversation->readAll($user);
+
+        return ['read'];
     }
 }

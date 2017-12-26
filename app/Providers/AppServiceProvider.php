@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Invite;
 use App\Models\Project;
 use App\Observers\InviteObserver;
+use App\Observers\MessageObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
@@ -14,6 +15,7 @@ use App\User;
 use Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Musonza\Chat\Messages\Message;
 
 /**
  * Class AppServiceProvider
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Project::observe(ProjectObserver::class);
         Invite::observe(InviteObserver::class);
         User::observe(UserObserver::class);
+        Message::observe(MessageObserver::class);
     }
 
     private function formComponents()
