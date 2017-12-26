@@ -1,3 +1,5 @@
+//require('./bootstrap');
+
 jQuery(document).ready(function ($) {
     /*
      * Hide notifications

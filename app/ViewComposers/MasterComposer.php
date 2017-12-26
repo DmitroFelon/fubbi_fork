@@ -8,10 +8,13 @@
 
 namespace App\ViewComposers;
 
+use App\Models\Project;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Musonza\Chat\Chat;
 use Musonza\Chat\Messages\Message;
 use Musonza\Chat\Notifications\MessageSent;
 
@@ -46,25 +49,17 @@ class MasterComposer
 
     public function compose(View $view)
     {
+        if ($this->request->ajax()) {
+            return;
+        }
 
         if (!Auth::check()) {
             return;
         }
 
-
-        //mark user's message as read (Musonza\Chat bug)
-        $messages = $this->user->unreadNotifications()->where('type', '=', MessageSent::class)->get();
-        $messages->each(function (DatabaseNotification $notification) {
-            $message = Message::find($notification->data['message_id']);
-            if ($message->user_id == Auth::user()->id) {
-                $message->markRead($this->user);
-            }
-        });
-
         $data = [
-            'notifications' => $this->user->unreadNotifications()->where('type', '!=', MessageSent::class)->get(),
-            'old_notifications' => $this->user->readNotifications()->where('type', '!=', MessageSent::class)->get(),
-            'messages' => $this->user->unreadNotifications()->where('type', '=', MessageSent::class)->get(),
+            'notifications' => $this->user->getNotifications(),
+            'message_notifications' => $this->user->getMessageNotifications(),
         ];
 
         return $view->with($data);

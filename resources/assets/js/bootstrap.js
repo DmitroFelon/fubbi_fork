@@ -1,8 +1,21 @@
 try {
     window._ = require('lodash');
+
 } catch (e) {
-    
+
 }
+
+try {
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-ui');
+    require('jquery-sortable');
+    require('bootstrap-sass');
+
+
+} catch (e) {
+
+}
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -25,5 +38,20 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+
+}
+
+try {
+    window.Pusher = require('pusher-js');
+    window.Echo = require('laravel-echo');
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '4f539992504be074c712',
+        cluster: 'eu',
+        encrypted: true,
+        namespace: 'App.Events'
+    });
+} catch (e) {
+
 }

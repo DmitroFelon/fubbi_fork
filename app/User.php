@@ -14,10 +14,15 @@ use App\Models\Team;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Billable;
 use Laravel\Scout\Searchable;
+use Musonza\Chat\Chat;
 use Musonza\Chat\Conversations\Conversation;
+use Musonza\Chat\Facades\ChatFacade;
+use Musonza\Chat\Messages\Message;
+use Musonza\Chat\Notifications\MessageSent;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -319,5 +324,49 @@ class User extends Authenticatable implements HasMedia
                 break;
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNotifications()
+    {
+        return $this->unreadNotifications()->where('type', '!=', MessageSent::class)->get();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewMessagesCount()
+    {
+        return $this->unreadNotifications()->where('type', '=', MessageSent::class)->count();
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function getMessageNotifications()
+    {
+        $messages = $this->unreadNotifications()->where('type', '=', MessageSent::class)->get();
+
+        $messages->transform(function ($notification, $key) use ($messages) {
+            $message = Message::find($notification->data['message_id']);
+            
+            if (!$message) {
+                return;
+            }
+
+            $notification->message = \Musonza\Chat\Messages\Message::find($message->id);
+
+            $notification->conversation = ChatFacade::conversation($message->conversation_id);
+
+            return $notification;
+        });
+
+        $messages = $messages->filter();
+
+        return $messages;
+    }
+
 
 }

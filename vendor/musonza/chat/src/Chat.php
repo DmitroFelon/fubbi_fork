@@ -228,7 +228,7 @@ class Chat
     /**
      * Sends the message.
      *
-     * @return void
+     * @return Message
      */
     public function send()
     {

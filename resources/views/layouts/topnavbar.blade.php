@@ -7,8 +7,12 @@
         </div>
         @auth
         <ul class="nav navbar-top-links navbar-right">
-            @include('partials.navbar-elements.navbar-messages')
-            @include('partials.navbar-elements.navbar-alerts')
+            <li id="message-notifications-content" class="dropdown">
+                @include('partials.navbar-elements.navbar-messages')
+            </li>
+            <li id="alert-notifications-content" class="dropdown">
+                @include('partials.navbar-elements.navbar-alerts')
+            </li>
             <li>
                 <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="#">
                     <i class="fa fa-sign-out"></i> Logout

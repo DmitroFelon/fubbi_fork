@@ -1,4 +1,5 @@
-<div class="chat-message left">
+<div data-id="{{$chat_message->id}}"
+     class="chat-message {{($chat_message->sender->id == \Illuminate\Support\Facades\Auth::user()->id)?'right':'left'}}">
     <div class="row">
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <div title="{{$chat_message->sender->role}}"

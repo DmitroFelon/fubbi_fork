@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Musonza\Chat\Chat;
+
 
 class MessageController extends Controller
 {
@@ -14,11 +15,19 @@ class MessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Chat $chat)
+    public function index(Chat $chat, Request $request)
     {
 
+        $user = Auth::user();
+
+        $conversations = $user->conversations;
+
+        if ($conversations->count() == 1 and !$request->has('c')) {
+            return redirect()->action('MessageController@index', ['c' => $conversations->first()->id]);
+        }
+
         $data = [
-            'conversations' => Auth::user()->conversations
+            'conversations' => $conversations
         ];
 
         return view('entity.chat.index', $data);
@@ -45,8 +54,16 @@ class MessageController extends Controller
         $user            = Auth::user();
         $conversation_id = $request->input('conversation');
         $conversation    = $chat->conversation($conversation_id);
-        $chat->message($request->input('message'))->from($user->id)->to($conversation)->send();
-        return redirect()->back();
+
+        if (!$conversation->users()->where('users.id', $user->id)->first()) {
+            return ['error'];
+        }
+
+        $message = $chat->message($request->input('message'))->from($user->id)->to($conversation)->send();
+
+        broadcast(new ChatMessage($message));
+
+        return ['sent'];
     }
 
     /**
@@ -61,9 +78,13 @@ class MessageController extends Controller
 
         $conversation = $chat->conversation($id);
 
-        //$conversation->readAll($user);
+        if (!$conversation->users()->where('users.id', $user->id)->first()) {
+            return ['error'];
+        }
 
-        $messages = $chat->conversations($conversation)->for($user)->getMessages(100, 0);
+        $conversation->readAll($user);
+
+        $messages = $conversation->messages()->orderBy('id', 'desc')->take(50)->get()->reverse();
 
         $data = [
             'chat_messages' => $messages,
@@ -72,39 +93,5 @@ class MessageController extends Controller
         ];
 
         return view('entity.chat.show', $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

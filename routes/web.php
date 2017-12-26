@@ -20,7 +20,27 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
+Broadcast::routes();
+
+Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
+    return true;
+});
+
+Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
+
+    $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);
+    if (!$conversation) {
+        return false;
+    }
+    return ($conversation->users()->where('id', $user->id))
+        ? ['id' => $user->id, 'name' => $user->name] : false;
+});
+
+
 Route::get('test', function () {
+
+    $user = \App\User::find(2);
+    $user->notify(new \App\Notifications\Test);
 
 });
 
@@ -57,6 +77,7 @@ Route::middleware(['auth'])->group(
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
         Route::resource('articles', 'ArticlesController');
+        Route::get('messages/{chat_id}/{last_message_id}', 'MessageController@get_new');
         Route::resource('messages', 'MessageController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');

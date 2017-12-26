@@ -73,5 +73,14 @@
 @section('scripts')
 @show
 
+<script>
+    Echo.private('App.User.' + user.id)
+            .notification(function (notification) {
+                if(notification.type == 'Musonza\\Chat\\Notifications\\MessageSent'){
+                    $('#message-notifications-content').html(notification.navbar_content);
+                }
+            });
+</script>
+
 </body>
 </html>

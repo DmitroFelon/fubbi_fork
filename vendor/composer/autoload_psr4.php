@@ -39,6 +39,7 @@ return array(
     'Spatie\\ImageOptimizer\\' => array($vendorDir . '/spatie/image-optimizer/src'),
     'Spatie\\EloquentSortable\\' => array($vendorDir . '/spatie/eloquent-sortable/src'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
+    'Pusher\\' => array($vendorDir . '/pusher/pusher-php-server/src'),
     'Psy\\' => array($vendorDir . '/psy/psysh/src/Psy'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),

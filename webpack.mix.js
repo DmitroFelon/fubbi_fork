@@ -1,6 +1,5 @@
 let mix = require('laravel-mix');
 
-
 mix.sass('resources/assets/sass/app.scss', 'public/css')
     .copy('resources/assets/vendor/bootstrap/fonts', 'public/fonts')
     .copy('resources/assets/vendor/font-awesome/fonts', 'public/fonts')
@@ -21,19 +20,16 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/sass/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
         ],
         'public/css/vendor.css')
-    .scripts(
+    .js(
         [
-            'resources/assets/js/bootstap.js',
-            'resources/assets/vendor/jquery/jquery-3.1.1.min.js',
-            'resources/assets/js/plugins/jquery-ui/jquery-ui.min.js',
-            'resources/assets/vendor/bootstrap/js/bootstrap.js',
+            'resources/assets/js/bootstrap.js',
             'resources/assets/vendor/metisMenu/jquery.metisMenu.js',
             'resources/assets/vendor/slimscroll/jquery.slimscroll.min.js',
             'resources/assets/vendor/pace/pace.min.js',
             'resources/assets/js/plugins/jasny/jasny-bootstrap.min.js',
             'resources/assets/js/plugins/steps/jquery.steps.min.js',
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
-            'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',
+           /* 'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',*/
             'resources/assets/js/plugins/sweetalert/sweetalert.min.js',
             'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
@@ -45,4 +41,4 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/app.js'
         ],
         'public/js/app.js')
-    .sourceMaps();
+    .sourceMaps().version();

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
+    'App\\Events\\Test' => $baseDir . '/app/Events/Test.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Exceptions\\Project\\ImpossibleProjectState' => $baseDir . '/app/Exceptions/Project/ImpossibleProjectState.php',
     'App\\Exceptions\\Project\\WrongTransition' => $baseDir . '/app/Exceptions/Project/WrongTransition.php',
@@ -10188,6 +10189,9 @@ return array(
     'Psy\\VersionUpdater\\GitHubChecker' => $vendorDir . '/psy/psysh/src/Psy/VersionUpdater/GitHubChecker.php',
     'Psy\\VersionUpdater\\IntervalChecker' => $vendorDir . '/psy/psysh/src/Psy/VersionUpdater/IntervalChecker.php',
     'Psy\\VersionUpdater\\NoopChecker' => $vendorDir . '/psy/psysh/src/Psy/VersionUpdater/NoopChecker.php',
+    'Pusher\\Pusher' => $vendorDir . '/pusher/pusher-php-server/src/Pusher.php',
+    'Pusher\\PusherException' => $vendorDir . '/pusher/pusher-php-server/src/PusherException.php',
+    'Pusher\\PusherInstance' => $vendorDir . '/pusher/pusher-php-server/src/PusherInstance.php',
     'Ramsey\\Uuid\\BinaryUtils' => $vendorDir . '/ramsey/uuid/src/BinaryUtils.php',
     'Ramsey\\Uuid\\Builder\\DefaultUuidBuilder' => $vendorDir . '/ramsey/uuid/src/Builder/DefaultUuidBuilder.php',
     'Ramsey\\Uuid\\Builder\\DegradedUuidBuilder' => $vendorDir . '/ramsey/uuid/src/Builder/DegradedUuidBuilder.php',

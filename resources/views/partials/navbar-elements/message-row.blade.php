@@ -1,13 +1,13 @@
 <li>
-    <a href="{{action('MessageController@index', ['c' => $message->data['conversation_id']])}}">
+    <a href="{{action('MessageController@index', ['c' => $message_notification->conversation->id ])}}">
         <div>
             <i class="fa fa-envelope fa-fw"></i>
-            <strong>{{\Musonza\Chat\Messages\Message::find($message->data['message_id'])->sender->name}}:</strong>
+            <strong>{{$message_notification->message->sender->name}}:</strong>
             <small>
-                {{str_limit(\Musonza\Chat\Messages\Message::find($message->data['message_id'])->body, 7, ' ...') }}
+                {{str_limit($message_notification->message->body, 7, ' ...') }}
             </small>
             <span class="pull-right text-muted small">
-                {{ Musonza\Chat\Facades\ChatFacade::conversation($message->data['conversation_id'])->data['title'] }}
+                {{ $message_notification->conversation->data['title'] }}
             </span>
         </div>
     </a>

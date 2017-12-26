@@ -24,6 +24,7 @@
         "laravelcollective/html": "^5.4.0",
         "laravelista/ekko": "^1.4",
         "musonza/chat": "^2.0",
+        "pusher/pusher-php-server": "~3.0",
         "spatie/laravel-medialibrary": "^6.0.0",
         "spatie/laravel-tags": "^2.0",
         "venturecraft/revisionable": "^1.28",
