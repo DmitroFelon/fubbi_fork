@@ -158,9 +158,9 @@ jQuery(document).ready(function ($) {
     });
 
     /*
-    * Add manual keyword
-    * todo save manual keyword alongside with keywords from keywordtool
-    * */
+     * Add manual keyword
+     * todo save manual keyword alongside with keywords from keywordtool
+     * */
     $(document).on("click", "button.keyword-input-submit", function (e) {
         e.preventDefault();
         var theme = $(this).attr('data-theme');
@@ -305,6 +305,48 @@ jQuery(document).ready(function ($) {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',
     });
+
+
+    /*
+     * Notifications
+     * */
+    Echo.private('App.User.' + user.id)
+        .notification(function (notification) {
+            if (notification.type == 'App\\Notifications\\Chat\\Message') {
+                if (conversation_id != notification.conversation_id) {
+                    $('#topnav-messages-list').prepend(notification.navbar_message);
+                    var messages_count_wrapper = $("#message-notifications-count");
+                    var count = parseInt(messages_count_wrapper.html());
+                    if (!count || isNaN(count)) {
+                        count = 0;
+                    }
+
+                    count = count + 1;
+
+                    messages_count_wrapper.html(count.toString())
+                } else {
+                    $.get("{{url('messages/read/')}}/" + notification.conversation_id);
+
+                }
+            } else {
+                if (notification.hasOwnProperty('navbar_message')) {
+
+                    $('#topnav-alerts-list').prepend(notification.navbar_message);
+                    var alerts_count_wrapper = $("#alerts-notifications-count");
+                    var count = parseInt(alerts_count_wrapper.html());
+
+                    if (!count || isNaN(count)) {
+                        count = 0;
+                    }
+
+                    count = count + 1;
+
+                    alerts_count_wrapper.html(count.toString())
+                    console.log(parseInt(alerts_count_wrapper.html()))
+                }
+            }
+        });
+
 });
 
 
