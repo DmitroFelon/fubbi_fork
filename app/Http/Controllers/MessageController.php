@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Musonza\Chat\Chat;
 use Musonza\Chat\Facades\ChatFacade;
 use Musonza\Chat\Messages\Message;
+use Musonza\Chat\Notifications\MessageSent;
 
 
 class MessageController extends Controller
@@ -93,6 +94,7 @@ class MessageController extends Controller
         return view('entity.chat.show', $data);
     }
 
+
     public function read($id)
     {
         $user         = Auth::user();
@@ -100,5 +102,12 @@ class MessageController extends Controller
         $conversation->readAll($user);
 
         return ['read'];
+    }
+
+    public function clear()
+    {
+        $user = Auth::user();
+        Auth::user()->unreadNotifications()->where('type', '=', MessageSent::class)->get()->markAsRead();
+        return redirect()->back();
     }
 }

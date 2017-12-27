@@ -5,15 +5,24 @@ namespace App\Notifications\Team;
 
 use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use \App\Models\Invite as Invitation;
+use Illuminate\Support\Facades\View;
 
+/**
+ * Class Invite
+ * @package App\Notifications\Team
+ */
 class Invite extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * @var Invitation
+     */
     protected $invitation;
 
     /**
@@ -23,31 +32,31 @@ class Invite extends Notification implements ShouldQueue
      */
     public function __construct(Invitation $invitation)
     {
-       $this->invitation = $invitation;
+        $this->invitation = $invitation;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)->line(
             _i(
-                'You have beed invited to team "%s". Please apply or decline it',
+                'You have beed invited to the team "%s". Please apply or decline it',
                 [$this->invitation->invitable->getInvitableName()]
             )
         )->action('Review Invitation', $this->invitation->invitable->getInvitableUrl())->line(
@@ -58,7 +67,7 @@ class Invite extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)
@@ -66,7 +75,7 @@ class Invite extends Notification implements ShouldQueue
 
         $notification = NotificationPayload::make(
             _i(
-                'You have beed invited to %s',
+                'You have beed invited to the team: "%s"',
                 [$this->invitation->invitable->getInvitableName()]
             ),
             $this->invitation->invitable->getInvitableUrl(),
@@ -75,6 +84,33 @@ class Invite extends Notification implements ShouldQueue
         );
 
         return $notification->toArray();
+    }
+
+    /**
+     * @param $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+
+        $data = NotificationPayload::make(
+            _i(
+                'You have beed invited to the team: "%s"',
+                [$this->invitation->invitable->getInvitableName()]
+            ),
+            $this->invitation->invitable->getInvitableUrl(),
+            get_class($this->invitation->invitable),
+            $this->invitation->invitable->getInvitableId()
+        );
+
+        $notification = new \stdClass();
+        $notification->created_at = now();
+        $notification->data = $data->toArray();
+        $notification->id = $this->id;
+
+        $navbar_message = View::make('partials.navbar-elements.alert-row', ['notification' => $notification]);
+
+        return new BroadcastMessage(['navbar_message' => $navbar_message->render()]);
     }
 
 }

@@ -82,13 +82,25 @@
                         $('#topnav-messages-list').prepend(notification.navbar_message);
                         var messages_count_wrapper = $("#message-notifications-count");
                         var count = parseInt(messages_count_wrapper.html());
-                        if (!count) {
+                        if (!count || isNaN(count)) {
                             count = 0;
                         }
                         messages_count_wrapper.html(count + 1)
                     } else {
                         $.get("{{url('messages/read/')}}/" + notification.conversation_id);
 
+                    }
+                } else {
+                    if (notification.hasOwnProperty('navbar_message')) {
+                        $('#topnav-alerts-list').prepend(notification.navbar_message);
+                        var alerts_count_wrapper = $("#alerts-notifications-count");
+                        var count = parseInt(alerts_count_wrapper.html());
+
+                        if (!count || isNaN(count)) {
+                            count = 0;
+                        }
+                        alerts_count_wrapper.html(count + 1)
+                        console.log(parseInt(alerts_count_wrapper.html()))
                     }
                 }
             });

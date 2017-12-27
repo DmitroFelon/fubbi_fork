@@ -12,21 +12,21 @@ use App\Models\Invite;
 
 class InviteObserver
 {
-	public function created(Invite $invite)
-	{
+    public function created(Invite $invite)
+    {
 
-		$notification = $invite->invitable->getInvitableNotification();
+        $notification = $invite->invitable->getInvitableNotification();
 
-		$invite->user->notify(
-			new $notification($invite)
-		);
-	}
+        $invite->user->notify(
+            new $notification($invite)
+        );
+    }
 
-	public function accepted(Invite $invite)
-	{
-	}
+    public function accepted(Invite $invite)
+    {
+    }
 
-	public function rejected(Invite $invite)
-	{
-	}
+    public function rejected(Invite $invite)
+    {
+    }
 }

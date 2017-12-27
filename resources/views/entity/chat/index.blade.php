@@ -30,7 +30,6 @@
             <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                 <div class="ibox">
                     <div style="height: 600px" id="messages-container" class="ibox-content">
-
                         @if($has_conversations)
                             <div class="spinner-big">
                                 <div class="sk-spinner sk-spinner-circle sk-spinner-big">

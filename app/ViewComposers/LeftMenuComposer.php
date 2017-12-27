@@ -110,6 +110,11 @@ class LeftMenuComposer
 				'icon' => 'fa fa-envelope',
 			],
 			[
+				'name' => 'Charges',
+				'url'  => '/charges',
+				'icon' => 'fa fa-dollar',
+			],
+			[
 				'name' => 'Settings',
 				'url'  => '/settings',
 				'icon' => 'fa fa-gear',

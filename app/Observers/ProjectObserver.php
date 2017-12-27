@@ -55,7 +55,7 @@ class ProjectObserver
             'admin' => \App\Notifications\Project\Created::class,
         ];
 
-        //invite managers about new subscription
+        //invite managers to the new project while filling process
         $should_be_invited = [
             'account_manager',
         ];

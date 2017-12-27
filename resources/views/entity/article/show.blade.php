@@ -32,7 +32,6 @@
                 </div>
 
                 <div class="row">
-
                     @for($i = 0; $i < 5; $i ++)
                         @isset($article->getMeta('socialposts')[$i])
                         <label for="socialpost-{{$i}}">{{_i('Social post')}} {{$i}}</label>

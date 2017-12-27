@@ -7,6 +7,11 @@
                 {{_i('Teams board')}}
             </h2>
         </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <a href="{{action('TeamController@create')}}" class="m-t-md btn btn-primary">
+                {{_i('Create a new team')}}
+            </a>
+        </div>
     </div>
 @endsection
 

@@ -8,10 +8,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
-class Test extends Notification implements ShouldBroadcast
+class Test extends Notification implements ShouldBroadcast, ShouldQueue
 {
-    
+    use Queueable;
+
     /**
      * Create a new notification instance.
      *
@@ -19,7 +21,7 @@ class Test extends Notification implements ShouldBroadcast
      */
     public function __construct()
     {
-        $sdf = ' asd';
+        Log::info('test schedule');
     }
 
     /**
@@ -41,4 +43,5 @@ class Test extends Notification implements ShouldBroadcast
             'amount' => '50',
         ]);
     }
+
 }

@@ -262,6 +262,15 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * @param $project_id
+     * @return mixed
+     */
+    public function hasInvitetoTeam($team_id)
+    {
+        return $this->invites()->where('invitable_id', $team_id)->teams()->new()->get()->isNotEmpty();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function invites()
@@ -276,6 +285,15 @@ class User extends Authenticatable implements HasMedia
     public function getInviteToProject($project_id)
     {
         return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
+    }
+
+    /**
+     * @param $team_id
+     * @return mixed
+     */
+    public function getInviteToTeam($team_id)
+    {
+        return $this->invites()->teams()->where('invitable_id', $team_id)->new()->get()->first();
     }
 
     /**

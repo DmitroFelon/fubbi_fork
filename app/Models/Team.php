@@ -45,22 +45,36 @@ class Team extends Model implements Invitable
     use Ratingable;
     use hasInvite;
     use Notifiable;
-    
-	/**
+
+    protected $fillable = [
+        'name',
+        'description',
+        'owner_id'
+    ];
+
+    protected $with = [
+        'users',
+        'owner',
+        'projects'
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users(){
-        return $this->belongsToMany(User::class,  'team_user', 'team_id', 'user_id');
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id');
     }
 
-	/**
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function owner(){
+    public function owner()
+    {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-	/**
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function projects()
@@ -68,7 +82,7 @@ class Team extends Model implements Invitable
         return $this->belongsToMany(Project::class);
     }
 
-	/**
+    /**
      * @return string
      */
     public function getInvitableUrl():string
@@ -76,7 +90,7 @@ class Team extends Model implements Invitable
         return url()->action('TeamController@show', $this);
     }
 
-	/**
+    /**
      * @return mixed
      */
     public function getInvitableNotification()
@@ -84,7 +98,7 @@ class Team extends Model implements Invitable
         return Invite::class;
     }
 
-	/**
+    /**
      * @return mixed
      */
     public function routeNotificationForMail()
@@ -92,13 +106,13 @@ class Team extends Model implements Invitable
         return $this->owner->email;
     }
 
-	/**
+    /**
      * @return mixed
      */
     public function routeNotificationForPhone()
     {
         return $this->owner->phone;
     }
-    
-    
+
+
 }

@@ -36,20 +36,9 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
 });
 
 Route::get('test', function () {
-    
-    $collection = collect([
-        ['id' => 1, 'name' => 'test1' ],
-        ['id' => 2, 'name' => 'test2' ],
-        ['id' => 3, 'name' => 'test3' ],
-        ['id' => 2, 'name' => 'test4' ],
-    ]);
+    $user = \App\User::find(2)->stripe_id;
 
-    $f = $collection->first(function ($item){
-        return $item['id'] == 2;
-    });
-
-    dd($f);
-
+    return redirect()->action('ChargesController@index', [$user]);
 });
 
 Route::middleware(['auth'])->group(
@@ -81,18 +70,28 @@ Route::middleware(['auth'])->group(
                 Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
             }
         );
+
+        Route::get('teams/accept/{team}', 'TeamController@accept');
+        Route::get('teams/decline/{team}', 'TeamController@decline');
         Route::resource('teams', 'TeamController');
         Route::resource('users', 'UserController');
         Route::resource('plans', 'PlanController');
         Route::resource('articles', 'ArticlesController');
+
         Route::get('messages/read/{id}', 'MessageController@read');
+        Route::get('messages/clear', 'MessageController@clear');
         Route::resource('messages', 'MessageController');
         Route::post('subscribe', 'SubscriptionController@subscribe');
         Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+
+        Route::get('charges', 'ChargesController@index');
+
         Route::post('settings/billing', 'SettingsController@billing');
         Route::post('settings', 'SettingsController@save');
         Route::get('settings', 'SettingsController@index');
+
         Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+
     }
 );
 

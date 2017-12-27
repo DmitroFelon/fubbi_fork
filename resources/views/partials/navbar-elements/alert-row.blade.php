@@ -17,15 +17,6 @@
         </div>
     </li>
     <li class="divider"></li>
-@else
 
-    <li>
-        <div class="dropdown-messages-box">
-            <div>
-                {{json_encode($notification)}}
-            </div>
-        </div>
-    </li>
-    <li class="divider"></li>
 
 @endif

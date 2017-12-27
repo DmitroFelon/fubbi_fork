@@ -1,12 +1,12 @@
 <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
     <i class="fa fa-bell"></i>
     @if($notifications->count())
-        <span class="label label-warning">
+        <span id="alerts-notifications-count" class="label label-warning">
                 {{$notifications->count()}}
-            </span>
+        </span>
     @endif
 </a>
-<ul class="dropdown-menu dropdown-messages">
+<ul id="topnav-alerts-list" class="dropdown-menu dropdown-messages">
     @each('partials.navbar-elements.alert-row',
         $notifications->take(5),
          'notification',
