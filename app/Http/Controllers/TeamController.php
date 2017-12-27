@@ -138,6 +138,10 @@ class TeamController extends Controller
                 return null;
             }
 
+            if ($user->hasInvitetoTeam($team->id)) {
+                return null;
+            }
+
             if (in_array($user->id, $team->users->pluck('id')->toArray())) {
                 return null;
             }
@@ -212,7 +216,7 @@ class TeamController extends Controller
         $user = Auth::user();
 
         $invite = $user->getInviteToTeam($team->id);
-        
+
         $invite->decline();
 
         return redirect()->back()->with('info', _i('Invitation has beed declined'));
