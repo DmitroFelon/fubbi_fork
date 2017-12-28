@@ -7,19 +7,42 @@
                 <h5>
                     {{_i('Upload article for project "%s"', [$project->name])}}
                 </h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                </div>
+                 <span class="pull-right">
+                     @foreach($article->tags as $tag)
+                         <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
+                     @endforeach
+                </span>
             </div>
             <div class="ibox-content">
                 <div class="ibox-content">
-                    {{Form::model($article, ['id' => 'article-form', 'enctype'=>"multipart/form-data",  'role'=>'form', 'multipart', 'route'=>['project.articles.store', $project->id] ])}}
-                    {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
-                    {!! Form::bsText('body', null, _i('Article Body'), _i('Keep empty if You will upload file to Google Docs'), ['id' => 'article-textarea'], 'textarea') !!}
-                    {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs'), ['multiple'], 'file') !!}
-                    {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
+                    <div class="row">
+                        @if($article->google_id)
+                            @include('entity.article.partials.google-preview')
+                        @endif
+                    </div>
+                    <div class="row">
+                        @if($article->body)
+                            @include('entity.article.partials.body-preview')
+                        @endif
+                    </div>
+                    <div class="row">
+                        {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
+
+                        <div class="row m-t-md">
+                            <h3 class="text-center">
+                                {{_i('Social posts')}}
+                            </h3>
+                        </div>
+
+                        @for($i = 1; $i <= 5; $i ++)
+                            {!! Form::bsText('socialposts[]', (isset($article->getMeta('socialposts')[$i-1]))?$article->getMeta('socialposts')[$i-1]:'', _i("Social Post text %d", [$i]), null, ['rows' => '3'],'textarea') !!}
+                        @endfor
+
+                        {{ Form::submit(_i('Save'), ['class' => 'btn btn-primary']) }}
+
+                        {{ Form::close()  }}
+                    </div>
+
                 </div>
             </div>
         </div>

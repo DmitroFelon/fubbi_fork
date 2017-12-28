@@ -39,16 +39,34 @@
                     @endif
                 </div>
 
+
+
                 <div class="row">
-                    @for($i = 0; $i < 5; $i ++)
-                        @isset($article->getMeta('socialposts')[$i])
-                        <label for="socialpost-{{$i}}">{{_i('Social post')}} {{$i}}</label>
-                        <div class="form-control" id="socialpost-{{$i}}">
-                            {{$article->getMeta('socialposts')[$i]}}
+
+                    <div class="row m-t-md">
+                        <h3 class="text-center">
+                            {{_i('Social posts')}}
+                        </h3>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="row m-t-lg">
+                            @for($i = 0; $i < 5; $i ++)
+                                @isset($article->getMeta('socialposts')[$i])
+                                <blockquote>
+                                    <p>
+                                        {{$article->getMeta('socialposts')[$i]}}
+                                    </p>
+                                </blockquote>
+                                @endisset
+                            @endfor
                         </div>
-                        @endisset
-                    @endfor
+                    </div>
+
+
                 </div>
+
+
 
             </div>
         </div>

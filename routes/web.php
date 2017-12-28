@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(
                 Route::resource('project.outlines', 'OutlineController');
                 Route::get('project/{project}/articles/{article}/accept', 'ArticlesController@accept');
                 Route::get('project/{project}/articles/{article}/decline', 'ArticlesController@decline');
+                Route::post('project/{project}/articles/{article}/save_social_posts', 'ArticlesController@save_social_posts');
                 Route::resource('project.articles', 'ArticlesController');
                 Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
             }

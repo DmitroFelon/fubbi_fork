@@ -23,7 +23,7 @@
             {!!Form::file($name, array_merge(['class' => $errors->has($name)?'has-error form-control ':'form-control ' ], $attributes))!!}
             @break
         @case('textarea')
-            {!!Form::textarea($name, null, array_merge(['class' => $errors->has($name)?'has-error form-control ':'form-control ' ], $attributes))!!}
+            {!!Form::textarea($name, $value, array_merge(['class' => $errors->has($name)?'has-error form-control ':'form-control ' ], $attributes))!!}
             @break
         @default
             {!!Form::text($name, $value, array_merge(['class' => $errors->has($name)?'has-error form-control ':'form-control ' ], $attributes))!!}

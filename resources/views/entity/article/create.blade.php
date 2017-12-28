@@ -19,7 +19,6 @@
                 {!! Form::bsText('body', null, _i('Article Body'), _i('Keep empty if You will upload file to Google Docs'), ['id' => 'article-textarea'], 'textarea') !!}
                 {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs'), ['multiple'], 'file') !!}
                 {!! Form::bsText('tags', null,_i("Type tags here"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
-
                 {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
             </div>
         </div>

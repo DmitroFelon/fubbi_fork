@@ -49,22 +49,22 @@ class ArticlesController extends Controller
      */
     public function store(Project $project, Article $article, Request $request)
     {
+
+        //save article
         $article->fill(
             $request->except(['_token', '_method'])
         );
-
         $article->user_id = Auth::user()->id;
-
-        $tags = collect(explode(',', $request->input('tags')));
-
         $article->save();
-
         $project->articles()->attach($article->id);
 
+        //attach tags
+        $tags = collect(explode(',', $request->input('tags')));
         $tags->each(function ($tag) use ($article) {
             $article->attachTagsHelper($tag);
         });
 
+        //upload file to google docs
         if ($request->hasFile('file')) {
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
             $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
@@ -72,7 +72,6 @@ class ArticlesController extends Controller
         }
 
         return redirect()->action('Project\ArticlesController@index', $project);
-
     }
 
     /**
@@ -125,8 +124,17 @@ class ArticlesController extends Controller
     public function destroy(Project $project, Article $article)
     {
         $article->delete();
-
         return redirect()->action('Project\ArticlesController@index', $project);
+    }
+
+    public function save_social_posts(Project $project, Article $article, Request $request)
+    {
+        $article->setMeta('socialposts', $request->input('socialposts'));
+
+        $article->save();
+
+        return redirect()->back()->with('success', _i('Article updated'));
+
     }
 
 
@@ -138,7 +146,6 @@ class ArticlesController extends Controller
     public function accept(Project $project, Article $article)
     {
         $project->acceptArticle($article->id);
-
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 
@@ -150,7 +157,6 @@ class ArticlesController extends Controller
     public function decline(Project $project, Article $article)
     {
         $project->declineArticle($article->id);
-
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 }
