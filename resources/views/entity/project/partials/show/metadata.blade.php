@@ -3,25 +3,6 @@
         @continue
     @endif
 
-    @if($meta_key == 'keywords_meta')
-        @continue
-    @endif
-
-    @if($meta_key == 'article_images_links' and is_array($meta_value) and empty($meta_value[0]))
-        @continue
-    @endif
-
-    @if($meta_key == 'avoid_keywords' and is_array($meta_value) and empty($meta_value[0]))
-        @continue
-    @endif
-
-    @if($meta_key == 'image_pages' and is_array($meta_value) and empty($meta_value[0]))
-        @continue
-    @endif
-
-    @if($meta_key == 'google_access' and is_array($meta_value) and empty($meta_value[0]))
-        @continue
-    @endif
 
     <div class="panel-group">
         <div class="panel panel-default">

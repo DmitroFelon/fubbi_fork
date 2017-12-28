@@ -49,17 +49,21 @@ class ArticlesController extends Controller
      */
     public function store(Project $project, Article $article, Request $request)
     {
-
         $article->fill(
             $request->except(['_token', '_method'])
         );
 
-
         $article->user_id = Auth::user()->id;
+
+        $tags = collect(explode(',', $request->input('tags')));
 
         $article->save();
 
         $project->articles()->attach($article->id);
+
+        $tags->each(function ($tag) use ($article) {
+            $article->attachTagsHelper($tag);
+        });
 
         if ($request->hasFile('file')) {
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
@@ -120,7 +124,9 @@ class ArticlesController extends Controller
      */
     public function destroy(Project $project, Article $article)
     {
-        //
+        $article->delete();
+
+        return redirect()->action('Project\ArticlesController@index', $project);
     }
 
 
@@ -144,7 +150,7 @@ class ArticlesController extends Controller
     public function decline(Project $project, Article $article)
     {
         $project->declineArticle($article->id);
-        
+
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 }

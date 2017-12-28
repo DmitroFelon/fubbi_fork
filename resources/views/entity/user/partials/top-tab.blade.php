@@ -1,6 +1,4 @@
-<li class="{{(request()->input('r') == $role->name or !request()->input('r') and $loop->first)
-                                    ?'active'
-                                    :''}}">
+<li class="{{($loop->first) ? 'active' : ''}}">
     <a class="no-paddings" data-toggle="tab"
        href="#tab-{{$role->name}}">
         <i class="fa fa-user"></i> {{$role->display_name}}

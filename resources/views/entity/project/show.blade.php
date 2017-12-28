@@ -60,11 +60,11 @@
                         {{_i('Edit')}}
                     </a>
                     <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
+                        <i class="fa fa-chevron-down"></i>
                     </a>
                 </div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content" style="display: none">
                 @include('entity.project.partials.show.metadata')
             </div>
         </div>
@@ -76,11 +76,11 @@
                 <h5>{{_i('Media files')}}</h5>
                 <div class="ibox-tools">
                     <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
+                        <i class="fa fa-chevron-down"></i>
                     </a>
                 </div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content " style="display: none">
                 @include('entity.project.partials.show.media')
             </div>
         </div>
@@ -96,13 +96,53 @@
                         {{_i('Edit')}}
                     </a>
                     <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
+                        <i class="fa fa-chevron-down"></i>
                     </a>
                 </div>
             </div>
-            <div class="ibox-content">
-                @include('entity.project.partials.show.keywords')
+            <div class="ibox-content " style="display: none">
+                @includeWhen($project->getMeta('keywords'), 'entity.project.partials.show.keywords')
             </div>
         </div>
     </div>
+
+    @role(['admin'])
+
+        @if($project->requireWorkers())
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{_i('Attach workers')}}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content " style="display: none">
+                        @include('entity.project.partials.show.invite-workers')
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if($project->workers->isEmpty() and $project->requireWorkers())
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>{{_i('Attach team')}}</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="display: none">
+                        @include('entity.project.partials.show.invite-team')
+                    </div>
+                </div>
+            </div>
+        @endif
+
+    @endrole
 @endsection

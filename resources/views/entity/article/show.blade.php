@@ -7,6 +7,11 @@
                 <h5>
                     {{$article->title}}
                 </h5>
+                <span class="pull-right">
+                     @foreach($article->tags as $tag)
+                        <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
+                    @endforeach
+                </span>
                 @role(['client'])
                 @if($article->pivot->accepted == null or $article->pivot->accepted == false)
                     <div class="ibox-tools">
@@ -19,6 +24,9 @@
                 @endrole
             </div>
             <div class="ibox-content">
+                <div class="row">
+
+                </div>
                 <div class="row">
                     @if($article->google_id)
                         @include('entity.article.partials.google-preview')

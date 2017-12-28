@@ -35,6 +35,19 @@ trait hasWorkers
         $this->fireModelEvent('attachWorker', false);
     }
 
+
+    /**
+     * @param $worker_ids
+     */
+    public function attachWorkers($worker_ids)
+    {
+        $this->workers()->attach($worker_ids);
+
+        $this->eventData['attachWorker'] = $worker_ids;
+
+        $this->fireModelEvent('attachWorkers', false);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -44,7 +57,7 @@ trait hasWorkers
     }
 
     /**
-     * @param $args
+     * @param $worker_id
      */
     public function detachWorker($worker_id)
     {
@@ -83,6 +96,10 @@ trait hasWorkers
     public function requireWorkers()
     {
 
+        if ($this->teams->isNotEmpty()) {
+            return [];
+        }
+
         $required_workers = [
             'writer' => _i('Writer'),
             'designer' => _i('Designer'),
@@ -94,7 +111,7 @@ trait hasWorkers
         $has_worker = [];
 
         $this->workers()->each(
-            function (User $user, $key) use (&$has_worker, $required_workers) {
+            function (User $user) use (&$has_worker, $required_workers) {
                 $has_worker[$user->role] = $required_workers[$user->role];
             }
         );

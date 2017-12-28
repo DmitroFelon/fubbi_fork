@@ -29,8 +29,6 @@
             </dd>
             <dt>{{_i('Billing Cycle')}}:</dt>
             <dd>1 {{_i('month')}}</dd>
-            <dt>{{_i('Messages')}}:</dt>
-            <dd>{{$project->commentCount()}}</dd>
         </dl>
     </div>
     <div class="col-lg-4" id="cluster_info">
@@ -45,16 +43,30 @@
                 {{$project->created_at}}
                 <small class="text-muted">({{$project->created_at->diffForHumans()}})</small>
             </dd>
-            <dt>{{_i('Participants')}}:</dt>
-            <dd class="project-people">
+            @if($project->workers->isNotEmpty())
+                <dt>{{_i('Participants')}}:</dt>
+
                 @foreach($project->workers as $worker)
-                    <div>
+                    <dd class="project-people">
                         <a target="_blank" href="{{url()->action('UserController@show', $worker)}}">
                             {{$worker->name}}
                         </a>
-                    </div>
+                    </dd>
                 @endforeach
-            </dd>
+
+            @endif
+            @if($project->teams->isNotEmpty())
+                <dt>{{_i('Team')}}:</dt>
+
+                @foreach($project->teams as $team)
+                    <dd class="project-people">
+                        <a target="_blank" href="{{url()->action('TeamController@show', $team)}}">
+                            {{$team->name}}
+                        </a>
+                    </dd>
+                @endforeach
+
+            @endif
         </dl>
     </div>
     <div class="col-lg-4">

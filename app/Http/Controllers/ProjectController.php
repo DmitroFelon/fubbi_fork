@@ -6,6 +6,8 @@ use App\Http\Requests\StoreProject;
 use App\Models\Article;
 use App\Models\Keyword;
 use App\Models\Project;
+use App\Models\Team;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -140,6 +142,8 @@ class ProjectController extends Controller
 
         $meta_to_skip = [
             'themes_order',
+            'keywords_meta',
+            'export'
         ];
 
         $project->metas->transform(
@@ -152,14 +156,60 @@ class ProjectController extends Controller
 
                 if (in_array($item->key, $meta_to_cast)) {
                     $item->value = explode(',', $item->value);
+
+                    //remove empty metas
+                    if (is_array($item->value) and empty($item->value)) {
+                        return null;
+                    }
+
+                    //remove empty metas
+                    if (isset($item->value[0]) and empty($item->value[0])) {
+                        return null;
+                    }
                 }
 
                 return (in_array($item->key, $meta_to_skip)) ? null : $item;
             }
         );
 
+        $project->metas = $project->metas->filter();
+
+        $users = [];
+        $teams = [];
+
+        $manager = $project->workers()->withRole('account_manager')->first(['id']);
+
+        $manager_id = ($manager) ? $manager->id : false;
+
+        if (Auth::user()->role == 'admin' or ($manager_id and $manager_id == Auth::user()->id)) {
+            //get users which are not attached to this project
+            $users = User::without(['notifications', 'invites'])
+                         ->whereNotIn('id', $project->workers->pluck('id')->toArray())
+                         ->get(['id', 'first_name', 'last_name', 'email']);
+
+            //prepare and filter users for the view
+
+            $invitable_users = $users->keyBy('id')->transform(function (User $user) use ($project) {
+                if (in_array($user->role, ['admin', 'client'])) {
+                    return null;
+                }
+
+                $role = $user->roles()->first();
+
+                $role_name = ($role) ? $role->display_name : '';
+
+                return $user->name . " - {$role_name}";
+            });
+
+            $users = $invitable_users->filter();
+
+            $teams = Team::all();
+        }
+
         $data = [
             'project' => $project,
+            'users' => $users,
+            'teams' => $teams
         ];
 
         return view('entity.project.show', $data);
@@ -225,6 +275,12 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@index');
     }
 
+    /**
+     * Accept project and start working
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function accept_review(Project $project)
     {
         $project->setState(\App\Models\Helpers\ProjectStates::ACCEPTED_BY_MANAGER);
@@ -232,6 +288,13 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@show', [$project]);
     }
 
+    /**
+     * Reject project
+     *
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function reject_review(Project $project)
     {
         $project->setState(\App\Models\Helpers\ProjectStates::REJECTED_BY_MANAGER);
@@ -239,6 +302,13 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@show', [$project]);
     }
 
+    /**
+     * Attach worker to the project
+     *
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function apply_to_project(Project $project)
     {
         $message_key = 'info';
@@ -257,6 +327,12 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
     }
 
+    /**
+     * Reject worker from the project
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function decline_project(Project $project)
     {
         $message_key = 'info';
@@ -269,6 +345,13 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
     }
 
+    /**
+     * Save not completed project
+     *
+     * @param Project $project
+     * @param Request $request
+     * @return array
+     */
     public function prefill(Project $project, Request $request)
     {
         $project->prefill($request);
@@ -276,8 +359,52 @@ class ProjectController extends Controller
         return ['ok'];
     }
 
+    /**
+     * Export all project's data to zip
+     *
+     * @param Project $project
+     * @return mixed
+     */
     public function export(Project $project)
     {
         return response()->download($project->export())->deleteFileAfterSend(true);
+    }
+
+
+    public function invite_users(Project $project, Request $request)
+    {
+        if ($request->has('users')) {
+            $project->attachWorkers(array_keys($request->input('users')));
+
+            $attached_users = User::whereIn('id', array_keys($request->input('users')))->get();
+
+            $attached_users_names = implode(', ', $attached_users->pluck('name')->toArray());
+
+            return redirect()->back()->with(
+                'info',
+                _i('Users: %s have been sucessfully attached to project: "%s"', [$attached_users_names, $project->name])
+            );
+        }
+
+
+        return redirect()->back();
+    }
+
+    public function invite_team(Project $project, Request $request)
+    {
+        if ($request->has('team')) {
+
+            $project->attachTeam($request->input('team'));
+
+            $attached_team = Team::find($request->input('team'));
+
+            return redirect()->back()->with(
+                'info',
+                _i('Team: %s have been sucessfully attached to project: "%s"', [$attached_team->name, $project->name])
+            );
+        }
+
+
+        return redirect()->back();
     }
 }

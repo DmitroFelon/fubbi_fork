@@ -60,6 +60,8 @@ Route::middleware(['auth'])->group(
         );
         Route::get('projects/{project}/prefill', 'ProjectController@prefill');
         Route::get('projects/{project}/export', 'ProjectController@export');
+        Route::post('projects/{project}/invite_users', 'ProjectController@invite_users');
+        Route::post('projects/{project}/invite_team', 'ProjectController@invite_team');
         Route::resource('projects', 'ProjectController');
         Route::namespace('Project')->group(
             function () {

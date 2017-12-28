@@ -1,3 +1,4 @@
+
 @foreach($project->getMeta('keywords') as $theme => $keywords)
     <div class="panel-group">
         <div class="panel panel-default">

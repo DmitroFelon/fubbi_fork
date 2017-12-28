@@ -18,6 +18,8 @@
                 {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
                 {!! Form::bsText('body', null, _i('Article Body'), _i('Keep empty if You will upload file to Google Docs'), ['id' => 'article-textarea'], 'textarea') !!}
                 {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs'), ['multiple'], 'file') !!}
+                {!! Form::bsText('tags', null,_i("Type tags here"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
+
                 {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
             </div>
         </div>
@@ -27,10 +29,15 @@
 
 @section('scripts')
 
-    <script>
-        jQuery(document).ready(function ($) {
+    <script type="text/javascript">
 
-        });
+        function stopRKey(evt) {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+        }
+
+        document.onkeypress = stopRKey;
 
     </script>
 

@@ -106,7 +106,9 @@ class Project extends Model implements HasMedia, Invitable
         'setState',
         'filled',
         'attachWorker',
-        'detachWorker'
+        'attachWorkers',
+        'detachWorker',
+        'attachTeam',
     ];
 
     /**

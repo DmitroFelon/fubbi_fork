@@ -41,6 +41,9 @@
 
     @include('partials.messages')
 
+        <div id="test"></div>
+
+
     <!-- Main view  -->
         <div class="row">
             <div class="col-lg-12">
@@ -73,5 +76,6 @@
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 
 @yield('scripts')
+
 </body>
 </html>

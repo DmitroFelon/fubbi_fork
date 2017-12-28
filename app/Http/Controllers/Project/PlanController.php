@@ -15,85 +15,78 @@ use Illuminate\Http\Request;
  */
 class PlanController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index(Project $project)
-	{
-		return $project->plan->id;
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Project $project)
+    {
+        return $project->plan->id;
+    }
 
-	public function show(Project $project, $id)
-	{
-		return redirect()->action('Project\PlanController@edit', [$project, $id]);
-	}
+    public function show(Project $project, $id)
+    {
+        return redirect()->action('Project\PlanController@edit', [$project, $id]);
+    }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param \App\Models\Project $project
-	 * @param  int $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit(Project $project, $id = null)
-	{
-		$data = $this->output($project);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\Project $project
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Project $project, $id = null)
+    {
+        $data = $this->output($project);
 
-		return view('entity.plan.project.edit', $data);
-	}
+        return view('entity.plan.project.edit', $data);
+    }
 
-	private function output(Project $project)
-	{
-		$plan           = $project->plan;
-		$plan->metadata = collect($plan->metadata);
+    private function output(Project $project)
+    {
+        $plan           = $project->plan;
+        $plan->metadata = collect($plan->metadata);
 
-		$plan->metadata->transform(
-			function ($item, $key) use ($project) {
-				$modif = $project->getModified($key);
-				return ($project->isModified($key)) ? $modif : $item;
-			}
-		);
+        $plan->metadata->transform(
+            function ($item, $key) use ($project) {
+                $modif = $project->getModified($key);
+                return ($project->isModified($key)) ? $modif : $item;
+            }
+        );
 
-		return compact(['plan', 'project']);
-	}
+        return compact(['plan', 'project']);
+    }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param \App\Models\Project $project
-	 * @param  int $id
-	 * @param  \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Project $project, $id, Request $request)
-	{
-		$plan = $project->plan;
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \App\Models\Project $project
+     * @param  int $id
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Project $project, $id, Request $request)
+    {
+        $plan = $project->plan;
 
-		$plan->metadata = collect($plan->metadata);
+        $plan->metadata = collect($plan->metadata);
 
-		$input_metadata = collect($request->except(['_method', '_token']));
+        $input_metadata = collect($request->except(['_method', '_token']));
 
-		$diff = $plan->metadata->diffAssoc($input_metadata);
+        $input_metadata->each(function ($value, $key) use ($project) {
+            $project->modify(
+                $key,
+                $value,
+                false
+            );
+        });
 
-		//check true false values 
-		$diff->each(
-			function ($item, $key) use ($project, $input_metadata) {
-				$project->modify(
-					$key,
-					$input_metadata->get($key),
-					false
-				);
-			}
-		);
+        unset($project->plan);
 
-		unset($project->plan);
+        $project->save();
 
-		$project->save();
-
-		$data = $this->output($project);
-
-		return view('entity.plan.project.edit', $data);
-	}
+        return redirect()->action('ProjectController@show', $project);
+    }
 }

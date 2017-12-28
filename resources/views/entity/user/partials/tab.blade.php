@@ -1,5 +1,5 @@
 <div id="tab-{{$role}}"
-     class="tab-pane {{(request()->input('r') == $role or !request()->input('r') and $loop->first)?'active':''}}">
+     class="tab-pane {{ ($loop->first )?'active':''}}">
     <div class="full-height-scroll">
         <div class="table-responsive">
             <table class="table table-striped table-hover">

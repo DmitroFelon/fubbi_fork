@@ -14,7 +14,7 @@ use App\Models\Team;
  * Class hasTeams
  *
  * attach App\Models\Team to App\Models\Project
- * 
+ *
  * @package App\Models\Traits\Project
  */
 trait hasTeams
@@ -26,4 +26,19 @@ trait hasTeams
     {
         return $this->belongsToMany(Team::class);
     }
+
+
+    /**
+     * @param $team_id
+     */
+    public function attachTeam($team_id)
+    {
+        $this->teams()->attach($team_id);
+
+        $this->eventData['attachTeam'] = $team_id;
+
+        $this->fireModelEvent('attachTeam', false);
+    }
+
+
 }
