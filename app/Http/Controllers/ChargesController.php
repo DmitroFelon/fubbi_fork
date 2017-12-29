@@ -55,9 +55,7 @@ class ChargesController extends Controller
                 ]);
 
         } catch (\Exception $e) {
-            //abort(404, $e->getMessage());
-
-            dd($e->getMessage());
+            abort(500);
         }
     }
 }

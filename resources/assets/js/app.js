@@ -251,7 +251,6 @@ jQuery(document).ready(function ($) {
             "hideMethod": "fadeOut"
         }
 
-
         toastr.error(title, message);
     }
 
@@ -283,7 +282,7 @@ jQuery(document).ready(function ($) {
     /*
      * Article textarea
      * */
-    $("#article-textarea").markdown(
+/*    $("#article-textarea").markdown(
         {
             autofocus: false,
             savable: false,
@@ -291,7 +290,7 @@ jQuery(document).ready(function ($) {
             fullscreen: {enable: false},
             hiddenButtons: ['Image', 'Url']
         }
-    );
+    );*/
 
     /*
      * Init footable table
@@ -303,7 +302,7 @@ jQuery(document).ready(function ($) {
      * */
     $('.i-checks').iCheck({
         checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',
+        radioClass: 'iradio_square-green'
     });
 
 
@@ -320,10 +319,33 @@ jQuery(document).ready(function ($) {
                     if (!count || isNaN(count)) {
                         count = 0;
                     }
-
-                    count = count + 1;
+                    count += 1;
 
                     messages_count_wrapper.html(count.toString())
+
+                    console.log(notification);
+                    
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "progressBar": true,
+                        "preventDuplicates": false,
+                        "positionClass": "toast-top-right",
+                        
+                        "showDuration": "400",
+                        "hideDuration": "1000",
+                        "timeOut": "7000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+
+                    var toastTitle = 'New message from: ' + notification.sender_name;
+
+                    toastr.info(notification.message_text.substring(0, 25) + '...', toastTitle );
+
                 } else {
                     $.get("{{url('messages/read/')}}/" + notification.conversation_id);
 
@@ -339,7 +361,7 @@ jQuery(document).ready(function ($) {
                         count = 0;
                     }
 
-                    count = count + 1;
+                    count += 1;
 
                     alerts_count_wrapper.html(count.toString())
                     console.log(parseInt(alerts_count_wrapper.html()))

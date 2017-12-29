@@ -2,18 +2,14 @@ try {
     window._ = require('lodash');
 
 } catch (e) {
-
+    console.log(e)
 }
 
 try {
     window.$ = window.jQuery = require('jquery');
-    require('jquery-ui');
-    require('jquery-sortable');
     require('bootstrap-sass');
-
-
 } catch (e) {
-
+    console.log(e)
 }
 
 
@@ -53,5 +49,5 @@ try {
         namespace: 'App.Events'
     });
 } catch (e) {
-
+    console.log(e)
 }

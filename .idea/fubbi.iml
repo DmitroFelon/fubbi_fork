@@ -4,7 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/public/js" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/app" />
       <excludeFolder url="file://$MODULE_DIR$/storage/framework" />
+      <excludeFolder url="file://$MODULE_DIR$/storage/logs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -21,5 +23,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="fubbi node_modules" level="project" />
+    <orderEntry type="library" name="toastr" level="application" />
   </component>
 </module>

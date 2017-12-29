@@ -131,12 +131,18 @@ class ArticlesController extends Controller
     {
         $article->setMeta('socialposts', $request->input('socialposts'));
 
+        $tags = collect(explode(',', $request->input('tags')));
+
+
+        $article->syncTags([]);
+        $tags->each(function ($tag) use ($article) {
+            $article->attachTagsHelper($tag);
+        });
+
         $article->save();
 
         return redirect()->back()->with('success', _i('Article updated'));
-
     }
-
 
     /**
      * @param Project $project

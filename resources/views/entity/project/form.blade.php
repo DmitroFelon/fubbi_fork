@@ -4,7 +4,6 @@
         @include('entity.project.tabs.plan')
         @break
     @case(\App\Models\Helpers\ProjectStates::QUIZ_FILLING)
-test
         @include('entity.project.tabs.quiz')
         @break
     @case(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING)

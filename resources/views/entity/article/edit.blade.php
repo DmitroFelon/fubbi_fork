@@ -25,27 +25,49 @@
                             @include('entity.article.partials.body-preview')
                         @endif
                     </div>
+                    {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
                     <div class="row">
-                        {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
+                        <div class="row m-t-md">
+                            <h3 class="text-center">
+                                {{_i('Tags')}}
+                            </h3>
+                        </div>
+                        {!! Form::bsText('tags', implode(',', $article->tags->pluck('name')->toArray()),_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
+                    </div>
+                    <div class="row">
 
                         <div class="row m-t-md">
                             <h3 class="text-center">
                                 {{_i('Social posts')}}
                             </h3>
                         </div>
-
                         @for($i = 1; $i <= 5; $i ++)
                             {!! Form::bsText('socialposts[]', (isset($article->getMeta('socialposts')[$i-1]))?$article->getMeta('socialposts')[$i-1]:'', _i("Social Post text %d", [$i]), null, ['rows' => '3'],'textarea') !!}
                         @endfor
 
                         {{ Form::submit(_i('Save'), ['class' => 'btn btn-primary']) }}
 
-                        {{ Form::close()  }}
-                    </div>
 
+                    </div>
+                    {{ Form::close()  }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
 
+@section('scripts')
+
+    <script type="text/javascript">
+
+        function stopRKey(evt) {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+        }
+
+        document.onkeypress = stopRKey;
+
+    </script>
+
+@endsection

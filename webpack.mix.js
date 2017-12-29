@@ -24,23 +24,29 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
     .js(
         [
             'resources/assets/js/bootstrap.js',
+            'resources/assets/js/plugins/jquery-ui/jquery-ui.min.js',
             'resources/assets/vendor/metisMenu/jquery.metisMenu.js',
             'resources/assets/vendor/slimscroll/jquery.slimscroll.min.js',
             'resources/assets/vendor/pace/pace.min.js',
             'resources/assets/js/plugins/jasny/jasny-bootstrap.min.js',
             'resources/assets/js/plugins/steps/jquery.steps.min.js',
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
-           /* 'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',*/
+            /* 'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',*/
             'resources/assets/js/plugins/sweetalert/sweetalert.min.js',
             'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
             'resources/assets/js/plugins/iCheck/icheck.min.js',
-            'resources/assets/js/plugins/toastr/toastr.min.js',
+            /*'resources/assets/js/plugins/toastr/toastr.min.js',*/
             'resources/assets/js/plugins/bootstrap-markdown/bootstrap-markdown.js',
             'resources/assets/js/plugins/bootstrap-markdown/markdown.js',
             'resources/assets/js/plugins/datapicker/bootstrap-datepicker.js',
+            
+        ],
+        'public/js/lib.js')
+    .sourceMaps().version()
+    .scripts(
+        [
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],
-        'public/js/app.js')
-    .sourceMaps().version();
+        'public/js/app.js') .version();

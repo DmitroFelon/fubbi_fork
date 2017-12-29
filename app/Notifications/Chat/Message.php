@@ -16,6 +16,7 @@ class Message extends Notification
 
     protected $message;
 
+
     /**
      * Create a new notification instance.
      *
@@ -52,11 +53,13 @@ class Message extends Notification
         );
 
         $data = [
-            'message_id' => $this->message->id,
-            'conversation_id' => $this->message->conversation_id,
-            'sender_name' => $this->message->sender->name,
-            'sender_id' => $this->message->sender->id,
-            'navbar_message' => $navbar_message->render()
+            'message_id'       => $this->message->id,
+            'conversation_id'  => $this->message->conversation_id,
+            'conversation_url' => action('MessageController@index', ['c' => $this->message->conversation_id]),
+            'message_text'     => $this->message->body,
+            'sender_name'      => $this->message->sender->name,
+            'sender_id'        => $this->message->sender->id,
+            'navbar_message'   => $navbar_message->render()
         ];
 
         return new BroadcastMessage($data);

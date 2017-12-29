@@ -30,6 +30,7 @@
 @include('layouts.navigation')
 
 
+
 <!-- Page wraper -->
     <div id="page-wrapper" class="gray-bg">
 
@@ -40,9 +41,6 @@
     @yield('before-content')
 
     @include('partials.messages')
-
-        <div id="test"></div>
-
 
     <!-- Main view  -->
         <div class="row">
@@ -73,6 +71,8 @@
 
 @yield('before-scripts')
 
+<script src="{!! asset('js/lib.js') !!}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 
 @yield('scripts')

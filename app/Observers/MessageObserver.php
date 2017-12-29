@@ -19,7 +19,7 @@ class MessageObserver
     public function created(Message $message)
     {
         $conversation = $message->conversation;
-
+        
         $recipients = $conversation->users->filter(function ($user) use ($message, $conversation) {
             return $message->user_id !== $user->id;
         });

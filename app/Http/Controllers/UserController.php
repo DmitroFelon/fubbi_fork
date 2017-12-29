@@ -151,7 +151,6 @@ class UserController extends Controller
 
         $user->save();
 
-
         return redirect()->back()->with('success', _i('Profile has been saved successfully'));
 
     }

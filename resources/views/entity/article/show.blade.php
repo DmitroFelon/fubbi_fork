@@ -7,11 +7,9 @@
                 <h5>
                     {{$article->title}}
                 </h5>
-                <span class="pull-right">
-                     @foreach($article->tags as $tag)
-                        <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
-                    @endforeach
-                </span>
+                @foreach($article->tags as $tag)
+                    <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
+                @endforeach
                 @role(['client'])
                 @if($article->pivot->accepted == null or $article->pivot->accepted == false)
                     <div class="ibox-tools">

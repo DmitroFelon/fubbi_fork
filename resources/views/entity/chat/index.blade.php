@@ -13,10 +13,10 @@
 @section('content')
     <div class="tabs-container">
         <div class="tabs-left">
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 <ul class="nav nav-tabs">
                     @foreach($conversations as $conversation)
-                        <li class="{{($loop->first)?'active first-chat ':''}}">
+                        <li class="chat-nav-link {{($loop->first)?'active first-chat ':''}}">
                             <a data-conversation-id="{{$conversation->id}}" class="message-switcher"
                                data-sourse="{{action('MessageController@show', $conversation->id)}}"
                                href="#">{{$conversation->data['title']}}</a>
@@ -27,7 +27,7 @@
             {{--
             Chat loaded by ajax from view: "entity.chat.show"
             --}}
-            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                 <div class="ibox">
                     <div style="height: 600px" id="messages-container" class="ibox-content">
                         @if($has_conversations)
@@ -93,10 +93,19 @@
 
         //load necessary chat
         $(".message-switcher").click(function () {
-            $("#messages-container").load($(this).attr('data-sourse'), function () {
 
+            $(".message-switcher").parent().removeClass('active');
+
+            $(this).parent().addClass('active');
+
+            $("#messages-container").load($(this).attr('data-sourse'), function () {
                 //scroll down
                 $('#chat-discussion').scrollTop($('#chat-discussion')[0].scrollHeight);
+
+                if (conversation_id) {
+                    //leave the current chat before joining the new one
+                    Echo.leave('conversation.' + conversation_id);
+                }
 
                 conversation_id = $("#chat-id").val();
 
@@ -105,7 +114,7 @@
                 //clear notifications from curent chat
                 old_notifications.each(function (i, obj) {
                     obj.remove();
-                    $(".divider[data-divider-id='"+conversation_id+"']").remove();
+                    $(".divider[data-divider-id='" + conversation_id + "']").remove();
                     var messages_count_wrapper = $("#message-notifications-count");
                     var count = parseInt(messages_count_wrapper.html());
 
@@ -118,22 +127,27 @@
 
                 Echo.join('conversation.' + conversation_id)
                         .here(function (users) {
+                            $(".chat-user-status").addClass('label-danger');
                             users.forEach(function (user) {
+                                console.log(user.id)
                                 var user_id = user.id
                                 var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
-                                wrapper.removeClass('label-danger ');
-                                wrapper.addClass('label-primary ');
+                                wrapper.removeClass('label-danger');
+                                wrapper.addClass('label-primary');
                                 wrapper.html("Online");
                             });
                         })
                         .joining(function (joiningMember, members) {
+                            console.log('joining')
                             var user_id = joiningMember.id
                             var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
-                            wrapper.addClass('label-primary');
                             wrapper.removeClass('label-danger');
+                            wrapper.addClass('label-primary');
                             wrapper.html("Online");
                         })
                         .leaving(function (leavingMember, members) {
+                            console.log('leaving')
+
                             var user_id = leavingMember.id
                             var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
                             wrapper.removeClass('label-primary');

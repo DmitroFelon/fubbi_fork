@@ -39,6 +39,10 @@
                         {{_i('Edit project')}}
                     </a>
                     @endrole
+                    <a href="{{url()->action('Project\ArticlesController@create', $project)}}"
+                       class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
+                        {{_i('Add article')}}
+                    </a>
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
                     </a>

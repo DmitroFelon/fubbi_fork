@@ -11,7 +11,9 @@
 |
 */
 
+use App\Mail\UserRegistered;
 use App\Services\Google\Drive;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +28,21 @@ Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
     return true;
 });
 
+
+Route::get('test', function () {
+
+
+    return new UserRegistered();
+
+    $message = (new \App\Notifications\Test())->toMail('test@email.com');
+
+    $markdown = new \Illuminate\Mail\Markdown(view(), config('mail.markdown'));
+    
+    return $markdown->render('vendor.notifications.email', $message->toArray());
+
+});
+
+
 Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
     $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);
     if (!$conversation) {
@@ -35,67 +52,92 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
         ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
-Route::get('test', function () {
-    $user = \App\User::find(2)->stripe_id;
 
-    return redirect()->action('ChargesController@index', [$user]);
-});
-
-Route::middleware(['auth'])->group(
-    function () {
-        Route::prefix('notification')->group(
-            function () {
-                Route::get('show/{id}', 'NotificationController@show');
-                Route::get('read/{id?}', 'NotificationController@read');
-                Route::get('', 'NotificationController@index');
-            }
-        );
-        Route::prefix('project')->group(
-            function () {
-                Route::get('accept_review/{project}', "ProjectController@accept_review");
-                Route::get('reject_review/{project}', "ProjectController@reject_review");
-                Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
-                Route::get('decline_project/{project}', "ProjectController@decline_project");
-            }
-        );
-        Route::get('projects/{project}/prefill', 'ProjectController@prefill');
-        Route::get('projects/{project}/export', 'ProjectController@export');
-        Route::post('projects/{project}/invite_users', 'ProjectController@invite_users');
-        Route::post('projects/{project}/invite_team', 'ProjectController@invite_team');
-        Route::resource('projects', 'ProjectController');
-        Route::namespace('Project')->group(
-            function () {
-                Route::resource('project.outlines', 'OutlineController');
-                Route::get('project/{project}/articles/{article}/accept', 'ArticlesController@accept');
-                Route::get('project/{project}/articles/{article}/decline', 'ArticlesController@decline');
-                Route::post('project/{project}/articles/{article}/save_social_posts', 'ArticlesController@save_social_posts');
-                Route::resource('project.articles', 'ArticlesController');
-                Route::resource('project.plan', 'PlanController')->only(['show', 'index', 'update', 'edit']);
-            }
-        );
-
-        Route::get('teams/accept/{team}', 'TeamController@accept');
-        Route::get('teams/decline/{team}', 'TeamController@decline');
-        Route::resource('teams', 'TeamController');
-        Route::resource('users', 'UserController');
-        Route::resource('plans', 'PlanController');
-        Route::resource('articles', 'ArticlesController');
-
-        Route::get('messages/read/{id}', 'MessageController@read');
-        Route::get('messages/clear', 'MessageController@clear');
-        Route::resource('messages', 'MessageController');
-        Route::post('subscribe', 'SubscriptionController@subscribe');
-        Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
-
+Route::middleware(['auth'])->group(function () {
+    Route::group(['middleware' => ['role:admin']], function () {
         Route::get('charges', 'ChargesController@index');
 
-        Route::post('settings/billing', 'SettingsController@billing');
-        Route::post('settings', 'SettingsController@save');
-        Route::get('settings', 'SettingsController@index');
+        Route::resources([
+            'users' => 'UserController',
+            'plans' => 'PlanController',
+            'articles' => 'ArticlesController',
+        ]);
+    });
 
-        Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+    Route::prefix('notification')->group(
+        function () {
+            Route::get('show/{id}', 'NotificationController@show');
+            Route::get('read/{id?}', 'NotificationController@read');
+            Route::get('', 'NotificationController@index');
+        }
+    );
 
-    }
+    Route::prefix('project')->group(
+        function () {
+            Route::group(['middleware' => ['role:admin|account_manager']], function () {
+                Route::get('accept_review/{project}', "ProjectController@accept_review");
+                Route::get('reject_review/{project}', "ProjectController@reject_review");
+            });
+
+            Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+            Route::get('decline_project/{project}', "ProjectController@decline_project");
+        }
+    );
+
+    Route::prefix('projects')->group(function () {
+        Route::get('{project}/prefill', 'ProjectController@prefill');
+        Route::get('{project}/export', 'ProjectController@export');
+        Route::post('{project}/invite_users', 'ProjectController@invite_users');
+        Route::post('{project}/invite_team', 'ProjectController@invite_team');
+    });
+
+
+    Route::namespace('Project')->group(
+        function () {
+            Route::prefix('project')->group(function () {
+                Route::get('{project}/articles/{article}/accept', 'ArticlesController@accept');
+                Route::get('{project}/articles/{article}/decline', 'ArticlesController@decline');
+                Route::post('{project}/articles/{article}/save_social_posts', 'ArticlesController@save_social_posts');
+            });
+
+            Route::resources([
+                'project.outlines' => 'OutlineController',
+                'project.articles' => 'ArticlesController',
+                'project.plan' => 'PlanController',
+            ]);
+        }
+    );
+
+    Route::prefix('teams')->group(function () {
+        Route::get('accept/{team}', 'TeamController@accept');
+        Route::get('decline/{team}', 'TeamController@decline');
+    });
+
+    Route::prefix('messages')->group(function () {
+        Route::get('read/{id}', 'MessageController@read');
+        Route::get('clear', 'MessageController@clear');
+    });
+
+    Route::post('subscribe', 'SubscriptionController');
+
+    Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+
+    Route::prefix('settings')->group(function () {
+        Route::post('billing', 'SettingsController@billing');
+        Route::post('', 'SettingsController@save');
+        Route::get('', 'SettingsController@index');
+    });
+
+    Route::resources(
+        [
+            'projects' => 'ProjectController',
+            'messages' => 'MessageController',
+            'teams' => 'TeamController'
+        ]
+    );
+
+    Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+}
 );
 
 
