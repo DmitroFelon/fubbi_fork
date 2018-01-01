@@ -14,12 +14,12 @@ use App\Models\Article;
  * Class Articles
  *
  * attach App\Models\Article to App\Models\Project
- * 
+ *
  * @package App\Models\Traits\Project
  */
 trait hasArticles
 {
-	/**
+    /**
      * @return mixed
      */
     public function articles()
@@ -27,16 +27,20 @@ trait hasArticles
         return $this->belongsToMany(Article::class)->withPivot('accepted', 'attempts')->withTimestamps();
     }
 
-	/**
+    /**
      * @param $article_id
      * @return mixed
      */
     public function attachArticle($article_id)
     {
         return $this->articles()->attach($article_id, ['attempts' => 1]);
+
+        $this->eventData['attachArticle'] = $article_id;
+        
+        $this->fireModelEvent('attachArticle', false);
     }
 
-	/**
+    /**
      * @param $article_id
      * @return mixed
      */
@@ -53,7 +57,7 @@ trait hasArticles
         return $this->articles()->sync($args);
     }
 
-	/**
+    /**
      * @param $article_id
      */
     public function acceptArticle($article_id)
@@ -61,7 +65,7 @@ trait hasArticles
         $this->articles()->updateExistingPivot($article_id, ['accepted' => true], true);
     }
 
-	/**
+    /**
      * @param $article_id
      */
     public function declineArticle($article_id)
@@ -76,7 +80,7 @@ trait hasArticles
 
         $this->articles()->updateExistingPivot($article_id, $data, true);
 
-        if($attempts > 3){
+        if ($attempts > 3) {
             //todo notify about limit of attempts 
             //todo move 3 to settings 
         }

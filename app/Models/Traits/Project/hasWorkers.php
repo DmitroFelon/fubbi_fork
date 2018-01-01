@@ -28,10 +28,13 @@ trait hasWorkers
      */
     public function attachWorker($worker_id)
     {
+        if ($this->workers()->find($worker_id)) {
+            return;
+        }
+
         $this->workers()->attach($worker_id);
 
         $this->eventData['attachWorker'] = $worker_id;
-
         $this->fireModelEvent('attachWorker', false);
     }
 
@@ -43,8 +46,7 @@ trait hasWorkers
     {
         $this->workers()->attach($worker_ids);
 
-        $this->eventData['attachWorker'] = $worker_ids;
-
+        $this->eventData['attachWorkers'] = $worker_ids;
         $this->fireModelEvent('attachWorkers', false);
     }
 
@@ -64,7 +66,6 @@ trait hasWorkers
         $this->workers()->detach($worker_id);
 
         $this->eventData['detachWorker'] = $worker_id;
-
         $this->fireModelEvent('detachWorker', false);
     }
 
@@ -101,11 +102,11 @@ trait hasWorkers
         }
 
         $required_workers = [
-            'writer' => _i('Writer'),
-            'designer' => _i('Designer'),
+            'writer'          => _i('Writer'),
+            'designer'        => _i('Designer'),
             'account_manager' => _i('Account manager'),
-            'editor' => _i('Editor'),
-            'researcher' => _i('Researcher'),
+            'editor'          => _i('Editor'),
+            'researcher'      => _i('Researcher'),
         ];
 
         $has_worker = [];
@@ -118,4 +119,8 @@ trait hasWorkers
 
         return array_diff($required_workers, $has_worker);
     }
+   
+
+
+
 }

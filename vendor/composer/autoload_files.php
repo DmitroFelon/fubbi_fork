@@ -19,8 +19,10 @@ return array(
     '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
     'e7223560d890eab89cda23685e711e2c' => $vendorDir . '/psy/psysh/src/Psy/functions.php',
     'decc78cc4436b1292c6c0d151b19445c' => $vendorDir . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
+    'e91d0dc994644828154ae2387ede1ca8' => $vendorDir . '/spatie/string/src/string_functions.php',
     'f18cc91337d49233e5754e93f3ed9ec3' => $vendorDir . '/laravelcollective/html/src/helpers.php',
     '270f70f51ae43c09211e3bc9af77115a' => $vendorDir . '/laravelista/ekko/src/Laravelista/Ekko/helpers.php',
     '67969b779fc2b57b79f39cdaef36a10e' => $vendorDir . '/yab/laravel-scout-mysql-driver/src/helpers.php',
     '8eca5ed3358a8cf297784e906ef521b5' => $vendorDir . '/belphemur/laravel-gettext/src/Xinax/LaravelGettext/Support/helpers.php',
+    '72b1e3f4a2af9b30b3f137b3ec2057fc' => $vendorDir . '/spatie/laravel-activitylog/src/helpers.php',
 );

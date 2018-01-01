@@ -32,13 +32,13 @@ Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
 Route::get('test', function () {
 
 
-    return new UserRegistered();
+    $project = \App\Models\Project::find(10);
 
-    $message = (new \App\Notifications\Test())->toMail('test@email.com');
+    $project->attachWorker(5);
 
-    $markdown = new \Illuminate\Mail\Markdown(view(), config('mail.markdown'));
-    
-    return $markdown->render('vendor.notifications.email', $message->toArray());
+    dd($project->activity()->get());
+
+    dd($project->workers);
 
 });
 
@@ -58,8 +58,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('charges', 'ChargesController@index');
 
         Route::resources([
-            'users' => 'UserController',
-            'plans' => 'PlanController',
+            'users'    => 'UserController',
+            'plans'    => 'PlanController',
             'articles' => 'ArticlesController',
         ]);
     });
@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resources([
                 'project.outlines' => 'OutlineController',
                 'project.articles' => 'ArticlesController',
-                'project.plan' => 'PlanController',
+                'project.plan'     => 'PlanController',
             ]);
         }
     );
@@ -132,7 +132,7 @@ Route::middleware(['auth'])->group(function () {
         [
             'projects' => 'ProjectController',
             'messages' => 'MessageController',
-            'teams' => 'TeamController'
+            'teams'    => 'TeamController'
         ]
     );
 

@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
+use App\Models\Article;
 use App\Models\Project;
-use App\Observers\Traits\Project\Keywords;
+use App\Models\Team;
 use App\Observers\Traits\Project\States;
-use App\Observers\Traits\Project\Workers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +19,6 @@ use Musonza\Chat\Facades\ChatFacade;
  */
 class ProjectObserver
 {
-    use States;
 
     /**
      * @var \App\User|\Illuminate\Contracts\Auth\Authenticatable|null
@@ -95,12 +94,19 @@ class ProjectObserver
         $conversation->update([
             'data' => [
                 'project_id' => $project->id,
-                'title' => $project->name
+                'title'      => $project->name
             ]
         ]);
 
         $project->setMeta('conversation_id', $conversation->id);
         $project->save();
+
+
+        activity('project_state')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties([])
+            ->log('Project ' . $project->name . ' has beeb created');
     }
 
     /**
@@ -127,29 +133,106 @@ class ProjectObserver
                 }
             );
         }
+
+        activity('project_state')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties([])
+            ->log('Project ' . $project->name . ' has beeb filled sucessfully');
+
+
     }
 
+    /**
+     * @param Project $project
+     */
     public function attachWorker(Project $project)
     {
-
         if (!isset($project->eventData['attachWorker'])) {
             return;
         }
 
-        $worker       = $project->eventData['attachWorker'];
+        $worker_id = $project->eventData['attachWorker'];
+
         $conversation = ChatFacade::conversation($project->conversation_id);
-        ChatFacade::addParticipants($conversation, $worker);
+
+        ChatFacade::addParticipants($conversation, $worker_id);
+
+        $worker = User::find($worker_id);
+        activity('project_worker')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $worker])
+            ->log('User ' . $worker->name . ' has beed attached to project ' . $project->name);
+
     }
 
+    /**
+     * @param Project $project
+     */
     public function detachWorker(Project $project)
     {
         if (!isset($project->eventData['detachWorker'])) {
             return;
         }
 
-        $worker       = $project->eventData['detachWorker'];
+        $worker_id    = $project->eventData['detachWorker'];
         $conversation = ChatFacade::conversation($project->conversation_id);
-        ChatFacade::removeParticipants($conversation, $worker);
+        ChatFacade::removeParticipants($conversation, $worker_id);
 
+        $worker = User::find($worker_id);
+
+        activity('project_worker')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $worker])
+            ->log('User ' . $worker->name . ' has beed detached from project ' . $project->name);
+
+    }
+
+    public function attachWorkers(Project $project)
+    {
+        $worker_ids = $project->eventData['attachWorkers'];
+
+        $workers = User::findMany($worker_ids);
+
+        $attached_users_names = implode(', ', $workers->pluck('name')->toArray());
+
+        activity('project_worker')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $workers])
+            ->log('Users:  ' . $attached_users_names . ' have beed attached to project ' . $project->name);
+    }
+
+    public function attachTeam(Project $project)
+    {
+        $team = Team::find($project->eventData['attachTeam']);
+        activity('project_worker')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['team' => $team])
+            ->log('Team ' . $team->name . ' has beed attached to project project ' . $project->name);
+    }
+
+    public function attachArticle(Project $project)
+    {
+        $article = Article::find($project->eventData['attachArticle']);
+
+        activity('project_progress')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $article])
+            ->log('Article ' . $article->title . ' has been attached to project project ' . $project->name);
+
+    }
+
+    public function setState(Project $project)
+    {
+        activity('project_progress')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['state' => $project->state])
+            ->log('Project ' . $project->name . ' status changed to: "' . ucfirst(str_replace('_', ' ', $project->state)) . '".');
     }
 }

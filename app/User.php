@@ -125,9 +125,7 @@ class User extends Authenticatable implements HasMedia
      * @var array
      */
     protected $with = [
-        'roles',
-        'invites',
-        'notifications'
+        'roles'
     ];
 
     /**

@@ -143,7 +143,8 @@ class ProjectController extends Controller
         $meta_to_skip = [
             'themes_order',
             'keywords_meta',
-            'export'
+            'export',
+            'conversation_id'
         ];
 
         $project->metas->transform(

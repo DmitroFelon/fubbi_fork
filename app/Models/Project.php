@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Subscription;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\MediaLibrary\Media;
@@ -83,7 +84,13 @@ class Project extends Model implements HasMedia, Invitable
     use hasPlan;
     use SoftDeletes;
 
+    use LogsActivity;
+
     const TAG_CATEGORY = 'service_type';
+
+    protected static $logOnlyDirty = true;
+
+    protected static $logAttributes = ['name', 'text'];
 
     /**
      * Collections of project files
@@ -109,6 +116,7 @@ class Project extends Model implements HasMedia, Invitable
         'attachWorkers',
         'detachWorker',
         'attachTeam',
+        'attachArticle'
     ];
 
     /**
@@ -322,5 +330,18 @@ class Project extends Model implements HasMedia, Invitable
 
     }
 
-
+    public function getTimelineIcon($type)
+    {
+        switch ($type) {
+            case 'project_worker' :
+                return 'fa-users';
+                break;
+            case 'project_progress' :
+                return 'fa fa-line-chart';
+                break;
+            default:
+                return 'fa-file-o';
+                break;
+        }
+    }
 }

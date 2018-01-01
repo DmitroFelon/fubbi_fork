@@ -56,7 +56,7 @@ class ArticlesController extends Controller
         );
         $article->user_id = Auth::user()->id;
         $article->save();
-        $project->articles()->attach($article->id);
+        $project->attachArticle($article->id);
 
         //attach tags
         $tags = collect(explode(',', $request->input('tags')));

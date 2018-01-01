@@ -16,7 +16,7 @@ trait States
 {
     public function setState(Project $project)
     {
-        Log::info('state changed to: ' . $project->state . ". By: ". Auth::user()->name);
+        //Log::info('state changed to: ' . $project->state . ". By: ". Auth::user()->name);
     }
 
 }
