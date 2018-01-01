@@ -73,7 +73,12 @@ class Project extends Model implements HasMedia, Invitable
 {
     use hasStates;
     use hasWorkers;
-    use hasTeams;
+    use hasTeams
+
+
+
+
+    
     use hasOutlines;
     use hasArticles;
     use Metable;
