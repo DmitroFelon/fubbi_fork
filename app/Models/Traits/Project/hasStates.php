@@ -14,6 +14,7 @@ use App\Models\Keyword;
 use App\Services\Api\KeywordTool;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -140,13 +141,15 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
+        if ($request->input('themes')) {
+            return $this->prefillQuiz($request);
+        }
+        
+
         if ($request->input('keywords')) {
             return $this->prefillKeywords($request);
         }
 
-        if ($request->input('themes')) {
-            return $this->prefillQuiz($request);
-        }
 
         return false;
     }
@@ -200,7 +203,6 @@ trait hasStates
         $this->save();
 
         return true;
-
     }
 
     /**
@@ -209,6 +211,22 @@ trait hasStates
      */
     private function prefillQuiz(Request $request)
     {
+        $this->setMeta(
+            $request->except(
+                [
+                    '_token',
+                    '_project_id',
+                    '_step',
+                    '_method',
+                    'compliance_guideline',
+                    'logo',
+                    'article_images',
+                    'ready_content',
+                ]
+            )
+        );
+        $this->save();
         return true;
     }
+    
 }

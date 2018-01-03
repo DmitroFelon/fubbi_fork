@@ -1,4 +1,4 @@
-@role(['client'])
+@role(['client', 'admin'])
     @switch($step)
     @case(\App\Models\Helpers\ProjectStates::PLAN_SELECTION)
         @include('entity.project.tabs.plan')

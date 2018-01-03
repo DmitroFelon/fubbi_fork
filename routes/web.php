@@ -85,13 +85,15 @@ Route::middleware(['auth'])->group(function () {
     );
 
     Route::prefix('projects')->group(function () {
-        Route::get('{project}/prefill', 'ProjectController@prefill');
+        Route::post('{project}/prefill', 'ProjectController@prefill');
+        Route::post('{project}/prefill_files', 'ProjectController@prefill_files');
+        Route::get('{project}/get_stored_files', 'ProjectController@get_stored_files');
+        Route::get('{project}/remove_stored_file/{media}', 'ProjectController@remove_stored_files');
         Route::get('{project}/export', 'ProjectController@export');
         Route::get('{project}/resume', 'ProjectController@resume');
         Route::post('{project}/invite_users', 'ProjectController@invite_users');
         Route::post('{project}/invite_team', 'ProjectController@invite_team');
     });
-
 
     Route::namespace('Project')->group(
         function () {

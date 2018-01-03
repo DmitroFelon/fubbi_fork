@@ -19,6 +19,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/sass/plugins/bootstrap-markdown/bootstrap-markdown.min.css',
             'resources/assets/sass/plugins/datapicker/datepicker3.css',
             'resources/assets/sass/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
+            'resources/assets/sass/plugins/dropzone/dropzone.css',
         ],
         'public/css/vendor.css')
     .js(
@@ -32,7 +33,6 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/steps/jquery.steps.min.js',
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
             /* 'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',*/
-            
             'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
             'resources/assets/js/plugins/iCheck/icheck.min.js',
@@ -40,7 +40,8 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/bootstrap-markdown/bootstrap-markdown.js',
             'resources/assets/js/plugins/bootstrap-markdown/markdown.js',
             'resources/assets/js/plugins/datapicker/bootstrap-datepicker.js',
-            
+            'resources/assets/js/plugins/dropzone/dropzone.js',
+
         ],
         'public/js/lib.js')
     .sourceMaps().version()

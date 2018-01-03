@@ -85,12 +85,13 @@ jQuery(document).ready(function ($) {
                 if (typeof(localStorage.getItem("quiz-form-step")) !== "undefined") {
                     jQuery("#quiz-form-t-" + localStorage.getItem("quiz-form-step")).click();
                 }
-            } else {
             }
         },
         onStepChanging: function (event, currentIndex) {
             //todo add validation
+            preUploadQuiz();
             return true;
+
         },
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
@@ -100,6 +101,7 @@ jQuery(document).ready(function ($) {
             }
         },
         onFinishing: function (event, currentIndex) {
+            preUploadQuiz()
             return true;
             //todo add validation
         },
@@ -273,29 +275,31 @@ jQuery(document).ready(function ($) {
     }
 
     function preUploadKeywords() {
+
         var formData = $("#keywords-form").serialize();
         var _project_id = $("input[name=_project_id]").val();
 
         jQuery.ajax('/projects/' + _project_id + '/prefill', {
+            method: 'POST',
             processData: false,
             contentType: false,
             data: formData
         });
     }
 
-    /*
-     * Article textarea
-     * */
-    /*    $("#article-textarea").markdown(
-     {
-     autofocus: false,
-     savable: false,
-     resize: 'vertical',
-     fullscreen: {enable: false},
-     hiddenButtons: ['Image', 'Url']
-     }
-     );*/
+    function preUploadQuiz() {
+        var formData = $("#quiz-form").serialize();
+        var _project_id = $("input[name=_project_id]").val();
 
+        jQuery.ajax('/projects/' + _project_id + '/prefill', {
+            method: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData
+        });
+
+    }
+    
     /*
      * Init footable table
      * */
@@ -373,17 +377,17 @@ jQuery(document).ready(function ($) {
         });
 
     /*
-    * Help videos
-    *
-    * Show if vidie exist
-    * */
-    if(help_video_src){
+     * Help videos
+     *
+     * Show if vidie exist
+     * */
+    if (help_video_src) {
         $('#help-video-wrapper').show();
     }
 
     /*
-    * Open video modal
-    * */
+     * Open video modal
+     * */
     $('#question-btn').click(function () {
         swal("", {
             className: 'help-video-alert',
@@ -403,10 +407,10 @@ jQuery(document).ready(function ($) {
                 }
             }
         }).then(function () {
-            $('.help-video').each(function(){
+            $('.help-video').each(function () {
                 /*
-                * Stop video on modal close
-                * */
+                 * Stop video on modal close
+                 * */
                 $(this).attr('src', $(this).attr('src'));
                 return false;
             });

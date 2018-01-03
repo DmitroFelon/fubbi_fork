@@ -1,4 +1,3 @@
-
 <div class="ibox-title">
     <h5>Fill quiz</h5>
 </div>
@@ -147,7 +146,10 @@
     <h1>Step 4</h1>
     <fieldset>
         {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a writing style that would like for your content"), null, [], 'url') !!}
-        {!! Form::bsText('compliance_guideline', null, _i("Do you have branding guidelines?"), '', ['multiple'], 'file') !!}
+
+        <div id="compliance_guideline-group" class="dropzone">
+        </div>
+
         {!! Form::bsText('logo', null, _i("Do you have a high resolution logo that we can use?"), '', [], 'file') !!}
         {!! Form::bsText('article_images[]', null, _i("Do you want us to add images to your articles?"), _i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples."), ['multiple'], 'file') !!}
         {!! Form::bsText('article_images_links', null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['required', 'class'=>'tagsinput' ] ) !!}
@@ -163,5 +165,4 @@
     </fieldset>
     {!! Form::close() !!}
 </div>
-
 

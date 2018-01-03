@@ -14,7 +14,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Spatie\MediaLibrary\Media;
 use Stripe\Plan;
 use Stripe\Subscription;
 
@@ -56,11 +58,11 @@ class ProjectController extends Controller
                 $projects = Project::query();
 
                 if ($request->has('status') and $request->get('status')) {
-                    if($request->get('status') == 'active'){
+                    if ($request->get('status') == 'active') {
                         $projects = $projects->whereHas('subscription', function ($query) {
                             $query->whereNull('ends_at');
                         });
-                    }else{
+                    } else {
                         $projects = $projects->whereHas('subscription', function ($query) {
                             $query->whereNotNull('ends_at');
                         });
@@ -419,6 +421,38 @@ class ProjectController extends Controller
     }
 
     /**
+     * @param Project $project
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_stored_files(Project $project, Request $request)
+    {
+        if (!$request->has('collection')) {
+            return Response::json('error', 400);
+        }
+
+        $files = $project->getMedia($request->get('collection'));
+
+        $files->transform(function (Media $media) {
+            $media->url = $media->getFullUrl();
+            return $media;
+        });
+
+        return Response::json($files->toArray(), 200);
+    }
+
+    /**
+     * @param Project $project
+     * @param Request $request
+     */
+    public function remove_stored_files(Project $project, Media $media, Request $request)
+    {
+        $project->media->find($media->id)->delete();
+
+        return Response::json('success', 200);
+    }
+
+    /**
      * Save not completed project
      *
      * @param Project $project
@@ -427,9 +461,17 @@ class ProjectController extends Controller
      */
     public function prefill(Project $project, Request $request)
     {
-        $project->prefill($request);
+        return Response::json($project->prefill($request), 200);
+    }
 
-        return ['ok'];
+    /**
+     * @param Project $project
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function prefill_files(Project $project, Request $request)
+    {
+        return Response::json($project->addFiles($request), 200);
     }
 
     /**
@@ -442,7 +484,6 @@ class ProjectController extends Controller
     {
         return response()->download($project->export())->deleteFileAfterSend(true);
     }
-
 
     /**
      * @param Project $project

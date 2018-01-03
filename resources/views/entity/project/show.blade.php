@@ -13,9 +13,9 @@
 
 @section('content')
 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
 
-    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col col-lg-12 col-xs-12 ">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{$project->name}}</h5>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="col col-lg-6">
+        <div class="col col-lg-6 col-xs-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('Quiz result')}}</h5>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="col col-lg-6">
+        <div class="col col-lg-6 col-xs-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('Media files')}}</h5>
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col col-lg-6">
+        <div class="col col-lg-6 col-xs-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('Keywords')}}</h5>
@@ -116,7 +116,7 @@
         @role(['admin'])
 
         @if($project->requireWorkers())
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col col-lg-6 col-xs-12 ">
                 <div class="ibox">
                     <div class="ibox-title">
                         <h5>{{_i('Attach workers')}}</h5>
@@ -134,7 +134,7 @@
         @endif
 
         @if($project->workers->isEmpty() and $project->requireWorkers())
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col col-lg-6 col-xs-12">
                 <div class="ibox">
                     <div class="ibox-title">
                         <h5>{{_i('Attach team')}}</h5>
@@ -154,8 +154,8 @@
         @endrole
     </div>
 
-    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-        <div class="ibox">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+        <div class="ibox p-w-xs">
             <div class="ibox-title">
                 <h5>{{_i('Activity')}}</h5>
             </div>

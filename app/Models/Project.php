@@ -168,17 +168,21 @@ class Project extends Model implements HasMedia, Invitable
      */
     public function addFiles(Request $request)
     {
+        $files = collect();
+
         foreach (self::$media_collections as $file_input) {
             if ($request->hasFile($file_input)) {
                 if (is_array($request->file($file_input))) {
                     foreach ($request->file($file_input) as $file) {
-                        $this->addMedia($file)->toMediaCollection($file_input);
+                        $files->push($this->addMedia($file)->toMediaCollection($file_input));
                     }
                 } else {
-                    $this->addMedia($request->file($file_input))->toMediaCollection($file_input);
+                    $files->push($this->addMedia($request->file($file_input))->toMediaCollection($file_input));
                 }
             }
         }
+        
+        return $files;
     }
 
     /**
