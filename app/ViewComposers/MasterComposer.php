@@ -58,10 +58,38 @@ class MasterComposer
         }
 
         $data = [
-            'notifications' => $this->user->getNotifications(),
+            'notifications'         => $this->user->getNotifications(),
             'message_notifications' => $this->user->getMessageNotifications(),
+            'help_video_src'        => $this->helpVideoSrc()
         ];
 
         return $view->with($data);
+    }
+
+    public function helpVideoSrc()
+    {
+        if ($this->request->is('projects')) {
+            return config('fubbi.videos.project.main');
+        }
+
+        if ($this->request->is('projects/create')) {
+            return config('fubbi.videos.project.create');
+        }
+
+        if ($this->request->is('projects/*/edit') and $this->request->has('s')) {
+            if ($this->request->get('s') == 'plan') {
+                return config('fubbi.videos.project.edit.plan');
+            }
+
+            if ($this->request->get('s') == 'quiz') {
+                return config('fubbi.videos.project.edit.quiz');
+            }
+
+            if ($this->request->get('s') == 'keywords') {
+                return config('fubbi.videos.project.edit.keywords');
+            }
+        }
+
+        return false;
     }
 }

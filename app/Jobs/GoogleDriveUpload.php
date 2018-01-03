@@ -152,6 +152,9 @@ class GoogleDriveUpload implements ShouldQueue
         return array_values($result);
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     private function createPermissions()
     {
         $permissions = collect();
@@ -173,7 +176,7 @@ class GoogleDriveUpload implements ShouldQueue
 
         //set admins as reader
         $admins->each(function (User $admin) use ($permissions) {
-            if ($admin->email == $this->article->author->email) {
+            if ($admin->id == $this->article->user_id) {
                 return;
             }
             $permissions->put($admin->email, 'writer');

@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\Media;
 
 /**
  * Class ArticlesController
@@ -54,12 +55,17 @@ class ArticlesController extends Controller
         $article->fill(
             $request->except(['_token', '_method'])
         );
+
         $article->user_id = Auth::user()->id;
+        $article->setMeta('type', $request->input('type'));
+
         $article->save();
+
         $project->attachArticle($article->id);
 
         //attach tags
         $tags = collect(explode(',', $request->input('tags')));
+
         $tags->each(function ($tag) use ($article) {
             $article->attachTagsHelper($tag);
         });
@@ -69,6 +75,11 @@ class ArticlesController extends Controller
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
             $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
+        }
+
+        //upload copyscape screenshot
+        if ($request->hasFile('copyscape')) {
+            $article->addMedia($request->file('copyscape'))->toMediaCollection('copyscape');
         }
 
         return redirect()->action('Project\ArticlesController@index', $project);
@@ -83,7 +94,7 @@ class ArticlesController extends Controller
      */
     public function show(Project $project, Article $article)
     {
-        $article = $project->articles()->find($article->id);
+       
 
         return view('entity.article.show', compact('project', 'article'));
     }

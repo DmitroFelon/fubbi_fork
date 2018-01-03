@@ -309,7 +309,6 @@ jQuery(document).ready(function ($) {
         radioClass: 'iradio_square-green'
     });
 
-
     /*
      * Notifications
      * */
@@ -372,6 +371,40 @@ jQuery(document).ready(function ($) {
                 }
             }
         });
+
+    /*
+    * Help videos
+    * */
+
+    if(help_video_src){
+        $('#help-video-wrapper').show();
+    }
+
+    $('#question-btn').click(function () {
+        swal("", {
+            className: 'help-video-alert',
+            buttons: {
+                cancel: false,
+                confirm: {
+                    text: 'Got it'
+                }
+            },
+            content: {
+                element: "iframe",
+                attributes: {
+                    className: 'help-video',
+                    src: help_video_src,
+                    frameborder: "0",
+                    allowfullscreen: "allowfullscreen"
+                }
+            }
+        }).then(function () {
+            $('.help-video').each(function(){
+                $(this).attr('src', $(this).attr('src'));
+                return false;
+            });
+        });
+    });
 
 });
 

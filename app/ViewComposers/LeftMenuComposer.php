@@ -19,204 +19,180 @@ use Illuminate\View\View;
  */
 class LeftMenuComposer
 {
-	/**
-	 * @var \Illuminate\Http\Request
-	 */
-	protected $request;
+    /**
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
 
-	/**
-	 * @var string
-	 */
-	protected $page;
+    /**
+     * @var string
+     */
+    protected $page;
 
-	/**
-	 * @var \Illuminate\Contracts\Auth\Authenticatable|null
-	 */
-	protected $user;
+    /**
+     * @var \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    protected $user;
 
-	/**
-	 * LeftMenuComposer constructor.
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 */
-	public function __construct(Request $request)
-	{
-		$this->user    = Auth::user();
-		$this->request = $request;
-		$this->page    = $request->path();
-	}
+    /**
+     * LeftMenuComposer constructor.
+     *
+     * @param \Illuminate\Http\Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->user    = Auth::user();
+        $this->request = $request;
+        $this->page    = $request->path();
+    }
 
-	/**
-	 * @param \Illuminate\View\View $view
-	 */
-	public function compose(View $view)
-	{
+    /**
+     * @param \Illuminate\View\View $view
+     */
+    public function compose(View $view)
+    {
 
-		if (Auth::check()) {
-			$role  = $this->user->role;
-			$links = $this->{$role}();
-		} else {
-			$links = $this->guest();
-		}
+        if (Auth::check()) {
+            $role  = $this->user->role;
+            $links = $this->{$role}();
+        } else {
+            $links = $this->guest();
+        }
 
-		$view->with('items', $links);
-	}
+        $links = collect($links)->push(
+            [
+                'name' => 'Messages',
+                'url'  => '/messages',
+                'icon' => 'fa fa-envelope',
+            ]
+        );
 
-	/**
-	 * @return array
-	 */
-	public function guest()
-	{
-		return [
-			'Login'    => '/login',
-			'Register' => '/register',
-		];
-	}
+        $links = collect($links)->push(
+            [
+                'name' => 'Settings',
+                'url'  => '/settings',
+                'icon' => 'fa fa-gear',
+            ]
+        );
 
-	/**
-	 * @return array
-	 */
-	public function admin()
-	{
-		return [
-			[
-				'name' => 'Users',
-				'url'  => '/users',
-				'icon' => 'fa fa-user',
-			],
-			[
-				'name' => 'Teams',
-				'url'  => '/teams',
-				'icon' => 'fa fa-users',
-			],
-			[
-				'name' => 'Projects',
-				'url'  => '/projects',
-				'icon' => 'fa fa-file-o',
-			],
-			[
-				'name' => 'Plans',
-				'url'  => '/plans',
-				'icon' => 'fa fa-gear',
-			],
-			[
-				'name' => 'Articles',
-				'url' => '/articles',
-				'icon' => 'fa fa-file-word-o',
-			],
-			[
-				'name' => 'Messages',
-				'url'  => '/messages',
-				'icon' => 'fa fa-envelope',
-			],
-			[
-				'name' => 'Charges',
-				'url'  => '/charges',
-				'icon' => 'fa fa-dollar',
-			],
-			[
-				'name' => 'Settings',
-				'url'  => '/settings',
-				'icon' => 'fa fa-gear',
-			]
+        $view->with('items', $links);
+    }
 
-		];
-	}
+    /**
+     * @return array
+     */
+    public function guest()
+    {
+        return [
+            'Login'    => '/login',
+            'Register' => '/register',
+        ];
+    }
 
-	/**
-	 * @return array
-	 */
-	public function client()
-	{
-		return [
-			[
-				'name' => 'Projects',
-				'url'  => '/projects',
-				'icon' => 'fa fa-file-o',
-			],
-			[
-				'name' => 'Messages',
-				'url'  => '/messages',
-				'icon' => 'fa fa-envelope',
-			],
-			[
-				'name' => 'Settings',
-				'url'  => '/settings',
-				'icon' => 'fa fa-gear',
-			]
-		];
-	}
+    /**
+     * @return array
+     */
+    public function admin()
+    {
+        return [
+            [
+                'name' => 'Users',
+                'url'  => '/users',
+                'icon' => 'fa fa-user',
+            ],
+            [
+                'name' => 'Teams',
+                'url'  => '/teams',
+                'icon' => 'fa fa-users',
+            ],
+            [
+                'name' => 'Projects',
+                'url'  => '/projects',
+                'icon' => 'fa fa-file-o',
+            ],
+            [
+                'name' => 'Plans',
+                'url'  => '/plans',
+                'icon' => 'fa fa-gear',
+            ],
+            [
+                'name' => 'Articles',
+                'url'  => '/articles',
+                'icon' => 'fa fa-file-word-o',
+            ],
+            [
+                'name' => 'Charges',
+                'url'  => '/charges',
+                'icon' => 'fa fa-dollar',
+            ],
+        ];
+    }
 
-	/**
-	 * @return array
-	 */
-	public function account_manager()
-	{
-		return [
-			[
-				'name' => 'Teams',
-				'url'  => '/teams',
-				'icon' => 'fa fa-users',
-			],
-			[
-				'name' => 'Projects',
-				'url'  => '/projects',
-				'icon' => 'fa fa-file-o',
-			],
-			[
-				'name' => 'Messages',
-				'url'  => '/messages',
-				'icon' => 'fa fa-envelope',
-			],
-			[
-				'name' => 'Settings',
-				'url'  => '/settings',
-				'icon' => 'fa fa-gear',
-			]
-		];
-	}
+    /**
+     * @return array
+     */
+    public function client()
+    {
+        return [
+            [
+                'name' => 'Projects',
+                'url'  => '/projects',
+                'icon' => 'fa fa-file-o',
+            ],
+        ];
+    }
 
-	/**
-	 * @return array
-	 */
-	public function writer()
-	{
-		return [
-			[
-				'name' => 'Projects',
-				'url'  => '/projects',
-				'icon' => 'fa fa-file-o',
-			],
-			[
-				'name' => 'Messages',
-				'url'  => '/messages',
-				'icon' => 'fa fa-envelope',
-			],
-			[
-				'name' => 'Settings',
-				'url'  => '/settings',
-				'icon' => 'fa fa-gear',
-			]
-		];
-	}
+    /**
+     * @return array
+     */
+    public function account_manager()
+    {
+        return [
+            [
+                'name' => 'Teams',
+                'url'  => '/teams',
+                'icon' => 'fa fa-users',
+            ],
+            [
+                'name' => 'Projects',
+                'url'  => '/projects',
+                'icon' => 'fa fa-file-o',
+            ],
+        ];
+    }
 
-	/**
-	 * @return array
-	 */
-	public function editor()
-	{
-		return [
+    /**
+     * @return array
+     */
+    public function writer()
+    {
+        return [
+            [
+                'name' => 'Projects',
+                'url'  => '/projects',
+                'icon' => 'fa fa-file-o',
+            ],
+            
+        ];
+    }
 
-		];
-	}
+    /**
+     * @return array
+     */
+    public function editor()
+    {
+        return [
 
-	/**
-	 * @return array
-	 */
-	public function designer()
-	{
-		return [
+        ];
+    }
 
-		];
-	}
+    /**
+     * @return array
+     */
+    public function designer()
+    {
+        return [
+
+        ];
+    }
 }

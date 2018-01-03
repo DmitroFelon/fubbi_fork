@@ -67,12 +67,20 @@
     var user = @json((\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user():'');
     var conversation_id = null;
     var is_chat = false;
+    var help_video_src = "{{$help_video_src}}";
 </script>
+
+<div id="help-video-wrapper">
+    <button id="question-btn" class="btn btn-warning btn-circle btn-lg">
+        <i class="fa fa-question"></i>
+    </button>
+</div>
 
 @yield('before-scripts')
 
 <script src="{!! asset('js/lib.js') !!}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 
 @yield('scripts')
