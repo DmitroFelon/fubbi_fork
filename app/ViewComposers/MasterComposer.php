@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imad
- * Date: 01/12/17
- * Time: 10:08
- */
+
 
 namespace App\ViewComposers;
 
@@ -18,6 +13,10 @@ use Musonza\Chat\Chat;
 use Musonza\Chat\Messages\Message;
 use Musonza\Chat\Notifications\MessageSent;
 
+/**
+ * Class MasterComposer
+ * @package App\ViewComposers
+ */
 class MasterComposer
 {
     /**
@@ -47,6 +46,10 @@ class MasterComposer
         $this->request = $request;
     }
 
+    /**
+     * @param View $view
+     * @return $this|void
+     */
     public function compose(View $view)
     {
         if ($this->request->ajax()) {
@@ -66,6 +69,9 @@ class MasterComposer
         return $view->with($data);
     }
 
+    /**
+     * @return bool|string
+     */
     public function helpVideoSrc()
     {
         if ($this->request->is('projects')) {

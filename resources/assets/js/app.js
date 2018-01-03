@@ -374,12 +374,16 @@ jQuery(document).ready(function ($) {
 
     /*
     * Help videos
+    *
+    * Show if vidie exist
     * */
-
     if(help_video_src){
         $('#help-video-wrapper').show();
     }
 
+    /*
+    * Open video modal
+    * */
     $('#question-btn').click(function () {
         swal("", {
             className: 'help-video-alert',
@@ -400,6 +404,9 @@ jQuery(document).ready(function ($) {
             }
         }).then(function () {
             $('.help-video').each(function(){
+                /*
+                * Stop video on modal close
+                * */
                 $(this).attr('src', $(this).attr('src'));
                 return false;
             });
