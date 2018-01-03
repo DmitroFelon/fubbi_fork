@@ -284,6 +284,10 @@ class ProjectController extends Controller
         return redirect()->action('ProjectController@index');
     }
 
+    /**
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function resume(Project $project)
     {
         $client = $project->client;
@@ -391,6 +395,11 @@ class ProjectController extends Controller
     }
 
 
+    /**
+     * @param Project $project
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function invite_users(Project $project, Request $request)
     {
         if ($request->has('users')) {
@@ -410,6 +419,11 @@ class ProjectController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Project $project
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function invite_team(Project $project, Request $request)
     {
         if ($request->has('team')) {
