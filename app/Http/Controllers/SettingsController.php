@@ -6,8 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class SettingsController
+ * @package App\Http\Controllers
+ */
 class SettingsController extends Controller
 {
+    /**
+     * @return mixed
+     */
     public function index()
     {
 
@@ -58,6 +65,10 @@ class SettingsController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function save(Request $request)
     {
         $user = Auth::user();
@@ -77,6 +88,10 @@ class SettingsController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function billing(Request $request)
     {
         $user = Auth::user();

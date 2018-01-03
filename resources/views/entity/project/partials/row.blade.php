@@ -6,7 +6,7 @@
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}">{{$project->name}}</a>
         <br/>
         <small>
-            Created {{$project->created_at->format('Y-m-d')}}
+            {{_i('Created')}} {{$project->created_at->format('Y-m-d')}}
         </small>
     </td>
     <td class="">
@@ -22,6 +22,11 @@
         <strong>{{_i('Articles')}}:</strong> {{_i('Total')}}:{{$project->articles()->count()}}, {{_i('Accepted')}}
         :{{$project->articles()->accepted()->count()}}
     </td>
+    <td>
+        @if($project->client->subscription($project->name)->onGracePeriod())
+            <strong>{{_i('Will be stopped at')}}:</strong> {{$project->subscription->ends_at->format('Y-m-d')}}
+        @endif
+    </td>
     <td class="project-actions">
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm navy-bg">
             <i class="fa fa-folder"></i> {{_i('View')}}
@@ -35,11 +40,22 @@
             <i class="fa fa-download"></i> {{_i('Export')}}
         </a>
         @role(['admin', 'client'])
-        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm red-bg">
-            <i class="fa fa-trash"></i> {{_i('Delete')}}
-        </a>
+        @if($project->client->subscription($project->name)->onGracePeriod())
+            <a href="{{action('ProjectController@resume', $project)}}" class="btn btn-white btn-sm grey-bg">
+                <i class="fa fa-refresh"></i> {{_i('Resume')}}
+            </a>
+        @else
+            <form method="post" style="display:inline;"
+                  action="{{action('ProjectController@destroy', ['id' => $project->id])}}">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button class="btn btn-white btn-sm red-bg" type="submit"><i class="fa fa-trash"></i> {{_i('Delete')}}
+                </button>
+            </form>
+        @endif
         @endrole()
-        <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}" class="btn btn-white btn-sm lazur-bg">
+        <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}"
+           class="btn btn-white btn-sm lazur-bg">
             <i class="fa fa-cloud"></i> {{_i('Chat')}}
         </a>
     </td>

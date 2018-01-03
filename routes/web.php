@@ -87,6 +87,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('projects')->group(function () {
         Route::get('{project}/prefill', 'ProjectController@prefill');
         Route::get('{project}/export', 'ProjectController@export');
+        Route::get('{project}/resume', 'ProjectController@resume');
         Route::post('{project}/invite_users', 'ProjectController@invite_users');
         Route::post('{project}/invite_team', 'ProjectController@invite_team');
     });

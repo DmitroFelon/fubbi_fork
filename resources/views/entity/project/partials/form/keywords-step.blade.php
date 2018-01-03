@@ -67,7 +67,7 @@
             </label>
         </div>
         <div class="col-lg-4">
-            <input data-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}" type="text"
+            <input required data-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}" type="text"
                    class="form-control keyword-input">
         </div>
         <div class="col-lg-2">

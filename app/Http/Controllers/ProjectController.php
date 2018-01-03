@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Stripe\Plan;
+use Stripe\Subscription;
 
 /**
  * Class ProjectController
@@ -103,7 +104,7 @@ class ProjectController extends Controller
             'entity.project.create',
             [
                 'plans' => $public_plans,
-                'step' => $step,
+                'step'  => $step,
             ]
         );
     }
@@ -209,8 +210,8 @@ class ProjectController extends Controller
 
         $data = [
             'project' => $project,
-            'users' => $users,
-            'teams' => $teams
+            'users'   => $users,
+            'teams'   => $teams
         ];
 
         return view('entity.project.show', $data);
@@ -236,8 +237,8 @@ class ProjectController extends Controller
         $data = [
             'keywords' => $project->getMeta('keywords'),
             'articles' => Article::all(),
-            'project' => $project,
-            'step' => $project->state,
+            'project'  => $project,
+            'step'     => $project->state,
         ];
 
         return view(
@@ -268,11 +269,29 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param Project $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
+
+        $client = $project->client;
+
+        if ($client->subscription($project->name)) {
+            $client->subscription($project->name)->cancel();
+        }
+
+        return redirect()->action('ProjectController@index');
+    }
+
+    public function resume(Project $project)
+    {
+        $client = $project->client;
+
+        if ($client->subscription($project->name)) {
+            $client->subscription($project->name)->resume();
+        }
+
         return redirect()->action('ProjectController@index');
     }
 

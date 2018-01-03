@@ -306,6 +306,10 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var theme = $(this).attr('data-theme');
         var input = $('input[data-theme="' + theme + '"]').val();
+        if (!input) {
+            return;
+        }
+
         var wrapper = $('div[data-theme="' + theme + '"]');
 
         wrapper.append(
@@ -423,15 +427,15 @@ jQuery(document).ready(function ($) {
     /*
      * Article textarea
      * */
-/*    $("#article-textarea").markdown(
-        {
-            autofocus: false,
-            savable: false,
-            resize: 'vertical',
-            fullscreen: {enable: false},
-            hiddenButtons: ['Image', 'Url']
-        }
-    );*/
+    /*    $("#article-textarea").markdown(
+     {
+     autofocus: false,
+     savable: false,
+     resize: 'vertical',
+     fullscreen: {enable: false},
+     hiddenButtons: ['Image', 'Url']
+     }
+     );*/
 
     /*
      * Init footable table
@@ -465,14 +469,14 @@ jQuery(document).ready(function ($) {
                     messages_count_wrapper.html(count.toString())
 
                     console.log(notification);
-                    
+
                     toastr.options = {
                         "closeButton": true,
                         "debug": false,
                         "progressBar": true,
                         "preventDuplicates": false,
                         "positionClass": "toast-top-right",
-                        
+
                         "showDuration": "400",
                         "hideDuration": "1000",
                         "timeOut": "7000",
@@ -485,7 +489,7 @@ jQuery(document).ready(function ($) {
 
                     var toastTitle = 'New message from: ' + notification.sender_name;
 
-                    toastr.info(notification.message_text.substring(0, 25) + '...', toastTitle );
+                    toastr.info(notification.message_text.substring(0, 25) + '...', toastTitle);
 
                 } else {
                     $.get("{{url('messages/read/')}}/" + notification.conversation_id);
