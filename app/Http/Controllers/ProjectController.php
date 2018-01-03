@@ -8,6 +8,7 @@ use App\Models\Keyword;
 use App\Models\Project;
 use App\Models\Team;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -46,13 +47,35 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = $this->request->user();
 
         switch ($user->role) {
             case 'admin':
-                $projects = Project::paginate(10);
+                $projects = Project::query();
+
+                if ($request->has('status') and $request->get('status')) {
+                    if($request->get('status') == 'active'){
+                        $projects = $projects->whereHas('subscription', function ($query) {
+                            $query->whereNull('ends_at');
+                        });
+                    }else{
+                        $projects = $projects->whereHas('subscription', function ($query) {
+                            $query->whereNotNull('ends_at');
+                        });
+                    }
+                }
+
+                if ($request->has('user') and $request->get('user')) {
+                    $projects = $projects->where('client_id', $request->get('user'));
+                }
+
+                if ($request->has('month') and $request->get('month')) {
+                    $projects = $projects->where('created_at', '>=', Carbon::now()->subMonth($request->get('month')));
+                }
+
+                $projects = $projects->paginate(10);
                 break;
             case 'client':
                 $projects = $user->projects()->paginate(10);
@@ -65,7 +88,33 @@ class ProjectController extends Controller
                 break;
         }
 
-        return view('entity.project.index', ['projects' => $projects]);
+        $filters = [];
+
+        $filters['users'] = User::without(['notifications', 'invites'])->withRole('client')
+                                ->get(['id', 'first_name', 'last_name', 'email']);
+        //prepare and filter users for the view
+        $clients          = $filters['users']->keyBy('id')->transform(function (User $user) {
+            return $user->name;
+        });
+        $filters['users'] = $clients->filter()->put('', _i('All clients'))->reverse()->toArray();
+
+
+        $filters['months'] = [
+            ''   => _('All time'),
+            '1'  => _('1 month'),
+            '3'  => _('3 months'),
+            '6'  => _('6 months'),
+            '12' => _('12 months'),
+        ];
+
+        $filters['status'] = [
+            ''         => _i('Any status'),
+            'active'   => _i('Active'),
+            'deactive' => _i('Deactive'),
+
+        ];
+
+        return view('entity.project.index', ['projects' => $projects, 'filters' => $filters]);
     }
 
     /**
