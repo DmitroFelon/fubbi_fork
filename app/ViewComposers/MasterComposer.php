@@ -52,19 +52,24 @@ class MasterComposer
      */
     public function compose(View $view)
     {
+
         if ($this->request->ajax()) {
             return;
         }
 
         if (!Auth::check()) {
-            return;
+            $data = [
+                'notifications'         => null,
+                'message_notifications' => null,
+                'help_video_src'        => null,
+            ];
+        } else {
+            $data = [
+                'notifications'         => $this->user->getNotifications(),
+                'message_notifications' => $this->user->getMessageNotifications(),
+                'help_video_src'        => $this->helpVideoSrc()
+            ];
         }
-
-        $data = [
-            'notifications'         => $this->user->getNotifications(),
-            'message_notifications' => $this->user->getMessageNotifications(),
-            'help_video_src'        => $this->helpVideoSrc()
-        ];
 
         return $view->with($data);
     }

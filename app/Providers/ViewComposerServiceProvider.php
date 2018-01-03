@@ -33,8 +33,10 @@ class ViewComposerServiceProvider extends ServiceProvider
          * Navigation
          * */
         View::composer('layouts.navigation', LeftMenuComposer::class);
+        /*
+         * Notifications, helpers
+         * */
         View::composer('master', MasterComposer::class);
-
     }
 
 
