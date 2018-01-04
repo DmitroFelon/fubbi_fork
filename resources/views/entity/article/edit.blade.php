@@ -22,7 +22,10 @@
                     </div>
                     {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
 
-                    {!! Form::bsSelect('type', ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'], '', _i('Content Type'), null, ['required']) !!}
+                     {!! Form::bsSelect('type',
+                        ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'],
+                        '', _i('Content Type'), null, ['required'])
+                      !!}
 
                     <div class="row">
                         <div class="row m-t-md">

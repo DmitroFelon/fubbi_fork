@@ -146,10 +146,12 @@ class ArticlesController extends Controller
 
         $article->setMeta('socialposts', $request->input('socialposts'));
 
+        $article->setMeta('type', $request->input('type'));
+
         $tags = collect(explode(',', $request->input('tags')));
 
         $article->syncTags([]);
-        
+
         $tags->each(function ($tag) use ($article) {
             $article->attachTagsHelper($tag);
         });
