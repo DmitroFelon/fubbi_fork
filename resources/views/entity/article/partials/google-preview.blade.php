@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="description pull-right">
-            {{_i('You must be logged in to google docs as ')}} <strong>{{Auth::user()->email}}</strong>
+            {{_i('You must be logged in to Google as ')}} <br> <strong>{{Auth::user()->email}}</strong>
         </div>
         <iframe id="google-frame"
                 width="100%"

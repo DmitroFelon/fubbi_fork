@@ -23,22 +23,12 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-
-                </div>
-                <div class="row">
                     @if($article->google_id)
                         @include('entity.article.partials.google-preview')
                     @endif
                 </div>
 
-                <div class="row">
-                    @if($article->body)
-                        @include('entity.article.partials.body-preview')
-                    @endif
-                </div>
-
                 @if($article->hasMedia('copyscape'))
-
                     <div class="row">
                         <h3 class="text-center">
                             {{_i('Copyscape screenshot')}}
@@ -47,7 +37,6 @@
                             <img class="img-thumbnail" width="250" src="{{$article->getMedia('copyscape')->first()->getFullUrl()}}" alt="">
                         </a>
                     </div>
-
                 @endif
                 @if(is_array($article->getMeta('socialposts')))
                 <div class="row">
