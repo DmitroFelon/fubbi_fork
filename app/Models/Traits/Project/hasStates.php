@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
+use Mockery\CountValidator\Exception;
 
 /**
  * Class hasStates
@@ -141,19 +142,19 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
-        echo $request->input('_step');
+        try {
+            if ($request->input('_step') == ProjectStates::QUIZ_FILLING) {
+                return $this->prefillQuiz($request);
+            }
 
-        if ($request->input('_step') == ProjectStates::QUIZ_FILLING) {
-            echo 'themes';
-            return $this->prefillQuiz($request);
+            if ($request->input('_step') == ProjectStates::KEYWORDS_FILLING) {
+                return $this->prefillKeywords($request);
+            }
+        } catch (\Exception $e) {
+            throw $e;
         }
 
-        if ($request->input('_step') == ProjectStates::KEYWORDS_FILLING) {
-            echo 'keywords';
-            return $this->prefillKeywords($request);
-        }
-
-        return false;
+        throw new Exception(_('Undefined project step'));
     }
 
     /**

@@ -467,9 +467,12 @@ class ProjectController extends Controller
      */
     public function prefill(Project $project, Request $request)
     {
-        return ($project->prefill($request))
-            ? Response::json(['success'], 200)
-            : Response::json(['error'], 200);
+        try {
+            $project->prefill($request);
+            Response::json(['success'], 200);
+        } catch (\Exception $e) {
+            Response::json(['error' => true, 'message' => $e->getMessage()], 400);
+        }
     }
 
     /**
