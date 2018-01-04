@@ -141,12 +141,12 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
-        if ($request->input(ProjectStates::QUIZ_FILLING)) {
+        if ($request->input('_step') == ProjectStates::QUIZ_FILLING) {
             echo 'themes';
             return $this->prefillQuiz($request);
         }
 
-        if ($request->input(ProjectStates::KEYWORDS_FILLING)) {
+        if ($request->input('_step') == ProjectStates::KEYWORDS_FILLING) {
             echo 'keywords';
             return $this->prefillKeywords($request);
         }
