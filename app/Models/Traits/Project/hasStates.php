@@ -154,7 +154,7 @@ trait hasStates
             throw $e;
         }
 
-        throw new Exception(_('Undefined project step'));
+        throw new Exception('Undefined project step: ' . $request->input('_step'));
     }
 
     /**
