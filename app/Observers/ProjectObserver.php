@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Article;
+use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\Project\StatusChanged;
@@ -20,7 +21,6 @@ use Musonza\Chat\Facades\ChatFacade;
  */
 class ProjectObserver
 {
-
     /**
      * @var \App\User|\Illuminate\Contracts\Auth\Authenticatable|null
      */
@@ -242,6 +242,21 @@ class ProjectObserver
      */
     public function setState(Project $project)
     {
+        $states_to_skip = [
+            ProjectStates::KEYWORDS_FILLING,
+            ProjectStates::QUIZ_FILLING,
+            ProjectStates::PLAN_SELECTION,
+            ProjectStates::CREATED,
+            ProjectStates::REJECTED_BY_CLIENT,
+            ProjectStates::ACCEPTED_BY_MANAGER,
+            ProjectStates::REJECTED_BY_MANAGER,
+            ProjectStates::FILLING_BY_RESEARCHER,
+        ];
+
+        if (in_array($project->state, $states_to_skip)) {
+            return;
+        }
+
         $project->client->notify(new StatusChanged($project));
 
         activity('project_progress')
