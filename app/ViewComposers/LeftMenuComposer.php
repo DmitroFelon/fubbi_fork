@@ -75,6 +75,15 @@ class LeftMenuComposer
             ]
         );
 
+        $links = collect($links)->push(
+            [
+                'name' => 'Issues',
+                'url'  => '/issues',
+                'icon' => 'fa fa-bug',
+            ]
+        );
+
+
         $view->with('items', $links);
     }
 

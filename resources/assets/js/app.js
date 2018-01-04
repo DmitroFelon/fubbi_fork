@@ -277,8 +277,7 @@ jQuery(document).ready(function ($) {
     function preUploadKeywords() {
         var formData = new FormData(document.getElementById("keywords-form"));
         var _project_id = $("input[name=_project_id]").val();
-
-        console.log(formData);
+        
 
         $.post({
             url: '/projects/' + _project_id + '/prefill',
@@ -289,8 +288,7 @@ jQuery(document).ready(function ($) {
     }
 
     function preUploadQuiz() {
-        var formData = $("#quiz-form").serialize();
-
+        var formData = new FormData(document.getElementById("quiz-form"));
         var _project_id = $("input[name=_project_id]").val();
 
         $.post({

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProject;
 use App\Models\Article;
+use App\Models\Helpers\ProjectStates;
 use App\Models\Keyword;
 use App\Models\Project;
 use App\Models\Team;
@@ -281,9 +282,12 @@ class ProjectController extends Controller
             ? $request->input('s')
             : false;
 
-
         if ($step) {
-            $project->setState($step);
+            if (in_array($step, ProjectStates::$changeable_states)) {
+                $project->setState($step);
+            } else {
+                return redirect()->back()->with('error', _i('You can\'t perform this action'));
+            }
         }
 
         $data = [
@@ -440,7 +444,11 @@ class ProjectController extends Controller
         $files = $project->getMedia($request->get('collection'));
 
         $files->transform(function (Media $media) {
-            $media->url = $media->getFullUrl();
+            try {
+                $media->url = $media->getFullUrl();
+            } catch (\Exception $e) {
+                $media->url = '';
+            }
             return $media;
         });
 

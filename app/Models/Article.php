@@ -55,6 +55,9 @@ use Spatie\Tags\Tag;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article accepted()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article declined()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article new()
+ * @property string|null $google_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article meta()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereGoogleId($value)
  */
 class Article extends Model implements HasMedia
 {

@@ -136,7 +136,8 @@ Route::middleware(['auth'])->group(function () {
         [
             'projects' => 'ProjectController',
             'messages' => 'MessageController',
-            'teams'    => 'TeamController'
+            'teams'    => 'TeamController',
+            'issues'   => 'IssueController'
         ]
     );
 

@@ -2,6 +2,7 @@
 
 namespace Spatie\MediaLibrary\Filesystem;
 
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\Media;
 use Spatie\MediaLibrary\Helpers\File;
 use Spatie\MediaLibrary\FileManipulator;
@@ -39,7 +40,7 @@ class DefaultFilesystem implements Filesystem
      */
     public function copyToMediaLibrary(string $pathToFile, Media $media, bool $conversions = false, string $targetFileName = '')
     {
-        $destination = $this->getMediaDirectory($media, $conversions).
+        $destination = $this->getMediaDirectory($media, $conversions) .
             ($targetFileName == '' ? pathinfo($pathToFile, PATHINFO_BASENAME) : $targetFileName);
 
         $file = fopen($pathToFile, 'r');
@@ -91,7 +92,7 @@ class DefaultFilesystem implements Filesystem
      */
     public function copyFromMediaLibrary(Media $media, string $targetFile): string
     {
-        $sourceFile = $this->getMediaDirectory($media).'/'.$media->file_name;
+        $sourceFile = $this->getMediaDirectory($media) . '/' . $media->file_name;
 
         touch($targetFile);
 
@@ -99,7 +100,7 @@ class DefaultFilesystem implements Filesystem
 
         $targetFileStream = fopen($targetFile, 'a');
 
-        while (! feof($stream)) {
+        while (!feof($stream)) {
             $chunk = fread($stream, 1024);
             fwrite($targetFileStream, $chunk);
         }
@@ -131,8 +132,8 @@ class DefaultFilesystem implements Filesystem
      */
     public function renameFile(Media $media, string $oldName)
     {
-        $oldFile = $this->getMediaDirectory($media).'/'.$oldName;
-        $newFile = $this->getMediaDirectory($media).'/'.$media->file_name;
+        $oldFile = $this->getMediaDirectory($media) . '/' . $oldName;
+        $newFile = $this->getMediaDirectory($media) . '/' . $media->file_name;
 
         $this->filesystem->disk($media->disk)->move($oldFile, $newFile);
     }
@@ -148,8 +149,9 @@ class DefaultFilesystem implements Filesystem
             ? $pathGenerator->getPathForConversions($media)
             : $pathGenerator->getPath($media);
 
-        if (! in_array($media->getDiskDriverName(), ['s3'], true)) {
+        if (!in_array($media->getDiskDriverName(), ['s3'], true)) {
             $this->filesystem->disk($media->disk)->makeDirectory($directory);
+            
         }
 
         return $directory;

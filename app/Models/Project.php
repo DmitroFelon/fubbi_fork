@@ -24,6 +24,7 @@ use Laravel\Cashier\Subscription;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
 use Venturecraft\Revisionable\Revision;
 
@@ -68,6 +69,7 @@ use Venturecraft\Revisionable\Revision;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activity
  */
 class Project extends Model implements HasMedia, Invitable
 {
@@ -83,7 +85,6 @@ class Project extends Model implements HasMedia, Invitable
     use hasInvite;
     use hasPlan;
     use SoftDeletes;
-
     use LogsActivity;
 
     /**
@@ -196,7 +197,7 @@ class Project extends Model implements HasMedia, Invitable
                 }
             }
         }
-        
+
         return $files;
     }
 

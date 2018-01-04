@@ -79,35 +79,40 @@
 <script>
     jQuery(document).ready(function ($) {
         var _project_id = $("input[name=_project_id]").val();
-        dz = $("#compliance_guideline-group").dropzone(
-                {
-                    url: "/projects/" + _project_id + "/prefill_files",
-                    paramName: 'compliance_guideline',
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    init: function () {
-                        thisDropzone = this;
-                        var files = [];
-                        $.get('/projects/' + _project_id + '/get_stored_files',
-                                {collection: 'compliance_guideline'},
-                                function (data) {
-                                    data.forEach(function (item) {
-                                        thisDropzone.emit("addedfile", item);
-                                        thisDropzone.options.thumbnail.call(thisDropzone, item, item.url);
-                                        thisDropzone.emit("complete", item);
-                                    });
-                                });
-                    },
+        $("#compliance_guideline-group").dropzone({
+            url: "/projects/" + _project_id + "/prefill_files",
+            paramName: 'compliance_guideline',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            autoDiscover: false,
+            init: function () {
+                thisDropzone = this;
 
-                    addRemoveLinks: true,
-                    removedfile: function (item) {
-                        $.get('/projects/' + item.model_id + '/remove_stored_file/' + item.id);
-                        var _ref;
-                        return (_ref = item.previewElement) != null ? _ref.parentNode.removeChild(item.previewElement) : void 0;
-                    }
+                this.on("addedfile", function(item) {
+
                 });
+
+                $.get('/projects/' + _project_id + '/get_stored_files',
+                        {collection: 'compliance_guideline'},
+                        function (data) {
+                            data.forEach(function (item) {
+                                thisDropzone.emit("addedfile", item);
+                                thisDropzone.options.thumbnail.call(thisDropzone, item, item.url);
+                                thisDropzone.emit("complete", item);
+                            });
+                        });
+            },
+            addRemoveLinks: true,
+            removedfile: function (item) {
+                $.get('/projects/' + item.model_id + '/remove_stored_file/' + item.id);
+                var _ref;
+                return (_ref = item.previewElement) != null
+                        ? _ref.parentNode.removeChild(item.previewElement)
+                        : void 0;
+            }
+        });
     });
 </script>
 

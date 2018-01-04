@@ -7,6 +7,7 @@ use App\Models\Annotation;
 use App\Models\Article;
 use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
+use App\Models\Issue;
 use App\Models\Outline;
 use App\Models\Project;
 use App\Models\Role;
@@ -141,8 +142,8 @@ class User extends Authenticatable implements HasMedia
 
         return [
             'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
+            'last_name'  => $this->last_name,
+            'email'      => $this->email,
         ];
     }
 
@@ -152,7 +153,8 @@ class User extends Authenticatable implements HasMedia
     public function getRoleAttribute()
     {
         return ($this->roles->first())
-            ? $this->roles->first()->name :
+            ? $this->roles->first()->name
+            :
             null;
     }
 
@@ -242,8 +244,8 @@ class User extends Authenticatable implements HasMedia
         $invite = new Invite(
             [
                 'invitable_type' => get_class($whereInvite),
-                'invitable_id' => $whereInvite->getInvitableId(),
-                'user_id' => $this->id,
+                'invitable_id'   => $whereInvite->getInvitableId(),
+                'user_id'        => $this->id,
             ]
         );
 
@@ -381,6 +383,4 @@ class User extends Authenticatable implements HasMedia
 
         return $messages;
     }
-
-
 }
