@@ -182,6 +182,9 @@ class GoogleDriveUpload implements ShouldQueue
             $permissions->put($admin->email, 'writer');
         });
 
+
+        Log::debug($permissions->toJson());
+
         return $permissions;
     }
 }
