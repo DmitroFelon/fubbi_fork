@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Spatie\MediaLibrary\Media;
+use Stripe\Error\InvalidRequest;
 use Stripe\Plan;
 use Stripe\Subscription;
 
@@ -326,11 +327,16 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
 
-        $client = $project->client;
+        try{
+            $client = $project->client;
 
-        if ($client->subscription($project->name)) {
-            $client->subscription($project->name)->cancel();
+            if ($client->subscription($project->name)) {
+                $client->subscription($project->name)->cancel();
+            }
+        }catch (InvalidRequest $e){
+            $project->forceDelete();
         }
+
 
         return redirect()->action('ProjectController@index');
     }
