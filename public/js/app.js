@@ -417,30 +417,42 @@ jQuery(document).ready(function ($) {
 
     function preUploadKeywords() {
 
-        var formData = $("#keywords-form").serialize();
+
+
+
+        var formData = $("#keywords-form");
+
+        console.log(formData);
+
+        var formData = formData.serialize();
+
+        console.log(formData);
+
         var _project_id = $("input[name=_project_id]").val();
 
-        jQuery.ajax('/projects/' + _project_id + '/prefill', {
+        $.ajax({
+            url: '/projects/' + _project_id + '/prefill',
             method: 'POST',
             processData: false,
             contentType: false,
             data: formData
-        });
+        })
     }
 
     function preUploadQuiz() {
         var formData = $("#quiz-form").serialize();
+
         var _project_id = $("input[name=_project_id]").val();
 
-        jQuery.ajax('/projects/' + _project_id + '/prefill', {
+        $.ajax({
+            url: '/projects/' + _project_id + '/prefill',
             method: 'POST',
             processData: false,
             contentType: false,
             data: formData
         });
-
     }
-    
+
     /*
      * Init footable table
      * */
