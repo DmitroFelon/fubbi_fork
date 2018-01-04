@@ -327,13 +327,13 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
 
-        try{
+        try {
             $client = $project->client;
 
             if ($client->subscription($project->name)) {
                 $client->subscription($project->name)->cancel();
             }
-        }catch (InvalidRequest $e){
+        } catch (InvalidRequest $e) {
             $project->forceDelete();
         }
 
@@ -467,7 +467,9 @@ class ProjectController extends Controller
      */
     public function prefill(Project $project, Request $request)
     {
-        return Response::json($project->prefill($request), 200);
+        return ($project->prefill($request))
+            ? Response::json(['success'], 200)
+            : Response::json(['error'], 200);
     }
 
     /**

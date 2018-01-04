@@ -141,6 +141,8 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
+        echo $request->input('_step');
+
         if ($request->input('_step') == ProjectStates::QUIZ_FILLING) {
             echo 'themes';
             return $this->prefillQuiz($request);
