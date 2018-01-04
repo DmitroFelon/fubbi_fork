@@ -5,7 +5,7 @@
 <div class="ibox-content">
 
     {!! Form::model($project,
-    ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
+    ['files' => true, 'method' => 'POST', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
     !!}
     {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::QUIZ_FILLING) !!}
     {!! Form::hidden('_project_id', $project->id ) !!}
