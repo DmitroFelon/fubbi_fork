@@ -42,6 +42,8 @@
         @if($article->google_id)
             <strong>{{_i('Google docs')}}:</strong> <a target="_blank"
                                                        href="https://docs.google.com/document/d/{{$article->google_id}}/edit">{{_i('open')}}</a>
+        @else
+            <strong>{{_i('Google docs')}}:</strong> {{ _i('Processing')}}
         @endif
     </td>
     <td class="project-actions">
