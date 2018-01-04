@@ -22,11 +22,17 @@
                     </div>
                     {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
 
-                     {!! Form::bsSelect('type',
-                        ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'],
-                        '', _i('Content Type'), null, ['required'])
-                      !!}
-
+                    <div class="row">
+                        <div class="row m-t-md">
+                            <h3 class="text-center">
+                                {{_i('Type')}}
+                            </h3>
+                        </div>
+                        {!! Form::bsSelect('type',
+                           ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'],
+                           '', _i('Content Type'), null, ['required'])
+                        !!}
+                    </div>
                     <div class="row">
                         <div class="row m-t-md">
                             <h3 class="text-center">
@@ -36,7 +42,6 @@
                         {!! Form::bsText('tags', implode(',', $article->tags->pluck('name')->toArray()),_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
                     </div>
                     <div class="row">
-
                         <div class="row m-t-md">
                             <h3 class="text-center">
                                 {{_i('Social posts')}}
