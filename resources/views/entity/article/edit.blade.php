@@ -20,11 +20,6 @@
                             @include('entity.article.partials.google-preview')
                         @endif
                     </div>
-                    <div class="row">
-                        @if($article->body)
-                            @include('entity.article.partials.body-preview')
-                        @endif
-                    </div>
                     {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
                     <div class="row">
                         <div class="row m-t-md">
