@@ -28,6 +28,7 @@
                     </a>
                 </div>
 
+                @role(['!client'])
                 {{Form::open(['action' => 'ProjectController@index', 'method' => 'get'])}}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     {{ Form::select(
@@ -59,6 +60,7 @@
                     </span>
                 </div>
                 {{Form::close()}}
+                @endrole()
             </div>
             <div class="project-list">
                 <table class="table table-hover">
