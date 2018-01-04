@@ -86,10 +86,19 @@ class Project extends Model implements HasMedia, Invitable
 
     use LogsActivity;
 
+    /**
+     *
+     */
     const TAG_CATEGORY = 'service_type';
 
+    /**
+     * @var bool
+     */
     protected static $logOnlyDirty = true;
 
+    /**
+     * @var array
+     */
     protected static $logAttributes = ['name', 'text'];
 
     /**
@@ -124,8 +133,14 @@ class Project extends Model implements HasMedia, Invitable
      */
     protected $dates = ['deleted_at'];
 
+    /**
+     * @var string
+     */
     protected $metaTable = 'projects_meta';
 
+    /**
+     * @var array
+     */
     protected $with = ['client', 'comments'];
 
     /**
@@ -207,6 +222,9 @@ class Project extends Model implements HasMedia, Invitable
         return Invite::class;
     }
 
+    /**
+     * @return float|int
+     */
     public function getProgress()
     {
         $key              = 'articles_count';
@@ -220,6 +238,9 @@ class Project extends Model implements HasMedia, Invitable
             ? $total_articles_accepted / $require_articles * 100 : 0;
     }
 
+    /**
+     * @return string
+     */
     public function export()
     {
 
@@ -334,6 +355,10 @@ class Project extends Model implements HasMedia, Invitable
 
     }
 
+    /**
+     * @param $type
+     * @return string
+     */
     public function getTimelineIcon($type)
     {
         switch ($type) {
