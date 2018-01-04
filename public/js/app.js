@@ -416,12 +416,13 @@ jQuery(document).ready(function ($) {
     }
 
     function preUploadKeywords() {
-        var formData = $("#keywords-form").serializeArray();
+        var formData = new FormData(document.getElementById("keywords-form"));
         var _project_id = $("input[name=_project_id]").val();
 
-        $.ajax({
+        console.log(formData);
+
+        $.post({
             url: '/projects/' + _project_id + '/prefill',
-            method: 'POST',
             processData: false,
             contentType: false,
             data: formData
@@ -433,9 +434,8 @@ jQuery(document).ready(function ($) {
 
         var _project_id = $("input[name=_project_id]").val();
 
-        $.ajax({
+        $.post({
             url: '/projects/' + _project_id + '/prefill',
-            method: 'POST',
             processData: false,
             contentType: false,
             data: formData
