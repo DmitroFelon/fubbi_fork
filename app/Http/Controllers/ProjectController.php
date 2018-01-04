@@ -469,9 +469,9 @@ class ProjectController extends Controller
     {
         try {
             $project->prefill($request);
-            Response::json(['success'], 200);
+            return Response::json(['success', 'error' => false], 200);
         } catch (\Exception $e) {
-            Response::json(['error' => true, 'message' => $e->getMessage()], 400);
+            return Response::json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
