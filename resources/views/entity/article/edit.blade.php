@@ -21,6 +21,9 @@
                         @endif
                     </div>
                     {{ Form::open(['method' => 'POST', 'action' => ['Project\ArticlesController@save_social_posts', $project, $article]]) }}
+
+                    {!! Form::bsSelect('type', ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'], '', _i('Content Type'), null, ['required']) !!}
+
                     <div class="row">
                         <div class="row m-t-md">
                             <h3 class="text-center">
@@ -58,7 +61,9 @@
         function stopRKey(evt) {
             var evt = (evt) ? evt : ((event) ? event : null);
             var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-            if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+            if ((evt.keyCode == 13) && (node.type == "text")) {
+                return false;
+            }
         }
 
         document.onkeypress = stopRKey;
