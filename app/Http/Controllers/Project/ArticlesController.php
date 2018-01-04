@@ -95,7 +95,7 @@ class ArticlesController extends Controller
     public function show(Project $project, Article $article)
     {
 
-        dd($article->pivot);
+        dd($project->articles()->find($article->id)->pivot);
 
         return view('entity.article.show', compact('project', 'article'));
     }
