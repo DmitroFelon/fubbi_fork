@@ -64,6 +64,9 @@ class Article extends Model implements HasMedia
     use Metable;
     use HasTags;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'title',
         'body',
@@ -74,6 +77,11 @@ class Article extends Model implements HasMedia
      * @var string
      */
     protected $metaTable = 'article_meta';
+
+    /**
+     * @var array
+     */
+    protected $with = ['projects'];
 
     /**
      * @var array
@@ -153,6 +161,12 @@ class Article extends Model implements HasMedia
 
     }
 
+    /**
+     * @param string $as
+     * @return \Spatie\MediaLibrary\Media
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+     */
     public function export($as = Drive::MS_WORD)
     {
         $api = new Drive();
