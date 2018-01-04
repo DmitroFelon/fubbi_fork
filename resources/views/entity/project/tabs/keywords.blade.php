@@ -3,7 +3,7 @@
 </div>
 <div class="ibox-content">
     {!! Form::model($project,
-    ['files' => true, 'method' => 'POST', 'role'=>'form', 'id' => 'keywords-form', 'action' => ['ProjectController@update', $project->id]])
+    ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'keywords-form', 'action' => ['ProjectController@update', $project->id]])
     !!}
     {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING) !!}
     {!! Form::hidden('_project_id', $project->id)  !!}
