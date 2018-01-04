@@ -108,7 +108,8 @@ class ArticlesController extends Controller
      */
     public function edit(Project $project, Article $article)
     {
-        $article = $project->articles()->find($article->id);
+        $article = $project->articles()->findOrFail($article->id);
+
         return view('entity.article.edit', compact('project', 'article'));
     }
 
@@ -140,12 +141,15 @@ class ArticlesController extends Controller
 
     public function save_social_posts(Project $project, Article $article, Request $request)
     {
+
+        $article = $project->articles()->findOrFail($article->id);
+
         $article->setMeta('socialposts', $request->input('socialposts'));
 
         $tags = collect(explode(',', $request->input('tags')));
 
-
         $article->syncTags([]);
+        
         $tags->each(function ($tag) use ($article) {
             $article->attachTagsHelper($tag);
         });
