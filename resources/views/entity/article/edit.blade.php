@@ -29,7 +29,7 @@
                             </h3>
                         </div>
                         {!! Form::bsSelect('type',
-                           ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'],
+                           ['' => 'Select Type', 'Article Outline' => 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'],
                            '', _i('Content Type'), null, ['required'])
                         !!}
                     </div>
