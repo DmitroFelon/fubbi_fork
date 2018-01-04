@@ -21,7 +21,6 @@ class Progress extends Notification
      */
     public function __construct(Project $project)
     {
-
         //todo remind workers to complete project articles
         $this->project = $project;
     }
@@ -29,7 +28,7 @@ class Progress extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -40,27 +39,16 @@ class Progress extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Reminder!')
+            ->line(_i('Please, continue working on project: "%s"', [$this->project->name]))
+            ->action('Review project', url()->action('ProjectController@show', $this->project))
+            ->line('Thank you for using our application!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
 }

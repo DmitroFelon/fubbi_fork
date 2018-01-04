@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Article;
 use App\Models\Project;
 use App\Models\Team;
+use App\Notifications\Project\StatusChanged;
 use App\Observers\Traits\Project\States;
 use App\User;
 use Illuminate\Http\Request;
@@ -190,6 +191,9 @@ class ProjectObserver
 
     }
 
+    /**
+     * @param Project $project
+     */
     public function attachWorkers(Project $project)
     {
         $worker_ids = $project->eventData['attachWorkers'];
@@ -205,6 +209,9 @@ class ProjectObserver
             ->log('Users:  ' . $attached_users_names . ' have beed attached to project ' . $project->name);
     }
 
+    /**
+     * @param Project $project
+     */
     public function attachTeam(Project $project)
     {
         $team = Team::find($project->eventData['attachTeam']);
@@ -215,6 +222,9 @@ class ProjectObserver
             ->log('Team ' . $team->name . ' has beed attached to project project ' . $project->name);
     }
 
+    /**
+     * @param Project $project
+     */
     public function attachArticle(Project $project)
     {
         $article = Article::find($project->eventData['attachArticle']);
@@ -227,8 +237,13 @@ class ProjectObserver
 
     }
 
+    /**
+     * @param Project $project
+     */
     public function setState(Project $project)
     {
+        $project->client->notify(new StatusChanged($project));
+
         activity('project_progress')
             ->causedBy(Auth::user())
             ->performedOn($project)

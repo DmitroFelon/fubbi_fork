@@ -10,10 +10,20 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\View;
 use Musonza\Chat\Facades\ChatFacade;
 
+/**
+ * 
+ * Used to send notification about new message in the chat with pusher
+ * 
+ * Class Message
+ * @package App\Notifications\Chat
+ */
 class Message extends Notification
 {
     use Queueable;
 
+    /**
+     * @var \Musonza\Chat\Messages\Message
+     */
     protected $message;
 
 
@@ -39,6 +49,10 @@ class Message extends Notification
     }
 
 
+    /**
+     * @param $notifiable
+     * @return BroadcastMessage
+     */
     public function toBroadcast($notifiable)
     {
         $notification               = new \stdClass();

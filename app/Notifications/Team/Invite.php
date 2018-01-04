@@ -54,14 +54,11 @@ class Invite extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->line(
-            _i(
-                'You have beed invited to the team "%s". Please apply or decline it',
-                [$this->invitation->invitable->getInvitableName()]
-            )
-        )->action('Review Invitation', $this->invitation->invitable->getInvitableUrl())->line(
-            'Thank you for using our application!'
-        );
+        return (new MailMessage)
+            ->subject('Invitation to team')
+            ->line(_i('You have beed invited to the team "%s". Please apply or decline it', [$this->invitation->invitable->getInvitableName()]))
+            ->action('Review Invitation', $this->invitation->invitable->getInvitableUrl())
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -74,10 +71,7 @@ class Invite extends Notification implements ShouldQueue
     {
 
         $notification = NotificationPayload::make(
-            _i(
-                'You have beed invited to the team: "%s"',
-                [$this->invitation->invitable->getInvitableName()]
-            ),
+            _i('You have beed invited to the team: "%s"', [$this->invitation->invitable->getInvitableName()]),
             $this->invitation->invitable->getInvitableUrl(),
             get_class($this->invitation->invitable),
             $this->invitation->invitable->getInvitableId()
@@ -94,19 +88,16 @@ class Invite extends Notification implements ShouldQueue
     {
 
         $data = NotificationPayload::make(
-            _i(
-                'You have beed invited to the team: "%s"',
-                [$this->invitation->invitable->getInvitableName()]
-            ),
+            _i('You have beed invited to the team: "%s"', [$this->invitation->invitable->getInvitableName()]),
             $this->invitation->invitable->getInvitableUrl(),
             get_class($this->invitation->invitable),
             $this->invitation->invitable->getInvitableId()
         );
 
-        $notification = new \stdClass();
+        $notification             = new \stdClass();
         $notification->created_at = now();
-        $notification->data = $data->toArray();
-        $notification->id = $this->id;
+        $notification->data       = $data->toArray();
+        $notification->id         = $this->id;
 
         $navbar_message = View::make('partials.navbar-elements.alert-row', ['notification' => $notification]);
 
