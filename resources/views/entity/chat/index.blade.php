@@ -48,9 +48,8 @@
                                 </div>
                             </div>
                         @else
-                            No active conversations
+                            {{_i('No active conversations')}}
                         @endif
-
                     </div>
                 </div>
             </div>
@@ -65,6 +64,7 @@
     </style>
     <script>
         jQuery(document).ready(function ($) {
+            //get necessary chat id
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('c')) {
                 $(".first-chat > a[data-conversation-id='" + urlParams.get('c') + "']").click();
@@ -72,6 +72,7 @@
                 $(".first-chat > a").click();
             }
 
+            //send message
             $(document).on("click", "button#send-message", function (e) {
                 e.preventDefault();
                 var formData = $("#chat-form").serialize();
@@ -88,91 +89,84 @@
                         }
                 );
             });
-        });
-
-
-        //load necessary chat
-        $(".message-switcher").click(function () {
-
-            $(".message-switcher").parent().removeClass('active');
-
-            $(this).parent().addClass('active');
-
-            $("#messages-container").load($(this).attr('data-sourse'), function () {
-                //scroll down
-                $('#chat-discussion').scrollTop($('#chat-discussion')[0].scrollHeight);
-
-                if (conversation_id) {
-                    //leave the current chat before joining the new one
-                    Echo.leave('conversation.' + conversation_id);
-                }
-
-                conversation_id = $("#chat-id").val();
-
-                var old_notifications = $(".top-message-list-item[data-conversation-id='" + conversation_id + "']");
-
-                //clear notifications from curent chat
-                old_notifications.each(function (i, obj) {
-                    obj.remove();
-                    $(".divider[data-divider-id='" + conversation_id + "']").remove();
-                    var messages_count_wrapper = $("#message-notifications-count");
-                    var count = parseInt(messages_count_wrapper.html());
-
-                    if (count == 1) {
-                        messages_count_wrapper.html('')
-                        return;
+            //load necessary chat
+            $(".message-switcher").click(function () {
+                $(".message-switcher").parent().removeClass('active');
+                $(this).parent().addClass('active');
+                $("#messages-container").load($(this).attr('data-sourse'), function () {
+                    //scroll down
+                    $('#chat-discussion').scrollTop($('#chat-discussion')[0].scrollHeight);
+                    if (conversation_id) {
+                        //leave the current chat before joining the new one
+                        Echo.leave('conversation.' + conversation_id);
                     }
-                    messages_count_wrapper.html(count - 1)
-                });
+                    conversation_id = $("#chat-id").val();
 
-                Echo.join('conversation.' + conversation_id)
-                        .here(function (users) {
-                            $(".chat-user-status").addClass('label-danger');
-                            users.forEach(function (user) {
-                                console.log(user.id)
-                                var user_id = user.id
+                    var old_notifications = $(".top-message-list-item[data-conversation-id='" + conversation_id + "']");
+
+                    //clear notifications from curent chat
+                    old_notifications.each(function (i, obj) {
+                        obj.remove();
+                        $(".divider[data-divider-id='" + conversation_id + "']").remove();
+                        var messages_count_wrapper = $("#message-notifications-count");
+                        var count = parseInt(messages_count_wrapper.html());
+
+                        if (count == 1) {
+                            messages_count_wrapper.html('')
+                            return;
+                        }
+                        messages_count_wrapper.html(count - 1)
+                    });
+
+                    Echo.join('conversation.' + conversation_id)
+                            .here(function (users) {
+                                $(".chat-user-status").addClass('label-danger');
+                                users.forEach(function (user) {
+                                    console.log(user.id)
+                                    var user_id = user.id
+                                    var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
+                                    wrapper.removeClass('label-danger');
+                                    wrapper.addClass('label-primary');
+                                    wrapper.html("Online");
+                                });
+                            })
+                            .joining(function (joiningMember, members) {
+                                console.log('joining')
+                                var user_id = joiningMember.id
                                 var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
                                 wrapper.removeClass('label-danger');
                                 wrapper.addClass('label-primary');
                                 wrapper.html("Online");
+                            })
+                            .leaving(function (leavingMember, members) {
+                                console.log('leaving')
+
+                                var user_id = leavingMember.id
+                                var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
+                                wrapper.removeClass('label-primary');
+                                wrapper.addClass('label-danger');
+                                wrapper.html("Offline");
+                            })
+                            .listen('ChatMessage', function (e) {
+
+                                var message_id = e.message_id;
+                                var sender_id = e.sender_id;
+                                var message = e.message;
+
+                                $('#chat-discussion').append(message);
+
+                                var message_wrapper = $(".chat-message[data-id='" + message_id + "']");
+
+                                message_wrapper.removeClass('left');
+                                message_wrapper.removeClass('right');
+
+                                message_wrapper.addClass((sender_id == user.id ? 'right' : 'left'));
+
+                                $('#chat-input').val('');
+                                $('#chat-discussion').scrollTop($('#chat-discussion')[0].scrollHeight);
                             });
-                        })
-                        .joining(function (joiningMember, members) {
-                            console.log('joining')
-                            var user_id = joiningMember.id
-                            var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
-                            wrapper.removeClass('label-danger');
-                            wrapper.addClass('label-primary');
-                            wrapper.html("Online");
-                        })
-                        .leaving(function (leavingMember, members) {
-                            console.log('leaving')
 
-                            var user_id = leavingMember.id
-                            var wrapper = $(".chat-user-status[data-user-id='" + user_id + "']");
-                            wrapper.removeClass('label-primary');
-                            wrapper.addClass('label-danger');
-                            wrapper.html("Offline");
-                        })
-                        .listen('ChatMessage', function (e) {
-
-                            var message_id = e.message_id;
-                            var sender_id = e.sender_id;
-                            var message = e.message;
-
-                            $('#chat-discussion').append(message);
-
-                            var message_wrapper = $(".chat-message[data-id='" + message_id + "']");
-
-                            message_wrapper.removeClass('left');
-                            message_wrapper.removeClass('right');
-
-                            message_wrapper.addClass((sender_id == user.id ? 'right' : 'left'));
-
-                            $('#chat-input').val('');
-                            $('#chat-discussion').scrollTop($('#chat-discussion')[0].scrollHeight);
-                        });
-
+                });
             });
         });
     </script>

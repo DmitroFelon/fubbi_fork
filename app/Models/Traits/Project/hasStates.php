@@ -142,6 +142,7 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
+
         try {
             if ($request->input('_step') == ProjectStates::QUIZ_FILLING) {
                 return $this->prefillQuiz($request);
@@ -154,7 +155,7 @@ trait hasStates
             throw $e;
         }
 
-        throw new Exception(json_encode($request->input()));
+        throw new Exception('Undefined project step: ' . $request->input('_step'));
     }
 
     /**
