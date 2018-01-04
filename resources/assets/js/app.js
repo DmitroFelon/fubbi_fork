@@ -275,18 +275,7 @@ jQuery(document).ready(function ($) {
     }
 
     function preUploadKeywords() {
-
-
-
-
-        var formData = $("#keywords-form");
-
-        console.log(formData);
-
-        var formData = formData.serialize();
-
-        console.log(formData);
-
+        var formData = $("#keywords-form").serializeArray();
         var _project_id = $("input[name=_project_id]").val();
 
         $.ajax({
