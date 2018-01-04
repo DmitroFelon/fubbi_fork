@@ -141,15 +141,15 @@ trait hasStates
      */
     public function prefill(Request $request)
     {
-        if ($request->input('themes')) {
+        if ($request->input(ProjectStates::QUIZ_FILLING)) {
+            echo 'themes';
             return $this->prefillQuiz($request);
         }
-        
 
-        if ($request->input('keywords')) {
+        if ($request->input(ProjectStates::KEYWORDS_FILLING)) {
+            echo 'keywords';
             return $this->prefillKeywords($request);
         }
-
 
         return false;
     }
@@ -228,5 +228,5 @@ trait hasStates
         $this->save();
         return true;
     }
-    
+
 }
