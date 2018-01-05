@@ -81,7 +81,6 @@ class Project extends Model implements HasMedia, Invitable
     use Metable;
     use FormProjectAccessors;
     use HasMediaTrait;
-    use HasComments;
     use hasInvite;
     use hasPlan;
     use SoftDeletes;
@@ -142,7 +141,7 @@ class Project extends Model implements HasMedia, Invitable
     /**
      * @var array
      */
-    protected $with = ['client', 'comments'];
+    protected $with = ['client'];
 
     /**
      * Project's owner

@@ -267,6 +267,7 @@ class ProjectController extends Controller
             'teams'   => $teams
         ];
 
+
         return view('entity.project.show', $data);
     }
 

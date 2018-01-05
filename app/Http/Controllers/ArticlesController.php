@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Services\Google\Drive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
@@ -17,7 +19,7 @@ class ArticlesController extends Controller
     {
         $data = [
             'articles' => Article::paginate(),
-            'all' => true
+            'all'      => true
         ];
 
         return view('entity.article.index', $data);
@@ -67,5 +69,16 @@ class ArticlesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function request_access(Article $article, Request $request, Drive $drive)
+    {
+
+        $email     = Auth::user()->email;
+        $google_id = $article->google_id;
+        
+        $permissions = [$email => 'commenter'];
+        $drive->addPermission($google_id, $permissions);
+        return redirect()->back()->with('success', 'Permissions has been provided');
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GoogleDriveCreate;
 use App\Jobs\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
+use App\Services\Google\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\Media;
@@ -48,7 +50,7 @@ class ArticlesController extends Controller
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      * @internal param Drive $google
      */
-    public function store(Project $project, Article $article, Request $request)
+    public function store(Project $project, Article $article, Drive $drive, Request $request)
     {
 
         //save article
@@ -75,6 +77,9 @@ class ArticlesController extends Controller
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
             $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
+        } else {
+            $file_name = ($article->title) ? $article->title : $project->name . '-' . rand();
+            GoogleDriveCreate::dispatch($project, $article, $file_name);
         }
 
         //upload copyscape screenshot
@@ -146,7 +151,8 @@ class ArticlesController extends Controller
 
         $article->setMeta('socialposts', $request->input('socialposts'));
 
-        $article->setMeta('type', $request->input('type'));
+        $article->type = $request->input('type');
+
 
         $tags = collect(explode(',', $request->input('tags')));
 

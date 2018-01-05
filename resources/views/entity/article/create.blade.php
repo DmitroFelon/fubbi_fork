@@ -4,9 +4,12 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="ibox">
             <div class="ibox-title">
-                <h5>
-                    {{_i('Upload article for project "%s"', [$project->name])}}
-                </h5>
+                <a href="{{action('ProjectController@show', $project)}}">
+                    <h5>
+                        {{_i('Upload article for project: ')}}
+                        {{$project->name}}
+                    </h5>
+                </a>
                 <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -126,9 +129,9 @@
                     </div>
                 </div>
                 {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
-                {!! Form::bsSelect('type', ['' => 'Select Type', 'Article Outline', 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'], '', _i('Content Type'), null, ['required']) !!}
-                {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs'), ['multiple', 'required'], 'file') !!}
-                {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), [], 'file') !!}
+                {!! Form::bsSelect('type', ['' => 'Select Type', 'Article Outline' => 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'], '', _i('Content Type'), null, ['required']) !!}
+                {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs. Keep empty to create a new file'), [], 'file') !!}
+                {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot if necessary'), [], 'file') !!}
                 {!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
                 {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
             </div>

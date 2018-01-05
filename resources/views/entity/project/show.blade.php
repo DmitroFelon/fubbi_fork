@@ -12,9 +12,7 @@
 @endsection
 
 @section('content')
-
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-
         <div class="col col-lg-12 col-xs-12 ">
             <div class="ibox">
                 <div class="ibox-title">

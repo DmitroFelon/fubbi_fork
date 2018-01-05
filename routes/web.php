@@ -132,6 +132,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('', 'SettingsController@index');
     });
 
+    Route::prefix('articles')->group(function () {
+        Route::get('request_access/{article}', 'ArticlesController@request_access');
+    });
+
     Route::resources(
         [
             'projects' => 'ProjectController',

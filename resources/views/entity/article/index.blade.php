@@ -5,9 +5,7 @@
         <div class="ibox">
             <div class="ibox-title">
                 @if(!isset($all))
-                    <h5>
-                        {{$project->name}}
-                    </h5>
+                    <h5> {{$project->name}} </h5>
                     <div class="ibox-tools">
                         <a target="_blank" href="{{url()->action('Project\ArticlesController@create', [$project])}}"
                            class="btn btn-primary btn-xs">{{_i('Create new Article')}}</a>
@@ -33,9 +31,7 @@
                                 @endforeach
 
                             @endif
-
                             </tbody>
-
                         </table>
                         @isset($articles)
                         {{$articles->links()}}

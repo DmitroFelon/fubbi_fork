@@ -104,7 +104,7 @@
 <div class="row">
     <div class="col-lg-4">
         <dl class="dl-horizontal">
-            <dt>{{_i('Articles')}}:</dt>
+            <dt>{{_i('Total Articles')}}:</dt>
             <dd>
                 {{$project->articles->count()}} - <a
                         href="{{action('Project\ArticlesController@index', [$project])}}">{{_i('Review')}}</a>
@@ -121,3 +121,28 @@
         </dl>
     </div>
 </div>
+
+@foreach($project->getVariableServices() as $service)
+    @if($project->isRequireService($service))
+        <div class="row">
+            <div class="col-lg-4">
+                <dl class="dl-horizontal">
+                    <dt>{{$project->getServiceName($service)}}:</dt>
+                    <dd>
+                        {{$project->getArticleByType($service)->count()}} - <a
+                                href="{{action('Project\ArticlesController@index', [$project])}}">{{_i('Review')}}</a>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-lg-4">
+                <dl class="dl-horizontal">
+                    <dt>{{_i('Accepted')}}:</dt>
+                    <dd>
+                        {{$project->getArticleByType($service)->accepted()->count()}} - <a
+                                href="{{action('Project\ArticlesController@index', [$project])}}">{{_i('Review')}}</a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    @endif
+@endforeach

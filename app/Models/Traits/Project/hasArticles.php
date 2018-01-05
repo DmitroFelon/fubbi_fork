@@ -36,7 +36,7 @@ trait hasArticles
         return $this->articles()->attach($article_id, ['attempts' => 1]);
 
         $this->eventData['attachArticle'] = $article_id;
-        
+
         $this->fireModelEvent('attachArticle', false);
     }
 
@@ -84,5 +84,10 @@ trait hasArticles
             //todo notify about limit of attempts 
             //todo move 3 to settings 
         }
+    }
+
+    public function getArticleByType(string $type)
+    {
+        return $this->articles()->where('type', $type);
     }
 }

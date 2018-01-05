@@ -73,6 +73,7 @@ class Article extends Model implements HasMedia
     protected $fillable = [
         'title',
         'body',
+        'type',
         'user_id'
     ];
 
@@ -84,7 +85,7 @@ class Article extends Model implements HasMedia
     /**
      * @var array
      */
-    protected $with = ['projects'];
+    protected $with = ['projects', 'metas'];
 
     /**
      * @var array
@@ -184,4 +185,5 @@ class Article extends Model implements HasMedia
 
         return $media;
     }
+
 }

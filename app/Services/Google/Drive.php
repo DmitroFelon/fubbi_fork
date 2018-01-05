@@ -26,9 +26,9 @@ class Drive
 {
 
     const MS_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const PDF = 'application/pdf';
-    const HTML = 'text/html';
-    const TEXT = 'text/plain';
+    const PDF     = 'application/pdf';
+    const HTML    = 'text/html';
+    const TEXT    = 'text/plain';
 
     /**
      * @var
@@ -100,9 +100,9 @@ class Drive
     {
         $extensions = [
             self::MS_WORD => 'docx',
-            self::PDF => 'pdf',
-            self::HTML => 'html',
-            self::TEXT => 'txt',
+            self::PDF     => 'pdf',
+            self::HTML    => 'html',
+            self::TEXT    => 'txt',
         ];
 
         return (isset($extensions[$format])) ? $extensions[$format] : '';
@@ -115,7 +115,7 @@ class Drive
     {
         $optParams = array(
             'pageSize' => 10,
-            'fields' => 'nextPageToken, files(id, name, parents)'
+            'fields'   => 'nextPageToken, files(id, name, parents)'
         );
         return $this->service->files->listFiles($optParams);
 
@@ -146,7 +146,6 @@ class Drive
             $bodyCollectiob->put('uploadType', 'multipart');
             $bodyCollectiob->put('fields', 'id, name, parents');
 
-
             $file = $this->service->files->create($fileMetadata, $bodyCollectiob->toArray());
 
             return $file;
@@ -154,6 +153,30 @@ class Drive
             throw $e;
         }
 
+    }
+
+    public function createFile($name, $folder_id)
+    {
+        try {
+            $fileDataCollection = collect();
+
+            $fileDataCollection->put('name', $name);
+            $fileDataCollection->put('parents', [$folder_id]);
+            $fileDataCollection->put('mimeType', 'application/vnd.google-apps.document');
+
+            $fileMetadata = new Google_Service_Drive_DriveFile($fileDataCollection->toArray());
+
+            $optionsCollection = collect();
+            $optionsCollection->put('mimeType', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            $optionsCollection->put('uploadType', 'multipart');
+            $optionsCollection->put('fields', 'id, name, parents');
+
+            $file = $this->service->files->create($fileMetadata, $optionsCollection->toArray());
+
+            return $file;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -220,8 +243,8 @@ class Drive
     public function addFolder($name, $parent = null)
     {
         $fileMetadata = new Google_Service_Drive_DriveFile([
-            'name' => $name,
-            'parents' => [$parent],
+            'name'     => $name,
+            'parents'  => [$parent],
             'mimeType' => 'application/vnd.google-apps.folder',
 
         ]);
@@ -269,9 +292,9 @@ class Drive
 
         do {
             $response = $this->service->files->listFiles([
-                'q' => "'{$folder_id}' in parents",
+                'q'         => "'{$folder_id}' in parents",
                 'pageToken' => $pageToken,
-                'fields' => 'nextPageToken, files(id, name)',
+                'fields'    => 'nextPageToken, files(id, name)',
             ]);
             foreach ($response->files as $file) {
                 $files->push($file);
@@ -294,7 +317,7 @@ class Drive
         $batch = $this->service->createBatch();
         foreach ($path as $folder) {
             $request = $this->service->files->listFiles([
-                'q' => "name = '{$folder}'",
+                'q'      => "name = '{$folder}'",
                 'fields' => 'files(id, name)',
             ]);
             $batch->add($request, $folder);
