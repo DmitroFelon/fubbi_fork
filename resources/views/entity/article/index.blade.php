@@ -4,7 +4,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="ibox">
             <div class="ibox-title">
-                @if(!isset($all))
+                @if(isset($project))
                     <h5> {{$project->name}} </h5>
                     <div class="ibox-tools">
                         <a target="_blank" href="{{url()->action('Project\ArticlesController@create', [$project])}}"
@@ -17,30 +17,89 @@
                 @endif
             </div>
             <div class="ibox-content">
-                <div class="row">
-                    <div class="project-list">
-                        <table class="table table-hover">
-                            <tbody>
-                            @if(!isset($all))
-                                @foreach($project->articles as $article)
-                                    @include('entity.article.partials.row')
-                                @endforeach
-                            @else
-                                @foreach($articles as $article)
-                                    @include('entity.article.partials.row')
-                                @endforeach
-
-                            @endif
-                            </tbody>
-                        </table>
-                        @isset($articles)
-                        {{$articles->links()}}
+                <div class="row m-b-sm m-t-sm">
+                    @if(Auth::user()->role != 'client')
+                        @if(isset($project))
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                <a href="{{action('Project\ArticlesController@index', $project)}}"
+                                   id="loading-example-btn"
+                                   class="btn btn-white btn-sm"><i
+                                            class="fa fa-refresh">
+                                    </i> {{_i('Refresh')}}
+                                </a>
+                            </div>
+                            {{Form::open(['action' => ['Project\ArticlesController@index', $project], 'method' => 'get'])}}
+                        @else
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                <a href="{{action('ArticlesController@index')}}" id="loading-example-btn"
+                                   class="btn btn-white btn-sm"><i
+                                            class="fa fa-refresh">
+                                    </i> {{_i('Refresh')}}
+                                </a>
+                            </div>
+                            {{Form::open(['action' => ['ArticlesController@index'], 'method' => 'get'])}}
+                        @endif
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            {{ Form::select(
+                                   'type',
+                                   $filters['types'],
+                                   request('type'),
+                                   ['class' => 'form-control'])
+                               }}
+                        </div>
+                        @isset($project)
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            {{ Form::select(
+                                   'status',
+                                   $filters['statuses'],
+                                   request('status'),
+                                   ['class' => 'form-control'])
+                               }}
+                        </div>
                         @endisset
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <span class="input-group-btn">
+                            <button type="submit" class="btn btn-sm btn-primary"> {{_i('Filter')}}</button>
+                    </span>
+                        </div>
+                        {{Form::close()}}
+                    @endif()
+                </div>
+                <hr>
+                <div class="project-list">
+                    <table class="table table-hover footable">
+                        <thead>
+                        <tr>
+                            @isset($project)
+                            <th class="footable-sortable">
+                                {{_i('Status')}}
+                            </th>
+                            @endisset
+                            <th>{{_i('Title')}}</th>
+                            <th>{{_i('Author')}}</th>
+                            <th>{{_i('Type')}}</th>
+                            <th class="footable-sortable">{{_i('Google docs')}}</th>
+                            <th class="footable-sortable">
+                                @isset($project)
+                                {{_i('Project')}}
+                                @endisset
+                            </th>
+                            <th class="footable-sortable">
 
-                    </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($articles as $article)
+                            @include('entity.article.partials.row')
+                        @endforeach
+                        </tbody>
+                    </table>
+                    {{$articles->links()}}
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 

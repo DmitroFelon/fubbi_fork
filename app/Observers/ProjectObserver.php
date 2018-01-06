@@ -242,7 +242,7 @@ class ProjectObserver
      */
     public function setState(Project $project)
     {
-        $states_to_skip = [
+        /*$states_to_skip = [
             ProjectStates::KEYWORDS_FILLING,
             ProjectStates::QUIZ_FILLING,
             ProjectStates::PLAN_SELECTION,
@@ -255,7 +255,7 @@ class ProjectObserver
 
         if (in_array($project->state, $states_to_skip)) {
             return;
-        }
+        }*/
 
         $project->client->notify(new StatusChanged($project));
 

@@ -60,6 +60,7 @@
                     {{Form::close()}}
                 @endif()
             </div>
+            <hr>
             <div class="project-list">
                 <table class="table table-hover">
                     <tbody>

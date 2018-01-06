@@ -69,10 +69,10 @@
                         <thead>
                         <tr>
                             <th>{{_i('Order ID')}}</th>
-                            <th data-hide="phone">{{_i('Customer')}}</th>
-                            <th data-hide="phone">{{_i('Amount')}}</th>
-                            <th data-hide="phone">{{_i('Date added')}}</th>
-                            <th data-hide="phone">{{_i('Source')}}</th>
+                            <th>{{_i('Customer')}}</th>
+                            <th>{{_i('Amount')}}</th>
+                            <th>{{_i('Date added')}}</th>
+                            <th>{{_i('Source')}}</th>
                         </tr>
                         </thead>
                         <tbody>

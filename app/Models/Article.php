@@ -186,4 +186,47 @@ class Article extends Model implements HasMedia
         return $media;
     }
 
+    public function getTypes(Project $project)
+    {
+        $types = collect(
+            [
+                ''                   => _i('Select Type'),
+                'Article Outline'    => _i('Article Outline'),
+                'Article Topic'      => _i('Article Topic'),
+                'Article'            => _i('Article'),
+                'Social Posts Texts' => _i('Social Posts Texts'),
+            ]
+        );
+
+        collect($project->getVariableServices())->each(function ($item) use ($types, $project) {
+            if ($project->isRequireService($item)) {
+                $types->put($item, $project->getServiceName($item));
+            }
+        });
+
+        return $types;
+    }
+
+
+    public static function getAllTypes()
+    {
+
+        $project = new Project();
+
+        $types = collect(
+            [
+                ''                   => _i('Select Type'),
+                'Article Outline'    => _i('Article Outline'),
+                'Article Topic'      => _i('Article Topic'),
+                'Article'            => _i('Article'),
+                'Social Posts Texts' => _i('Social Posts Texts'),
+            ]
+        );
+
+        collect($project->getVariableServices())->each(function ($item) use ($types, $project) {
+            $types->put($item, $project->getServiceName($item));
+        });
+
+        return $types;
+    }
 }

@@ -23,13 +23,9 @@ trait hasPlan
      */
     public function getPlanAttribute($value)
     {
-        return Cache::remember(
-            'stripe_plan_' . $this->subscription->stripe_plan,
-            1,
-            function () {
-                return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
-            }
-        );
+        return Cache::remember('stripe_plan_' . $this->subscription->stripe_plan, 10, function () {
+            return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
+        });
     }
 
     /**
@@ -40,9 +36,23 @@ trait hasPlan
      */
     public function getPlanMetadataAttribute($value)
     {
-        return (isset($this->plan) and !is_null($this->plan)) ? collect(
-            $this->plan->metadata->jsonSerialize()
-        ) : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
+
+        $result = Cache::remember('plna_matadata_' . $this->id, 1, function () {
+
+            $metadata = (isset($this->plan) and !is_null($this->plan))
+                ? collect($this->plan->metadata->jsonSerialize())
+                : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
+
+            return $metadata->transform(function ($item, $key) {
+                $result = ($this->isModified($key))
+                    ? $this->getModified($key)
+                    : $item;
+                return $result;
+            });
+
+        });
+
+        return $result;
     }
 
     /**
@@ -50,7 +60,7 @@ trait hasPlan
      *
      * Get each metadata as Project service
      */
-    public function getServiceName(string $service, $countable = false)
+    public function getServiceName(string $service)
     {
         $plan_services = [
             'articles_count'     => _i('Articles Count'),
@@ -132,10 +142,16 @@ trait hasPlan
      */
     public function isRequireService(string $service)
     {
-        $result = $this->plan_metadata->get($service);
-        return ($result == false or $result == 'false' or $result == null)
+
+        $metadata = $this->plan_metadata;
+
+        $result = $metadata->get($service);
+
+        $require = ($result == false or $result == 'false' or $result == null)
             ? false
             : true;
+
+        return $require;
 
     }
 }

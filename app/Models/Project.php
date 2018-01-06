@@ -141,7 +141,7 @@ class Project extends Model implements HasMedia, Invitable
     /**
      * @var array
      */
-    protected $with = ['client'];
+    protected $with = ['client', 'metas'];
 
     /**
      * Project's owner

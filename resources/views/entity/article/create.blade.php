@@ -128,12 +128,22 @@
                         </div>
                     </div>
                 </div>
-                {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
-                {!! Form::bsSelect('type', ['' => 'Select Type', 'Article Outline' => 'Article Outline', 'Article Topic' => 'Article Topic', 'Article' => 'Article', 'Social Posts Texts' => 'Social Posts Texts'], '', _i('Content Type'), null, ['required']) !!}
-                {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs. Keep empty to create a new file'), [], 'file') !!}
-                {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot if necessary'), [], 'file') !!}
-                {!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
-                {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-lg-offset-1 col-md-offset-1 m-t-md">
+                        <h3 class="text-center">
+                            {{_i('Content')}}
+                        </h3>
+                        {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
+                        {!! Form::bsSelect('type', $filters['types'], '', _i('Content Type'), null, ['required']) !!}
+                        {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs. Keep empty to create a new file'), [], 'file') !!}
+                        {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot if necessary'), [], 'file') !!}
+                        {!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
+                        {{Form::submit('Upload article', ['class' => 'btn btn-primary'])}}
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>

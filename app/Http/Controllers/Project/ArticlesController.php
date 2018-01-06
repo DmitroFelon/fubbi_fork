@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Services\Google\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\Media;
 
 /**
@@ -24,9 +25,34 @@ class ArticlesController extends Controller
      * @param \App\Models\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function index(Project $project)
+    public function index(Project $project, Article $article, Request $request)
     {
-        return view('entity.article.index', compact('project'));
+
+        $articles_query = $project->articles();
+
+        if ($request->has('type') and $request->input('type') != '') {
+            $articles_query->where('type', $request->input('type'));
+        }
+
+        if ($request->has('status') and $request->input('status') != '') {
+            if ($request->input('status') == 1) {
+                $articles_query->accepted();
+            } else {
+                $articles_query->declined();
+            }
+        }
+
+        $articles = $articles_query->simplePaginate(10);
+
+        $filters['types'] = $article->getTypes($project);
+
+        $filters['statuses'] = [
+            ''    => _i('Select status'),
+            true  => _i('Accepted'),
+            false => _i('Declined')
+        ];
+
+        return view('entity.article.index', compact('project', 'articles', 'filters'));
     }
 
     /**
@@ -34,9 +60,12 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Project $project)
+    public function create(Project $project, Article $article)
     {
-        return view('entity.article.create', compact('project'));
+
+        $filters['types'] = $article->getTypes($project);
+
+        return view('entity.article.create', compact('project', 'filters'));
     }
 
     /**
@@ -59,6 +88,7 @@ class ArticlesController extends Controller
         );
 
         $article->user_id = Auth::user()->id;
+        
         $article->setMeta('type', $request->input('type'));
 
         $article->save();

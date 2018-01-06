@@ -15,16 +15,29 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = [
-            'articles' => Article::paginate(),
-            'all'      => true
+        $all = true;
+
+
+        $articles_query = Article::query();
+
+        if ($request->has('type') and $request->input('type') != '') {
+            $articles_query->where('type', $request->input('type'));
+        }
+
+        $articles = $articles_query->simplePaginate(10);
+
+        $filters['types'] = Article::getAllTypes();
+        
+        $filters['statuses'] = [
+            ''    => _i('Select status'),
+            true  => _i('Accepted'),
+            false => _i('Declined')
         ];
 
-        return view('entity.article.index', $data);
+        return view('entity.article.index', compact('articles', 'all', 'filters'));
     }
-
 
     /**
      * Display the specified resource.
@@ -76,7 +89,7 @@ class ArticlesController extends Controller
 
         $email     = Auth::user()->email;
         $google_id = $article->google_id;
-        
+
         $permissions = [$email => 'commenter'];
         $drive->addPermission($google_id, $permissions);
         return redirect()->back()->with('success', 'Permissions has been provided');

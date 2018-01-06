@@ -1,6 +1,6 @@
 <tr>
 
-    @if(isset($article->pivot->accepted))
+    @isset($project)
         @if($article->pivot->accepted === 1)
             <td>
                 <span class="badge badge-primary">{{_i('Accepted')}}</span>
@@ -14,11 +14,7 @@
                 <span class="badge">{{_i('Review')}}</span>
             </td>
         @endif
-    @else
-        <td>
-            <span class="badge">{{_i('Review')}}</span>
-        </td>
-    @endif
+    @endisset
 
 
     <td class="project-title">
@@ -51,6 +47,16 @@
             <strong>{{_i('Google docs')}}:</strong> {{ _i('Processing')}}
         @endif
     </td>
+
+    <td>
+        @isset($project)
+
+        <strong>{{_i('Project')}}:</strong> <a href="{{action('ProjectController@show', $project)}}">"{{$project->name}}
+            "</a>
+
+        @endisset
+    </td>
+
     <td class="project-actions">
         @if(isset($project))
             <a href="{{action('Project\ArticlesController@show', [$project, $article])}}"
