@@ -7,14 +7,12 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class TeamController
+ * @package App\Http\Controllers
+ */
 class TeamController extends Controller
 {
-
-    /**
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
     /**
      * ProjectController constructor.
      *
@@ -22,10 +20,12 @@ class TeamController extends Controller
      */
     public function __construct(Request $request)
     {
+        $this->middleware('can:index,' . Team::class)->only(['index']);
+        $this->middleware('can:show,team')->only(['show']);
+        $this->middleware('can:create,' . Team::class)->only(['create', 'store']);
+        $this->middleware('can:delete,team')->only(['destroy']);
 
-        $this->request = $request;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -34,9 +34,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-
-        $user = $this->request->user();
-
+        $user = Auth::user();
         switch ($user->role) {
             case 'admin':
                 $teams = Team::with('users')->get();
@@ -74,11 +72,6 @@ class TeamController extends Controller
             return $user->name;
         })->filter();
 
-        $data = [
-            'owner_users' => $users,
-            'invitable_users' => $users,
-        ];
-
 
         return view('entity.team.create', ['users' => $users]);
     }
@@ -87,6 +80,7 @@ class TeamController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     * @param Team $team
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Team $team)
@@ -154,8 +148,8 @@ class TeamController extends Controller
         });
 
         $data = [
-            'team' => $team,
-            'owner_users' => $owner_users->filter(),
+            'team'            => $team,
+            'owner_users'     => $owner_users->filter(),
             'invitable_users' => $invitable_users->filter(),
         ];
 
@@ -199,6 +193,10 @@ class TeamController extends Controller
         //
     }
 
+    /**
+     * @param Team $team
+     * @return mixed
+     */
     public function accept(Team $team)
     {
         $user = Auth::user();
@@ -206,16 +204,29 @@ class TeamController extends Controller
         $team->users()->attach($user->id);
 
         $invite = $user->getInviteToTeam($team->id);
+
+        if(!$invite){
+           abort(403);
+        }
+
         $invite->accept();
 
         return redirect()->back()->with('success', _i('Now You are a part of this team'));
     }
 
+    /**
+     * @param Team $team
+     * @return mixed
+     */
     public function decline(Team $team)
     {
         $user = Auth::user();
 
         $invite = $user->getInviteToTeam($team->id);
+
+        if(!$invite){
+            abort(403);
+        }
 
         $invite->decline();
 

@@ -62,7 +62,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Messages',
-                'url'  => '/messages',
+                'url'  => 'messages',
                 'icon' => 'fa fa-envelope',
             ]
         );
@@ -70,7 +70,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Settings',
-                'url'  => '/settings',
+                'url'  => 'settings',
                 'icon' => 'fa fa-gear',
             ]
         );
@@ -78,7 +78,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Issues',
-                'url'  => '/issues',
+                'url'  => 'issues',
                 'icon' => 'fa fa-bug',
             ]
         );
@@ -93,8 +93,8 @@ class LeftMenuComposer
     public function guest()
     {
         return [
-            'Login'    => '/login',
-            'Register' => '/register',
+            'Login'    => 'login',
+            'Register' => 'register',
         ];
     }
 
@@ -106,32 +106,32 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Users',
-                'url'  => '/users',
+                'url'  => 'users',
                 'icon' => 'fa fa-user',
             ],
             [
                 'name' => 'Teams',
-                'url'  => '/teams',
+                'url'  => 'teams',
                 'icon' => 'fa fa-users',
             ],
             [
                 'name' => 'Projects',
-                'url'  => '/projects',
+                'url'  => 'projects',
                 'icon' => 'fa fa-file-o',
             ],
             [
                 'name' => 'Plans',
-                'url'  => '/plans',
+                'url'  => 'plans',
                 'icon' => 'fa fa-gear',
             ],
             [
                 'name' => 'Articles',
-                'url'  => '/articles',
+                'url'  => 'articles',
                 'icon' => 'fa fa-file-word-o',
             ],
             [
                 'name' => 'Charges',
-                'url'  => '/charges',
+                'url'  => 'charges',
                 'icon' => 'fa fa-dollar',
             ],
         ];
@@ -145,7 +145,7 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Projects',
-                'url'  => '/projects',
+                'url'  => 'projects',
                 'icon' => 'fa fa-file-o',
             ],
         ];
@@ -159,12 +159,12 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Teams',
-                'url'  => '/teams',
+                'url'  => 'teams',
                 'icon' => 'fa fa-users',
             ],
             [
                 'name' => 'Projects',
-                'url'  => '/projects',
+                'url'  => 'projects',
                 'icon' => 'fa fa-file-o',
             ],
         ];
@@ -178,7 +178,7 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Projects',
-                'url'  => '/projects',
+                'url'  => 'projects',
                 'icon' => 'fa fa-file-o',
             ],
             

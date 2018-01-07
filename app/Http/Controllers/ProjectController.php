@@ -30,20 +30,15 @@ use Stripe\Subscription;
 class ProjectController extends Controller
 {
     /**
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * ProjectController constructor.
      *
-     * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->request = $request;
-
-        $this->authorizeResource(Project::class);
+        $this->middleware('can:index,' . Project::class)->only(['index', 'show']);
+        $this->middleware('can:create,' . Project::class)->only(['create', 'store']);
+        $this->middleware('can:update,' . Project::class)->only(['edit', 'update']);
+        $this->middleware('can:delete,' . Project::class)->only(['delete', 'destroy', 'resume']);
     }
 
     /**
@@ -53,7 +48,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $this->request->user();
+        $user = $request->user();
 
         switch ($user->role) {
             case 'admin':
@@ -395,10 +390,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function apply_to_project(Project $project)
+    public function apply_to_project(Project $project, Request $request)
     {
         $message_key = 'info';
-        $user        = $this->request->user();
+        $user        = $request->user();
 
         if ($project->hasWorker($user->role) or $project->teams->isNotEmpty()) {
             $message_key = 'error';
@@ -419,11 +414,11 @@ class ProjectController extends Controller
      * @param Project $project
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function decline_project(Project $project)
+    public function decline_project(Project $project, Request $request)
     {
         $message_key = 'info';
         $message     = _i('You are declined this project');
-        $user        = $this->request->user();
+        $user        = $request->user();
 
         $invite = $user->getInviteToProject($project->id);
         $invite->decline();

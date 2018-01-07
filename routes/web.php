@@ -32,14 +32,6 @@ Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
 Route::get('test', function () {
 
 
-    $project = \App\Models\Project::find(10);
-
-    $project->attachWorker(5);
-
-    dd($project->activity()->get());
-
-    dd($project->workers);
-
 });
 
 
@@ -54,13 +46,13 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
 
 
 Route::middleware(['auth'])->group(function () {
+
     Route::group(['middleware' => ['role:admin']], function () {
-        Route::get('charges', 'ChargesController@index');
+        Route::get('charges', ['uses' => 'ChargesController@index', 'as' => 'charges']);
 
         Route::resources([
-            'users'    => 'UserController',
-            'plans'    => 'PlanController',
-            'articles' => 'ArticlesController',
+            'plans' => 'PlanController',
+
         ]);
     });
 
@@ -129,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('settings')->group(function () {
         Route::post('billing', 'SettingsController@billing');
         Route::post('', 'SettingsController@save');
-        Route::get('', 'SettingsController@index');
+        Route::get('', ['as' => 'settings', 'uses' => 'SettingsController@index']);
     });
 
     Route::prefix('articles')->group(function () {
@@ -140,8 +132,10 @@ Route::middleware(['auth'])->group(function () {
         [
             'projects' => 'ProjectController',
             'messages' => 'MessageController',
+            'users'    => 'UserController',
             'teams'    => 'TeamController',
-            'issues'   => 'IssueController'
+            'issues'   => 'IssueController',
+            'articles' => 'ArticlesController',
         ]
     );
 

@@ -10,6 +10,12 @@ use Stripe\Charge;
 
 class ChargesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:index,' . Charge::class)->only(['index']);
+    }
+
     public function index(Request $request)
     {
 
@@ -34,7 +40,6 @@ class ChargesController extends Controller
 
             $charges = \Stripe\Charge::all($data);
 
-
             $charges = collect($charges->data);
 
             $charges->transform(function (Charge $charge) {
@@ -48,10 +53,10 @@ class ChargesController extends Controller
 
             return view('pages.admin.charges.index',
                 [
-                    'charges' => $charges,
-                    'clients' => $clients,
+                    'charges'   => $charges,
+                    'clients'   => $clients,
                     'date_from' => $date_from,
-                    'date_to' => $date_to
+                    'date_to'   => $date_to
                 ]);
 
         } catch (\Exception $e) {

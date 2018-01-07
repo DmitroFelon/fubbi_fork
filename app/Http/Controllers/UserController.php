@@ -21,8 +21,11 @@ class UserController extends Controller
      */
     public function __construct(Request $request)
     {
-
         $this->request = $request;
+        $this->middleware('can:index,' . User::class)->only(['index']);
+        $this->middleware('can:view,user')->only(['show']);
+        $this->middleware('can:create,user')->only(['create', 'store']);
+        $this->middleware('can:update,user')->only(['edit', 'update']);
     }
 
     /**
@@ -32,9 +35,7 @@ class UserController extends Controller
      */
     public function index()
     {
-
         //get roles
-
         $roles = Cache::remember(
             'role_names',
             60 * 60 * 60,
@@ -61,10 +62,11 @@ class UserController extends Controller
 
         //fill emprty roles by emprty collection
         foreach ($roles as $role) {
-            $groupedByRoles[$role->name] = (isset($groupedByRoles[$role->name])) ? $groupedByRoles[$role->name] : collect();
+            $groupedByRoles[$role->name] = (isset($groupedByRoles[$role->name])) ? $groupedByRoles[$role->name]
+                : collect();
         }
 
-        return view('entity.user.index', compact(['users', 'groupedByRoles', 'roles', 'search_suggestions']));
+        return view('entity.user.index', compact('users', 'groupedByRoles', 'roles', 'search_suggestions'));
     }
 
     /**
@@ -89,10 +91,10 @@ class UserController extends Controller
 
         $request->validate([
             'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-            'role' => 'required|integer'
+            'last_name'  => 'required',
+            'email'      => 'required|unique:users,email',
+            'password'   => 'required|confirmed|min:6',
+            'role'       => 'required|integer'
         ]);
 
 
@@ -140,7 +142,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'phone' => 'required',
+            'phone'    => 'required',
             'password' => 'sometimes|nullable|confirmed|min:6',
         ]);
 
@@ -165,7 +167,6 @@ class UserController extends Controller
     {
         //
     }
-
 
     private function searchSuggestions()
     {

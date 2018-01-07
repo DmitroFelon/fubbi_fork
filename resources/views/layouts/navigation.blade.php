@@ -3,9 +3,9 @@
         <ul class="nav metismenu" id="side-menu">
 
             @auth
-                <li class="nav-header">
-                    <div class="dropdown profile-element">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">
@@ -16,38 +16,33 @@
                                     {{_i('Fast actions')}}<b class="caret"></b>
                                 </span>
                             </span>
-                        </a>
-                        @auth
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li>
-                                <a href="#"
-                                   onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
-                        @endauth
-                    </div>
-                    <div class="logo-element">
-                        IN+
-                    </div>
+                    </a>
+                    @auth
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li>
+                            <a href="#"
+                               onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                    @endauth
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            @foreach($items as $item)
+                <li class="{{(\Illuminate\Support\Facades\Route::is($item['url']. '*')) ? 'active' : '' }}">
+                    <a href="{{url($item['url'])}}">
+                        <i class="{{$item['icon']}}"></i>
+                        <span class="nav-label">{{$item['name']}}</span>
+                    </a>
                 </li>
-                @foreach($items as $item)
-                    <li class="{{isActiveRoute($item['url'])}}">
-                        <a href="{{$item['url']}}">
-                            <i class="{{$item['icon']}}"></i>
-                            <span class="nav-label">{{$item['name']}}</span>
-                            @if($item['url'] == '/alerts')
-                                <span class="badge">
-                                    {{ \Illuminate\Support\Facades\Auth::user()->unreadNotifications->count() }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
-                @endforeach
+            @endforeach
             @endauth
 
             @guest
