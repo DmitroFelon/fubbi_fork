@@ -110,3 +110,37 @@
 a:hover{
   cursor: pointer!important;
 }
+
+.keyword-question> ul > li{
+  list-style: none;
+}
+
+li > .keyword-question-tab, .keyword-question-tab:hover{
+  display: block;
+  width: auto;
+  margin: 0 0.5em 0.5em 0!important;
+  padding: 8px!important;
+  text-decoration: none;
+  background: #6fd1bd!important;
+  color: #fff!important;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px!important;
+  list-style: none;
+}
+
+li.active > .keyword-question-tab{
+  background: #1AB394!important;
+  color: #fff!important;
+}
+
+.keyword-question-tab:hover{
+  background: #1AB394!important;
+  margin: 0 0.5em 0.5em 0!important;
+  border-radius: 5px!important;
+  padding: 8px!important;
+}
+
+.collapse-link{
+  color: #c4c4c4!important;
+}

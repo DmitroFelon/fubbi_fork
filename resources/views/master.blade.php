@@ -83,6 +83,7 @@
             url: "/projects/" + _project_id + "/prefill_files",
             paramName: 'compliance_guideline',
             method: 'POST',
+            createImageThumbnails: true,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

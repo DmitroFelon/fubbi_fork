@@ -9,11 +9,7 @@
 namespace App\Services\Api;
 
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Collection;
-use PHPUnit\Runner\Exception;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class KeywordTool
@@ -22,87 +18,118 @@ use Psr\Http\Message\ResponseInterface;
  */
 class KeywordTool implements KeywordsFactoryInterface
 {
-	/**
-	 * KeywordTool constructor.
-	 */
-	public function __construct()
-	{
-		$this->client = new Client(
-			[
-				'base_uri' => 'https://api.keywordtool.io/v2/',
-				'timeout'  => 40,
-				'defaults' => [
-					'query' => [
-						'apikey' => config('keywordtool.apikey'),
-					],
-				],
-			]
-		);
-	}
 
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return \Illuminate\Support\Collection
-	 * @throws \Exception
-	 */
-	public function suggestions($keyword, $country = 'au', $language = 'en') :Collection 
-	{
-		$apikey = config('keywordtool.apikey');
+    const SOURCE_GOOGLE    = 'google';
+    const SOURCE_youtube   = 'youtube';
+    const SOURCE_bing      = 'bing';
+    const SOURCE_AMAZON    = 'amazon';
+    const SOURCE_EBAY      = 'ebay';
+    const SOURCE_APP_STORE = 'app-store';
 
-		$params = [
-			'apikey'          => $apikey,
-			'keyword'         => urldecode($keyword),
-			'country'         => $country,
-			'language'        => $language,
-			'metrics_network' => 'googlesearchnetwork',
-			'output'          => 'json',
-		];
+    /**
+     * @param $keyword
+     * @param string $country
+     * @param string $language
+     * @return \Illuminate\Support\Collection
+     * @throws \Exception
+     */
+    public function suggestions($keyword, $country = 'au', $language = 'en'):Collection
+    {
+        $apikey = config('keywordtool.apikey');
 
-		$ch = curl_init();
-		curl_setopt(
-			$ch,
-			CURLOPT_URL,
-			'https://api.keywordtool.io/v2/search/suggestions/google?'.http_build_query($params)
-		);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$output = curl_exec($ch);
+        $params = [
+            'apikey'          => $apikey,
+            'keyword'         => urldecode($keyword),
+            'country'         => $country,
+            'language'        => $language,
+            'metrics_network' => 'googlesearchnetwork',
+            'output'          => 'json',
+        ];
 
-		if (curl_error($ch)) {
-			throw new \Exception(curl_error($ch));
-		}
+        $ch = curl_init();
+        curl_setopt(
+            $ch,
+            CURLOPT_URL,
+            sprintf("https://api.keywordtool.io/v2/search/suggestions/%s?%s", self::SOURCE_GOOGLE, http_build_query($params))
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
 
-		$results = json_decode($output, true);
+        if (curl_error($ch)) {
+            throw new \Exception(curl_error($ch));
+        }
 
-		if (isset($results['results']) and ! empty($results['results'])) {
-			$results = (isset($results['results'])) ? collect($results['results']) : collect();
+        $results = json_decode($output, true);
 
-			$results = $results->collapse();
+        if (isset($results['results']) and !empty($results['results'])) {
+            $results  = (isset($results['results'])) ? collect($results['results']) : collect();
+            $results  = $results->collapse();
+            $keywords = collect($results->keyBy('string'));
+            $keywords->transform(
+                function ($item, $key) {
+                    //set each $keyword => false
+                    return false;
+                }
+            );
+            return $keywords;
+        }
 
-			$keywords = collect($results->keyBy('string'));
+        throw new \Exception(\GuzzleHttp\json_encode($output));
+    }
 
-			$keywords->transform(
-				function ($item, $key) {
-					return false;
-				}
-			);
+    /**
+     * @param $keyword
+     * @param string $country
+     * @param string $language
+     * @return \Illuminate\Support\Collection
+     * @throws \Exception
+     */
+    public function questions($keyword, $country = 'au', $language = 'en'):Collection
+    {
+        $apikey = config('keywordtool.apikey');
 
-			return $keywords;
-		}
+        $params = [
+            'apikey'          => $apikey,
+            'keyword'         => urldecode($keyword),
+            'country'         => $country,
+            'language'        => $language,
+            'metrics_network' => 'googlesearchnetwork',
+            'output'          => 'json',
+            'type'            => 'questions'
+        ];
 
-		throw new \Exception(\GuzzleHttp\json_encode($output));
-	}
+        $ch = curl_init();
+        curl_setopt(
+            $ch,
+            CURLOPT_URL,
+            sprintf("https://api.keywordtool.io/v2/search/suggestions/%s?%s", self::SOURCE_GOOGLE, http_build_query($params))
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
 
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function questions($keyword, $country = 'au', $language = 'en'):Collection
-	{
-		return collect();
-	}
+        if (curl_error($ch)) {
+            throw new \Exception(curl_error($ch));
+        }
+
+        $results = json_decode($output, true);
+
+        if (isset($results['results']) and !empty($results['results'])) {
+            $results = (isset($results['results'])) ? collect($results['results']) : collect();
+
+            $categories_count = $results->count();
+            $results          = $results->collapse();
+            //remove sub categories from result
+            $results  = $results->slice($categories_count);
+            $keywords = collect($results->keyBy('string'));
+            $keywords->transform(
+                function ($item, $key) {
+                    return false;
+                }
+            );
+            return $keywords;
+        }
+
+        throw new \Exception(\GuzzleHttp\json_encode($output));
+    }
 
 }

@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class ArticlesController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('can:index,' . Article::class)->only(['index']);
+        $this->middleware('can:show,article')->only(['show']);
+        $this->middleware('can:update,article')->only(['update', 'edit']);
+        $this->middleware('can:create,' . Article::class)->only(['create', 'store']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +26,6 @@ class ArticlesController extends Controller
     public function index(Request $request)
     {
         $all = true;
-
 
         $articles_query = Article::query();
 
@@ -29,7 +36,7 @@ class ArticlesController extends Controller
         $articles = $articles_query->simplePaginate(10);
 
         $filters['types'] = Article::getAllTypes();
-        
+
         $filters['statuses'] = [
             ''    => _i('Select status'),
             true  => _i('Accepted'),
@@ -48,40 +55,6 @@ class ArticlesController extends Controller
     public function show(Article $article)
     {
         return view('entity.article.show', compact('article'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function request_access(Article $article, Request $request, Drive $drive)

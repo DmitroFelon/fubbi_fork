@@ -49,6 +49,14 @@ class LocalKeywords implements KeywordsFactoryInterface
 	 */
 	public function questions($keyword, $country = 'au', $language = 'en'):Collection
 	{
-		// TODO: Implement questions() method.
+		$keywords = collect($this->faker->words(20));
+
+		$keywords->transform(function ($item, $key){
+			return [$item => false];
+		});
+
+		$keywords = $keywords->collapse();
+
+		return $keywords;
 	}
 }

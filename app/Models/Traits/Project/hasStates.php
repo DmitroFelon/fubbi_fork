@@ -80,9 +80,9 @@ trait hasStates
             )
         );
         $this->addFiles($request);
+
         $this->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
     }
-
 
     /**
      * @param string $state
@@ -164,47 +164,42 @@ trait hasStates
      */
     private function prefillKeywords(Request $request)
     {
-        $keywords_input = collect($request->input('keywords'));
+        if ($request->has('keywords')) {
+            $this->saveKeywords($request->input('keywords'), 'keywords');
+        }
 
-        $keywords_input->transform(
-            function ($item, $key) {
-                return array_keys($item);
-            }
-        );
+        if ($request->has('keywords_questions')) {
+            $this->saveKeywords($request->input('keywords_questions'), 'keywords_questions');
+        }
 
-        $keywords_old = ($this->getMeta('keywords')) ? collect($this->getMeta('keywords')) : collect();
-
-        //fill by new keywords if necessary
-        $keywords_input->each(
-            function ($item, $k) use ($keywords_old) {
-                if (!$keywords_old->has($k)) {
-                    $keywords_old->put($k, []);
-                }
-            }
-        );
-
-        $keywords_old->transform(
-            function ($item, $k) use ($keywords_input, &$keywords_old) {
-                if ($keywords_input->has($k)) {
-                    //set all to false
-                    foreach ($item as $keyword => $state) {
-                        $item->$keyword = false;
-                    }
-                    //set true at existed
-                    foreach ($keywords_input->get($k) as $i => $keyword) {
-                        $item->$keyword = true;
-                    }
-                }
-
-                return $item;
-            }
-        );
-
-        $this->setMeta('keywords', $keywords_old);
-
-        $this->setMeta('keywords_meta', $request->input('meta'));
+        if ($request->has('meta')) {
+            $this->setMeta('keywords_meta', $request->input('meta'));
+        }
 
         $this->save();
+
+        return true;
+    }
+
+    private function saveKeywords($input, $name)
+    {
+        $input = collect($input);
+
+        //set input value to true insted of "1"
+        $input->transform(function ($item) {
+            return array_fill_keys(array_keys($item), true);
+        });
+
+        //load keywords from database
+        $keywords = collect($this->getMeta($name));
+
+        $input_array = $input->toArray();
+        //cast to array from std
+        $old_array = json_decode(json_encode($keywords->toArray()), true);
+
+        $keywords = array_replace_recursive($old_array, $input_array);
+
+        $this->setMeta($name, $keywords);
 
         return true;
     }

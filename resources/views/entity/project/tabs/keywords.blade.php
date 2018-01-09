@@ -12,7 +12,7 @@
     @foreach(collect(explode(',', $project->themes)) as $theme)
         <h1>{{$theme}}</h1>
         <fieldset data-theme="{{$theme}}" data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $theme])}}">
-
+            {{--loaded by ajax--}}
         </fieldset>
     @endforeach
 
@@ -20,7 +20,7 @@
     @foreach(collect(explode(',', $project->questions)) as $question)
         <h1>{{$question}}</h1>
         <fieldset data-theme="{{$question}}"  data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $question])}}">
-
+            {{--loaded by ajax--}}
         </fieldset>
     @endforeach
 

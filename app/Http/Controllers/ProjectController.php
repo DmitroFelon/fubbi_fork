@@ -14,9 +14,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use Kodeine\Metable\MetaData;
 use Spatie\MediaLibrary\Media;
 use Stripe\Error\InvalidRequest;
 use Stripe\Plan;
@@ -37,8 +41,8 @@ class ProjectController extends Controller
     {
         $this->middleware('can:index,' . Project::class)->only(['index', 'show']);
         $this->middleware('can:create,' . Project::class)->only(['create', 'store']);
-        $this->middleware('can:update,' . Project::class)->only(['edit', 'update']);
-        $this->middleware('can:delete,' . Project::class)->only(['delete', 'destroy', 'resume']);
+        $this->middleware('can:update,project')->only(['edit', 'update']);
+        $this->middleware('can:delete,project')->only(['delete', 'destroy', 'resume']);
     }
 
     /**
@@ -158,21 +162,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param \App\Http\Requests\StoreProject|\Illuminate\Http\Request $request
-     * @param \App\Models\Project $project
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
-     */
-    public function store(StoreProject $request, Project $project)
-    {
-        return;
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param \App\Models\Project $project
@@ -180,90 +169,25 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $meta_to_cast = [
-            'themes',
-            'questions',
-            'avoid_keywords',
-            'article_images_links',
-            'image_pages',
-            'google_access',
-        ];
 
-        $meta_to_skip = [
-            'themes_order',
-            'keywords_meta',
-            'export',
-            'conversation_id'
-        ];
+        $keywords           = $project->keywords;
+        $keywords_questions = $project->keywords_questions;
+        $metadata           = $project->metaToView();
+        $manager            = $project->workers()->withRole('account_manager')->first(['id']);
+        $manager_id         = ($manager) ? $manager->id : null;
 
-        $project->metas->transform(
-            function ($item, $key) use ($meta_to_cast, $meta_to_skip) {
-
-                $item->value = (filter_var(
-                    $item->value,
-                    FILTER_VALIDATE_URL
-                )) ? '<a href="' . $item->value . '">' . $item->value . '</a>' : $item->value;
-
-                if (in_array($item->key, $meta_to_cast)) {
-                    $item->value = explode(',', $item->value);
-
-                    //remove empty metas
-                    if (is_array($item->value) and empty($item->value)) {
-                        return null;
-                    }
-
-                    //remove empty metas
-                    if (isset($item->value[0]) and empty($item->value[0])) {
-                        return null;
-                    }
-                }
-
-                return (in_array($item->key, $meta_to_skip)) ? null : $item;
-            }
-        );
-
-        $project->metas = $project->metas->filter();
 
         $users = [];
         $teams = [];
 
-        $manager = $project->workers()->withRole('account_manager')->first(['id']);
-
-        $manager_id = ($manager) ? $manager->id : false;
-
         if (Auth::user()->role == 'admin' or ($manager_id and $manager_id == Auth::user()->id)) {
             //get users which are not attached to this project
-            $users = User::without(['notifications', 'invites'])
-                         ->whereNotIn('id', $project->workers->pluck('id')->toArray())
-                         ->get(['id', 'first_name', 'last_name', 'email']);
 
-            //prepare and filter users for the view
-
-            $invitable_users = $users->keyBy('id')->transform(function (User $user) use ($project) {
-                if (in_array($user->role, ['admin', 'client'])) {
-                    return null;
-                }
-
-                $role = $user->roles()->first();
-
-                $role_name = ($role) ? $role->display_name : '';
-
-                return $user->name . " - {$role_name}";
-            });
-
-            $users = $invitable_users->filter();
-
+            $users = $project->getAvailableWorkers();
             $teams = Team::all();
         }
 
-        $data = [
-            'project' => $project,
-            'users'   => $users,
-            'teams'   => $teams
-        ];
-
-
-        return view('entity.project.show', $data);
+        return view('entity.project.show', compact('project', 'keywords', 'keywords_questions', 'metadata', 'users', 'teams'));
     }
 
     /**
@@ -276,27 +200,14 @@ class ProjectController extends Controller
     {
         $step = ($request->has('s'))
             ? $request->input('s')
-            : false;
+            : $project->state;
 
-        if ($step) {
-            if (in_array($step, ProjectStates::$changeable_states)) {
-                $project->setState($step);
-            } else {
-                return redirect()->back()->with('error', _i('You can\'t perform this action'));
-            }
-        }
 
-        $data = [
-            'keywords' => $project->getMeta('keywords'),
-            'articles' => Article::all(),
-            'project'  => $project,
-            'step'     => $project->state,
-        ];
+        $keywords = $project->getMeta('keywords');
 
-        return view(
-            'entity.project.edit',
-            $data
-        );
+        $articles = $project->articles;
+
+        return view('entity.project.edit', compact('keywords', 'articles', 'project', 'step'));
     }
 
     /**
@@ -308,7 +219,6 @@ class ProjectController extends Controller
      */
     public function update(StoreProject $request, Project $project)
     {
-
         if (!$request->has('_step')) {
             abort(404);
         }
@@ -401,6 +311,9 @@ class ProjectController extends Controller
         } else {
             $project->attachWorker($user->id);
             $invite = $user->getInviteToProject($project->id);
+            if (!$invite) {
+                abort(403);
+            }
             $invite->accept();
             $message = _i('You are applied to this project');
         }
@@ -421,6 +334,9 @@ class ProjectController extends Controller
         $user        = $request->user();
 
         $invite = $user->getInviteToProject($project->id);
+        if (!$invite) {
+            abort(403);
+        }
         $invite->decline();
 
         return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
@@ -441,14 +357,15 @@ class ProjectController extends Controller
 
         $files->transform(function (Media $media) {
             try {
-                $media->url = $media->getFullUrl();
+                $media->url = $media->getFullUrl('dropzone');
             } catch (\Exception $e) {
-                $media->url = '';
+                Log::error($e->getMessage());
+                $media->url = $media->getFullUrl();
             }
             return $media;
         });
 
-        return Response::json($files->toArray(), 200);
+        return Response::json($files->filter()->toArray(), 200);
     }
 
     /**
@@ -521,7 +438,7 @@ class ProjectController extends Controller
         }
 
 
-        return redirect()->back();
+        return redirect()->back()->with('error', _i('Users were not specified'));
     }
 
     /**
@@ -533,17 +450,16 @@ class ProjectController extends Controller
     {
         if ($request->has('team')) {
 
-            $project->attachTeam($request->input('team'));
+            $team = Team::findOrFail($request->input('team'));
 
-            $attached_team = Team::find($request->input('team'));
+            $project->attachTeam($request->input('team'));
 
             return redirect()->back()->with(
                 'info',
-                _i('Team: %s have been sucessfully attached to project: "%s"', [$attached_team->name, $project->name])
+                _i('Team: "%s" have been sucessfully attached to project: "%s"', [$team->name, $project->name])
             );
         }
 
-
-        return redirect()->back();
+        return redirect()->back()->with('error', _i('Team was not specified'));
     }
 }

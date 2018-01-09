@@ -211,7 +211,11 @@ return [
         /*
          * Chat
          * */
-        Musonza\Chat\ChatServiceProvider::class
+        Musonza\Chat\ChatServiceProvider::class,
+        /*
+         * Image manipulation
+         * */
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -285,7 +289,11 @@ return [
         /*
          * Chat
          * */
-        'Chat' => Musonza\Chat\Facades\ChatFacade::class
+        'Chat' => Musonza\Chat\Facades\ChatFacade::class,
+        /*
+         * Image manipulaion
+         * */
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];

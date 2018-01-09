@@ -34,7 +34,7 @@
         </div>
         {!! Form::bsText(
             'questions', null,
-            _i('What are the top 3 questions clients desperately want answers to?'),
+            _i('What are the top 7 questions clients desperately want answers to?'),
             _i("Separate by coma or click 'enter'"),
             ['required', 'class'=> 'tagsinput' ]
         ) !!}
@@ -90,6 +90,8 @@
         {!! Form::bsSelect('writing_style', config('fubbi.form.quiz.writing_style'),
          null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
         {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
+
+        @if($project->plan->id != 'fubbi-basic-plan')
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel-group">
@@ -114,6 +116,8 @@
                 </div>
             </div>
         </div>
+        @endif
+
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="panel-group">
@@ -158,7 +162,6 @@
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
-        {!! Form::bsText('google_access', null, _i("We use Google docs to have you approve your articles. Please add all the email addresses of people in your organisation that need access."), '', [ 'class'=>"tagsinput"]) !!}
         {!! Form::bsText('cta', null, _i("Do you want us to add calls to action (CTA) to the end of your articles?"), _i("Examples include phoning your office for a complimentary consultation or review. Other times it might be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with specific information i.e. if you want them to download a free report, please share a link to the download offer. If you want people to phone your office please provide details of what you’ll share on the phone call. We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
         {!! Form::bsText('ready_content', null, _i("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts."), _i("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts"), ['multiple'], 'file') !!}
         {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', _i("Do you want to review outlines before we send you articles to approve?"), _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}

@@ -61,7 +61,7 @@ class CheckState implements ShouldQueue
     }
 
     /**
-     *
+     * Check is project still not filled
      */
     public function filling()
     {

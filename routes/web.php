@@ -34,7 +34,7 @@ Route::get('test', function () {
 
 });
 
-
+//Notifications and messages
 Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
     $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);
     if (!$conversation) {

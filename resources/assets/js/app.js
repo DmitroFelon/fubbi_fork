@@ -123,6 +123,11 @@ jQuery(document).ready(function ($) {
             loading: "Loading related keywords..."
         },
         onInit: function (event, currentIndex) {
+            if (typeof(Storage) !== "undefined") {
+                if (typeof(localStorage.getItem("keywords-form-step")) !== "undefined") {
+                    jQuery("#keywords-form-t-" + localStorage.getItem("keywords-form-step")).click();
+                }
+            }
         },
         onStepChanging: function (event, currentIndex) {
             /*if (!validateKeywords(event, currentIndex)) {
@@ -161,7 +166,6 @@ jQuery(document).ready(function ($) {
 
     /*
      * Add manual keyword
-     * todo save manual keyword alongside with keywords from keywordtool
      * */
     $(document).on("click", "button.keyword-input-submit", function (e) {
         e.preventDefault();
@@ -188,9 +192,38 @@ jQuery(document).ready(function ($) {
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
         });
-
-
     });
+
+    /*
+     * Add manual keyword question
+     * */
+    $(document).on("click", "button.keyword-question-input-submit", function (e) {
+        e.preventDefault();
+        var theme = $(this).attr('data-question-theme');
+        var input = $('input[data-question-theme="' + theme + '"]').val();
+        if (!input) {
+            return;
+        }
+
+        var wrapper = $('div[data-question-theme="' + theme + '"]');
+
+        wrapper.append(
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
+            '<div class="i-checks">' +
+            '<label><input class="keywords-checkbox" checked ' +
+            'type="checkbox" name="keywords_questions[' + theme + '][' + input + ']" ' +
+            'value="true"> <i></i>' + input + '</label></div></div>'
+        );
+
+        $('input[data-question-theme="' + theme + '"]').val('');
+
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+
 
     /*
      * Init tags inputs
@@ -278,7 +311,6 @@ jQuery(document).ready(function ($) {
         var formData = new FormData(document.getElementById("keywords-form"));
         var _project_id = $("input[name=_project_id]").val();
         
-
         $.post({
             url: '/projects/' + _project_id + '/prefill',
             processData: false,

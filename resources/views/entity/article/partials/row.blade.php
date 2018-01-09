@@ -71,9 +71,6 @@
             <a href="{{action('ArticlesController@show', [$article])}}" class="btn btn-white btn-sm">
                 <i class="fa fa-folder"></i> {{_i('View')}}
             </a>
-            <a href="{{action('ArticlesController@edit', [$article])}}" class="btn btn-white btn-sm">
-                <i class="fa fa-edit"></i> {{_i('Edit')}}
-            </a>
         @endif
 
     </td>

@@ -62,7 +62,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Messages',
-                'url'  => 'messages',
+                'url'  => action('MessageController@index'),
                 'icon' => 'fa fa-envelope',
             ]
         );
@@ -70,7 +70,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Settings',
-                'url'  => 'settings',
+                'url'  => action('SettingsController@index'),
                 'icon' => 'fa fa-gear',
             ]
         );
@@ -78,7 +78,7 @@ class LeftMenuComposer
         $links = collect($links)->push(
             [
                 'name' => 'Issues',
-                'url'  => 'issues',
+                'url'  => action('IssueController@index'),
                 'icon' => 'fa fa-bug',
             ]
         );
@@ -93,8 +93,8 @@ class LeftMenuComposer
     public function guest()
     {
         return [
-            'Login'    => 'login',
-            'Register' => 'register',
+            'Login'    => action('Auth\LoginController@login'),
+            'Register' => action('Auth\RegisterController@register'),
         ];
     }
 
@@ -106,32 +106,32 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Users',
-                'url'  => 'users',
+                'url'  => action('UserController@index'),
                 'icon' => 'fa fa-user',
             ],
             [
                 'name' => 'Teams',
-                'url'  => 'teams',
+                'url'  => action('TeamController@index'),
                 'icon' => 'fa fa-users',
             ],
             [
                 'name' => 'Projects',
-                'url'  => 'projects',
+                'url'  => action('ProjectController@index'),
                 'icon' => 'fa fa-file-o',
             ],
             [
                 'name' => 'Plans',
-                'url'  => 'plans',
+                'url'  => action('PlanController@index'),
                 'icon' => 'fa fa-gear',
             ],
             [
                 'name' => 'Articles',
-                'url'  => 'articles',
+                'url'  => action('ArticlesController@index'),
                 'icon' => 'fa fa-file-word-o',
             ],
             [
                 'name' => 'Charges',
-                'url'  => 'charges',
+                'url'  => action('ChargesController@index'),
                 'icon' => 'fa fa-dollar',
             ],
         ];
@@ -145,7 +145,7 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Projects',
-                'url'  => 'projects',
+                'url'  => action('ProjectController@index'),
                 'icon' => 'fa fa-file-o',
             ],
         ];
@@ -159,12 +159,12 @@ class LeftMenuComposer
         return [
             [
                 'name' => 'Teams',
-                'url'  => 'teams',
+                'url'  => action('TeamController@index'),
                 'icon' => 'fa fa-users',
             ],
             [
                 'name' => 'Projects',
-                'url'  => 'projects',
+                'url'  => action('ProjectController@index'),
                 'icon' => 'fa fa-file-o',
             ],
         ];
@@ -177,11 +177,15 @@ class LeftMenuComposer
     {
         return [
             [
+                'name' => 'Teams',
+                'url'  => action('TeamController@index'),
+                'icon' => 'fa fa-users',
+            ],
+            [
                 'name' => 'Projects',
-                'url'  => 'projects',
+                'url'  => action('ProjectController@index'),
                 'icon' => 'fa fa-file-o',
             ],
-            
         ];
     }
 
@@ -191,7 +195,16 @@ class LeftMenuComposer
     public function editor()
     {
         return [
-
+            [
+                'name' => 'Teams',
+                'url'  => action('TeamController@index'),
+                'icon' => 'fa fa-users',
+            ],
+            [
+                'name' => 'Projects',
+                'url'  => action('ProjectController@index'),
+                'icon' => 'fa fa-file-o',
+            ],
         ];
     }
 
@@ -201,7 +214,32 @@ class LeftMenuComposer
     public function designer()
     {
         return [
+            [
+                'name' => 'Teams',
+                'url'  => action('TeamController@index'),
+                'icon' => 'fa fa-users',
+            ],
+            [
+                'name' => 'Projects',
+                'url'  => action('ProjectController@index'),
+                'icon' => 'fa fa-file-o',
+            ],
+        ];
+    }
 
+    public function researcher()
+    {
+        return [
+            [
+                'name' => 'Teams',
+                'url'  => action('TeamController@index'),
+                'icon' => 'fa fa-users',
+            ],
+            [
+                'name' => 'Projects',
+                'url'  => action('ProjectController@index'),
+                'icon' => 'fa fa-file-o',
+            ],
         ];
     }
 }

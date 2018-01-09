@@ -2,7 +2,6 @@
     <h3>{{_i('Form')}}</h3>
 </div>
 
-
 <div class="row p-h-lg">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
@@ -54,50 +53,130 @@
     </div>
 </div>
 
-
 <div class="row text-center">
     <h3>{{_i('Keywords')}}</h3>
 </div>
 
-<div class="row">
-    <div class="form-group">
-        <div class="col-lg-1">
-            <label for="input-{{str_replace(' ', '', $theme)}}"
-                   class="control-label">{{_i('Add keyword manually')}}
-            </label>
-        </div>
-        <div class="col-lg-4">
-            <input required data-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}" type="text"
-                   class="form-control keyword-input">
-        </div>
-        <div class="col-lg-2">
-            <button data-theme="{{$theme}}"
-                    id="keyword-input-submit-{{str_replace(' ', '', $theme)}}"
-                    class="form-control btn-primary btn keyword-input-submit">
-                {{_i('Add')}}
-            </button>
-        </div>
-    </div>
-</div>
+<div class="tabs-container keyword-question">
 
-<div class="row p-h-lg">
-    <div data-theme="{{$theme}}" id="wrapper-{{str_replace(' ', '', $theme)}}"
-         class="col-xs-12 col-sm-12 col-md-12 col-lg-12 keywords-wrapper">
-        @foreach($keywords as $keyword => $accepted)
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <div class="i-checks">
-                    <label>
-                        <input class="keywords-checkbox"
-                               {{($accepted)?'checked':''}}
-                               type="checkbox"
-                               name="keywords[{{$theme}}][{{$keyword}}]"
-                               value="1"> <i></i>
-                        {{ucfirst($keyword)}}
-                    </label>
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a role="tab" aria-expanded="true" class="keyword-question-tab" data-toggle="tab"
+               href="#tab-themes-{{str_replace(' ', '-', $theme)}}">
+                {{_i('Keywords Suggestions')}}
+            </a>
+        </li>
+
+        <li>
+            <a role="tab" aria-expanded="false" class="keyword-question-tab" data-toggle="tab"
+               href="#tab-questions-{{str_replace(' ', '-', $theme)}}">
+                {{_i('Questions')}}
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" id="tab-themes-{{str_replace(' ', '-', $theme)}}" class="tab-pane active">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-lg-1">
+                                    <label for="input-{{str_replace(' ', '', $theme)}}"
+                                           class="control-label">{{_i('Add keyword manually')}}
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input required data-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}"
+                                           type="text"
+                                           class="form-control keyword-input">
+                                </div>
+                                <div class="col-lg-2">
+                                    <button data-theme="{{$theme}}"
+                                            id="keyword-input-submit-{{str_replace(' ', '', $theme)}}"
+                                            class="form-control btn-primary btn keyword-input-submit">
+                                        {{_i('Add')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-h-lg">
+                            <div data-theme="{{$theme}}" id="wrapper-{{str_replace(' ', '', $theme)}}"
+                                 class="col-xs-12 col-sm-12 col-md-12 col-lg-12 keywords-wrapper">
+                                @foreach($keywords as $keyword => $accepted)
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="i-checks">
+                                            <label>
+                                                <input class="keywords-checkbox"
+                                                       {{($accepted)?'checked':''}}
+                                                       type="checkbox"
+                                                       name="keywords[{{$theme}}][{{$keyword}}]"
+                                                       value="1"> <i></i>
+                                                {{ucfirst($keyword)}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        @endforeach
+        </div>
+
+        <div role="tabpanel" id="tab-questions-{{str_replace(' ', '-', $theme)}}" class="tab-pane">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-lg-1">
+                                    <label for="input-{{str_replace(' ', '', $theme)}}"
+                                           class="control-label">{{_i('Add question manually')}}
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input required data-question-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}"
+                                           type="text"
+                                           class="form-control keyword-input">
+                                </div>
+                                <div class="col-lg-2">
+                                    <button data-question-theme="{{$theme}}"
+                                            id="keyword-input-submit-{{str_replace(' ', '', $theme)}}"
+                                            class="form-control btn-primary btn keyword-question-input-submit">
+                                        {{_i('Add')}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-h-lg">
+                            <div data-question-theme="{{$theme}}" id="wrapper-{{str_replace(' ', '', $theme)}}"
+                                 class="col-xs-12 col-sm-12 col-md-12 col-lg-12 keywords-wrapper">
+                                @foreach($keywords_questions as $keyword => $accepted)
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="i-checks">
+                                            <label>
+                                                <input class="keywords-checkbox"
+                                                       {{($accepted)?'checked':''}}
+                                                       type="checkbox"
+                                                       name="keywords_questions[{{$theme}}][{{$keyword}}]"> <i></i>
+                                                {{ucfirst($keyword)}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
+
+
 
 

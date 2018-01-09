@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\MiniFyImage;
 use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\FormProjectAccessors;
@@ -71,7 +72,7 @@ use Venturecraft\Revisionable\Revision;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activity
  */
-class Project extends Model implements HasMedia, Invitable
+class Project extends Model implements HasMediaConversions, Invitable
 {
     use hasStates;
     use hasWorkers;
@@ -189,10 +190,14 @@ class Project extends Model implements HasMedia, Invitable
             if ($request->hasFile($file_input)) {
                 if (is_array($request->file($file_input))) {
                     foreach ($request->file($file_input) as $file) {
-                        $files->push($this->addMedia($file)->toMediaCollection($file_input));
+                        $file = $this->addMedia($file)->toMediaCollection($file_input);
+                        //MiniFyImage::dispatch($file);
+                        $files->push($file);
                     }
                 } else {
-                    $files->push($this->addMedia($request->file($file_input))->toMediaCollection($file_input));
+                    $file = $this->addMedia($request->file($file_input))->toMediaCollection($file_input);
+                    //MiniFyImage::dispatch($file);
+                    $files->push($file);
                 }
             }
         }
@@ -372,5 +377,87 @@ class Project extends Model implements HasMedia, Invitable
                 return 'fa-file-o';
                 break;
         }
+    }
+
+    public function metaToView()
+    {
+        $meta_to_cast = [
+            'themes',
+            'questions',
+            'avoid_keywords',
+            'article_images_links',
+            'image_pages',
+            'google_access',
+        ];
+
+        $meta_to_skip = [
+            'themes_order',
+            'keywords_meta',
+            'keywords',
+            'keywords_questions',
+            'export',
+            'conversation_id'
+        ];
+
+        $meta = $this->metas;
+
+        $meta->transform(function ($item) use ($meta_to_cast, $meta_to_skip) {
+
+            if (strpos($item->key, 'modificator_') !== false or in_array($item->key, $meta_to_skip)) {
+                return null;
+            }
+
+            //is link
+            $item->value = (filter_var($item->value, FILTER_VALIDATE_URL))
+                ? '<a href="' . $item->value . '">' . $item->value . '</a>'
+                : $item->value;
+
+            if (in_array($item->key, $meta_to_cast)) {
+                $item->value = explode(',', $item->value);
+                //remove empty metas
+                if (is_array($item->value) and empty($item->value)) {
+                    return null;
+                }
+                //remove empty metas
+                if (isset($item->value[0]) and empty($item->value[0])) {
+                    return null;
+                }
+            }
+
+            return $item;
+
+        });
+
+        return $meta->filter();
+    }
+
+    public function getAvailableWorkers()
+    {
+        $users = User::without(['notifications', 'invites'])
+                     ->whereNotIn('id', $this->workers->pluck('id')->toArray())
+                     ->get(['id', 'first_name', 'last_name', 'email']);
+
+        //prepare and filter users for the view
+
+        $invitable_users = $users->keyBy('id')->transform(function (User $user) {
+            if (in_array($user->role, ['admin', 'client'])) {
+                return null;
+            }
+
+            $role = $user->roles()->first();
+
+            $role_name = ($role) ? $role->display_name : '';
+
+            return $user->name . " - {$role_name}";
+        });
+
+        return $invitable_users->filter();
+    }
+
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this->addMediaConversion('dropzone')
+             ->width(120)
+             ->height(120);
     }
 }

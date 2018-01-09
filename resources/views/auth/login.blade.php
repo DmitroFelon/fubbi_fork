@@ -44,10 +44,16 @@
 
             <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{_i('Remember Me')}}
-                        </label>
+                    <div class="">
+                        <div class="i-checks">
+                            <label>
+                                <input class="keywords-checkbox"
+                                       {{ old('remember') ? 'checked' : '' }}
+                                       type="checkbox"
+                                       name="remember"> <i></i>
+                                {{_i('Remember Me')}}
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

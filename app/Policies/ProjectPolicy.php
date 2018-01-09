@@ -75,7 +75,7 @@ class ProjectPolicy
     public function delete(User $user, Project $model)
     {
         $skip = [
-            
+
         ];
 
         if (in_array($user->role, $skip)) {

@@ -78,7 +78,27 @@
                     </div>
                 </div>
                 <div class="ibox-content " style="display: none">
-                    @includeWhen($project->getMeta('keywords'), 'entity.project.partials.show.keywords')
+                    @includeWhen(!empty($keywords), 'entity.project.partials.show.keywords', ['iterable' => $keywords])
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-lg-6 col-xs-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{{_i('Questions')}}</h5>
+                    <div class="ibox-tools">
+                        <a href="{{url()->action('ProjectController@edit', ['id' => $project->id, 's' => 'keywords'])}}"
+                           class="btn btn-primary btn-xs m-r-sm p-w-sm">
+                            {{_i('Edit')}}
+                        </a>
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content " style="display: none">
+                    @includeWhen(!empty($keywords_questions), 'entity.project.partials.show.keywords', ['iterable' => $keywords_questions])
                 </div>
             </div>
         </div>
@@ -135,12 +155,7 @@
                 </div>
             </div>
             <div class="ibox-content inspinia-timeline">
-                @foreach($project->activity()->where('log_name', '!=', 'default')->orderBy('created_at', 'desc')->limit(10)->get() as $activity)
-
-                    @if( $activity->log_name == 'default')
-                        @continue
-                    @endif
-
+                @foreach($project->activity()->where('log_name', '!=', 'default')->orderBy('id', 'desc')->limit(10)->get() as $activity)
                     <div class="timeline-item">
                         <div class="row">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 date">

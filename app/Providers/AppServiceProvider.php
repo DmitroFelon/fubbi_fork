@@ -11,11 +11,13 @@ use App\Observers\UserObserver;
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use App\Services\Api\Keywords\LocalKeywords;
 use App\Services\Api\KeywordTool;
+use App\Services\CustomFileSystem;
 use App\User;
 use Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Musonza\Chat\Messages\Message;
+use Spatie\MediaLibrary\Filesystem\Filesystem;
 
 /**
  * Class AppServiceProvider
@@ -59,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
                 'label',
                 'description',
                 'attributes' => [],
-                'type' => '',
+                'type'       => '',
             ]
         );
 
@@ -72,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
                 'selected',
                 'label',
                 'description',
-                'select_attributes' => [],
+                'select_attributes'  => [],
                 'options_attributes' => [],
             ]
         );
@@ -85,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
+        $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
+        $this->app->bind(Filesystem::class, CustomFileSystem::class);
     }
 }

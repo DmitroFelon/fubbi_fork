@@ -37,7 +37,7 @@
             </li>
             @foreach($items as $item)
                 <li class="{{(\Illuminate\Support\Facades\Route::is($item['url']. '*')) ? 'active' : '' }}">
-                    <a href="{{url($item['url'])}}">
+                    <a href="{{$item['url']}}">
                         <i class="{{$item['icon']}}"></i>
                         <span class="nav-label">{{$item['name']}}</span>
                     </a>

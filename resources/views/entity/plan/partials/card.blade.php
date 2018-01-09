@@ -17,10 +17,8 @@
         <a href="{{action('PlanController@show', ['id' => $plan->id])}}" class="btn btn-white btn-sm">
             <i class="fa fa-folder"></i> View
         </a>
-        @role('client')
         <a href="{{action('PlanController@edit', ['id' => $plan->id])}}" class="btn btn-white btn-sm">
             <i class="fa fa-pencil"></i> Edit
         </a>
-        @endrole
     </td>
 </tr>
