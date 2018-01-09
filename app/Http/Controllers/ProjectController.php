@@ -403,7 +403,19 @@ class ProjectController extends Controller
      */
     public function prefill_files(Project $project, Request $request)
     {
-        return Response::json($project->addFiles($request), 200);
+        $files = $project->addFiles($request);
+
+         $files->transform(function (Media $media) {
+            try {
+                $media->url = $media->getFullUrl('dropzone');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                $media->url = $media->getFullUrl();
+            }
+            return $media;
+        });
+
+        return Response::json($files, 200);
     }
 
     /**

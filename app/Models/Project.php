@@ -458,6 +458,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     {
         $this->addMediaConversion('dropzone')
              ->width(120)
-             ->height(120);
+             ->height(120)->nonQueued();
     }
 }
