@@ -88,6 +88,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
-        $this->app->bind(Filesystem::class, CustomFileSystem::class);
+        //$this->app->bind(Filesystem::class, CustomFileSystem::class);
     }
 }

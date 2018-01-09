@@ -157,7 +157,7 @@ class CustomFileSystem implements Filesystem
             ? $pathGenerator->getPathForConversions($media)
             : $pathGenerator->getPath($media);
 
-        \Illuminate\Support\Facades\File::makeDirectory($directory, 0775, true, true);
+        \Illuminate\Support\Facades\File::makeDirectory(public_path($directory), 0775, true, true);
 
         return $directory;
     }
