@@ -134,6 +134,11 @@ class LeftMenuComposer
                 'url'  => action('ChargesController@index'),
                 'icon' => 'fa fa-dollar',
             ],
+            [
+                'name' => 'Help Videos',
+                'url'  => action('HelpVideosController@index'),
+                'icon' => 'fa fa-youtube',
+            ],
         ];
     }
 

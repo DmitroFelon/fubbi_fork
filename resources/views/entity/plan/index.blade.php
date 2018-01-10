@@ -15,8 +15,7 @@
             <div class="ibox-title">
                 <h5>{{_i('')}}</h5>
                 <div class="ibox-tools">
-                    <a target="_blank" href="{{route('plans.create')}}"
-                       class="btn btn-primary btn-xs">{{_i('Create new plan')}}</a>
+
                 </div>
             </div>
             <div class="ibox-content">

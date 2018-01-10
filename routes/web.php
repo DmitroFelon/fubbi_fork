@@ -22,16 +22,20 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
-Broadcast::routes();
-
-Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
-    return true;
+Route::get('test', function () {
+    $routeCollection = collect(Route::getRoutes());
+    $routeCollection->each(function (Illuminate\Routing\Route $route) {
+        if ($route->getName() and in_array('GET', $route->methods)) {
+            echo $route->getName() . json_encode($route->methods);
+            echo '<hr>';
+        }
+    });
 });
 
-
-Route::get('test', function () {
-
-
+Broadcast::routes();
+//chat
+Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
+    return true;
 });
 
 //Notifications and messages
@@ -44,15 +48,15 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
         ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
-
 Route::middleware(['auth'])->group(function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
+
         Route::get('charges', ['uses' => 'ChargesController@index', 'as' => 'charges']);
 
         Route::resources([
-            'plans' => 'PlanController',
-
+            'plans'       => 'PlanController',
+            'help_videos' => 'HelpVideosController'
         ]);
     });
 
@@ -70,7 +74,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('accept_review/{project}', "ProjectController@accept_review");
                 Route::get('reject_review/{project}', "ProjectController@reject_review");
             });
-
             Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
             Route::get('decline_project/{project}', "ProjectController@decline_project");
         }
@@ -98,7 +101,6 @@ Route::middleware(['auth'])->group(function () {
             });
 
             Route::resources([
-                'project.outlines' => 'OutlineController',
                 'project.articles' => 'ArticlesController',
                 'project.plan'     => 'PlanController',
             ]);
@@ -141,10 +143,4 @@ Route::middleware(['auth'])->group(function () {
     );
 
     Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
-}
-);
-
-
-
-
-
+});

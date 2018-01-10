@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-01-04.
+    * Generated on 2018-01-10.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -59,7 +59,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -215,7 +214,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -371,7 +369,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -527,7 +524,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -683,7 +679,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -839,7 +834,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
@@ -995,7 +989,6 @@ namespace PHPSTORM_META {
         'zipper' => \Chumper\Zipper\Zipper::class,
         'chat' => \Musonza\Chat\Chat::class,
         'command.activitylog:clean' => \Spatie\Activitylog\CleanActivitylogCommand::class,
-        'App\Services\Api\Keywords\KeywordsFactoryInterface' => \App\Services\Api\KeywordTool::class,
         'conf' => \Garf\LaravelConf\ConfManager::class,
         'Activity' => \Kim\Activity\Activity::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,

@@ -423,7 +423,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     {
         $meta_to_cast = [
             'themes',
-            'questions',
             'avoid_keywords',
             'article_images_links',
             'image_pages',
