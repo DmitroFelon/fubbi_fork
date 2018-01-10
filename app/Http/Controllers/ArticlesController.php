@@ -12,10 +12,10 @@ class ArticlesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('can:index,' . Article::class)->only(['index']);
+       /* $this->middleware('can:index,' . Article::class)->only(['index']);
         $this->middleware('can:show,article')->only(['show']);
         $this->middleware('can:update,article')->only(['update', 'edit']);
-        $this->middleware('can:create,' . Article::class)->only(['create', 'store']);
+        $this->middleware('can:create,' . Article::class)->only(['create', 'store']);*/
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Helpers\Page;
 use App\Models\HelpVideo;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,8 @@ class HelpVideosController extends Controller
      */
     public function create()
     {
-        return view('entity.help_video.create');
+        $pages = Page::getAvailablePages()->keyBy('route');
+        return view('entity.help_video.create', compact('pages'));
     }
 
     /**

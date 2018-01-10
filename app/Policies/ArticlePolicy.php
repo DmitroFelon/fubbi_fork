@@ -39,7 +39,6 @@ class ArticlePolicy
      */
     public function index(User $user, Project $project)
     {
-
         return $user->projects()->find($project->id)->exists();
     }
 

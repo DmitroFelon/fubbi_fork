@@ -17,13 +17,11 @@
 
             {!! Form::bsText('url', null, _i('Full url or Youtube id'), null, ['required'], 'text') !!}
 
-            {!! Form::bsText('page', null, _i('Page'), null, ['required'], 'text') !!}
+            {!! Form::bsSelect('page', $pages, null, _i(''), '', ['required']) !!}
 
             {{Form::submit('Save Video', ['class' => 'form-control btn btn-primary'])}}
 
             {!! Form::close() !!}
-
-
         </div>
     </div>
 

@@ -59,30 +59,37 @@ class LeftMenuComposer
             $links = $this->guest();
         }
 
-        $links = collect($links)->push(
+
+        $links = collect($links);
+
+        $links->push(
             [
-                'name' => 'Messages',
-                'url'  => action('MessageController@index'),
-                'icon' => 'fa fa-envelope',
+                'name'  => 'Messages',
+                'url'   => action('MessageController@index'),
+                'icon'  => 'fa fa-envelope',
+                'order' => 100,
             ]
         );
 
-        $links = collect($links)->push(
+        $links->push(
             [
-                'name' => 'Settings',
-                'url'  => action('SettingsController@index'),
-                'icon' => 'fa fa-gear',
+                'name'  => 'Settings',
+                'url'   => action('SettingsController@index'),
+                'icon'  => 'fa fa-gear',
+                'order' => 100,
             ]
         );
 
-        $links = collect($links)->push(
+        $links->push(
             [
-                'name' => 'Issues',
-                'url'  => action('IssueController@index'),
-                'icon' => 'fa fa-bug',
+                'name'  => 'Issues',
+                'url'   => action('IssueController@index'),
+                'icon'  => 'fa fa-bug',
+                'order' => 100,
             ]
         );
 
+        $links = $links->sortBy('order', SORT_NUMERIC, true);
 
         $view->with('items', $links);
     }
@@ -105,39 +112,46 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Users',
-                'url'  => action('UserController@index'),
-                'icon' => 'fa fa-user',
+                'name'  => 'Users',
+                'url'   => action('UserController@index'),
+                'icon'  => 'fa fa-user',
+                'order' => 100,
             ],
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
             [
-                'name' => 'Plans',
-                'url'  => action('PlanController@index'),
-                'icon' => 'fa fa-gear',
+                'name'  => 'Plans',
+                'url'   => action('PlanController@index'),
+                'icon'  => 'fa fa-gear',
+                'order' => 100,
             ],
             [
-                'name' => 'Articles',
-                'url'  => action('ArticlesController@index'),
-                'icon' => 'fa fa-file-word-o',
+                'name'  => 'Articles',
+                'url'   => action('ArticlesController@index'),
+                'icon'  => 'fa fa-file-word-o',
+                'order' => 100,
             ],
             [
-                'name' => 'Charges',
-                'url'  => action('ChargesController@index'),
-                'icon' => 'fa fa-dollar',
+                'name'  => 'Charges',
+                'url'   => action('ChargesController@index'),
+                'icon'  => 'fa fa-dollar',
+                'order' => 100,
             ],
             [
-                'name' => 'Help Videos',
-                'url'  => action('HelpVideosController@index'),
-                'icon' => 'fa fa-youtube',
+                'name'  => 'Help Videos',
+                'url'   => action('HelpVideosController@index'),
+                'icon'  => 'fa fa-youtube',
+                'order' => 100,
             ],
         ];
     }
@@ -149,9 +163,10 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }
@@ -163,14 +178,16 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }
@@ -182,14 +199,16 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }
@@ -201,14 +220,16 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }
@@ -220,14 +241,16 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }
@@ -236,14 +259,16 @@ class LeftMenuComposer
     {
         return [
             [
-                'name' => 'Teams',
-                'url'  => action('TeamController@index'),
-                'icon' => 'fa fa-users',
+                'name'  => 'Teams',
+                'url'   => action('TeamController@index'),
+                'icon'  => 'fa fa-users',
+                'order' => 100,
             ],
             [
-                'name' => 'Projects',
-                'url'  => action('ProjectController@index'),
-                'icon' => 'fa fa-file-o',
+                'name'  => 'Projects',
+                'url'   => action('ProjectController@index'),
+                'icon'  => 'fa fa-file-o',
+                'order' => 100,
             ],
         ];
     }

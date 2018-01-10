@@ -43,4 +43,11 @@ class HelpVideo extends Model
         return 'http://img.youtube.com/vi/' . $this->youtube_id . '/default.jpg';
     }
 
+    public function setPageAttribute($value)
+    {
+        $this->attributes['page'] = is_array($value)
+            ? json_encode($value)
+            : json_encode([$value]);
+    }
+
 }
