@@ -19,6 +19,16 @@ use Spatie\MediaLibrary\Media;
  */
 class ArticlesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:articles.index,project')->only(['index']);
+        $this->middleware('can:articles.update,project,article')->only(['edit', 'save_social_posts']);
+        $this->middleware('can:articles.create,project,App\Models\Article')->only(['create', 'store']);
+        $this->middleware('can:articles.delete,project,article')->only(['destroy']);
+        $this->middleware('can:articles.accept,project,article')->only(['accept', 'decline']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +37,6 @@ class ArticlesController extends Controller
      */
     public function index(Project $project, Article $article, Request $request)
     {
-
         $articles_query = $project->articles();
 
         if ($request->has('type') and $request->input('type') != '') {
@@ -88,7 +97,7 @@ class ArticlesController extends Controller
         );
 
         $article->user_id = Auth::user()->id;
-        
+
         $article->setMeta('type', $request->input('type'));
 
         $article->save();
@@ -146,19 +155,6 @@ class ArticlesController extends Controller
         $article = $project->articles()->findOrFail($article->id);
 
         return view('entity.article.edit', compact('project', 'article'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \App\Models\Project $project
-     * @param  \App\Models\Article $article
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Project $project, Article $article, Request $request)
-    {
-        //
     }
 
     /**

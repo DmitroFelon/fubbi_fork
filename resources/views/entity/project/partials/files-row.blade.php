@@ -7,7 +7,7 @@
                    target="_blank"
                    data-gallery="{{$media->collection_name}}">
                     <img class="blueimp-gallery-image"
-                         src="{{$media->getFullUrl()}}">
+                         src="{{$media->getFullUrl('dropzone')}}">
                 </a>
             @else
                 <a target="_blank" href="{{$media->getFullUrl()}}">

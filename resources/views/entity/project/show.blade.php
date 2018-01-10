@@ -103,45 +103,43 @@
             </div>
         </div>
 
-        @role(['admin'])
-
-        @if($project->requireWorkers())
-            <div class="col col-lg-6 col-xs-12 ">
-                <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>{{_i('Attach workers')}}</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-down"></i>
-                            </a>
+        @can('project.invite', $project)
+            @if($project->requireWorkers())
+                <div class="col col-lg-6 col-xs-12 ">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>{{_i('Attach workers')}}</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content " style="display: none">
+                            @include('entity.project.partials.show.invite-workers')
                         </div>
                     </div>
-                    <div class="ibox-content " style="display: none">
-                        @include('entity.project.partials.show.invite-workers')
-                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
-        @if($project->workers->isEmpty() and $project->requireWorkers())
-            <div class="col col-lg-6 col-xs-12">
-                <div class="ibox">
-                    <div class="ibox-title">
-                        <h5>{{_i('Attach team')}}</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-down"></i>
-                            </a>
+            @if($project->workers->isEmpty() and $project->requireWorkers())
+                <div class="col col-lg-6 col-xs-12">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>{{_i('Attach team')}}</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-down"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="display: none">
+                            @include('entity.project.partials.show.invite-team')
                         </div>
                     </div>
-                    <div class="ibox-content" style="display: none">
-                        @include('entity.project.partials.show.invite-team')
-                    </div>
                 </div>
-            </div>
-        @endif
-
-        @endrole
+            @endif
+        @endcan
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
@@ -178,7 +176,5 @@
             </div>
         </div>
     </div>
-
-
 
 @endsection

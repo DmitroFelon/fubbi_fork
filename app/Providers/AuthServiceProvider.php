@@ -15,7 +15,6 @@ use App\User;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use Musonza\Chat\Messages\Message;
 use Stripe\Charge;
 use Stripe\Plan;
 
@@ -32,7 +31,6 @@ class AuthServiceProvider extends ServiceProvider
         Team::class    => TeamPolicy::class,
         Charge::class  => ChargePolicy::class,
         Plan::class    => PlanPolicy::class,
-        Article::class => ArticlePolicy::class,
     ];
 
     /**
@@ -44,6 +42,23 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        $gate->define('update-project', ProjectPolicy::class.'@update');
+        /*
+         * project additional policies
+         * */
+        $gate->define('project.update', ProjectPolicy::class . '@update');
+        $gate->define('project.accept-review', ProjectPolicy::class . '@accept_review');
+        $gate->define('project.invite', ProjectPolicy::class . '@invite_users');
+
+        /*
+         * articles additional policies
+         * */
+
+        $gate->define('articles.index', ArticlePolicy::class . '@index');
+        $gate->define('articles.update', ArticlePolicy::class . '@update');
+        $gate->define('articles.create', ArticlePolicy::class . '@create');
+        $gate->define('articles.delete', ArticlePolicy::class . '@delete');
+        $gate->define('articles.accept', ArticlePolicy::class . '@accept');
+
+
     }
 }

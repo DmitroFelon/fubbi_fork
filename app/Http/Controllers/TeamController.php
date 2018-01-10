@@ -60,20 +60,11 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Team $team)
     {
-
-        $users = User::without(['notifications', 'invites'])->get(['id', 'first_name', 'last_name', 'email']);
-
-        $users = $users->keyBy('id')->transform(function (User $user) {
-            if ($user->role == 'client') {
-                return null;
-            }
-            return $user->name;
-        })->filter();
-
-
-        return view('entity.team.create', ['users' => $users]);
+        $owner_users     = $team->getPossibleOwners();
+        $invitable_users = $team->getInvitableUsers();
+        return view('entity.team.create', compact('owner_users', 'invitable_users'));
     }
 
     /**
@@ -118,42 +109,9 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        $users = User::without(['notifications', 'invites'])->get(['id', 'first_name', 'last_name', 'email']);
-
-        $owner_users = $users->keyBy('id')->transform(function (User $user) {
-            if ($user->role == 'client') {
-                return null;
-            }
-            return $user->name;
-        });
-
-        $invitable_users = $users->keyBy('id')->transform(function (User $user) use ($team) {
-            if ($user->role == 'client') {
-                return null;
-            }
-
-            if ($user->hasInvitetoTeam($team->id)) {
-                return null;
-            }
-
-            if (in_array($user->id, $team->users->pluck('id')->toArray())) {
-                return null;
-            }
-
-            if ($user->id == $team->owner_id) {
-                return null;
-            }
-
-            return $user->name;
-        });
-
-        $data = [
-            'team'            => $team,
-            'owner_users'     => $owner_users->filter(),
-            'invitable_users' => $invitable_users->filter(),
-        ];
-
-        return view('entity.team.edit', $data);
+        $owner_users     = $team->getPossibleOwners();
+        $invitable_users = $team->getInvitableUsers($team);
+        return view('entity.team.edit', compact('team', 'owner_users', 'invitable_users'));
     }
 
     /**
@@ -205,8 +163,8 @@ class TeamController extends Controller
 
         $invite = $user->getInviteToTeam($team->id);
 
-        if(!$invite){
-           abort(403);
+        if (!$invite) {
+            abort(403);
         }
 
         $invite->accept();
@@ -224,7 +182,7 @@ class TeamController extends Controller
 
         $invite = $user->getInviteToTeam($team->id);
 
-        if(!$invite){
+        if (!$invite) {
             abort(403);
         }
 

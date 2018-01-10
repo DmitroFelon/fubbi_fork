@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Keyword;
 use App\Models\Project;
+use App\Models\Role;
 use App\Models\Team;
 use App\User;
 use Carbon\Carbon;
@@ -39,10 +40,18 @@ class ProjectController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('can:index,' . Project::class)->only(['index', 'show']);
+        $this->middleware('can:index,' . Project::class)->only([
+            'index',
+            'show',
+            'get_stored_files',
+            'remove_stored_files',
+            'export'
+        ]);
         $this->middleware('can:create,' . Project::class)->only(['create', 'store']);
         $this->middleware('can:update,project')->only(['edit', 'update']);
         $this->middleware('can:delete,project')->only(['delete', 'destroy', 'resume']);
+        $this->middleware('can:project.accept-review,project')->only(['accept_review', 'reject_review']);
+        $this->middleware('can:project.invite,project')->only(['invite_users', 'invite_team']);
     }
 
     /**
@@ -173,7 +182,7 @@ class ProjectController extends Controller
         $keywords           = $project->keywords;
         $keywords_questions = $project->keywords_questions;
         $metadata           = $project->metaToView();
-        $manager            = $project->workers()->withRole('account_manager')->first(['id']);
+        $manager            = $project->workers()->withRole(Role::ACCOUNT_MANAGER)->first(['id']);
         $manager_id         = ($manager) ? $manager->id : null;
 
 
@@ -355,13 +364,8 @@ class ProjectController extends Controller
 
         $files = $project->getMedia($request->get('collection'));
 
-        $files->transform(function (Media $media) {
-            try {
-                $media->url = $media->getFullUrl('dropzone');
-            } catch (\Exception $e) {
-                Log::error($e->getMessage());
-                $media->url = $media->getFullUrl();
-            }
+        $files->transform(function (Media $media) use ($project) {
+            $media->url = $project->prepareMediaConversion($media);
             return $media;
         });
 
@@ -375,7 +379,6 @@ class ProjectController extends Controller
     public function remove_stored_files(Project $project, Media $media, Request $request)
     {
         $project->media->find($media->id)->delete();
-
         return Response::json('success', 200);
     }
 
@@ -404,14 +407,24 @@ class ProjectController extends Controller
     public function prefill_files(Project $project, Request $request)
     {
         $files = $project->addFiles($request);
+        $files->transform(function (Media $media) use ($project) {
+            $media->url = $project->prepareMediaConversion($media);
+            return $media;
+        });
 
-         $files->transform(function (Media $media) {
-            try {
-                $media->url = $media->getFullUrl('dropzone');
-            } catch (\Exception $e) {
-                Log::error($e->getMessage());
-                $media->url = $media->getFullUrl();
-            }
+        return Response::json($files, 200);
+    }
+
+    /**
+     * @param Project $project
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function prefill_meta_files(Project $project, Request $request)
+    {
+        $files = $project->addMetaFiles($request);
+        $files->transform(function (Media $media) use ($project) {
+            $media->url = $project->prepareMediaConversion($media);
             return $media;
         });
 

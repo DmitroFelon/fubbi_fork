@@ -21,7 +21,7 @@
         <div class="form-group @unless( isset($project) and $project->themes_order != '' ) hide @endunless"
              id="themes-order-list-wrapper">
             {!! Form::label('', _i("Please reorder themes in order of priority.")) !!}
-            <div class="text-muted">Drag and drop</div>
+            <div class="text-muted">{{_i('Drag and drop')}}</div>
             <ul id="themes-order-list" class="list-group sortable">
                 @isset($project)
                 @foreach(explode(',',$project->themes_order) as $row)
@@ -32,12 +32,18 @@
                 @endisset
             </ul>
         </div>
-        {!! Form::bsText(
-            'questions', null,
-            _i('What are the top 7 questions clients desperately want answers to?'),
-            _i("Separate by coma or click 'enter'"),
-            ['required', 'class'=> 'tagsinput' ]
-        ) !!}
+
+        @for($i=0;$i<=6;$i++)
+            @if($i==0)
+                {!! Form::bsText(
+                   'questions[]', ((isset($project->questions[$i]))?$project->questions[$i]:''),
+                   _i('What are the top 7 questions clients desperately want answers to?'),
+                   null, ['id' => 'questions-'.$i]
+               ) !!}
+            @else
+                {!! Form::bsText('questions[]', ((isset($project->questions[$i]))?$project->questions[$i]:''), null, null, ['id' => 'questions-'.$i]) !!}
+            @endif
+        @endfor
     </fieldset>
     <h1>Step 2</h1>
     <fieldset>
@@ -92,30 +98,30 @@
         {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
 
         @if($project->plan->id != 'fubbi-basic-plan')
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel-group">
-                    <div class="panel panel-default">
-                        <div class="panel-heading collapsible" data-toggle="collapse" href="#quora-block">
-                            <h4 class="panel-title">
-                                <span>{{_i("For some of our packages we publish on Quora. Do you have a Quora account? (it’s a secure field)")}}</span>
-                                <i class="text-right fa fa-expand right" aria-hidden="true"></i>
-                            </h4>
-                        </div>
-                        <div id="quora-block" class="panel-collapse row collapse">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    {!! Form::bsText('quora_username', null, _i("Username"), null, ['autocomplete' => 'off']) !!}
-                                </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    {!! Form::bsText('quora_password', null, _i("Password"), null, ['autocomplete' => 'new-password'], 'password') !!}
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading collapsible" data-toggle="collapse" href="#quora-block">
+                                <h4 class="panel-title">
+                                    <span>{{_i("For some of our packages we publish on Quora. Do you have a Quora account? (it’s a secure field)")}}</span>
+                                    <i class="text-right fa fa-expand right" aria-hidden="true"></i>
+                                </h4>
+                            </div>
+                            <div id="quora-block" class="panel-collapse row collapse">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        {!! Form::bsText('quora_username', null, _i("Username"), null, ['autocomplete' => 'off']) !!}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        {!! Form::bsText('quora_password', null, _i("Password"), null, ['autocomplete' => 'new-password'], 'password') !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
 
         <div class="row">
@@ -151,19 +157,56 @@
     <fieldset>
         {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a writing style that would like for your content"), null, [], 'url') !!}
 
-        <div id="compliance_guideline-group" class="dropzone">
+        <div class="row m-t-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">{{_i('Do you have branding guidelines?')}}</label>
+                <div id="compliance_guideline-group" class="dropzone">
+                </div>
+            </div>
         </div>
 
-        {!! Form::bsText('logo', null, _i("Do you have a high resolution logo that we can use?"), '', [], 'file') !!}
-        {!! Form::bsText('article_images[]', null, _i("Do you want us to add images to your articles?"), _i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples."), ['multiple'], 'file') !!}
+        <div class="row m-t-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">{{_i('Do you have a high resolution logo that we can use?')}}</label>
+                <div id="logo-group" class="dropzone">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row m-t-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">{{_i("Do you want us to add images to your articles?")}}</label>
+                <div id="article_images-group" class="dropzone">
+                </div>
+            </div>
+
+            <span class="text-muted">
+                {{_i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples.")}}
+            </span>
+        </div>
+
         {!! Form::bsText('article_images_links', null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['required', 'class'=>'tagsinput' ] ) !!}
         {!! Form::bsText('avoid_keywords', null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', [ 'class'=>'tagsinput']) !!}
         {!! Form::bsText('image_pages', null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', [ 'class'=>'tagsinput']) !!}
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
+
         {!! Form::bsText('cta', null, _i("Do you want us to add calls to action (CTA) to the end of your articles?"), _i("Examples include phoning your office for a complimentary consultation or review. Other times it might be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with specific information i.e. if you want them to download a free report, please share a link to the download offer. If you want people to phone your office please provide details of what you’ll share on the phone call. We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
-        {!! Form::bsText('ready_content', null, _i("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts."), _i("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts"), ['multiple'], 'file') !!}
+
+        <div class="row m-t-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label">{{_i("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts.")}}</label>
+                <div id="ready_content-group" class="dropzone">
+                </div>
+            </div>
+
+            <span class="text-muted">
+                {{_i("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts")}}
+            </span>
+        </div>
+
         {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', _i("Do you want to review outlines before we send you articles to approve?"), _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}
     </fieldset>
     {!! Form::close() !!}

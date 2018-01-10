@@ -19,7 +19,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Kodeine\Metable\Metable;
 use Laravel\Cashier\Subscription;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -184,25 +186,60 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     public function addFiles(Request $request)
     {
-        $files = collect();
+        try {
+            $files = collect();
+            foreach (self::$media_collections as $file_input) {
+                $media = $this->addFile($file_input, $request);
+                if($media instanceof Media){
+                    $files->push($media);
+                }
+            }
+            return $files->filter();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 
-        foreach (self::$media_collections as $file_input) {
+    /**
+     * @param Request $request
+     * @return static
+     * @throws \Exception
+     */
+    public function addMetaFiles(Request $request)
+    {
+        try {
+            $files = collect();
+            foreach ($request->file() as $file_name => $file) {
+                $files->push($this->addFile($file_name, $request));
+            }
+            return $files->filter();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $file_input
+     * @param Request $request
+     * @return Media
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+     */
+    private function addFile($file_input, Request $request)
+    {
+        try {
             if ($request->hasFile($file_input)) {
                 if (is_array($request->file($file_input))) {
                     foreach ($request->file($file_input) as $file) {
-                        $file = $this->addMedia($file)->toMediaCollection($file_input);
-                        //MiniFyImage::dispatch($file);
-                        $files->push($file);
+                        return $this->addMedia($file)->toMediaCollection($file_input);
                     }
                 } else {
-                    $file = $this->addMedia($request->file($file_input))->toMediaCollection($file_input);
-                    //MiniFyImage::dispatch($file);
-                    $files->push($file);
+                    return $this->addMedia($request->file($file_input))->toMediaCollection($file_input);
                 }
             }
+        } catch (\Exception $e) {
+            throw $e;
         }
-
-        return $files;
     }
 
     /**
@@ -379,6 +416,9 @@ class Project extends Model implements HasMediaConversions, Invitable
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function metaToView()
     {
         $meta_to_cast = [
@@ -431,6 +471,9 @@ class Project extends Model implements HasMediaConversions, Invitable
         return $meta->filter();
     }
 
+    /**
+     * @return static
+     */
     public function getAvailableWorkers()
     {
         $users = User::without(['notifications', 'invites'])
@@ -454,10 +497,28 @@ class Project extends Model implements HasMediaConversions, Invitable
         return $invitable_users->filter();
     }
 
+    /**
+     * @param Media|null $media
+     * @throws \Spatie\Image\Exceptions\InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null)
     {
         $this->addMediaConversion('dropzone')
-             ->width(120)
-             ->height(120)->nonQueued();
+             ->crop('crop-center', 120, 120)->nonQueued();
+    }
+
+    /**
+     * @param Media $media
+     * @return string
+     */
+    public function prepareMediaConversion(Media $media)
+    {
+        try {
+            return (File::exists($media->getPath('dropzone')))
+                ? $media->getFullUrl('dropzone')
+                : $media->getFullUrl();
+        } catch (\Exception $e) {
+            return $media->getFullUrl();
+        }
     }
 }

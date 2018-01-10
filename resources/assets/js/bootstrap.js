@@ -8,6 +8,7 @@ try {
 try {
     window.$ = window.jQuery = require('jquery');
     require('bootstrap-sass');
+    window.Dropzone = require('dropzone')
 } catch (e) {
     console.log(e)
 }

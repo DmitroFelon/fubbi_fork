@@ -8,6 +8,10 @@ use App\Models\Project;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 //TODO implement actions authorisation
+/**
+ * Class ProjectPolicy
+ * @package App\Policies
+ */
 class ProjectPolicy
 {
     use HandlesAuthorization;
@@ -62,7 +66,7 @@ class ProjectPolicy
             return true;
         }
 
-        return ($user->projects()->find($model->id)->exists());
+        return ($user->projects()->find($model->id));
     }
 
     /**
@@ -83,5 +87,32 @@ class ProjectPolicy
         }
 
         return ($model->client_id == $user->id);
+    }
+
+    /**
+     * @param User $user
+     * @param Project $model
+     * @return bool
+     */
+    public function accept_review(User $user, Project $model)
+    {
+        $skip = [
+            Role::ADMIN
+        ];
+
+        if (in_array($user->role, $skip)) {
+            return true;
+        }
+
+        $manager = $model->workers()->withRole(Role::ACCOUNT_MANAGER)->first(['id']);
+
+        if ($user->id == $manager->id) {
+            return true;
+        }
+    }
+
+    public function invite_users(User $user, Project $model)
+    {
+        return $this->accept_review($user, $model);
     }
 }

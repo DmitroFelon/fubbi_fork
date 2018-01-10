@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Fubbi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css"/>
     <link rel="stylesheet" href="{!! asset('css/vendor.css') !!}"/>
     <link rel="stylesheet" href="{!! asset('css/app.css') !!}"/>
 </head>
@@ -71,6 +72,7 @@
 <script src="{!! asset('js/lib.js') !!}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 <script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
 
 @yield('scripts')
@@ -78,42 +80,7 @@
 
 <script>
     jQuery(document).ready(function ($) {
-        var _project_id = $("input[name=_project_id]").val();
-        $("#compliance_guideline-group").dropzone({
-            url: "/projects/" + _project_id + "/prefill_files",
-            paramName: 'compliance_guideline',
-            method: 'POST',
-            createImageThumbnails: true,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            autoDiscover: false,
-            init: function () {
-                thisDropzone = this;
 
-                this.on("addedfile", function(item) {
-
-                });
-
-                $.get('/projects/' + _project_id + '/get_stored_files',
-                        {collection: 'compliance_guideline'},
-                        function (data) {
-                            data.forEach(function (item) {
-                                thisDropzone.emit("addedfile", item);
-                                thisDropzone.options.thumbnail.call(thisDropzone, item, item.url);
-                                thisDropzone.emit("complete", item);
-                            });
-                        });
-            },
-            addRemoveLinks: true,
-            removedfile: function (item) {
-                $.get('/projects/' + item.model_id + '/remove_stored_file/' + item.id);
-                var _ref;
-                return (_ref = item.previewElement) != null
-                        ? _ref.parentNode.removeChild(item.previewElement)
-                        : void 0;
-            }
-        });
     });
 </script>
 

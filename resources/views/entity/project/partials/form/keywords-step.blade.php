@@ -14,7 +14,7 @@
                        name="meta[{{$theme}}][content_theme]"
                        type="text"
                        class="form-control">
-                <span class="help-block">Descirption</span>
+                <span class="help-block"></span>
             </div>
         </div>
         <div class="form-group">
@@ -25,7 +25,7 @@
                 <input value="{{$meta->get('points_cover')}}" id="meta-{{str_replace(' ', '_', $theme)}}-points_cover"
                        name="meta[{{$theme}}][points_cover]"
                        type="text" class="form-control">
-                <span class="help-block">Descirption</span>
+                <span class="help-block"></span>
             </div>
         </div>
         <div class="form-group">
@@ -36,7 +36,7 @@
                 <input value="{{$meta->get('points_avoid')}}" id="meta-{{str_replace(' ', '_', $theme)}}-points_avoid"
                        name="meta[{{$theme}}][points_avoid]"
                        type="text" class="form-control">
-                <span class="help-block">Descirption</span>
+                <span class="help-block"></span>
             </div>
         </div>
         <div class="form-group">
@@ -47,8 +47,49 @@
                 <input value="{{$meta->get('references')}}" id="meta-{{str_replace(' ', '_', $theme)}}-references"
                        name="meta[{{$theme}}][references]"
                        type="text" class="form-control">
-                <span class="help-block">Descirption</span>
+                <span class="help-block"></span>
             </div>
+        </div>
+        <br>
+        <div class="form-group m-t-md">
+            <label for="meta-{{str_replace(' ', '_', $theme)}}-this_month" class="col-lg-2 control-label">
+                {{_i('Write about topic this month?')}}
+            </label>
+            <div class="col-lg-10">
+                <input id="meta-{{str_replace(' ', '_', $theme)}}-this_month" name="meta[{{$theme}}][this_month]"
+                       {{($meta->get('this_month')) ? 'checked' : ''}}
+                       type="checkbox" class="js-switch"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <br>
+        <div class="form-group m-t-md">
+            <label for="meta-{{str_replace(' ', '_', $theme)}}-next_moth" class="col-lg-2 control-label">
+                {{_i('Write about topic next month?')}}
+            </label>
+            <div class="col-lg-10">
+                <input id="meta-{{str_replace(' ', '_', $theme)}}-next_moth" name="meta[{{$theme}}][next_moth]"
+                       {{($meta->get('next_moth')) ? 'checked' : ''}}
+                       type="checkbox" class="js-switch"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <div class="form-group m-t-md">
+            <label for="meta-{{str_replace(' ', '_', $theme)}}-next_moth" class="col-lg-2 control-label">
+                {{_i('Files')}}
+            </label>
+            <div class="col-lg-10">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div data-theme="{{$theme}}" id="meta-{{str_replace(' ', '_', $theme)}}-files"
+                         class="dropzone keyword-dropzone">
+                    </div>
+                </div>
+                <span class="help-block"></span>
+            </div>
+            <script>
+                var meta_dropzone_id = "meta-{{str_replace(' ', '_', $theme)}}-files";
+                var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $theme)}}-collection";
+            </script>
         </div>
     </div>
 </div>
@@ -138,7 +179,8 @@
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
-                                    <input required data-question-theme="{{$theme}}" id="input-{{str_replace(' ', '', $theme)}}"
+                                    <input required data-question-theme="{{$theme}}"
+                                           id="input-{{str_replace(' ', '', $theme)}}"
                                            type="text"
                                            class="form-control keyword-input">
                                 </div>

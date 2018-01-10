@@ -114,6 +114,10 @@ jQuery(document).ready(function ($) {
     /*
      * Init keywords form with steps
      * */
+
+
+    var keyword_dropzones = [];
+
     $("#keywords-form").steps({
         bodyTag: "fieldset",
         enableAllSteps: true,
@@ -153,15 +157,39 @@ jQuery(document).ready(function ($) {
             return true;
         },
         onContentLoaded: function () {
+            var _project_id = $("input[name=_project_id]").val();
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green',
+                radioClass: 'iradio_square-green'
             });
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            elems.forEach(function (html) {
+                var switchery = new Switchery(html, {color: '#1AB394'});
+            });
+
+            keyword_dropzones.forEach(function (dropzone) {
+                dropzone.off();
+                dropzone.destroy();
+            });
+
+            var dropzone = new Dropzone('div#' + meta_dropzone_id, {
+                url: "/projects/" + _project_id + "/prefill_meta_files",
+                paramName: meta_dropzone_collection,
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                addRemoveLinks: true,
+                init: dropzone_init,
+                success: dropzone_success,
+                removedfile: dropzone_removedfile
+            });
+
+            keyword_dropzones.push(dropzone);
+
         },
         onFinished: function (event, currentIndex) {
             var form = $(this);
             form.submit();
-        },
+        }
     });
 
     /*
@@ -224,7 +252,6 @@ jQuery(document).ready(function ($) {
         });
     });
 
-
     /*
      * Init tags inputs
      * */
@@ -270,7 +297,6 @@ jQuery(document).ready(function ($) {
             $("#themes_order").val(sorted.join());
         }
     });
-
     function showToastError(message, title = '') {
 
         toastr.options = {
@@ -310,7 +336,7 @@ jQuery(document).ready(function ($) {
     function preUploadKeywords() {
         var formData = new FormData(document.getElementById("keywords-form"));
         var _project_id = $("input[name=_project_id]").val();
-        
+
         $.post({
             url: '/projects/' + _project_id + '/prefill',
             processData: false,
@@ -335,7 +361,6 @@ jQuery(document).ready(function ($) {
      * Init footable table
      * */
     $('.footable').footable();
-
     /*
      * iChecks
      * */
@@ -343,7 +368,6 @@ jQuery(document).ready(function ($) {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green'
     });
-
     /*
      * Notifications
      * */
@@ -360,9 +384,6 @@ jQuery(document).ready(function ($) {
                     count += 1;
 
                     messages_count_wrapper.html(count.toString())
-
-                    console.log(notification);
-
                     toastr.options = {
                         "closeButton": true,
                         "debug": false,
@@ -400,13 +421,10 @@ jQuery(document).ready(function ($) {
                     }
 
                     count += 1;
-
-                    alerts_count_wrapper.html(count.toString())
-                    console.log(parseInt(alerts_count_wrapper.html()))
+                    alerts_count_wrapper.html(count.toString());
                 }
             }
         });
-
     /*
      * Help videos
      *
@@ -415,7 +433,6 @@ jQuery(document).ready(function ($) {
     if (help_video_src) {
         $('#help-video-wrapper').show();
     }
-
     /*
      * Open video modal
      * */
@@ -447,8 +464,100 @@ jQuery(document).ready(function ($) {
             });
         });
     });
+    /*
+     * Quiz dropzones init
+     *
+     * */
+    var _project_id = $("input[name=_project_id]").val();
+    $("#compliance_guideline-group").dropzone({
+        url: "/projects/" + _project_id + "/prefill_files",
+        paramName: 'compliance_guideline',
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        addRemoveLinks: true,
+        init: dropzone_init,
+        success: dropzone_success,
+        removedfile: dropzone_removedfile
+    });
+    $("#logo-group").dropzone({
+        url: "/projects/" + _project_id + "/prefill_files",
+        paramName: 'logo',
+        method: 'POST',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        addRemoveLinks: true,
+        init: dropzone_init,
+        success: dropzone_success,
+        removedfile: dropzone_removedfile
+    });
+    $("#article_images-group").dropzone({
+        url: "/projects/" + _project_id + "/prefill_files",
+        paramName: 'article_images',
+        method: 'POST',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        addRemoveLinks: true,
+        init: dropzone_init,
+        success: dropzone_success,
+        removedfile: dropzone_removedfile
+    });
+    $("#ready_content-group").dropzone({
+        url: "/projects/" + _project_id + "/prefill_files",
+        paramName: 'ready_content',
+        method: 'POST',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        addRemoveLinks: true,
+        init: dropzone_init,
+        success: dropzone_success,
+        removedfile: dropzone_removedfile
+    });
+    function dropzone_init() {
+        var thisDropzone = this;
+        $.get('/projects/' + _project_id + '/get_stored_files',
+            {collection: thisDropzone.options.paramName},
+            function (data) {
+                data.forEach(function (item) {
+                    thisDropzone.emit("addedfile", item);
+                    setDropzoneThumbnail(item, thisDropzone);
+                    thisDropzone.emit("complete", item);
+                });
+            });
+    }
 
-});
+    function dropzone_removedfile(item) {
+        $.get('/projects/' + item.model_id + '/remove_stored_file/' + item.id);
+        item.previewElement.remove();
+    }
+
+    function dropzone_success(item, response) {
+        var thisDropzone = this;
+        var response_data = response[0];
+        item.id = response_data.id;
+        item.url = response_data.url;
+        item.model_id = response_data.model_id;
+        item.mime_type = response_data.mime_type;
+        setDropzoneThumbnail(item, thisDropzone);
+    }
+
+    function setDropzoneThumbnail(item, thisDropzone) {
+        switch (item.mime_type) {
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                thisDropzone.options.thumbnail.call(
+                    thisDropzone, item, '/img/docx.png'
+                );
+                break;
+            case 'application/pdf':
+                thisDropzone.options.thumbnail.call(
+                    thisDropzone, item, '/img/pdf.png'
+                );
+                break;
+            default:
+                thisDropzone.options.thumbnail.call(thisDropzone, item, item.url);
+                break;
+        }
+    }
+
+})
 
 
 

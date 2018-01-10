@@ -57,23 +57,22 @@ class AppServiceProvider extends ServiceProvider
             'components.form.text',
             [
                 'name',
-                'value',
-                'label',
-                'description',
-                'attributes' => [],
-                'type'       => '',
+                'value'       => null,
+                'label'       => null,
+                'description' => null,
+                'attributes'  => [],
+                'type'        => 'text',
             ]
         );
-
         Form::component(
             'bsSelect',
             'components.form.select',
             [
                 'name',
                 'list',
-                'selected',
-                'label',
-                'description',
+                'selected'           => null,
+                'label'              => null,
+                'description'        => null,
                 'select_attributes'  => [],
                 'options_attributes' => [],
             ]

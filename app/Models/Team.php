@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Team
@@ -46,12 +47,18 @@ class Team extends Model implements Invitable
     use hasInvite;
     use Notifiable;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'description',
         'owner_id'
     ];
 
+    /**
+     * @var array
+     */
     protected $with = [
         'users',
         'owner',
@@ -112,6 +119,55 @@ class Team extends Model implements Invitable
     public function routeNotificationForPhone()
     {
         return $this->owner->phone;
+    }
+
+    /**
+     * @param Team|null $team
+     * @return Collection
+     */
+    public function getInvitableUsers(Team $team = null)
+    {
+        $users = User::without(['notifications', 'invites'])->get(['id', 'first_name', 'last_name', 'email']);
+        return $users->keyBy('id')->transform(function (User $user) use ($team) {
+            if ($user->role == Role::CLIENT) {
+                return null;
+            }
+
+            if ($team) {
+                if ($user->role == Role::CLIENT) {
+                    return null;
+                }
+
+                if ($user->hasInvitetoTeam($team->id)) {
+                    return null;
+                }
+
+                if ($user->teams()->find($team->id)) {
+                    return null;
+                }
+
+                if ($user->id == $team->owner_id) {
+                    return null;
+                }
+            }
+            return $user->name;
+        })->filter();
+
+
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPossibleOwners()
+    {
+        $users = User::without(['notifications', 'invites'])->get(['id', 'first_name', 'last_name', 'email']);
+        return $users->keyBy('id')->transform(function (User $user) {
+            if ($user->role == Role::CLIENT) {
+                return null;
+            }
+            return $user->name;
+        })->filter();
     }
 
 

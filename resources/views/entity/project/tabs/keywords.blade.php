@@ -9,7 +9,7 @@
     {!! Form::hidden('_project_id', $project->id)  !!}
 
     {{--Themes' keywords tabs--}}
-    @foreach(collect(explode(',', $project->themes)) as $theme)
+    @foreach(explode(',', $project->themes) as $theme)
         <h1>{{$theme}}</h1>
         <fieldset data-theme="{{$theme}}" data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $theme])}}">
             {{--loaded by ajax--}}
@@ -17,7 +17,7 @@
     @endforeach
 
     {{--Questions' keywords tabs--}}
-    @foreach(collect(explode(',', $project->questions)) as $question)
+    @foreach($project->questions as $question)
         <h1>{{$question}}</h1>
         <fieldset data-theme="{{$question}}"  data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $question])}}">
             {{--loaded by ajax--}}

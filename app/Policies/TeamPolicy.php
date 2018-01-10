@@ -59,7 +59,7 @@ class TeamPolicy
      * @param Team $model
      * @return bool
      */
-    public function create(User $user, Team $model)
+    public function create(User $user)
     {
         $deny = [
             'client'
