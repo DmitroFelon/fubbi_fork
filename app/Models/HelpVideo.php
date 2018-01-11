@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Helpers\Page;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,6 +21,11 @@ class HelpVideo extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $guarded = [];
+
+    /**
      * @param $value
      * @return mixed|string
      */
@@ -36,6 +42,15 @@ class HelpVideo extends Model
 
     /**
      * @param $value
+     * @return mixed|string
+     */
+    public function getPlayerAttribute($value)
+    {
+        return 'http://www.youtube.com/embed/' . $this->youtube_id;
+    }
+
+    /**
+     * @param $value
      * @return string
      */
     public function getThumbnailAttribute($value)
@@ -43,11 +58,23 @@ class HelpVideo extends Model
         return 'http://img.youtube.com/vi/' . $this->youtube_id . '/default.jpg';
     }
 
+    /**
+     * @param $value
+     */
     public function setPageAttribute($value)
     {
         $this->attributes['page'] = is_array($value)
             ? json_encode($value)
             : json_encode([$value]);
+    }
+
+    /**
+     * @param $value
+     * @return Page
+     */
+    public function getPageAttribute($value)
+    {
+        return Page::getByRoute(json_decode($value));
     }
 
 }

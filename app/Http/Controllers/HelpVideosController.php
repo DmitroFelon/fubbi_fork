@@ -52,7 +52,7 @@ class HelpVideosController extends Controller
      */
     public function show(HelpVideo $helpVideo)
     {
-        return view('entity.help_video.show', ['video' => $helpVideo]);
+        return view('entity.help_video.show', compact('helpVideo'));
     }
 
     /**
@@ -63,7 +63,8 @@ class HelpVideosController extends Controller
      */
     public function edit(HelpVideo $helpVideo)
     {
-        return view('entity.help_video.edit', ['video' => $helpVideo]);
+        $pages = Page::getAvailablePages()->keyBy('route');
+        return view('entity.help_video.edit', compact('helpVideo', 'pages'));
     }
 
     /**
@@ -86,6 +87,7 @@ class HelpVideosController extends Controller
      *
      * @param HelpVideo $helpVideo
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy(HelpVideo $helpVideo)
     {

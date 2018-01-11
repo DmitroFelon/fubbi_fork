@@ -33,7 +33,8 @@
                                             <strong>{{_i('Path')}}: </strong> {{ $video->url }}
                                         </td>
                                         <td>
-                                            <strong>{{_i('Page')}}: </strong> {{ $video->page }}
+                                            <strong>{{_i('Page')}}
+                                                : </strong> {{ implode(', ', $video->page->pluck('name')->toArray() ) }}
                                         </td>
                                         <td>
                                             <a href="{{action('HelpVideosController@edit', $video)}}"

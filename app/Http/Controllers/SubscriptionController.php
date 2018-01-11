@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Services\FlashMessage;
 use Illuminate\Http\Request;
@@ -24,13 +25,13 @@ class SubscriptionController extends Controller
             //attach subscription
             $project->subscription_id = $subscription->id;
             //set state
-            $project->setState(\App\Models\Helpers\ProjectStates::QUIZ_FILLING);
+            $project->setState(ProjectStates::QUIZ_FILLING);
 
             $project->save();
 
             FlashMessage::make(_i('Your subscribtion created successfully'), FlashMessage::SUCCESS);
 
-            return redirect()->action('ProjectController@edit', [$project]);
+            return redirect()->action('ProjectController@edit', [$project, ['s' => ProjectStates::QUIZ_FILLING]]);
 
         } catch (\Exception $e) {
             abort(500);

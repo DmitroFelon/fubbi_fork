@@ -3,20 +3,19 @@
 </div>
 
 <div class="ibox-content">
-
     {!! Form::model($project,
     ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
     !!}
     {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::QUIZ_FILLING) !!}
     {!! Form::hidden('_project_id', $project->id ) !!}
-    {!! Form::hidden('themes_order', null, ['id'=>'themes_order']) !!}
+    {!! Form::select('themes_order[]',[], null, ['id'=>'themes_order', 'multiple', 'style' => 'display:none;']) !!}
     <h1>Step 1</h1>
     <fieldset>
-        {!! Form::bsText(
-            'themes', null,
+        {!! Form::bsSelect(
+            'themes[]', $project->prepareTagsInput('themes'), null,
             _i("Type content themes here"),
             _i("Type at least 10 themes. Separate by coma or click 'enter'."),
-            ['required', 'class'=> 'tagsinput' ]
+            ['required', 'id' => 'themes', 'class'=>'tagsinput', 'multiple']
         ) !!}
         <div class="form-group @unless( isset($project) and $project->themes_order != '' ) hide @endunless"
              id="themes-order-list-wrapper">
@@ -24,11 +23,11 @@
             <div class="text-muted">{{_i('Drag and drop')}}</div>
             <ul id="themes-order-list" class="list-group sortable">
                 @isset($project)
-                @foreach(explode(',',$project->themes_order) as $row)
-                    @if($row != '')
-                        <li class="list-group-item" data-value="{{$row}}">{{$row}}</li>
-                    @endif
-                @endforeach
+                    @foreach($project->prepareTagsInput('themes_order') as $row)
+                        @if($row != '')
+                            <li class="list-group-item" data-value="{{$row}}">{{$row}}</li>
+                        @endif
+                    @endforeach
                 @endisset
             </ul>
         </div>
@@ -186,9 +185,9 @@
             </span>
         </div>
 
-        {!! Form::bsText('article_images_links', null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['required', 'class'=>'tagsinput' ] ) !!}
-        {!! Form::bsText('avoid_keywords', null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', [ 'class'=>'tagsinput']) !!}
-        {!! Form::bsText('image_pages', null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', [ 'class'=>'tagsinput']) !!}
+        {!! Form::bsSelect('article_images_links[]',$project->prepareTagsInput('article_images_links'), null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'required', 'class'=>'tagsinput' ] ) !!}
+        {!! Form::bsSelect('avoid_keywords[]',$project->prepareTagsInput('avoid_keywords'), null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+        {!! Form::bsSelect('image_pages[]',$project->prepareTagsInput('image_pages'), null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
@@ -207,7 +206,13 @@
             </span>
         </div>
 
-        {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', _i("Do you want to review outlines before we send you articles to approve?"), _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}
+        <div class="row m-t-md">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', _i("Do you want to review outlines before we send you articles to approve?"), _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}
+            </div>
+        </div>
+
+
     </fieldset>
     {!! Form::close() !!}
 </div>

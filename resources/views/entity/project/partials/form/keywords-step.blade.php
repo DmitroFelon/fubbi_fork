@@ -56,9 +56,11 @@
                 {{_i('Write about topic this month?')}}
             </label>
             <div class="col-lg-10">
+                <input value="no" name="meta[{{$theme}}][this_month]"
+                       type="hidden"/>
                 <input id="meta-{{str_replace(' ', '_', $theme)}}-this_month" name="meta[{{$theme}}][this_month]"
                        {{($meta->get('this_month')) ? 'checked' : ''}}
-                       type="checkbox" class="js-switch"/>
+                       type="checkbox" value="yes" class="js-switch"/>
                 <span class="help-block"></span>
             </div>
         </div>
@@ -68,9 +70,11 @@
                 {{_i('Write about topic next month?')}}
             </label>
             <div class="col-lg-10">
+                <input value="no" name="meta[{{$theme}}][next_moth]"
+                       type="hidden"/>
                 <input id="meta-{{str_replace(' ', '_', $theme)}}-next_moth" name="meta[{{$theme}}][next_moth]"
                        {{($meta->get('next_moth')) ? 'checked' : ''}}
-                       type="checkbox" class="js-switch"/>
+                       type="checkbox" value="yes" class="js-switch"/>
                 <span class="help-block"></span>
             </div>
         </div>

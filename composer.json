@@ -27,6 +27,7 @@
         "laravelista/ekko": "^1.4",
         "musonza/chat": "^2.0",
         "pusher/pusher-php-server": "~3.0",
+        "setasign/fpdf": "^1.8",
         "spatie/laravel-activitylog": "^2.3",
         "spatie/laravel-medialibrary": "^6.0.0",
         "spatie/laravel-tags": "^2.0",

@@ -190,7 +190,7 @@ class Project extends Model implements HasMediaConversions, Invitable
             $files = collect();
             foreach (self::$media_collections as $file_input) {
                 $media = $this->addFile($file_input, $request);
-                if($media instanceof Media){
+                if ($media instanceof Media) {
                     $files->push($media);
                 }
             }
@@ -421,14 +421,6 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     public function metaToView()
     {
-        $meta_to_cast = [
-            'themes',
-            'avoid_keywords',
-            'article_images_links',
-            'image_pages',
-            'google_access',
-        ];
-
         $meta_to_skip = [
             'themes_order',
             'keywords_meta',
@@ -440,7 +432,7 @@ class Project extends Model implements HasMediaConversions, Invitable
 
         $meta = $this->metas;
 
-        $meta->transform(function ($item) use ($meta_to_cast, $meta_to_skip) {
+        $meta->transform(function ($item) use ($meta_to_skip) {
 
             if (strpos($item->key, 'modificator_') !== false or in_array($item->key, $meta_to_skip)) {
                 return null;
@@ -450,18 +442,6 @@ class Project extends Model implements HasMediaConversions, Invitable
             $item->value = (filter_var($item->value, FILTER_VALIDATE_URL))
                 ? '<a href="' . $item->value . '">' . $item->value . '</a>'
                 : $item->value;
-
-            if (in_array($item->key, $meta_to_cast)) {
-                $item->value = explode(',', $item->value);
-                //remove empty metas
-                if (is_array($item->value) and empty($item->value)) {
-                    return null;
-                }
-                //remove empty metas
-                if (isset($item->value[0]) and empty($item->value[0])) {
-                    return null;
-                }
-            }
 
             return $item;
 
@@ -519,5 +499,10 @@ class Project extends Model implements HasMediaConversions, Invitable
         } catch (\Exception $e) {
             return $media->getFullUrl();
         }
+    }
+
+    public function prepareTagsInput($key)
+    {
+        return (is_array($this->$key)) ? array_combine(array_values($this->$key), array_values($this->$key)) : [];
     }
 }

@@ -411,13 +411,17 @@ jQuery(document).ready(function ($) {
             '<li class="list-group-item" data-value="' + event.item + '">' + event.item + '</li>'
         );
         var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
-        $("#themes_order").val(sorted.join());
+        $("#themes_order option").remove();
+        sorted.forEach(function (item) {
+            $("#themes_order").append('<option selected="selected" value="' + item + '">' + item + '</option>');
+        });
     });
     /*
      * Remove item from sortable list if removed from tags input
      * */
     tag_themes_input.on('itemRemoved', function (event) {
         $('.list-group-item[data-value="' + event.item + '"]').remove();
+        $("#themes_order option[value='" + event.item + "']").remove();
         var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
         $("#themes_order").val(sorted.join());
         if (tag_themes_input.val() == '') {
@@ -435,7 +439,10 @@ jQuery(document).ready(function ($) {
         opacity: 0.8,
         stop: function (event, ui) {
             var sorted = $("#themes-order-list").sortable("toArray", {attribute: 'data-value'});
-            $("#themes_order").val(sorted.join());
+            $("#themes_order option").remove();
+            sorted.forEach(function (item) {
+                $("#themes_order").append('<option selected="selected" value="' + item + '">' + item + '</option>');
+            });
         }
     });
     function showToastError(message, title = '') {
@@ -577,8 +584,9 @@ jQuery(document).ready(function ($) {
     /*
      * Open video modal
      * */
-    $('#question-btn').click(function () {
-        swal("", {
+    $('.question-btn').click(function () {
+        var btn = $(this);
+        swal(btn.attr('data-name'), {
             className: 'help-video-alert',
             buttons: {
                 cancel: false,
@@ -590,7 +598,7 @@ jQuery(document).ready(function ($) {
                 element: "iframe",
                 attributes: {
                     className: 'help-video',
-                    src: help_video_src,
+                    src: btn.attr('data-player'),
                     frameborder: "0",
                     allowfullscreen: "allowfullscreen"
                 }

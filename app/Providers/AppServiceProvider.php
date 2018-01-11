@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         $this->formComponents();
     }
 
+    /**
+     * init veiw observers
+     */
     private function observers()
     {
         Project::observe(ProjectObserver::class);
@@ -50,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
         Message::observe(MessageObserver::class);
     }
 
+    /**
+     * init custom collective forms components
+     */
     private function formComponents()
     {
         Form::component(
@@ -87,6 +93,5 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
-        //$this->app->bind(Filesystem::class, CustomFileSystem::class);
     }
 }

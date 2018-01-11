@@ -58,13 +58,17 @@
     var user = @json((\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user():'');
     var conversation_id = null;
     var is_chat = false;
-    var help_video_src = "{{$help_video_src}}";
+    var help_video_src = @json($help_video_src);
 </script>
 
 <div id="help-video-wrapper">
-    <button id="question-btn" class="btn btn-warning btn-circle btn-lg">
-        <i class="fa fa-question"></i>
-    </button>
+    @foreach($help_video_src as $video)
+        <button data-name="{{$video->name}}" data-player="{{$video->player}}"
+                class="btn btn-warning btn-lg question-btn">
+            <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
+        </button>
+
+    @endforeach
 </div>
 
 @yield('before-scripts')

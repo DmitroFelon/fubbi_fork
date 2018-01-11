@@ -1,4 +1,4 @@
-<div class="form-group" id="{!! isset($attributes['id']) ? $attributes['id'] : $name !!}}-group">
+<div class="form-group" id="{!! isset($attributes['id']) ? $attributes['id'] : $name !!}-group">
     @if($label)
         {!!Form::label($name, $label, ['class' => 'control-label'])!!}
     @endif

@@ -138,7 +138,7 @@ class ProjectController extends Controller
     {
         $step = 'plan';
 
-        $public_plans = Cache::remember(
+        $plans = Cache::remember(
             'public_plans',
             60,
             function () {
@@ -161,13 +161,7 @@ class ProjectController extends Controller
             }
         );
 
-        return view(
-            'entity.project.create',
-            [
-                'plans' => $public_plans,
-                'step'  => $step,
-            ]
-        );
+        return view('entity.project.create', compact('plans', 'step'));
     }
 
     /**
@@ -211,12 +205,34 @@ class ProjectController extends Controller
             ? $request->input('s')
             : $project->state;
 
+        $plans = Cache::remember(
+            'public_plans',
+            60,
+            function () {
+                $available_plans = [
+                    'fubbi-basic-plan',
+                    'fubbi-bronze-plan',
+                    'fubbi-silver-plan',
+                    'fubbi-gold-plan',
+                ];
+
+                $filtered_plans = Collection::make();
+
+                foreach (Plan::all()->data as $plan) {
+                    if (in_array($plan->id, $available_plans)) {
+                        $filtered_plans->push($plan);
+                    }
+                }
+
+                return $filtered_plans->reverse();
+            }
+        );
 
         $keywords = $project->getMeta('keywords');
 
         $articles = $project->articles;
 
-        return view('entity.project.edit', compact('keywords', 'articles', 'project', 'step'));
+        return view('entity.project.edit', compact('keywords', 'articles', 'project', 'step', 'plans'));
     }
 
     /**
@@ -234,7 +250,7 @@ class ProjectController extends Controller
 
         $project = $project->filling($request);
 
-        return redirect()->action('ProjectController@edit', [$project]);
+        return redirect()->action('ProjectController@edit', [$project, 's' => $project->state ] );
     }
 
     /**
