@@ -30,7 +30,5 @@
             {{--loaded by ajax--}}
         </fieldset>
     @endforeach
-
     {!! Form::close() !!}
-
 </div>

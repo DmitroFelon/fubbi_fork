@@ -62,13 +62,15 @@
 </script>
 
 <div id="help-video-wrapper">
-    @foreach($help_video_src as $video)
-        <button data-name="{{$video->name}}" data-player="{{$video->player}}"
-                class="btn btn-warning btn-lg question-btn">
-            <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
-        </button>
+    @isset($help_video_src)
+        @foreach($help_video_src as $video)
+            <button data-name="{{$video->name}}" data-player="{{$video->player}}"
+                    class="btn btn-warning btn-lg question-btn">
+                <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
+            </button>
 
-    @endforeach
+        @endforeach
+    @endisset
 </div>
 
 @yield('before-scripts')
