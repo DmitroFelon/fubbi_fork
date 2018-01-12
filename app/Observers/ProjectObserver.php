@@ -7,6 +7,8 @@ use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\Project\StatusChanged;
+use App\Notifications\Worker\Attached;
+use App\Notifications\Worker\Detached;
 use App\Observers\Traits\Project\States;
 use App\User;
 use Illuminate\Http\Request;
@@ -166,6 +168,8 @@ class ProjectObserver
             ->withProperties(['worker' => $worker])
             ->log('User ' . $worker->name . ' has beed attached to project ' . $project->name);
 
+        $worker->notify(new Attached($project));
+
     }
 
     /**
@@ -177,8 +181,10 @@ class ProjectObserver
             return;
         }
 
-        $worker_id    = $project->eventData['detachWorker'];
+        $worker_id = $project->eventData['detachWorker'];
+
         $conversation = ChatFacade::conversation($project->conversation_id);
+
         ChatFacade::removeParticipants($conversation, $worker_id);
 
         $worker = User::find($worker_id);
@@ -189,6 +195,7 @@ class ProjectObserver
             ->withProperties(['worker' => $worker])
             ->log('User ' . $worker->name . ' has beed detached from project ' . $project->name);
 
+        $worker->notify(new Detached($project));
     }
 
     /**
@@ -207,6 +214,11 @@ class ProjectObserver
             ->performedOn($project)
             ->withProperties(['worker' => $workers])
             ->log('Users:  ' . $attached_users_names . ' have beed attached to project ' . $project->name);
+
+        $workers->each(function (User $user) use ($project) {
+            $user->notify(new Attached($project));
+        });
+
     }
 
     /**
@@ -276,7 +288,7 @@ class ProjectObserver
         activity('project_progress')
             ->causedBy(Auth::user())
             ->performedOn($project)
-            ->withProperties(['worker' => $article])
+            ->withProperties(['article' => $article])
             ->log('Article ' . $article->title . ' has been apprived.');
     }
 
@@ -290,7 +302,7 @@ class ProjectObserver
         activity('project_progress')
             ->causedBy(Auth::user())
             ->performedOn($project)
-            ->withProperties(['worker' => $article])
+            ->withProperties(['article' => $article])
             ->log('Article ' . $article->title . ' has been declined.');
     }
 
@@ -304,7 +316,7 @@ class ProjectObserver
         activity('project_progress')
             ->causedBy(Auth::user())
             ->performedOn($project)
-            ->withProperties(['worker' => $article])
+            ->withProperties(['article' => $article])
             ->log('Writer: ' . $article->author->name . ' has spent 3 attempts wtih article: ' . $article->id);
     }
 
