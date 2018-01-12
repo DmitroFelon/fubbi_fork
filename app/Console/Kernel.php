@@ -35,10 +35,10 @@ class Kernel extends ConsoleKernel
                 Log::debug('cron runned');
 
                 \App\Models\Project::where('id', 11)->get()->each(function (\App\Models\Project $project) {
-                    dispatch(new \App\Jobs\Project\CheckState($project));
+                    //dispatch(new \App\Jobs\Project\CheckState($project));
                 });
             }
-        )->name('monitor_projects_state')->dailyAt('8:00');
+        )->name('monitor_projects_state')->everyMinute();
     }
 
     /**
