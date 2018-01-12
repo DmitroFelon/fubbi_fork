@@ -10,15 +10,23 @@
 
     {{--Themes' keywords tabs--}}
     @foreach($project->prepareTagsInput('themes_order') as $theme)
+        @if(!trim($theme))
+            @continue
+        @endif
         <h1>{{$theme}}</h1>
-        <fieldset data-theme="{{$theme}}" data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $theme])}}">
+        <fieldset data-theme="{{$theme}}" data-mode="async"
+                  data-url="{{url()->action('KeywordsController@index', [$project->id, $theme])}}">
             {{--loaded by ajax--}}
         </fieldset>
     @endforeach
     {{--Questions' keywords tabs--}}
     @foreach($project->prepareTagsInput('questions') as $question)
+        @if(!trim($question))
+            @continue
+        @endif
         <h1>{{$question}}</h1>
-        <fieldset data-theme="{{$question}}"  data-mode="async" data-url="{{url()->action('KeywordsController@index', [$project->id, $question])}}">
+        <fieldset data-theme="{{$question}}" data-mode="async"
+                  data-url="{{url()->action('KeywordsController@index', [$project->id, $question])}}">
             {{--loaded by ajax--}}
         </fieldset>
     @endforeach

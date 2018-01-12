@@ -186,8 +186,8 @@
         </div>
 
         {!! Form::bsSelect('article_images_links[]',$project->prepareTagsInput('article_images_links'), null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'required', 'class'=>'tagsinput' ] ) !!}
-        {!! Form::bsSelect('avoid_keywords[]',$project->prepareTagsInput('avoid_keywords'), null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), '', ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
-        {!! Form::bsSelect('image_pages[]',$project->prepareTagsInput('image_pages'), null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), '', ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+        {!! Form::bsSelect('avoid_keywords[]',$project->prepareTagsInput('avoid_keywords'), null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+        {!! Form::bsSelect('image_pages[]',$project->prepareTagsInput('image_pages'), null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
