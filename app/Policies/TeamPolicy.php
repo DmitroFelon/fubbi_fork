@@ -23,7 +23,7 @@ class TeamPolicy
     public function index(User $user)
     {
         $deny = [
-            'client'
+            \App\Models\Role::CLIENT
         ];
 
         return !in_array($user->role, $deny);
@@ -62,7 +62,7 @@ class TeamPolicy
     public function create(User $user)
     {
         $deny = [
-            'client'
+            \App\Models\Role::CLIENT
         ];
 
         return !in_array($user->role, $deny);

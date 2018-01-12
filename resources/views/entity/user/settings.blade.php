@@ -36,7 +36,7 @@
                             <i class="fa fa-bell "></i> {{_i('Notifications')}}
                         </a>
                     </li>
-                    @role(['client'])
+                    @role([\App\Models\Role::CLIENT])
                     <li class="">
                         <a data-toggle="tab" href="#tab-billing">
                             <i class="fa fa-credit-card "></i> {{_i('Billling info')}}
@@ -57,7 +57,7 @@
                         </div>
 
                     </div>
-                    @role(['client'])
+                    @role([\App\Models\Role::CLIENT])
                     <div id="tab-billing" class="tab-pane">
                         <div class="panel-body">
                             @include('entity.user.settings.billing')

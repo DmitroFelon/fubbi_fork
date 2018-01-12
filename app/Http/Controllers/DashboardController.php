@@ -75,20 +75,20 @@ class DashboardController extends Controller
         $role = $user->role;
 
         switch ($role) {
-            case 'client':
+            case \App\Models\Role::CLIENT:
                 return $this->client();
                 break;
-            case 'admin':
+            case \App\Models\Role::ADMIN:
                 return $this->admin();
                 break;
-            case 'account_manager':
+            case \App\Models\Role::ACCOUNT_MANAGER:
                 break;
-            case 'researcher':
+            case \App\Models\Role::RESEARCHER:
                 break;
-            case 'writer':
+            case \App\Models\Role::WRITER:
                 return $this->admin();
                 break;
-            case 'designer':
+            case \App\Models\Role::DESIGNER:
                 break;
             default:
                 return null;

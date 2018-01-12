@@ -1,4 +1,4 @@
-@role(['account_manager', 'admin'])
+@role([\App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::ADMIN])
 @if($project->isOnReview())
     <a href="{{url("project/accept_review/{$project->id}")}}" class="btn btn-primary btn-xs pull-right">
         {{_i('Accept review')}}
@@ -14,7 +14,7 @@
     {{_i('Modify Plan')}}
 </a>
 @endrole()
-@role(['client'])
+@role([\App\Models\Role::CLIENT])
 <a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
     {{_i('Edit project')}}
 </a>

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Article;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
+use App\Models\Role;
 use App\Models\Team;
 use App\Notifications\Project\StatusChanged;
 use App\Notifications\Worker\Attached;
@@ -54,17 +55,16 @@ class ProjectObserver
     {
         //notify admins about new subscription
         $should_be_notified = [
-            'admin' => \App\Notifications\Project\Created::class,
+            Role::ADMIN => \App\Notifications\Project\Created::class,
         ];
 
         //invite managers to the new project while filling process
         $should_be_invited = [
-            'account_manager',
+            Role::ACCOUNT_MANAGER,
         ];
 
         //send confirmation to client
         $this->user->notify(new \App\Notifications\Project\Created($project));
-
 
         foreach ($should_be_notified as $role => $model) {
             $users = User::withRole($role)->get();
@@ -88,7 +88,7 @@ class ProjectObserver
          * Create chat conversation
          * */
 
-        $participants = User::withRole('admin')->get(['id'])->pluck('id');
+        $participants = User::withRole(Role::ADMIN)->get(['id'])->pluck('id');
 
         $participants->push($project->client->id);
 
@@ -121,10 +121,11 @@ class ProjectObserver
     public function filled(Project $project)
     {
         $should_be_invited = [
-            'account_manager',
-            'writer',
-            'editor',
-            'designer',
+            \App\Models\Role::ACCOUNT_MANAGER,
+            \App\Models\Role::WRITER,
+            \App\Models\Role::EDITOR,
+            \App\Models\Role::DESIGNER,
+            \App\Models\Role::RESEARCHER,
         ];
 
         foreach ($should_be_invited as $role) {
@@ -142,8 +143,6 @@ class ProjectObserver
             ->performedOn($project)
             ->withProperties([])
             ->log('Project ' . $project->name . ' has beeb filled sucessfully');
-
-
     }
 
     /**

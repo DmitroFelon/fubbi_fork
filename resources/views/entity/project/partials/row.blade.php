@@ -31,7 +31,7 @@
         <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm navy-bg">
             <i class="fa fa-folder"></i> {{_i('View')}}
         </a>
-        @role('client')
+        @role(\App\Models\Role::CLIENT)
         <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm blue-bg">
             <i class="fa fa-pencil"></i> {{_i('Edit')}}
         </a>
@@ -39,8 +39,8 @@
         <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
             <i class="fa fa-download"></i> {{_i('Export')}}
         </a>
-        @role(['admin', 'client'])
-        @if($project->client->subscription($project->name)->onGracePeriod())
+        @role([\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])
+        @if($project->client->subscription( $project->name)->onGracePeriod())
             <a href="{{action('ProjectController@resume', $project)}}" class="btn btn-white btn-sm grey-bg">
                 <i class="fa fa-refresh"></i> {{_i('Resume')}}
             </a>

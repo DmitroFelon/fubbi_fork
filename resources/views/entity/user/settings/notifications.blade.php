@@ -8,7 +8,7 @@
         </div>
     @endforeach
 </div>
-@role(['client'])
+@role([\App\Models\Role::CLIENT])
 <br>
 <h3 class="text-center">{{_i('Disable billing notifications')}}</h3>
 <br>

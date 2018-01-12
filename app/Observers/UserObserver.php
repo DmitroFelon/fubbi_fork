@@ -21,7 +21,7 @@ class UserObserver
         if (Request::input('role')) {
             $user->notify(new RegistrationConfirmation($user));
         } else {
-            $admins = User::withRole('admin')->get();
+            $admins = User::withRole(\App\Models\Role::ADMIN)->get();
             $admins->each(function (User $item, $key) use ($user) {
                 $item->notify(new \App\Notifications\Client\Registered($user));
             });

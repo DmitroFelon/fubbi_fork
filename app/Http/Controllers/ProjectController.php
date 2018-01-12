@@ -64,7 +64,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
         switch ($user->role) {
-            case 'admin':
+            case \App\Models\Role::ADMIN:
                 $projects = Project::query();
 
                 if ($request->has('status') and $request->get('status')) {
@@ -89,7 +89,7 @@ class ProjectController extends Controller
 
                 $projects = $projects->paginate(10);
                 break;
-            case 'client':
+            case \App\Models\Role::CLIENT:
                 $projects = $user->projects()->paginate(10);
                 if ($projects->isEmpty()) {
                     return redirect()->action('ProjectController@create');

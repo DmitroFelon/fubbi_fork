@@ -454,7 +454,7 @@ class Project extends Model implements HasMediaConversions, Invitable
         //prepare and filter users for the view
 
         $invitable_users = $users->keyBy('id')->transform(function (User $user) {
-            if (in_array($user->role, ['admin', 'client'])) {
+            if (in_array($user->role, [\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])) {
                 return null;
             }
 

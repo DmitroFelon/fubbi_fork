@@ -96,17 +96,16 @@ trait hasWorkers
      */
     public function requireWorkers()
     {
-
         if ($this->teams->isNotEmpty()) {
             return [];
         }
 
         $required_workers = [
-            'writer'          => _i('Writer'),
-            'designer'        => _i('Designer'),
-            'account_manager' => _i('Account manager'),
-            'editor'          => _i('Editor'),
-            'researcher'      => _i('Researcher'),
+            \App\Models\Role::WRITER          => _i('Writer'),
+            \App\Models\Role::DESIGNER        => _i('Designer'),
+            \App\Models\Role::ACCOUNT_MANAGER => _i('Account manager'),
+            /*\App\Models\Role::EDITOR          => _i('Editor'),*/
+            \App\Models\Role::RESEARCHER      => _i('Researcher'),
         ];
 
         $has_worker = [];
@@ -119,8 +118,6 @@ trait hasWorkers
 
         return array_diff($required_workers, $has_worker);
     }
-   
-
 
 
 }

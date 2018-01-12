@@ -7,7 +7,7 @@
                 {{_i('Users')}}
             </h5>
             <div class="ibox-tools">
-                @role(['admin'])
+                @role([\App\Models\Role::ADMIN])
                 <a target="_blank" href="{{url()->action('UserController@create')}}"
                    class="btn btn-primary btn-xs">{{_i('Create new User')}}</a>
                 @endrole

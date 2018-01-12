@@ -194,7 +194,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function projects()
     {
-        if ($this->role == 'client') {
+        if ($this->role == \App\Models\Role::CLIENT) {
             return $this->hasMany(Project::class, 'client_id');
         }
 

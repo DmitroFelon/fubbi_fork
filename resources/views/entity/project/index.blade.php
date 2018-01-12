@@ -19,7 +19,7 @@
         </div>
         <div class="ibox-content">
             <div class="row m-b-sm m-t-sm">
-                @if(Auth::user()->role != 'client')
+                @if(Auth::user()->role != \App\Models\Role::CLIENT)
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                         <a href="{{action('ProjectController@index')}}" id="loading-example-btn"
                            class="btn btn-white btn-sm"><i

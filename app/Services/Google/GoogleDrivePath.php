@@ -9,6 +9,7 @@
 namespace App\Services\Google;
 
 
+use App\Models\Role;
 use App\User;
 use Illuminate\Support\Facades\Log;
 
@@ -93,7 +94,7 @@ trait GoogleDrivePath
             $permissions->put($worker->email, 'writer');
         });
 
-        $admins = User::withRole('admin')->get();
+        $admins = User::withRole(Role::ADMIN)->get();
 
         //set admins as reader
         $admins->each(function (User $admin) use ($permissions) {
