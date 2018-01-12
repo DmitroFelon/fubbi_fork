@@ -31,12 +31,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(
             function () {
-
                 \App\Models\Project::where('id', 11)->get()->each(function (\App\Models\Project $project) {
                     dispatch(new \App\Jobs\Project\CheckState($project));
                 });
             }
-        )->name('monitor_projects_state')->everyMinute();
+        )->name('monitor_projects_state')->dailyAt('8:00');
     }
 
     /**
