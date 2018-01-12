@@ -265,4 +265,48 @@ class ProjectObserver
             ->withProperties(['state' => $project->state])
             ->log('Project ' . $project->name . ' status changed to: "' . ucfirst(str_replace('_', ' ', $project->state)) . '".');
     }
+
+    /**
+     * @param Project $project
+     */
+    public function acceptArticle(Project $project)
+    {
+        $article = Article::find($project->eventData['acceptArticle']);
+
+        activity('project_progress')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $article])
+            ->log('Article ' . $article->title . ' has been apprived.');
+    }
+
+    /**
+     * @param Project $project
+     */
+    public function declineArticle(Project $project)
+    {
+        $article = Article::find($project->eventData['declineArticle']);
+
+        activity('project_progress')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $article])
+            ->log('Article ' . $article->title . ' has been declined.');
+    }
+
+    /**
+     * @param Project $project
+     */
+    public function lastDeclineArticle(Project $project)
+    {
+        $article = Article::find($project->eventData['lastDeclineArticle']);
+
+        activity('project_progress')
+            ->causedBy(Auth::user())
+            ->performedOn($project)
+            ->withProperties(['worker' => $article])
+            ->log('Writer: ' . $article->author->name . ' has spent 3 attempts wtih article: ' . $article->id);
+    }
+
+
 }

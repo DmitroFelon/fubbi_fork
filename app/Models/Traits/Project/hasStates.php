@@ -172,9 +172,9 @@ trait hasStates
             $this->saveKeywords($request->input('keywords_questions'), 'keywords_questions');
         }
 
-        if ($request->has('meta')) {
+        if ($request->has('meta') and is_array($request->get('meta'))) {
 
-            $old_keywords_meta = $this->keywords_meta;
+            $old_keywords_meta = ($this->keywords_meta) ? $this->keywords_meta : [];
 
             foreach ($request->get('meta') as $theme => $metas) {
                 $old_keywords_meta[$theme] = $metas;
@@ -188,6 +188,11 @@ trait hasStates
         return true;
     }
 
+    /**
+     * @param $input
+     * @param $name
+     * @return bool
+     */
     private function saveKeywords($input, $name)
     {
         $input = collect($input);

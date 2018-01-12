@@ -128,7 +128,10 @@ class Project extends Model implements HasMediaConversions, Invitable
         'attachWorkers',
         'detachWorker',
         'attachTeam',
-        'attachArticle'
+        'attachArticle',
+        'acceptArticle',
+        'declineArticle',
+        'lastDeclineArticle' //fires when writer of article has spent 3 attempts for approval
     ];
 
     /**

@@ -61,6 +61,8 @@ trait hasArticles
     public function acceptArticle($article_id)
     {
         $this->articles()->updateExistingPivot($article_id, ['accepted' => true], true);
+        $this->eventData['acceptArticle'] = $article_id;
+        $this->fireModelEvent('acceptArticle', false);
     }
 
     /**
@@ -79,8 +81,13 @@ trait hasArticles
         $this->articles()->updateExistingPivot($article_id, $data, true);
 
         if ($attempts > 3) {
+            $this->eventData['lastDeclineArticle'] = $article_id;
+            $this->fireModelEvent('lastDeclineArticle', false);
             //todo notify about limit of attempts 
             //todo move 3 to settings 
+        } else {
+            $this->eventData['declineArticle'] = $article_id;
+            $this->fireModelEvent('declineArticle', false);
         }
     }
 

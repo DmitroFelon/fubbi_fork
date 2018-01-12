@@ -106,7 +106,7 @@ class ProjectPolicy
 
         $manager = $model->workers()->withRole(Role::ACCOUNT_MANAGER)->first(['id']);
 
-        if ($user->id == $manager->id) {
+        if($manager and $user->id == $manager->id) {
             return true;
         }
     }
