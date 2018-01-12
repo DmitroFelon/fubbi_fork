@@ -55,6 +55,8 @@ class ArticlesController extends Controller
 
         $articles = $articles_query->simplePaginate(10);
 
+        dd($articles);
+
         $filters['types'] = $article->getTypes($project);
 
         $filters['statuses'] = [
