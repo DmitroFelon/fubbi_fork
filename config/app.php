@@ -220,6 +220,10 @@ return [
          * Pdf
          * */
         Barryvdh\DomPDF\ServiceProvider::class,
+        /*
+         * Bugsnag
+         * */
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
     ],
 
     /*
@@ -301,6 +305,12 @@ return [
          * Pdf
          * */
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        /*
+         * Bugsnug
+         * */
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+
+
     ],
 
 ];
