@@ -282,7 +282,7 @@ class Project extends Model implements HasMediaConversions, Invitable
         return ($require_articles > 0)
             ? $total_articles_accepted / $require_articles * 100 : 0;
     }
-
+   
     /**
      * @return string
      */

@@ -35,7 +35,7 @@ class Filled extends Notification implements ShouldQueue
     {
         return ['mail', 'database'];
     }
-
+   
     /**
      * Get the mail representation of the notification.
      *

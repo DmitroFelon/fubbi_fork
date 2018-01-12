@@ -13,7 +13,7 @@ class Invite extends Notification
     use Queueable;
 
     protected $invitation;
-
+   
     /**
      * Create a new notification instance.
      *
