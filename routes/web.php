@@ -24,7 +24,7 @@ Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
     $project = \App\Models\Project::find(11);
-    
+    dd($project->subscription);
 });
 
 Broadcast::routes();

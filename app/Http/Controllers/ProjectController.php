@@ -455,7 +455,7 @@ class ProjectController extends Controller
      */
     public function export(Project $project)
     {
-        return response()->download($project->export())->deleteFileAfterSend(true);
+        return response()->download($project->export());
     }
 
     /**

@@ -23,12 +23,29 @@ class MessageController extends Controller
     {
         $user          = Auth::user();
         $conversations = $user->conversations;
+
+        $conversations->transform(function ($item, $key) {
+            $project = Project::meta()->where(function ($query) use ($item) {
+                $query->where('projects_meta.key', 'conversation_id')
+                      ->where('projects_meta.value', $item->id);
+            })->get();
+
+            if ($project->isNotEmpty()) {
+                return $item;
+            } else {
+                return null;
+            }
+        });
+
+        $conversations = $conversations->filter();
+
         if ($conversations->count() == 1 and !$request->has('c')) {
             return redirect()->action('MessageController@index', ['c' => $conversations->first()->id]);
         }
 
         return view('entity.chat.index', [
-            'conversations' => $conversations, 'has_conversations' => $conversations->isNotEmpty()
+            'conversations'     => $conversations,
+            'has_conversations' => $conversations->isNotEmpty()
         ]);
     }
 
@@ -87,8 +104,8 @@ class MessageController extends Controller
 
         $data = [
             'chat_messages' => $messages,
-            'participants' => $conversation->users,
-            'conversation' => $id
+            'participants'  => $conversation->users,
+            'conversation'  => $id
         ];
 
         return view('entity.chat.show', $data);

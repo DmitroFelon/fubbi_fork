@@ -92,6 +92,8 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     const TAG_CATEGORY = 'service_type';
 
+    protected $table = 'projects';
+
     /**
      * @var bool
      */
@@ -286,11 +288,9 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     public function export()
     {
-
-        $this->unsetMeta('export');
-        $ready_export = $this->getMeta('export');
+        $ready_export = trim($this->getMeta('export'));
         //return path to zip if exist
-        if ($ready_export and file_exists($ready_export)) {
+        if ($ready_export and File::exists($ready_export)) {
             return $ready_export;
         }
 

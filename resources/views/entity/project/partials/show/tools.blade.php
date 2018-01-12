@@ -1,3 +1,7 @@
+<a href="{{action('ProjectController@export', $project)}}" class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
+    <i class="fa fa-download"></i> {{_i('Export')}}
+</a>
+
 @can('project.accept-review', $project)
 
     @if($project->isOnReview())
