@@ -21,10 +21,9 @@ class WebhookController extends Controller
     {
         $payload = json_decode($request->getContent(), true);
 
-        
-        if (! $this->isInTestingEnvironment() && ! $this->eventExistsOnStripe($payload['id'])) {
+        /*if (! $this->isInTestingEnvironment() && ! $this->eventExistsOnStripe($payload['id'])) {
             return;
-        }
+        }*/
 
         $method = 'handle'.studly_case(str_replace('.', '_', $payload['type']));
 
