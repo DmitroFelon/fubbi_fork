@@ -4,8 +4,11 @@ namespace App\Jobs\Project;
 
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
+use App\Models\Role;
+use App\Notifications\Project\Delayed;
 use App\Notifications\Project\Remind;
 use App\Notifications\Project\Subscription;
+use App\Notifications\Project\WillRemoved;
 use App\Notifications\Worker\Progress;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -48,12 +51,11 @@ class CheckState implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('start');
-        //check is not project ready for workers
+        Log::debug('state handle start');
+        //check is project ready for workers
         if ($this->filling()) {
-            //return;
+            return;
         }
-
         //check the working progress
         $this->progress();
         //check ends_at of project subscription
@@ -65,7 +67,6 @@ class CheckState implements ShouldQueue
      */
     public function filling()
     {
-
         $filling_states = [
             ProjectStates::QUIZ_FILLING,
             ProjectStates::KEYWORDS_FILLING
@@ -74,13 +75,7 @@ class CheckState implements ShouldQueue
         Log::debug($this->project->client->name . ' filling reminder start');
 
         if ($this->project->created_at->diffInDays(now()) > 1 and in_array($this->project->state, $filling_states)) {
-            //todo remind client to complete quiz
-
-            Log::debug($this->project->client->name . ' filling reminder');
-            return;
-
             $this->project->client->notify(new Remind($this->project));
-
             return true;
         }
     }
@@ -90,21 +85,15 @@ class CheckState implements ShouldQueue
      */
     public function subscription()
     {
-        $end_at_timestamp = \Stripe\Subscription::retrieve($this->project->subscription->stripe_id)->current_period_end;
-
-        $end_at = \Carbon\Carbon::createFromTimestamp($end_at_timestamp);
-
-        if ($end_at->diffInDays(now()) == 1) {
-            //todo notify user about new billing cycle
-
-            Log::debug($this->project->client->name . ' subscription reminder');
+        if (!$this->project->subscription->ends_at) {
             return;
-
-            $this->project->client->notify(new Subscription($this->project));
-
-            return true;
         }
 
+        if ($this->project->subscription->ends_at->diffInDays(now()) < 2) {
+            $this->project->client->notify(new WillRemoved($this->project));
+        }
+
+        return;
     }
 
     /**
@@ -114,12 +103,12 @@ class CheckState implements ShouldQueue
     {
         if ($this->project->created_at->diffInDays(now()) > 15 and $this->project->getProgress() < 100) {
             //todo notify workers about progress
-
             $this->project->workers->each(function (User $user) {
-                //todo check for user's notification settings
-                Log::debug($user->name . ' progress reminder');
-                return;
-                $user->notify(new Progress($this->project));
+                if ($user->role == Role::ACCOUNT_MANAGER) {
+                    $user->notify(new Delayed($this->project));
+                } else {
+                    $user->notify(new Progress($this->project));
+                }
             });
         }
     }

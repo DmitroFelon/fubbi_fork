@@ -33,7 +33,7 @@
     </div>
     <div class="col-lg-4" id="cluster_info">
         <dl class="dl-horizontal">
-            <dt>{{_i('Last Updated')}}:</dt>
+            <dt>{{_i('Updated')}}:</dt>
             <dd>
                 {{$project->updated_at}}
                 <small class="text-muted">({{$project->updated_at->diffForHumans()}})</small>
@@ -51,6 +51,12 @@
                         <a target="_blank" href="{{url()->action('UserController@show', $worker)}}">
                             {{$worker->name}}
                         </a>
+                        @role([\App\Models\Role::ADMIN])
+                        <a class="text-danger" title="Remove from project"
+                           href="{{action('ProjectController@remove_from_project', [$project, $worker])}}">
+                             <i class="fa fa-times"></i>
+                        </a>
+                        @endrole
                     </dd>
                 @endforeach
 

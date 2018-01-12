@@ -250,7 +250,7 @@ class ProjectController extends Controller
 
         $project = $project->filling($request);
 
-        return redirect()->action('ProjectController@edit', [$project, 's' => $project->state ] );
+        return redirect()->action('ProjectController@edit', [$project, 's' => $project->state]);
     }
 
     /**
@@ -343,7 +343,28 @@ class ProjectController extends Controller
             $message = _i('You are applied to this project');
         }
 
-        return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
+        return redirect()->back()->with($message_key, $message);
+    }
+
+    /**
+     * Attach worker to the project
+     *
+     *
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function remove_from_project(Project $project, User $user)
+    {
+        $message_key = 'info';
+        try {
+            $project->detachWorker($user->id);
+            $message = _i("%s has beed removed from project", [$user->name]);
+        } catch (\Exception $e) {
+            $message_key = 'error';
+            $message     = _i("%s is not attached to this project", [$user->name]);
+        }
+
+        return redirect()->back()->with($message_key, $message);
     }
 
     /**

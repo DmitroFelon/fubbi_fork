@@ -46,9 +46,11 @@ class Remind extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->subject(_i('Project filling'))
+            ->line(_i('Hello %s', [$notifiable->name]))
+            ->line(_i('Please complete filling your project "%s".', [$this->project->name]))
+            ->action('Review project', action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
-    
+
 }

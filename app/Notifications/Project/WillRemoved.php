@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Subscription extends Notification
+class WillRemoved extends Notification
 {
     use Queueable;
 
@@ -45,11 +45,15 @@ class Subscription extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(_i('Subscription renewal'))
+            ->subject(_i('Project will be removed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Subscription of Your project "%s" will renewed soon.', [$this->project->name]))
+            ->line(_i('Project "%s" will be removed at: %s.', [
+                $this->project->name,
+                $this->project->subscription->ends_at
+            ]))
             ->action('Review project', action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
+
 
 }

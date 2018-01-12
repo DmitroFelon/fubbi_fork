@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
                     dispatch(new \App\Jobs\Project\CheckState($project));
                 });
             }
-        )->name('monitor_projects_state')->everyMinute();
+        )->name('monitor_projects_state')->everyMinute('8:00');
     }
 
     /**

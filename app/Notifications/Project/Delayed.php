@@ -5,10 +5,9 @@ namespace App\Notifications\Project;
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Subscription extends Notification
+class Delayed extends Notification
 {
     use Queueable;
 
@@ -45,9 +44,10 @@ class Subscription extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(_i('Subscription renewal'))
+            ->subject(_i('Project is delayed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Subscription of Your project "%s" will renewed soon.', [$this->project->name]))
+            ->line(_i('Project "%s" is delayed.', [$this->project->name]))
+            ->line(_i('Please, contact to workers.'))
             ->action('Review project', action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }

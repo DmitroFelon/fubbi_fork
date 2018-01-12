@@ -70,6 +70,9 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('reject_review/{project}', "ProjectController@reject_review");
             });
             Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+            Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+
+
             Route::get('decline_project/{project}', "ProjectController@decline_project");
         }
     );
@@ -85,6 +88,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('{project}/resume', 'ProjectController@resume');
         Route::post('{project}/invite_users', 'ProjectController@invite_users');
         Route::post('{project}/invite_team', 'ProjectController@invite_team');
+
+        Route::get('{project}/remove_from_project/{user}', 'ProjectController@remove_from_project');
     });
 
     Route::namespace('Project')->group(
