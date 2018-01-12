@@ -21,7 +21,6 @@ class Subscription extends Notification
      */
     public function __construct(Project $project)
     {
-
         //todo notify client ebout ending of subscription
         $this->project = $project;
     }
@@ -29,7 +28,7 @@ class Subscription extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -40,27 +39,17 @@ class Subscription extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject(_i('Subscription renewal'))
+            ->line(_i('Hello %s', [$notifiable->name]))
+            ->line(_i('Subscription of Your project "%" will renewed soon.', [$this->project->name]))
+            ->action('Review project', action('ProjectController@show', $this->project))
+            ->line('Thank you for using our application!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
 }
