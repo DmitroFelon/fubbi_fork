@@ -104,9 +104,12 @@ trait hasWorkers
             \App\Models\Role::WRITER          => _i('Writer'),
             \App\Models\Role::DESIGNER        => _i('Designer'),
             \App\Models\Role::ACCOUNT_MANAGER => _i('Account manager'),
-            /*\App\Models\Role::EDITOR          => _i('Editor'),*/
-            \App\Models\Role::RESEARCHER      => _i('Researcher'),
+            \App\Models\Role::RESEARCHER => _i('Researcher'),
         ];
+
+        /*
+         * \App\Models\Role::EDITOR => _i('Editor')-  removed for now
+         * */
 
         $has_worker = [];
 
