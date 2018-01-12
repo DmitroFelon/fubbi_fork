@@ -17,12 +17,14 @@
     </a>
 @endcan
 
-@can('project.update', $project)
-    <a href="{{url()->action('ProjectController@edit', $project)}}"
-       class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
-        {{_i('Edit project')}}
-    </a>
-@endcan
+@role([\App\Models\Role::ADMIN, \App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::CLIENT])
+    @can('project.update', $project)
+        <a href="{{url()->action('ProjectController@edit', $project)}}"
+           class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
+            {{_i('Edit project')}}
+        </a>
+    @endcan
+@endrole
 
 <a href="{{url()->action('Project\ArticlesController@create', $project)}}"
    class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
