@@ -13,30 +13,30 @@ class WebhookController extends CashierController
     public function handleInvoicePaymentSucceeded($payload)
     {
         Log::debug('handleInvoicePaymentSucceeded');
-        return new Response('Webhook Handled', 200);
+        return ['Webhook Handled'];
     }
 
     public function handleInvoicePaymentFailed($payload)
     {
         Log::debug('handleInvoicePaymentSucceeded');
-        return new Response('Webhook Handled', 200);
+        return ['Webhook Handled'];
     }
 
     public function handleInvoicePaymentPending($payload)
     {
         Log::debug('handleInvoicePaymentSucceeded');
-        return new Response('Webhook Handled', 200);
+        return ['Webhook Handled'];
     }
 
     public function handleInvoiceUpcoming($payload)
     {
         Log::debug('handleInvoiceUpcoming');
-        return new Response('Webhook Handled', 200);
+        return ['Webhook Handled'];
     }
 
     public function handleInvoiceCreated($payload)
     {
         Log::debug('handleInvoiceCreated');
-        return new Response('Webhook Handled', 200);
+        return ['Webhook Handled'];
     }
 }
