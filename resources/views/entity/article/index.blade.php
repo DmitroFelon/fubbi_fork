@@ -18,7 +18,7 @@
             </div>
             <div class="ibox-content">
                 <div class="row m-b-sm m-t-sm">
-                    @if(Auth::user()->role != 'client')
+                    @if(Auth::user()->role != \App\Models\Role::CLIENT)
                         @if(isset($project))
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 <a href="{{action('Project\ArticlesController@index', $project)}}"
@@ -67,6 +67,7 @@
                 </div>
                 <hr>
                 <div class="project-list">
+                    <span class="pull-right">{{_i('Count')}} : {{$project->articles()->count()}}</span>
                     <table class="table table-hover footable">
                         <thead>
                         <tr>

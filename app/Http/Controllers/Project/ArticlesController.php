@@ -33,6 +33,8 @@ class ArticlesController extends Controller
      * Display a listing of the resource.
      *
      * @param \App\Models\Project $project
+     * @param Article $article
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Project $project, Article $article, Request $request)

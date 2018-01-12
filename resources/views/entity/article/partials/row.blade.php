@@ -31,8 +31,8 @@
     </td>
 
     <td>
-        <strong>{{_i('Author')}}:</strong> <a
-                href="{{action('UserController@show', $article->author)}}">{{$article->author->name}}</a>
+        <strong>{{_i('Author')}}:</strong>
+        <a href="{{action('UserController@show', $article->author)}}">{{$article->author->name}}</a>
     </td>
 
     <td>
@@ -41,8 +41,8 @@
 
     <td>
         @if($article->google_id)
-            <strong>{{_i('Google docs')}}:</strong> <a target="_blank"
-                                                       href="https://docs.google.com/document/d/{{$article->google_id}}/edit">{{_i('open')}}</a>
+            <strong>{{_i('Google docs')}}:</strong>
+            <a target="_blank" href="https://docs.google.com/document/d/{{$article->google_id}}/edit">{{_i('open')}}</a>
         @else
             <strong>{{_i('Google docs')}}:</strong> {{ _i('Processing')}}
         @endif
@@ -50,10 +50,9 @@
 
     <td>
         @isset($project)
-
-        <strong>{{_i('Project')}}:</strong> <a href="{{action('ProjectController@show', $project)}}">"{{$project->name}}
-            "</a>
-
+        <strong>
+            {{_i('Project')}}:
+        </strong> <a href="{{action('ProjectController@show', $project)}}">"{{$project->name}}"</a>
         @endisset
     </td>
 
