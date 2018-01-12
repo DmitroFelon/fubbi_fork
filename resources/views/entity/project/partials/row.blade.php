@@ -40,6 +40,10 @@
             <i class="fa fa-download"></i> {{_i('Export')}}
         </a>
         @role([\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])
+        <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}"
+           class="btn btn-white btn-sm lazur-bg">
+            <i class="fa fa-cloud"></i> {{_i('Chat')}}
+        </a>
         @if($project->client->subscription( $project->name)->onGracePeriod())
             <a href="{{action('ProjectController@resume', $project)}}" class="btn btn-white btn-sm grey-bg">
                 <i class="fa fa-refresh"></i> {{_i('Resume')}}
@@ -54,9 +58,6 @@
             </form>
         @endif
         @endrole()
-        <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}"
-           class="btn btn-white btn-sm lazur-bg">
-            <i class="fa fa-cloud"></i> {{_i('Chat')}}
-        </a>
+
     </td>
 </tr>
