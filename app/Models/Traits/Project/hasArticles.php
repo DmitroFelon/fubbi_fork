@@ -34,9 +34,7 @@ trait hasArticles
     public function attachArticle($article_id)
     {
         return $this->articles()->attach($article_id, ['attempts' => 1]);
-
         $this->eventData['attachArticle'] = $article_id;
-
         $this->fireModelEvent('attachArticle', false);
     }
 
