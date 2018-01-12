@@ -308,7 +308,10 @@ class Project extends Model implements HasMediaConversions, Invitable
                         $collection = str_replace('-', ' ', $collection);
                         $collection = str_replace('_', ' ', $collection);
 
-                        $data['keywords_media'][$collection][] = $item->getPath();
+                        if (File::exists($item->getPath())) {
+                            $data['keywords_media'][$collection][] = $item->getPath();
+                        }
+
                     });
                 }
             } else {
@@ -317,7 +320,10 @@ class Project extends Model implements HasMediaConversions, Invitable
                         $collection = str_replace('-', ' ', $collection);
                         $collection = str_replace('_', ' ', $collection);
 
-                        $data['media'][$collection][] = $item->getPath();
+                        if (File::exists($item->getPath())) {
+                            $data['media'][$collection][] = $item->getPath();
+                        }
+
                     });
                 }
             }
