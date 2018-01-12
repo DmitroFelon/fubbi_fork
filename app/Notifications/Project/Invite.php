@@ -43,12 +43,18 @@ class Invite extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $email = (new MailMessage)
             ->subject(_i('Invitation to project "%s', [$this->invitation->invitable->getInvitableName()]))
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('You have beed invited to project "%s". Please apply or decline it', [$this->invitation->invitable->getInvitableName()]))
             ->action('Review Project', $this->invitation->invitable->getInvitableUrl())
             ->line('Thank you for using our application!');
+
+        if (method_exists($this->invitation->invitable, 'export')) {
+            $email->attach($this->invitation->invitable->export());
+        }
+
+        return $email;
     }
 
     /**

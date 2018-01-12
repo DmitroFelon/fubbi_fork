@@ -300,7 +300,6 @@ class Project extends Model implements HasMediaConversions, Invitable
         foreach ($collections as $collection) {
             $collection_files = $this->getMedia($collection);
             if (strpos($collection, 'meta-') !== false) {
-                //TODO wrap by folder "ideas media"
                 if ($collection_files->isNotEmpty()) {
                     $collection_files->each(function (Media $item) use (&$data, $collection) {
                         $collection = str_replace('meta-', '', $collection);

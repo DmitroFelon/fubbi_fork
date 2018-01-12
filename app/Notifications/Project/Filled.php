@@ -48,7 +48,8 @@ class Filled extends Notification implements ShouldQueue
             ->subject('New project has beed filled.')
             ->line(_i('New project "%s" has beed filled.', [$this->project->name]))
             ->action('Review project', url()->action('ProjectController@show', $this->project))
-            ->line('Thank you for using our application!');
+            ->line('Thank you for using our application!')
+            ->attach($this->project->export());
     }
 
     /**
