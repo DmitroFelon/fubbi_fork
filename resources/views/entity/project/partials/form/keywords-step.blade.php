@@ -4,6 +4,8 @@
 
 <div class="row p-h-lg">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <input value="no" name="meta[{{$theme}}][this_month]" type="hidden"/>
+        <input value="no" name="meta[{{$theme}}][next_moth]" type="hidden"/>
         <div class="form-group">
             <label for="meta-{{str_replace(' ', '_', $theme)}}-content_theme"
                    class="col-lg-2 control-label">
@@ -19,7 +21,7 @@
         </div>
         <div class="form-group">
             <label for="meta-{{str_replace(' ', '_', $theme)}}-points_cover" class="col-lg-2 control-label">
-                {{_i('What points hould we cover in the content?')}}
+                {{_i('What points should we cover in the content?')}}
             </label>
             <div class="col-lg-10">
                 <input value="{{$meta->get('points_cover')}}" id="meta-{{str_replace(' ', '_', $theme)}}-points_cover"
@@ -30,7 +32,7 @@
         </div>
         <div class="form-group">
             <label for="meta-{{str_replace(' ', '_', $theme)}}-points_avoid" class="col-lg-2 control-label">
-                {{_i('What points hould we avoid in content?')}}
+                {{_i('What points should we avoid in content?')}}
             </label>
             <div class="col-lg-10">
                 <input value="{{$meta->get('points_avoid')}}" id="meta-{{str_replace(' ', '_', $theme)}}-points_avoid"
@@ -56,10 +58,9 @@
                 {{_i('Write about topic this month?')}}
             </label>
             <div class="col-lg-10">
-                <input value="no" name="meta[{{$theme}}][this_month]"
-                       type="hidden"/>
+
                 <input id="meta-{{str_replace(' ', '_', $theme)}}-this_month" name="meta[{{$theme}}][this_month]"
-                       {{($meta->get('this_month')) ? 'checked' : ''}}
+                       {{($meta->get('this_month') == 'yes') ? 'checked' : ''}}
                        type="checkbox" value="yes" class="js-switch"/>
                 <span class="help-block"></span>
             </div>
@@ -70,10 +71,9 @@
                 {{_i('Write about topic next month?')}}
             </label>
             <div class="col-lg-10">
-                <input value="no" name="meta[{{$theme}}][next_moth]"
-                       type="hidden"/>
+
                 <input id="meta-{{str_replace(' ', '_', $theme)}}-next_moth" name="meta[{{$theme}}][next_moth]"
-                       {{($meta->get('next_moth')) ? 'checked' : ''}}
+                       {{($meta->get('next_moth') == 'yes') ? 'checked' : ''}}
                        type="checkbox" value="yes" class="js-switch"/>
                 <span class="help-block"></span>
             </div>

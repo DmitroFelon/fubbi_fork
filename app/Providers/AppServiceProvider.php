@@ -92,6 +92,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
+        $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
     }
 }

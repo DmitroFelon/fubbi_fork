@@ -173,7 +173,14 @@ trait hasStates
         }
 
         if ($request->has('meta')) {
-            $this->setMeta('keywords_meta', $request->input('meta'));
+
+            $old_keywords_meta = $this->keywords_meta;
+
+            foreach ($request->get('meta') as $theme => $metas) {
+                $old_keywords_meta[$theme] = $metas;
+            }
+
+            $this->setMeta('keywords_meta', $old_keywords_meta);
         }
 
         $this->save();

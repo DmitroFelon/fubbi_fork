@@ -28,7 +28,7 @@ Route::get('test', function (FPDF $pdf) {
 
     $meta = $project->getMeta();
 
-    dd($meta);
+    dd($project->keywords_meta);
 
     $skip = [
         'quora_username',

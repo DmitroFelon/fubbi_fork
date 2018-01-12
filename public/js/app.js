@@ -700,8 +700,16 @@ jQuery(document).ready(function ($) {
                     thisDropzone, item, '/img/pdf.png'
                 );
                 break;
-            default:
+            case 'image/jpg':
+            case 'image/jpeg':
+            case 'image/png':
+            case 'image/gif':
                 thisDropzone.options.thumbnail.call(thisDropzone, item, item.url);
+                break;
+            default:
+                thisDropzone.options.thumbnail.call(
+                    thisDropzone, item, '/img/file.png'
+                );
                 break;
         }
     }
