@@ -216,6 +216,10 @@ return [
          * Image manipulation
          * */
         Intervention\Image\ImageServiceProvider::class,
+        /*
+         * Pdf
+         * */
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -230,7 +234,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -293,7 +296,11 @@ return [
         /*
          * Image manipulaion
          * */
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        /*
+         * Pdf
+         * */
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

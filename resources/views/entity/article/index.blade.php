@@ -67,7 +67,7 @@
                 </div>
                 <hr>
                 <div class="project-list">
-                    <span class="pull-right">{{_i('Count')}} : {{$project->articles()->count()}}</span>
+                    <span class="pull-right">{{_i('Count')}} : {{$articles->count()}}</span>
                     <table class="table table-hover footable">
                         <thead>
                         <tr>

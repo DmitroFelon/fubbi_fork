@@ -148,7 +148,7 @@
                 <h5>{{_i('Activity')}}</h5>
                 <div class="ibox-tools">
                     <a class="collapse-link">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </a>
                 </div>
             </div>

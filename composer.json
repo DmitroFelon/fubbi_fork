@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "barryvdh/laravel-dompdf": "^0.8.1",
         "belphemur/laravel-gettext": "^6.0",
         "chumper/zipper": "^1.0",
         "faustbrian/laravel-commentable": "^3.0",
@@ -27,7 +28,6 @@
         "laravelista/ekko": "^1.4",
         "musonza/chat": "^2.0",
         "pusher/pusher-php-server": "~3.0",
-        "setasign/fpdf": "^1.8",
         "spatie/laravel-activitylog": "^2.3",
         "spatie/laravel-medialibrary": "^6.0.0",
         "spatie/laravel-tags": "^2.0",

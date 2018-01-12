@@ -22,74 +22,9 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
 Auth::routes();
 
-Route::get('test', function (FPDF $pdf) {
-
+Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
     $project = \App\Models\Project::find(11);
-
-    $meta = $project->getMeta();
-
-    dd($project->keywords_meta);
-
-    $skip = [
-        'quora_username',
-        'quora_password',
-        'keywords',
-        'questions',
-        'themes',
-        'themes_order',
-        'conversation_id',
-        'keywords_questions',
-        'keywords_meta',
-        'seo_first_name',
-        'seo_last_name',
-        'seo_email',
-        'google_access',
-        'export',
-
-    ];
-
-    $meta = $meta->filter(function ($item, $key) use ($skip) {
-        if (strpos($key, 'modificator_') !== false) {
-            return null;
-        }
-        if (in_array($key, $skip)) {
-            return null;
-        }
-        return $item;
-    });
-
-    $chunks = $meta->chunk(4);
-
-
-    $pdf->AddPage();
-
-    foreach ($chunks as $chunk) {
-        $pdf->SetFont('Arial', '', 10);
-        foreach ($chunk->keys() as $key) {
-            if ($chunk->get($key) and !empty($chunk->get($key))) {
-                $pdf->Cell(25, 5, $key);
-            } else {
-                continue;
-            }
-        }
-        $pdf->Ln(10);
-        foreach ($chunk as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $sub_value) {
-                    if ($sub_value) {
-                        $pdf->Cell(25, 6, $sub_value);
-                        $pdf->Ln(5);
-                    }
-                }
-            } else {
-                $pdf->Cell(25, 6, $value);
-                $pdf->Ln(5);
-            }
-        }
-        $pdf->Ln(10);
-    }
-    return response($pdf->Output('S'))
-        ->header('Content-Type', 'application/pdf');
+    
 });
 
 Broadcast::routes();
