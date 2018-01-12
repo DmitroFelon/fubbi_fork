@@ -104,7 +104,7 @@ trait hasWorkers
             \App\Models\Role::WRITER          => _i('Writer'),
             \App\Models\Role::DESIGNER        => _i('Designer'),
             \App\Models\Role::ACCOUNT_MANAGER => _i('Account manager'),
-            \App\Models\Role::RESEARCHER => _i('Researcher'),
+            \App\Models\Role::RESEARCHER      => _i('Researcher'),
         ];
 
         /*
@@ -115,7 +115,9 @@ trait hasWorkers
 
         $this->workers()->each(
             function (User $user) use (&$has_worker, $required_workers) {
-                $has_worker[$user->role] = $required_workers[$user->role];
+                if (isset($required_workers[$user->role])) {
+                    $has_worker[$user->role] = $required_workers[$user->role];
+                }
             }
         );
 
