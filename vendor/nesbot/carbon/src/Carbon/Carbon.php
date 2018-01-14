@@ -1973,7 +1973,7 @@ class Carbon extends DateTime
      *
      * @param int $value
      *
-     * @return static
+     * @return Carbon
      */
     public function subYear($value = 1)
     {

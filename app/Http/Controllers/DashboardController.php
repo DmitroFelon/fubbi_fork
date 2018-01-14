@@ -138,21 +138,13 @@ class DashboardController extends Controller
             return User::withRole('client')->get();
         });
 
-        $date_from = now()->subYear(5)->format('m/d/Y');
-        $date_to   = now()->format('m/d/Y');
+        $date_from = ($request->has('date_from'))
+            ? $request->input('date_from')
+            : now()->subYear(5)->format('m/d/Y');
 
-        $data = (!$request->has('customer'))
-            ? [] : ['customer' => $request->input('customer')];
-
-        if ($request->has('date_from')) {
-            $from      = Carbon::createFromFormat('m/d/Y', $request->input('date_from'));
-            $date_from = $request->input('date_from');
-        }
-
-        if ($request->has('date_to')) {
-            $to      = Carbon::createFromFormat('m/d/Y', $request->input('date_to'));
-            $date_to = $request->input('date_to');
-        }
+        $date_to = ($request->has('date_to'))
+            ? $request->input('date_to')
+            : now()->format('m/d/Y');
 
         return view('pages.admin.dashboard.index', compact('clients', 'date_from', 'date_to'));
     }

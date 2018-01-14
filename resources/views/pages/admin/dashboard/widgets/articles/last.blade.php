@@ -1,5 +1,5 @@
 @if($last_articles->isNotEmpty())
-    <table class="table table-stripped small m-t-md">
+    <table class="table table-stripped table-hover small m-t-md">
         <tbody>
         @foreach($last_articles as $article)
             <tr onclick="location.href='#';" class="pointer b-r-md">

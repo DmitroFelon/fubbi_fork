@@ -7,6 +7,7 @@ use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
+use App\Notifications\Project\Created;
 use App\Notifications\Project\StatusChanged;
 use App\Notifications\Worker\Attached;
 use App\Notifications\Worker\Detached;
@@ -55,7 +56,7 @@ class ProjectObserver
     {
         //notify admins about new subscription
         $should_be_notified = [
-            Role::ADMIN => \App\Notifications\Project\Created::class,
+            Role::ADMIN => Created::class,
         ];
 
         //invite managers to the new project while filling process
@@ -64,7 +65,7 @@ class ProjectObserver
         ];
 
         //send confirmation to client
-        $this->user->notify(new \App\Notifications\Project\Created($project));
+        $project->client->notify(new Created($project));
 
         foreach ($should_be_notified as $role => $model) {
             $users = User::withRole($role)->get();
