@@ -1,4 +1,4 @@
-<tr class="pointer" onclick="window.location='{{action('Project\ArticlesController@show', [$project, $article])}}'">
+<tr class="pointer" onclick="window.location='{{action('Project\ArticlesController@show', [$article->project, $article])}}'">
     @isset($project)
     @if($article->accepted === 1)
         <td>
@@ -16,12 +16,7 @@
     @endisset
 
     <td class="project-title">
-        @if(isset($project))
-            <a href="{{action('Project\ArticlesController@show', [$project, $article])}}">{{$article->title}}</a>
-        @else
-            <a href="{{action('ArticlesController@show', [$article])}}">{{$article->title}}</a>
-        @endif
-
+        <a href="{{action('Project\ArticlesController@show', [$article->project, $article])}}">{{$article->title}}</a>
         <br/>
         <small>
             {{_i('Created')}} {{$article->created_at->format('Y-m-d H:m')}}
@@ -33,11 +28,9 @@
     </td>
 
     <td>
-        @isset($project)
         <strong>
             {{_i('Project')}}:
-        </strong> <a href="{{action('ProjectController@show', $project)}}">"{{$project->name}}"</a>
-        @endisset
+        </strong> <a href="{{action('ProjectController@show', $article->project)}}">"{{$article->project->name}}"</a>
     </td>
 
 </tr>

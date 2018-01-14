@@ -71,21 +71,11 @@
                     <table class="table table-hover footable">
                         <thead>
                         <tr>
-                            @isset($project)
-                            <th class="footable-sortable">
-                                {{_i('Status')}}
-                            </th>
-                            @endisset
+                            <th class="footable-sortable">{{_i('Status')}}</th>
                             <th>{{_i('Title')}}</th>
                             <th>{{_i('Type')}}</th>
-                            <th class="footable-sortable">
-                                @isset($project)
-                                {{_i('Project')}}
-                                @endisset
-                            </th>
-                            <th class="footable-sortable">
-
-                            </th>
+                            <th class="footable-sortable">{{_i('Project')}}</th>
+                            <th class="footable-sortable"></th>
                         </tr>
                         </thead>
                         <tbody>
