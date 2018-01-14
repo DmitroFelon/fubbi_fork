@@ -24,7 +24,7 @@ trait hasArticles
      */
     public function articles()
     {
-        return $this->belongsToMany(Article::class)->withPivot('accepted', 'attempts')->withTimestamps();
+        return $this->hasMany(Article::class);
     }
 
     /**
@@ -60,7 +60,9 @@ trait hasArticles
      */
     public function acceptArticle($article_id)
     {
-        $this->articles()->updateExistingPivot($article_id, ['accepted' => true], true);
+        $article           = $this->articles()->find($article_id);
+        $article->accepted = true;
+        $article->save();
         $this->eventData['acceptArticle'] = $article_id;
         $this->fireModelEvent('acceptArticle', false);
     }
@@ -70,15 +72,13 @@ trait hasArticles
      */
     public function declineArticle($article_id)
     {
+        $article  = $this->articles()->find($article_id);
+        $attempts = $article->attempts;
 
-        $attempts = $this->articles()->find($article_id)->pivot->attempts + 1;
+        $article->accepted = false;
+        $article->attempts = $attempts + 1;
 
-        $data = [
-            'accepted' => false,
-            'attempts' => $this->articles()->find($article_id)->pivot->attempts + 1
-        ];
-
-        $this->articles()->updateExistingPivot($article_id, $data, true);
+        $article->save();
 
         if ($attempts > 3) {
             $this->eventData['lastDeclineArticle'] = $article_id;

@@ -85,7 +85,7 @@ class Article extends Model implements HasMedia
     /**
      * @var array
      */
-    protected $with = ['projects', 'metas'];
+    protected $with = ['project', 'metas'];
 
     /**
      * @var array
@@ -97,9 +97,9 @@ class Article extends Model implements HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function projects()
+    public function project()
     {
-        return $this->belongsToMany(Project::class)->withPivot('accepted', 'attempts')->withTimestamps();
+        return $this->belongsTo(Project::class);
     }
 
     /**
@@ -186,6 +186,10 @@ class Article extends Model implements HasMedia
         return $media;
     }
 
+    /**
+     * @param Project $project
+     * @return \Illuminate\Support\Collection
+     */
     public function getTypes(Project $project)
     {
         $types = collect(
@@ -208,6 +212,9 @@ class Article extends Model implements HasMedia
     }
 
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public static function getAllTypes()
     {
 

@@ -144,3 +144,13 @@ li.active > .keyword-question-tab{
 .collapse-link{
   color: #c4c4c4!important;
 }
+.pointer:hover{
+  cursor: pointer;
+}
+.clickable-row {
+  display: block;
+}
+.clickable-row:hover {
+  background-color: #f6fbfd;
+  cursor: pointer;
+}

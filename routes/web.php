@@ -23,8 +23,7 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    $project = \App\Models\Project::find(11);
-    dd($project->subscription);
+    Bugsnag::notifyError('ErrorType', 'Test Error');
 });
 
 Broadcast::routes();
@@ -48,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role:admin']], function () {
 
         Route::get('charges', ['uses' => 'ChargesController@index', 'as' => 'charges']);
+
+        Route::get('dashboard', ['uses' => 'DashboardController@dashboard', 'as' => 'dashboard']);
+        Route::get('dashboard/preload/{view}', ['uses' => 'DashboardController@preloadView', 'as' => 'preloadView']);
 
         Route::resources([
             'plans'       => 'PlanController',

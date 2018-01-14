@@ -102,11 +102,11 @@ class ArticlesController extends Controller
 
         $article->user_id = Auth::user()->id;
 
+        $article->project_id = $project->id;
+
         $article->setMeta('type', $request->input('type'));
 
         $article->save();
-
-        $project->attachArticle($article->id);
 
         //attach tags
         $tags = collect(explode(',', $request->input('tags')));

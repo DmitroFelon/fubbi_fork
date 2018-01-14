@@ -282,7 +282,7 @@ class Project extends Model implements HasMediaConversions, Invitable
         return ($require_articles > 0)
             ? $total_articles_accepted / $require_articles * 100 : 0;
     }
-   
+
     /**
      * @return string
      */
@@ -371,12 +371,17 @@ class Project extends Model implements HasMediaConversions, Invitable
         $zipper->make($full_path)->folder($main_folder)->add($pdf_path);
         //set media
 
-        foreach ($data['media'] as $collection => $files) {
-            $zipper->folder($main_folder . '/' . $collection)->add($files);
+
+        if (isset($data['media'])) {
+            foreach ($data['media'] as $collection => $files) {
+                $zipper->folder($main_folder . '/' . $collection)->add($files);
+            }
         }
 
-        foreach ($data['keywords_media'] as $collection => $files) {
-            $zipper->folder($main_folder . '/keywords media/' . $collection)->add($files);
+        if (isset($data['keywords_media'])) {
+            foreach ($data['keywords_media'] as $collection => $files) {
+                $zipper->folder($main_folder . '/keywords media/' . $collection)->add($files);
+            }
         }
 
         $zipper->close();

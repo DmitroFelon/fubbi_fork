@@ -1,9 +1,9 @@
-<tr>
+<tr class="pointer" onclick="window.location='{{action('ProjectController@show', [$project])}}'">
     <td class="project-status">
         <span class="label label-primary">{{ucfirst(str_replace('_',' ',$project->state))}}</span>
     </td>
     <td class="project-title">
-        <a href="{{action('ProjectController@show', ['id' => $project->id])}}">{{$project->name}}</a>
+        <a href="{{action('ProjectController@show', [$project])}}">{{$project->name}}</a>
         <br/>
         <small>
             {{_i('Created')}} {{$project->created_at->format('Y-m-d')}}
@@ -28,14 +28,9 @@
         @endif
     </td>
     <td class="project-actions">
-        <a href="{{action('ProjectController@show', ['id' => $project->id])}}" class="btn btn-white btn-sm navy-bg">
-            <i class="fa fa-folder"></i> {{_i('View')}}
+        <a href="{{action('Project\ArticlesController@index', [$project])}}" class="btn btn-white btn-sm blue-bg">
+            <i class="fa fa-folder"></i> {{_i('Content')}}
         </a>
-        @role(\App\Models\Role::CLIENT)
-        <a href="{{action('ProjectController@edit', ['id' => $project->id])}}" class="btn btn-white btn-sm blue-bg">
-            <i class="fa fa-pencil"></i> {{_i('Edit')}}
-        </a>
-        @endrole
         <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
             <i class="fa fa-download"></i> {{_i('Export')}}
         </a>
@@ -50,7 +45,7 @@
             </a>
         @else
             <form method="post" style="display:inline;"
-                  action="{{action('ProjectController@destroy', ['id' => $project->id])}}">
+                  action="{{action('ProjectController@destroy', [$project])}}">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <button class="btn btn-white btn-sm red-bg" type="submit"><i class="fa fa-trash"></i> {{_i('Delete')}}

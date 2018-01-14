@@ -112,6 +112,12 @@ class LeftMenuComposer
     {
         return [
             [
+                'name'  => 'Dashboard',
+                'url'   => action('DashboardController@dashboard'),
+                'icon'  => 'fa fa-dashboard',
+                'order' => 120,
+            ],
+            [
                 'name'  => 'Users',
                 'url'   => action('UserController@index'),
                 'icon'  => 'fa fa-user',

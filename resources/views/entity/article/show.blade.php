@@ -11,7 +11,7 @@
                     <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
                 @endforeach
                 @role([\App\Models\Role::CLIENT])
-                @if($article->pivot->accepted == null or $article->pivot->accepted == false)
+                @if($article->accepted == null or $article->accepted == false)
                     <div class="ibox-tools">
                         <a href="{{url()->action('Project\ArticlesController@accept', [$project, $article])}}"
                            class="btn btn-primary btn-xs">{{_i('Accept article')}}</a>

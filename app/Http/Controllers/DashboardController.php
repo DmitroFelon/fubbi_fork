@@ -10,9 +10,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Services\FlashMessage;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -22,7 +25,6 @@ use Illuminate\Support\Facades\View;
  */
 class DashboardController extends Controller
 {
-
     /**
      * @var Request
      */
@@ -65,7 +67,6 @@ class DashboardController extends Controller
         return abort(404);
     }
 
-
     /**
      * @return null
      */
@@ -79,16 +80,13 @@ class DashboardController extends Controller
                 return $this->client();
                 break;
             case \App\Models\Role::ADMIN:
-                return $this->admin();
-                break;
             case \App\Models\Role::ACCOUNT_MANAGER:
-                break;
             case \App\Models\Role::RESEARCHER:
-                break;
             case \App\Models\Role::WRITER:
-                return $this->admin();
+                return $this->workers();
                 break;
             case \App\Models\Role::DESIGNER:
+                return $this->admin();
                 break;
             default:
                 return null;
@@ -115,10 +113,56 @@ class DashboardController extends Controller
     }
 
     /**
+     * @return mixed
+     */
+    private function workers()
+    {
+        return redirect()->action("ProjectController@index");
+    }
+
+    /**
      * @return \Illuminate\Http\RedirectResponse
      */
     private function admin()
     {
-        return redirect()->action("ProjectController@index");
+        return redirect()->action("DashboardController@dashboard");
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function dashboard(Request $request)
+    {
+        $clients = Cache::remember('clients', 60, function () {
+            return User::withRole('client')->get();
+        });
+
+        $date_from = now()->subYear(5)->format('m/d/Y');
+        $date_to   = now()->format('m/d/Y');
+
+        $data = (!$request->has('customer'))
+            ? [] : ['customer' => $request->input('customer')];
+
+        if ($request->has('date_from')) {
+            $from      = Carbon::createFromFormat('m/d/Y', $request->input('date_from'));
+            $date_from = $request->input('date_from');
+        }
+
+        if ($request->has('date_to')) {
+            $to      = Carbon::createFromFormat('m/d/Y', $request->input('date_to'));
+            $date_to = $request->input('date_to');
+        }
+
+        return view('pages.admin.dashboard.index', compact('clients', 'date_from', 'date_to'));
+    }
+
+    /**
+     * @param string $view
+     * @return View
+     */
+    public function preloadView(string $view)
+    {
+        return view($view);
     }
 }

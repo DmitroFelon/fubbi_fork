@@ -8,14 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Stripe\Charge;
 
+/**
+ * Class ChargesController
+ * @package App\Http\Controllers
+ */
 class ChargesController extends Controller
 {
 
+    /**
+     * ChargesController constructor.
+     */
     public function __construct()
     {
         $this->middleware('can:index,' . Charge::class)->only(['index']);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
 

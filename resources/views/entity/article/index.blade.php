@@ -77,9 +77,7 @@
                             </th>
                             @endisset
                             <th>{{_i('Title')}}</th>
-                            <th>{{_i('Author')}}</th>
                             <th>{{_i('Type')}}</th>
-                            <th class="footable-sortable">{{_i('Google docs')}}</th>
                             <th class="footable-sortable">
                                 @isset($project)
                                 {{_i('Project')}}

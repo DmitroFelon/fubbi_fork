@@ -34,7 +34,7 @@ class SubscriptionController extends Controller
             return redirect()->action('ProjectController@edit', [$project, ['s' => ProjectStates::QUIZ_FILLING]]);
 
         } catch (\Exception $e) {
-            abort(500);
+            redirect()->back()->with('error', $e->getMessage());
         }
     }
 

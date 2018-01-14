@@ -34,55 +34,55 @@ class ArticlePolicy
 
     /**
      * @param User $user
-     * @param Project $project
+     * @param Project $model
      * @return bool
      */
-    public function index(User $user, Project $project)
+    public function index(User $user, Project $model)
     {
-        return $user->projects()->find($project->id)->exists();
+        return $user->projects()->find($model->id)->exists();
     }
 
     /**
      * @param User $user
-     * @param Project $project
+     * @param Project $model
      * @param Article $article
      * @return bool
      */
-    public function update(User $user, Project $project, Article $article)
+    public function update(User $user, Project $model, Article $article)
     {
 
-        return $user->projects()->find($project->id)->exists();
+        return $user->projects()->find($model->id)->exists();
     }
 
     /**
      * @param User $user
-     * @param Project $project
+     * @param Project $model
      * @return bool
      */
-    public function create(User $user, Project $project)
+    public function create(User $user, Project $model)
     {
-        return $user->projects()->find($project->id)->exists();
+        return $user->projects()->find($model->id)->exists();
     }
 
     /**
      * @param User $user
-     * @param Project $project
+     * @param Project $model
      * @param Article $article
      * @return bool
      */
-    public function delete(User $user, Project $project, Article $article)
+    public function delete(User $user, Project $model, Article $article)
     {
-        return $user->projects()->find($project->id)->exists();
+        return $user->projects()->find($model->id)->exists();
     }
 
     /**
      * @param User $user
-     * @param Project $project
+     * @param Project $model
      * @param Article $article
      * @return bool
      */
-    public function accept(User $user, Project $project, Article $article)
+    public function accept(User $user, Project $model, Article $article)
     {
-        return ($project->client_id == $user->id);
+        return ($model->client_id == $user->id);
     }
 }

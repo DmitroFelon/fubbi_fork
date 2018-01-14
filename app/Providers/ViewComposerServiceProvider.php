@@ -10,6 +10,11 @@ namespace App\Providers;
 
 use App\ViewComposers\LeftMenuComposer;
 use App\ViewComposers\MasterComposer;
+use App\ViewComposers\Pages\Admin\DeclinedArticlesComposer;
+use App\ViewComposers\Pages\Admin\LastArticlesComposer;
+use App\ViewComposers\Pages\Admin\LastChargesComposer;
+use App\ViewComposers\Pages\Admin\PendingChargesComposer;
+use App\ViewComposers\Pages\Admin\RejectedChargesComposer;
 use App\ViewComposers\TopMenuComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +42,17 @@ class ViewComposerServiceProvider extends ServiceProvider
          * Notifications, helpers
          * */
         View::composer('master', MasterComposer::class);
+
+        $this->adminDashboardComposer();
+    }
+
+    private function adminDashboardComposer()
+    {
+        View::composer('pages.admin.dashboard.widgets.articles.last', LastArticlesComposer::class);
+        View::composer('pages.admin.dashboard.widgets.articles.declined', DeclinedArticlesComposer::class);
+        View::composer('pages.admin.dashboard.widgets.charges.last', LastChargesComposer::class);
+        View::composer('pages.admin.dashboard.widgets.charges.pending', PendingChargesComposer::class);
+        View::composer('pages.admin.dashboard.widgets.charges.rejected', RejectedChargesComposer::class);
     }
 
 
@@ -47,6 +63,6 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
+
     }
 }
