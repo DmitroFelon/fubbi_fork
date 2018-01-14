@@ -109,11 +109,11 @@ class ArticlesController extends Controller
         $article->save();
 
         //attach tags
-        $tags = collect(explode(',', $request->input('tags')));
+       /* $tags = collect(explode(',', $request->input('tags')));
 
         $tags->each(function ($tag) use ($article) {
             $article->attachTagsHelper($tag);
-        });
+        });*/
 
         //upload file to google docs
         if ($request->hasFile('file')) {
@@ -121,7 +121,7 @@ class ArticlesController extends Controller
             $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
         } else {
-            $file_name = ($article->title) ? $article->title : $project->name . '-' . rand();
+            $file_name = Article::generateTitle($project);
             GoogleDriveCreate::dispatch($project, $article, $file_name);
         }
 

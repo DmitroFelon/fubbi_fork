@@ -170,7 +170,6 @@
                 <div id="logo-group" class="dropzone">
                 </div>
             </div>
-
         </div>
 
         <div class="row m-t-md">
@@ -179,7 +178,6 @@
                 <div id="article_images-group" class="dropzone">
                 </div>
             </div>
-
             <span class="text-muted">
                 {{_i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples.")}}
             </span>

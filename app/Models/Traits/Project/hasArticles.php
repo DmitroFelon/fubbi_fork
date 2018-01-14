@@ -91,8 +91,76 @@ trait hasArticles
         }
     }
 
+    /**
+     * @param string $type
+     * @return mixed
+     */
     public function getArticleByType(string $type)
     {
         return $this->articles()->where('type', $type);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getRequirements()
+    {
+        return collect([
+           /* [
+                'string'           => _('Have you checked the compliance document?'),
+                'meta_name'        => '',
+                'media_collection' => ''
+            ],*/
+            [
+                'string'           => _('Have you checked the client’s preferred writing style?'),
+                'meta_name'        => 'writing_style',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Have you checked the Preferred Language?'),
+                'meta_name'        => 'language',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Did you study the client’s model articles?'),
+                'meta_name'        => 'example_article',
+                'media_collection' => 'ready_content'
+            ],
+            [
+                'string'           => _('Did you add the client’s preferred call to action?'),
+                'meta_name'        => 'cta',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Did you check if the content needs to be relevant to a City, State or Country?'),
+                'meta_name'        => 'relevance',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Did you check the Words To Avoid list?'),
+                'meta_name'        => 'avoid_keywords',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Did you check the Writing Guidelines List?'),
+                'meta_name'        => '',
+                'media_collection' => 'compliance_guideline'
+            ],
+           /* [
+                'string'           => _('Did you check every point in the outline is covered in the article?'),
+                'meta_name'        => '',
+                'media_collection' => ''
+            ],
+            [
+                'string'           => _('Did you only only write one article this month per keyword?'),
+                'meta_name'        => '',
+                'media_collection' => ''
+            ],*/
+            [
+                'string'           => _('Did you lay the article out in the correct format?'),
+                'meta_name'        => 'graphic_styles',
+                'media_collection' => ''
+            ],
+        ]);
     }
 }

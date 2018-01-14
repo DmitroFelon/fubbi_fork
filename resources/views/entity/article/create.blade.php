@@ -23,109 +23,47 @@
                         {{_i('Checklist')}}
                     </h3>
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Have you checked the compliance document?')}}
-                                </label>
+                        @foreach($project->getRequirements()->chunk(6) as $chunk)
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                @foreach($chunk as $row)
+                                    <div class="i-checks">
+                                        <label>
+                                            <input tabindex="{{$loop->parent->index+$loop->index}}" type="checkbox"
+                                                   required
+                                                   name="c"
+                                                   value="1"> <i></i>
+                                            {{_i($row['string'])}}
+                                        </label>
+                                    </div>
+                                    @if($row['media_collection'])
+                                        <div class="well m-t-xs m-b-md">
+                                            <h5><strong>{{_i('Files')}}:</strong></h5>
+                                            @foreach($project->getMedia($row['media_collection']) as $media)
+                                                <div class="border-bottom">
+                                                    <a target="_blank"
+                                                       href="{{$media->getFullUrl()}}">{{$media->getFullUrl()}}
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    @if($row['meta_name'])
+                                        <div class=" well m-t-xs m-b-md">
+                                            <h5><strong>{{_i('Quiz result')}}:</strong></h5>
+                                            @foreach(collect($project->{$row['meta_name']}) as $meta)
+                                                <div class="border-bottom">
+                                                    @if(filter_var($meta, FILTER_VALIDATE_URL))
+                                                        <a target="_blank" href="{{$meta}}">{{$meta}}</a>
+                                                    @else
+                                                        {{$meta}}
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Have you checked the client’s preferred writing style?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Have you checked the Preferred Language?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you study the client’s model articles?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you add the client’s preferred call to action?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you check if the content needs to be relvant to a City, State or Country?')}}
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you check the Words To Avoid list?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you check the Writing Guidelines List?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you check every point in the outline is covered in the article?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you only only write one article this month per keyword?')}}
-                                </label>
-                            </div>
-                            <div class="i-checks">
-                                <label>
-                                    <input type="checkbox"
-                                           required
-                                           name="c"
-                                           value="1"> <i></i>
-                                    {{_i('Did you lay the article out in the correct format?')}}
-                                </label>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
@@ -134,11 +72,11 @@
                         <h3 class="text-center">
                             {{_i('Content')}}
                         </h3>
-                        {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
+                        {!! Form::bsText('title', \App\Models\Article::generateTitle($project), _i('Title'), null, ['required'], 'text') !!}
                         {!! Form::bsSelect('type', $filters['types'], '', _i('Content Type'), null, ['required']) !!}
-                        {!! Form::bsText('file', null, _i('Article File'), _i('Upload file to Google Docs. Keep empty to create a new file'), [], 'file') !!}
-                        {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot if necessary'), [], 'file') !!}
-                        {!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
+                        {!! Form::bsText('file', null, _i('Article File'), _i('Upload file'), [], 'file') !!}
+                        {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), ['required'], 'file') !!}
+                        {{--{!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}--}}
                         {{Form::submit('Upload article', ['class' => 'btn btn-primary'])}}
                     </div>
                 </div>

@@ -23,7 +23,7 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    Bugsnag::notifyError('ErrorType', 'Test Error');
+    
 });
 
 Broadcast::routes();

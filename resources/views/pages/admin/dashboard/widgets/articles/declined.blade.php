@@ -2,7 +2,8 @@
     <table class="table table-stripped table-hover small m-t-md">
         <tbody>
         @foreach($declined_articles as $article)
-            <tr onclick="location.href='{{action('Project\ArticlesController@show', [$article->project->id, $article])}}';" class="clickable-row b-r-md">
+            <tr onclick="location.href='{{action('Project\ArticlesController@show', [$article->project->id, $article])}}';"
+                class="clickable-row b-r-md">
                 <td class="no-borders">
                     <i class="fa fa-circle text-danger"></i>
                 </td>
@@ -17,6 +18,9 @@
                 </td>
                 <td class="no-borders">
                     <strong> {{_i('Author')}} </strong> : {{$article->author->name}}
+                </td>
+                <td class="no-borders">
+                    <strong> {{_i('Disapprovals')}} </strong> : {{$article->attempts}}
                 </td>
             </tr>
         @endforeach

@@ -95,7 +95,7 @@
         <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>{{_i('Last Charges')}}</h5>
+                    <h5>{{_i('Last Payments')}}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-down"></i>
@@ -110,7 +110,7 @@
         <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>{{_i('Pending Charges')}}</h5>
+                    <h5>{{_i('Pending Payments')}}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-down"></i>
@@ -125,7 +125,7 @@
         <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>{{_i('Rejected Charges')}}</h5>
+                    <h5>{{_i('Rejected Payments')}}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-down"></i>

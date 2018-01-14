@@ -36,7 +36,7 @@
                 </div>
             </li>
             @foreach($items as $item)
-                <li class="{{(\Illuminate\Support\Facades\Route::is($item['url']. '*')) ? 'active' : '' }}">
+                <li class="{{(strpos(url()->current(), $item['url']) !== false)  ? 'active' : '' }}">
                     <a href="{{$item['url']}}">
                         <i class="{{$item['icon']}}"></i>
                         <span class="nav-label">{{$item['name']}}</span>

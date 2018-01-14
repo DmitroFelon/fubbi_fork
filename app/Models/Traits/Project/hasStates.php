@@ -44,10 +44,10 @@ trait hasStates
     public function filling(Request $request)
     {
         switch ($request->input('_step')) {
-            case \App\Models\Helpers\ProjectStates::QUIZ_FILLING:
+            case ProjectStates::QUIZ_FILLING:
                 $this->fillQuiz($request);
                 break;
-            case \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING:
+            case ProjectStates::KEYWORDS_FILLING:
                 $this->fillKeywords($request);
                 break;
             default:
@@ -121,7 +121,7 @@ trait hasStates
      */
     public function fillKeywords(Request $request)
     {
-        $this->setState(\App\Models\Helpers\ProjectStates::MANAGER_REVIEW);
+        $this->setState(ProjectStates::MANAGER_REVIEW);
         $this->filled();
     }
 

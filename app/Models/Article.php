@@ -195,9 +195,9 @@ class Article extends Model implements HasMedia
         $types = collect(
             [
                 ''                   => _i('Select Type'),
+                'Article'            => _i('Article'),
                 'Article Outline'    => _i('Article Outline'),
                 'Article Topic'      => _i('Article Topic'),
-                'Article'            => _i('Article'),
                 'Social Posts Texts' => _i('Social Posts Texts'),
             ]
         );
@@ -210,7 +210,6 @@ class Article extends Model implements HasMedia
 
         return $types;
     }
-
 
     /**
      * @return \Illuminate\Support\Collection
@@ -236,4 +235,16 @@ class Article extends Model implements HasMedia
 
         return $types;
     }
+
+    /**
+     * @param Project $project
+     * @return string
+     */
+    public static function generateTitle(Project $project)
+    {
+        $name  = $project->name;
+        $count = $project->articles()->count() + 1;
+        return $name . '-' . strval($count);
+    }
+    
 }
