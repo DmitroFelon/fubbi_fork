@@ -1,5 +1,4 @@
 <tr class="pointer" onclick="window.location='{{action('Project\ArticlesController@show', [$article->project, $article])}}'">
-    @isset($project)
     @if($article->accepted === 1)
         <td>
             <span class="badge badge-primary p-xs">{{_i('Accepted')}}</span>
@@ -13,7 +12,6 @@
             <span class="badge p-xs">{{_i('New')}}</span>
         </td>
     @endif
-    @endisset
 
     <td class="project-title">
         <a href="{{action('Project\ArticlesController@show', [$article->project, $article])}}">{{$article->title}}</a>

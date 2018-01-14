@@ -72,7 +72,6 @@
                         <thead>
                         <tr>
                             <th class="footable-sortable">{{_i('Status')}}</th>
-                            <th>{{_i('Title')}}</th>
                             <th>{{_i('Type')}}</th>
                             <th class="footable-sortable">{{_i('Project')}}</th>
                             <th class="footable-sortable"></th>
