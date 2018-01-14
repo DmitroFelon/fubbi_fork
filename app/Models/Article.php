@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
+use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -66,6 +67,7 @@ class Article extends Model implements HasMedia
     use SoftDeletes;
     use Metable;
     use HasTags;
+    use Ratingable;
 
     /**
      * @var array
@@ -246,5 +248,5 @@ class Article extends Model implements HasMedia
         $count = $project->articles()->count() + 1;
         return $name . '-' . strval($count);
     }
-    
+
 }

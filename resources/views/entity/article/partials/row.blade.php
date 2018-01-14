@@ -1,4 +1,5 @@
-<tr class="pointer" onclick="window.location='{{action('Project\ArticlesController@show', [$article->project, $article])}}'">
+<tr class="pointer"
+    onclick="window.location='{{action('Project\ArticlesController@show', [$article->project, $article])}}'">
     <td class="project-title">
         <a href="{{action('Project\ArticlesController@show', [$article->project, $article])}}">{{$article->title}}</a>
         <br/>
@@ -23,6 +24,13 @@
 
     <td>
         <strong>{{_i('Type')}}:</strong> {{$article->type}}
+    </td>
+
+    <td>
+        @if($article->ratingPercent> 0)
+            <span class="ratable" data-rating-read="1"
+                  data-rating="{{$article->ratingPercent}}"></span>
+        @endif
     </td>
 
     <td>

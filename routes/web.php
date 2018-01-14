@@ -23,7 +23,11 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    
+    $user = \App\User::find(2);
+
+    $user->rating(['rating' => 5], \Auth::user());
+
+    dd($user->avgRating);
 });
 
 Broadcast::routes();
@@ -100,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('{project}/articles/{article}/accept', 'ArticlesController@accept');
                 Route::get('{project}/articles/{article}/decline', 'ArticlesController@decline');
                 Route::post('{project}/articles/{article}/save_social_posts', 'ArticlesController@save_social_posts');
+                Route::post('{project}/articles/{article}/rate/', 'ArticlesController@rate');
             });
 
             Route::resources([

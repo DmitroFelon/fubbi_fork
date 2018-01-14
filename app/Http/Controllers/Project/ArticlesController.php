@@ -8,6 +8,7 @@ use App\Jobs\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -107,13 +108,6 @@ class ArticlesController extends Controller
         $article->setMeta('type', $request->input('type'));
 
         $article->save();
-
-        //attach tags
-       /* $tags = collect(explode(',', $request->input('tags')));
-
-        $tags->each(function ($tag) use ($article) {
-            $article->attachTagsHelper($tag);
-        });*/
 
         //upload file to google docs
         if ($request->hasFile('file')) {
@@ -217,5 +211,21 @@ class ArticlesController extends Controller
     {
         $project->declineArticle($article->id);
         return redirect()->action('Project\ArticlesController@index', $project);
+    }
+
+    public function rate(Project $project, Article $article, Request $request)
+    {
+        $user = Auth::user();
+
+        $article = $user->relatedArticles()->find($article->id);
+
+        if (!$article) {
+            abort(403);
+        }
+        $rate = $request->input('rate');
+        
+        $article->ratingUnique(['rating' => $rate], $user);
+
+        return true;
     }
 }

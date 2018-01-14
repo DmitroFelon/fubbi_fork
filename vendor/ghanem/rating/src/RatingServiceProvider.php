@@ -1,6 +1,6 @@
 <?php 
 
-namespace ghanem\Rating;
+namespace Ghanem\Rating;
 
 use Ghanem\Rating\Commands\MigrationCommand;
 use Illuminate\Support\ServiceProvider;

@@ -11,6 +11,7 @@ use App\Models\Outline;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
+use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -81,6 +82,7 @@ class User extends Authenticatable implements HasMedia
     use HasMediaTrait;
     use Searchable;
     use Metable;
+    use Ratingable;
 
     /**
      * The attributes that are mass assignable.
@@ -212,25 +214,9 @@ class User extends Authenticatable implements HasMedia
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function annotations()
-    {
-        return $this->hasMany(Annotation::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function articles()
     {
         return $this->hasMany(Article::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function outlines()
-    {
-        return $this->hasMany(Outline::class);
     }
 
     /**
@@ -259,7 +245,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * @param $project_id
+     * @param $team_id
      * @return mixed
      */
     public function hasInvitetoTeam($team_id)
@@ -379,5 +365,10 @@ class User extends Authenticatable implements HasMedia
         $messages = $messages->filter();
 
         return $messages;
+    }
+
+    public function relatedArticles()
+    {
+        return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }
 }
