@@ -174,6 +174,12 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
+            [
+                'name'  => 'Research',
+                'url'   => action('ResearchController@index'),
+                'icon'  => 'fa fa-search',
+                'order' => 100,
+            ],
         ];
     }
 
@@ -195,6 +201,7 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
+
         ];
     }
 

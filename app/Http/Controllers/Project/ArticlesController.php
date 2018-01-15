@@ -21,6 +21,9 @@ use Spatie\MediaLibrary\Media;
 class ArticlesController extends Controller
 {
 
+    /**
+     * ArticlesController constructor.
+     */
     public function __construct()
     {
         $this->middleware('can:articles.index,project')->only(['index']);
@@ -101,21 +104,21 @@ class ArticlesController extends Controller
             $request->except(['_token', '_method'])
         );
 
-        $article->user_id = Auth::user()->id;
+        //temp title
+        $article->title = 'title';
 
+        $article->user_id    = Auth::user()->id;
         $article->project_id = $project->id;
-
-        $article->setMeta('type', $request->input('type'));
 
         $article->save();
 
         //upload file to google docs
         if ($request->hasFile('file')) {
             $file      = $article->addMedia($request->file('file'))->toMediaCollection('file');
-            $file_name = ($article->title) ? $article->title : $request->file('file')->getClientOriginalName();
+            $file_name = $article->generateTitle();
             GoogleDriveUpload::dispatch($project, $article, $file, $file_name);
         } else {
-            $file_name = Article::generateTitle($project);
+            $file_name = $article->generateTitle();
             GoogleDriveCreate::dispatch($project, $article, $file_name);
         }
 
@@ -168,6 +171,12 @@ class ArticlesController extends Controller
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 
+    /**
+     * @param Project $project
+     * @param Article $article
+     * @param Request $request
+     * @return mixed
+     */
     public function save_social_posts(Project $project, Article $article, Request $request)
     {
 
@@ -213,6 +222,12 @@ class ArticlesController extends Controller
         return redirect()->action('Project\ArticlesController@index', $project);
     }
 
+    /**
+     * @param Project $project
+     * @param Article $article
+     * @param Request $request
+     * @return bool
+     */
     public function rate(Project $project, Article $article, Request $request)
     {
         $user = Auth::user();
@@ -223,7 +238,7 @@ class ArticlesController extends Controller
             abort(403);
         }
         $rate = $request->input('rate');
-        
+
         $article->ratingUnique(['rating' => $rate], $user);
 
         return true;

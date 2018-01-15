@@ -127,6 +127,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('subscribe', 'SubscriptionController');
 
     Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+    Route::get('research', 'ResearchController@index');
+    Route::get('research/load', 'ResearchController@load');
 
     Route::prefix('settings')->group(function () {
         Route::post('billing', 'SettingsController@billing');

@@ -123,6 +123,7 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     protected $observables = [
         'setState',
+        'reset', //fired when billing cycle renewed
         'filled',
         'attachWorker',
         'attachWorkers',

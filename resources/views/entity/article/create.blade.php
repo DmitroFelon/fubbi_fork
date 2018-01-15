@@ -72,7 +72,6 @@
                         <h3 class="text-center">
                             {{_i('Content')}}
                         </h3>
-                        {!! Form::bsText('title', \App\Models\Article::generateTitle($project), _i('Title'), null, ['required'], 'text') !!}
                         {!! Form::bsSelect('type', $filters['types'], '', _i('Content Type'), null, ['required']) !!}
                         {!! Form::bsText('file', null, _i('Article File'), _i('Upload file'), [], 'file') !!}
                         {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), ['required'], 'file') !!}

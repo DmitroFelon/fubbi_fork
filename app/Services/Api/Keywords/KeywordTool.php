@@ -30,10 +30,11 @@ class KeywordTool implements KeywordsFactoryInterface
      * @param $keyword
      * @param string $country
      * @param string $language
-     * @return \Illuminate\Support\Collection
+     * @param string $metrics
+     * @return Collection
      * @throws \Exception
      */
-    public function suggestions($keyword, $country = 'au', $language = 'en'):Collection
+    public function suggestions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
     {
         $apikey = config('keywordtool.apikey');
 
@@ -74,7 +75,7 @@ class KeywordTool implements KeywordsFactoryInterface
             return $keywords;
         }
 
-        throw new \Exception(\GuzzleHttp\json_encode($output));
+        throw new \Exception(json_encode($output));
     }
 
     /**
@@ -84,7 +85,7 @@ class KeywordTool implements KeywordsFactoryInterface
      * @return \Illuminate\Support\Collection
      * @throws \Exception
      */
-    public function questions($keyword, $country = 'au', $language = 'en'):Collection
+    public function questions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
     {
         $apikey = config('keywordtool.apikey');
 
@@ -129,7 +130,7 @@ class KeywordTool implements KeywordsFactoryInterface
             return $keywords;
         }
 
-        throw new \Exception(\GuzzleHttp\json_encode($output));
+        throw new \Exception(json_encode($output));
     }
 
 }

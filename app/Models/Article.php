@@ -242,11 +242,13 @@ class Article extends Model implements HasMedia
      * @param Project $project
      * @return string
      */
-    public static function generateTitle(Project $project)
+    public function generateTitle()
     {
-        $name  = $project->name;
-        $count = $project->articles()->count() + 1;
-        return $name . '-' . strval($count);
+
+        $title       = strval($this->project->name) . ' - ' . strval($this->type) . ' ' . strval($this->id);
+        $this->title = $title;
+        $this->save();
+        return $title;
     }
 
 }
