@@ -3,13 +3,13 @@
 namespace App\Notifications\Team;
 
 
+use App\Models\Invite as Invitation;
 use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
-use \App\Models\Invite as Invitation;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -70,12 +70,7 @@ class Invite extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
 
-        $notification = NotificationPayload::make(
-            _i('You have beed invited to the team: "%s"', [$this->invitation->invitable->getInvitableName()]),
-            $this->invitation->invitable->getInvitableUrl(),
-            get_class($this->invitation->invitable),
-            $this->invitation->invitable->getInvitableId()
-        );
+        $notification = $this->makePayload();
 
         return $notification->toArray();
     }
@@ -87,12 +82,7 @@ class Invite extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
 
-        $data = NotificationPayload::make(
-            _i('You have beed invited to the team: "%s"', [$this->invitation->invitable->getInvitableName()]),
-            $this->invitation->invitable->getInvitableUrl(),
-            get_class($this->invitation->invitable),
-            $this->invitation->invitable->getInvitableId()
-        );
+        $data = $this->makePayload();
 
         $notification             = new \stdClass();
         $notification->created_at = now();
@@ -102,6 +92,20 @@ class Invite extends Notification implements ShouldQueue
         $navbar_message = View::make('partials.navbar-elements.alert-row', ['notification' => $notification]);
 
         return new BroadcastMessage(['navbar_message' => $navbar_message->render()]);
+    }
+
+    /**
+     * @return NotificationPayload
+     */
+    private function makePayload()
+    {
+        $notification = NotificationPayload::make(
+            _i('You have beed invited to the team: "%s"', [$this->invitation->invitable->getInvitableName()]),
+            $this->invitation->invitable->getInvitableUrl(),
+            get_class($this->invitation->invitable),
+            $this->invitation->invitable->getInvitableId()
+        );
+        return $notification;
     }
 
 }

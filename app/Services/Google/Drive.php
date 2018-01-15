@@ -25,10 +25,22 @@ use Illuminate\Support\Facades\Storage;
 class Drive
 {
 
+    /**
+     *
+     */
     const MS_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const PDF     = 'application/pdf';
-    const HTML    = 'text/html';
-    const TEXT    = 'text/plain';
+    /**
+     *
+     */
+    const PDF  = 'application/pdf';
+    /**
+     *
+     */
+    const HTML = 'text/html';
+    /**
+     *
+     */
+    const TEXT = 'text/plain';
 
     /**
      * @var
@@ -96,6 +108,10 @@ class Drive
         return new Google_Service_Drive($this->client);
     }
 
+    /**
+     * @param $format
+     * @return mixed|string
+     */
     public static function getExtension($format)
     {
         $extensions = [
@@ -155,6 +171,12 @@ class Drive
 
     }
 
+    /**
+     * @param $name
+     * @param $folder_id
+     * @return Google_Service_Drive_DriveFile
+     * @throws \Exception
+     */
     public function createFile($name, $folder_id)
     {
         try {
@@ -342,6 +364,11 @@ class Drive
         return $ids;
     }
 
+    /**
+     * @param $file_id
+     * @param string $as
+     * @return mixed
+     */
     public function exportFile($file_id, $as = self::MS_WORD)
     {
         $response = $this->service->files->export($file_id, $as, [
@@ -353,6 +380,10 @@ class Drive
         return $content;
     }
 
+    /**
+     * @param $file_id
+     * @return \Google_Service_Drive_Revision|null
+     */
     public function retrieveRevisions($file_id)
     {
         try {
@@ -365,6 +396,11 @@ class Drive
     }
 
 
+    /**
+     * @param $file_id
+     * @param $revision_id
+     * @return \Google_Service_Drive_Revision|null
+     */
     public function retrieveRevision($file_id, $revision_id)
     {
         try {

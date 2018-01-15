@@ -47,35 +47,22 @@ class KeywordTool implements KeywordsFactoryInterface
             'output'          => 'json',
         ];
 
-        $ch = curl_init();
-        curl_setopt(
-            $ch,
-            CURLOPT_URL,
-            sprintf("https://api.keywordtool.io/v2/search/suggestions/%s?%s", self::SOURCE_GOOGLE, http_build_query($params))
+        try {
+            $results = $this->call($params);
+        } catch (\Exception $e) {
+            throw new \Exception(json_encode($e->getMessage()));
+        }
+        
+        $results  = $results->collapse();
+        $keywords = collect($results->keyBy('string'));
+        $keywords->transform(
+            function ($item, $key) {
+                //set each $keyword => false
+                return false;
+            }
         );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
+        return $keywords;
 
-        if (curl_error($ch)) {
-            throw new \Exception(curl_error($ch));
-        }
-
-        $results = json_decode($output, true);
-
-        if (isset($results['results']) and !empty($results['results'])) {
-            $results  = (isset($results['results'])) ? collect($results['results']) : collect();
-            $results  = $results->collapse();
-            $keywords = collect($results->keyBy('string'));
-            $keywords->transform(
-                function ($item, $key) {
-                    //set each $keyword => false
-                    return false;
-                }
-            );
-            return $keywords;
-        }
-
-        throw new \Exception(json_encode($output));
     }
 
     /**
@@ -99,6 +86,35 @@ class KeywordTool implements KeywordsFactoryInterface
             'type'            => 'questions'
         ];
 
+        try {
+            $results = $this->call($params);
+        } catch (\Exception $e) {
+            throw new \Exception(json_encode($e->getMessage()));
+        }
+
+
+        $categories_count = $results->count();
+        $results          = $results->collapse();
+        //remove sub categories from result
+        $results  = $results->slice($categories_count);
+        $keywords = collect($results->keyBy('string'));
+        $keywords->transform(
+            function ($item, $key) {
+                return false;
+            }
+        );
+        return $keywords;
+
+        throw new \Exception('Empty response');
+    }
+
+    /**
+     * @param $params
+     * @return Collection
+     * @throws \Exception
+     */
+    private function call($params)
+    {
         $ch = curl_init();
         curl_setopt(
             $ch,
@@ -114,23 +130,11 @@ class KeywordTool implements KeywordsFactoryInterface
 
         $results = json_decode($output, true);
 
-        if (isset($results['results']) and !empty($results['results'])) {
-            $results = (isset($results['results'])) ? collect($results['results']) : collect();
-
-            $categories_count = $results->count();
-            $results          = $results->collapse();
-            //remove sub categories from result
-            $results  = $results->slice($categories_count);
-            $keywords = collect($results->keyBy('string'));
-            $keywords->transform(
-                function ($item, $key) {
-                    return false;
-                }
-            );
-            return $keywords;
+        if (!isset($results['results']) or empty($results['results'])) {
+            throw new \Exception('KeywordTool Api error');
         }
 
-        throw new \Exception(json_encode($output));
+        return collect($results['results']);
     }
 
 }

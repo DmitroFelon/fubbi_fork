@@ -13,50 +13,47 @@ use Illuminate\Support\Collection;
 
 class LocalKeywords implements KeywordsFactoryInterface
 {
-	protected $faker;
+    protected $faker;
 
-	public function __construct()
-	{
-		$faker       = new Faker();
-		$this->faker = $faker->create();
-	}
+    public function __construct()
+    {
+        $faker       = new Faker();
+        $this->faker = $faker->create();
+    }
 
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return \Illuminate\Support\Collection
-	 * @throws \Exception
-	 */
-	public function suggestions($keyword, $country = 'au', $language = 'en'):Collection
-	{
-		$keywords = collect($this->faker->words(20));
+    /**
+     * @param $keyword
+     * @param string $country
+     * @param string $language
+     * @return \Illuminate\Support\Collection
+     * @throws \Exception
+     */
+    public function suggestions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
+    {
+        return $this->keywords();
+    }
 
-		$keywords->transform(function ($item, $key){
-			return [$item => false];
-		});
+    /**
+     * @param $keyword
+     * @param string $country
+     * @param string $language
+     * @return \Illuminate\Support\Collection
+     */
+    public function questions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
+    {
+        return $this->keywords();
+    }
+    
+    
+    private function keywords(){
+        $keywords = collect($this->faker->words(20));
 
-		$keywords = $keywords->collapse();
+        $keywords->transform(function ($item, $key) {
+            return [$item => false];
+        });
 
-		return $keywords;
-	}
+        $keywords = $keywords->collapse();
 
-	/**
-	 * @param $keyword
-	 * @param string $country
-	 * @param string $language
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function questions($keyword, $country = 'au', $language = 'en'):Collection
-	{
-		$keywords = collect($this->faker->words(20));
-
-		$keywords->transform(function ($item, $key){
-			return [$item => false];
-		});
-
-		$keywords = $keywords->collapse();
-
-		return $keywords;
-	}
+        return $keywords;
+    }
 }

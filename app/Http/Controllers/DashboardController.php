@@ -8,12 +8,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Services\FlashMessage;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
@@ -68,7 +64,9 @@ class DashboardController extends Controller
     }
 
     /**
-     * @return null
+     * Return home page
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     private function composeRedirect()
     {
@@ -79,10 +77,10 @@ class DashboardController extends Controller
             case \App\Models\Role::CLIENT:
                 return $this->client();
                 break;
-            case \App\Models\Role::DESIGNER:
             case \App\Models\Role::ACCOUNT_MANAGER:
-            case \App\Models\Role::RESEARCHER:
             case \App\Models\Role::WRITER:
+            case \App\Models\Role::DESIGNER:
+            case \App\Models\Role::RESEARCHER:
                 return $this->workers();
                 break;
             case \App\Models\Role::ADMIN:
@@ -92,8 +90,6 @@ class DashboardController extends Controller
                 return null;
 
         }
-
-
     }
 
     /**
@@ -102,7 +98,7 @@ class DashboardController extends Controller
     private function client()
     {
         $user = Auth::user();
-        $role = $user->role;
+
         if ($user->projects()->count() == 1) {
             return redirect()->action("ProjectController@show", $user->projects()->first());
         } elseif ($user->projects()->count() > 1) {
@@ -140,7 +136,7 @@ class DashboardController extends Controller
 
         $date_from = ($request->has('date_from'))
             ? $request->input('date_from')
-            : now()->subYear(5)->format('m/d/Y');
+            : now()->subYear(1)->format('m/d/Y');
 
         $date_to = ($request->has('date_to'))
             ? $request->input('date_to')

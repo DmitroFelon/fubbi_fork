@@ -30,7 +30,7 @@ class ChargesController extends Controller
     public function index(Request $request)
     {
 
-        $date_from = now()->subYear(5)->format('m/d/Y');
+        $date_from = now()->subYear(1)->format('m/d/Y');
         $date_to   = now()->format('m/d/Y');
 
         try {
