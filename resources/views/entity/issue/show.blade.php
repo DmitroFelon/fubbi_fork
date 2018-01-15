@@ -6,11 +6,16 @@
         <div class="ibox-title">
             <h5>{{_i('Issue %d', [$issue->id])}} </h5>
             <div class="ibox-tools">
+
+                @role([\App\Models\Role::ADMIN])
+
                 {!! Form::model( $issue, ['route' => ['issues.update', $issue], 'method' => 'PUT' ] ) !!}
 
                 {!! Form::submit(_i('Mark as fixed'), ['class' => 'btn btn-success text-white btn-xs']) !!}
 
                 {!! Form::close() !!}
+
+                @endrole
             </div>
         </div>
         <div class="ibox-content">

@@ -320,5 +320,10 @@ class ProjectObserver
             ->log('Writer: ' . $article->author->name . ' has spent 3 attempts wtih article: ' . $article->id);
     }
 
+    public function reset(Project $project)
+    {
+        
+    }
+
 
 }

@@ -6,6 +6,7 @@ use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Ghanem\Rating\Traits\Ratingable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -93,6 +94,15 @@ class Article extends Model implements HasMedia
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+       /* static::addGlobalScope('active', function (Builder $builder) {
+            $builder->where('active', true);
+        });*/
+    }
 
     /**
      * One article may belong to many projects

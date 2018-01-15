@@ -15,6 +15,7 @@ use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
 use App\Notifications\Project\Invite;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -92,6 +93,9 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     const TAG_CATEGORY = 'service_type';
 
+    /**
+     * @var string
+     */
     protected $table = 'projects';
 
     /**
@@ -159,14 +163,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function task()
-    {
-        return $this->hasOne(Task::class);
     }
 
     /**
@@ -266,6 +262,22 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function getInvitableNotification()
     {
         return Invite::class;
+    }
+
+    /**
+     * Fired at the beginning of the new billing cycle
+     *
+     * resets atciles, asks to re-fill quiz and keywords
+     *
+     */
+    public function reset()
+    {
+        $this->created_at = Carbon::now();
+        $this->unsetMeta('export');
+        $this->save();
+
+        $this->articles()->where('active', true)->update(['active' => false]);
+        $this->fireModelEvent('reset', false);
     }
 
     /**
@@ -498,6 +510,10 @@ class Project extends Model implements HasMediaConversions, Invitable
         }
     }
 
+    /**
+     * @param $key
+     * @return array
+     */
     public function prepareTagsInput($key)
     {
         return (is_array($this->$key)) ? array_combine(array_values($this->$key), array_values($this->$key)) : [];

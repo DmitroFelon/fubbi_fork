@@ -33,6 +33,10 @@ class ArticlesController extends Controller
             $articles_query->where('type', $request->input('type'));
         }
 
+        if ($request->has('active') and $request->input('active') != '') {
+            $articles_query->where('active', true);
+        }
+
         $articles = $articles_query->simplePaginate(10);
 
         $filters['types'] = Article::getAllTypes();

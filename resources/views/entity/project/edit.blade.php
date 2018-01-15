@@ -19,6 +19,14 @@
                     : {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
                 </small>
 
+                <div class="m-t-md">
+                    <span class="text-primary">
+                        <a target="_blank" href="{{action('ResearchController@index')}}">
+                            {{_i('Make a research before filling quiz')}}
+                        </a>
+                    </span>
+                </div>
+
             </div>
         </div>
     </div>

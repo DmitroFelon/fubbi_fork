@@ -23,11 +23,8 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    $user = \App\User::find(2);
-
-    $user->rating(['rating' => 5], \Auth::user());
-
-    dd($user->avgRating);
+    $project = \App\Models\Project::find(11);
+    $project->reset();
 });
 
 Broadcast::routes();

@@ -20,8 +20,10 @@
                 @endrole
             </div>
             <div class="ibox-content">
+                @role([\App\Models\Role::CLIENT])
                 <div data-rating="{{$article->ratingPercent}}" class="ratable">
                 </div>
+                @endrole
                 <div class="row">
                     @if($article->google_id)
                         @include('entity.article.partials.google-preview')

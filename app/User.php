@@ -367,7 +367,7 @@ class User extends Authenticatable implements HasMedia
         return $messages;
     }
 
-    public function relatedArticles()
+    public function relatedClientArticles()
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }

@@ -49,6 +49,10 @@ class ArticlesController extends Controller
             $articles_query->where('type', $request->input('type'));
         }
 
+        if ($request->has('active') and $request->input('active') != '') {
+            $articles_query->where('active', true);
+        }
+
         if ($request->has('status') and $request->input('status') != '') {
             if ($request->input('status') == 1) {
                 $articles_query->accepted();
@@ -232,7 +236,7 @@ class ArticlesController extends Controller
     {
         $user = Auth::user();
 
-        $article = $user->relatedArticles()->find($article->id);
+        $article = $user->relatedClientArticles()->find($article->id);
 
         if (!$article) {
             abort(403);

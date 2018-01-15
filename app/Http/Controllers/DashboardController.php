@@ -79,13 +79,13 @@ class DashboardController extends Controller
             case \App\Models\Role::CLIENT:
                 return $this->client();
                 break;
-            case \App\Models\Role::ADMIN:
+            case \App\Models\Role::DESIGNER:
             case \App\Models\Role::ACCOUNT_MANAGER:
             case \App\Models\Role::RESEARCHER:
             case \App\Models\Role::WRITER:
                 return $this->workers();
                 break;
-            case \App\Models\Role::DESIGNER:
+            case \App\Models\Role::ADMIN:
                 return $this->admin();
                 break;
             default:

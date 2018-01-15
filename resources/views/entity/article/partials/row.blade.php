@@ -39,4 +39,11 @@
         </strong> <a href="{{action('ProjectController@show', $article->project)}}">"{{$article->project->name}}"</a>
     </td>
 
+    <td>
+        <strong>
+            {{_i('This month')}}:
+        </strong> {{($article->active) ? 'Yes' : 'No'}}
+    </td>
+
+
 </tr>
