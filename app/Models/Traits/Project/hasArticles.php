@@ -132,7 +132,7 @@ trait hasArticles
                 'media_collection' => ''
             ],
             [
-                'string'           => _('Did you check if the content needs to be relevant to a City, State or Country?'),
+                'string'           => _('Did you check if the content needs to be relevant to a City, State or Country?'), 
                 'meta_name'        => 'relevance',
                 'media_collection' => ''
             ],
@@ -152,7 +152,7 @@ trait hasArticles
                 'media_collection' => ''
             ],
             [
-                'string'           => _('Did you only only write one article this month per keyword?'), 
+                'string'           => _('Did you only only write one article this month per keyword?'),
                 'meta_name'        => '',
                 'media_collection' => ''
             ],*/
