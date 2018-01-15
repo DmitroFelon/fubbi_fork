@@ -8,11 +8,9 @@ use App\Jobs\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Spatie\MediaLibrary\Media;
 
 /**
  * Class ArticlesController
@@ -86,7 +84,7 @@ class ArticlesController extends Controller
 
         $filters['types'] = $article->getTypes($project);
 
-        return view('entity.article.create', compact('project', 'filters'));
+        return view('entity.article.create', compact('project', 'filters')); 
     }
 
     /**
