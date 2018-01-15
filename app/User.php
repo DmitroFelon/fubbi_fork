@@ -367,6 +367,9 @@ class User extends Authenticatable implements HasMedia
         return $messages;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function relatedClientArticles()
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');

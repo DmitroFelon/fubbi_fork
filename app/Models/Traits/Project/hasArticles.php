@@ -106,11 +106,11 @@ trait hasArticles
     public function getRequirements()
     {
         return collect([
-           /* [
+            [
                 'string'           => _('Have you checked the compliance document?'),
                 'meta_name'        => '',
-                'media_collection' => ''
-            ],*/
+                'media_collection' => 'compliance_guideline'
+            ],
             [
                 'string'           => _('Have you checked the client’s preferred writing style?'),
                 'meta_name'        => 'writing_style',
@@ -141,11 +141,11 @@ trait hasArticles
                 'meta_name'        => 'avoid_keywords',
                 'media_collection' => ''
             ],
-            [
+            /*[
                 'string'           => _('Did you check the Writing Guidelines List?'),
                 'meta_name'        => '',
                 'media_collection' => 'compliance_guideline'
-            ],
+            ],*/
            /* [
                 'string'           => _('Did you check every point in the outline is covered in the article?'),
                 'meta_name'        => '',
@@ -156,11 +156,11 @@ trait hasArticles
                 'meta_name'        => '',
                 'media_collection' => ''
             ],*/
-            [
+            /*[
                 'string'           => _('Did you lay the article out in the correct format?'),
-                'meta_name'        => 'graphic_styles',
+                'meta_name'        => '',
                 'media_collection' => ''
-            ],
+            ],*/
         ]);
     }
 }
