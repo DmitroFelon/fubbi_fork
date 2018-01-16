@@ -25,8 +25,10 @@ class WebhookController extends CashierController
         throw_unless($subscription_id, \Exception::class, 'Subscription id is not set');
         $project = Project::where('subscription_id', $subscription_id)->first();
 
-        $project->reset();
-
+        if($project){
+            $project->reset();
+        }
+        
         return ['Webhook Handled'];
     }
 
