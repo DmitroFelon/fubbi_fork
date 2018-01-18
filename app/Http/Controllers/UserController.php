@@ -24,7 +24,7 @@ class UserController extends Controller
         $this->request = $request;
         $this->middleware('can:index,' . User::class)->only(['index']);
         $this->middleware('can:view,user')->only(['show']);
-        $this->middleware('can:create,user')->only(['create', 'store']);
+        //c$this->middleware('can:create,user')->only(['create', 'store']);
         $this->middleware('can:update,user')->only(['edit', 'update']);
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
         //get roles
         $roles = Cache::remember(
             'role_names',
-            60 * 60 * 60,
+            10,
             function () {
                 return Role::all();
             }
