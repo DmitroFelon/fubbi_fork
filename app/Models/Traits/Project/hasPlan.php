@@ -23,6 +23,8 @@ trait hasPlan
      */
     public function getPlanAttribute($value)
     {
+        //Cache::forget('stripe_plan_' . $this->subscription->stripe_plan);
+
         return Cache::remember('stripe_plan_' . $this->subscription->stripe_plan, 10, function () {
             return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
         });
@@ -33,24 +35,28 @@ trait hasPlan
      * @return array|mixed
      *
      * Get metadata from Stripe Plan
+     * Also save to project meta
      */
     public function getPlanMetadataAttribute($value)
     {
+        //Cache::forget('plan_matadata_' . $this->id);
+        $project = $this;
 
-        $result = Cache::remember('plna_matadata_' . $this->id, 1, function () {
-
+        $result = Cache::remember('plan_matadata_' . $this->id, 10, function () use ($project) {
             $metadata = (isset($this->plan) and !is_null($this->plan))
                 ? collect($this->plan->metadata->jsonSerialize())
                 : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
-
-            return $metadata->transform(function ($item, $key) {
-                $result = ($this->isModified($key))
-                    ? $this->getModified($key)
-                    : $item;
-                return $result;
+            return $metadata->transform(function ($item, $key) use ($project) {
+                if ($this->isModified($key)) {
+                    return $item;
+                } else {
+                    $project->modify($key, $item, false);
+                    return $item;
+                }
             });
-
         });
+
+        $project->save();
 
         return $result;
     }
@@ -80,6 +86,9 @@ trait hasPlan
         return $plan_services[$service] ?? '';
     }
 
+    /**
+     * @return array
+     */
     public function getVariableServices()
     {
         return [

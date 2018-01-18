@@ -12,11 +12,7 @@
 @section('content')
     <div class="ibox">
         <div class="ibox-title">
-            <h5></h5>
-            <div class="ibox-tools">
-                <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
-                   class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
-            </div>
+            <h5>{{ucfirst($plan->name)}}</h5>
         </div>
         <div class="ibox-content">
             <div class="project-list">
@@ -56,7 +52,11 @@
                     @endforeach
                 </div>
                 <div class="row">
-                    {!! Form::submit('Update') !!}
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                        {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+                    </div>
+
                 </div>
                 {!! Form::close() !!}
             </div>

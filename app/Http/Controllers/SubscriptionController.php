@@ -31,7 +31,7 @@ class SubscriptionController extends Controller
 
             FlashMessage::make(_i('Your subscribtion created successfully'), FlashMessage::SUCCESS);
 
-            return redirect()->action('ProjectController@edit', [$project, ['s' => ProjectStates::QUIZ_FILLING]]);
+            return redirect()->action('ProjectController@edit', [$project, 's' => ProjectStates::QUIZ_FILLING]);
 
         } catch (\Exception $e) {
             redirect()->back()->with('error', $e->getMessage());

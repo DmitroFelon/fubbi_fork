@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Article;
-use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
@@ -11,7 +10,6 @@ use App\Notifications\Project\Created;
 use App\Notifications\Project\StatusChanged;
 use App\Notifications\Worker\Attached;
 use App\Notifications\Worker\Detached;
-use App\Observers\Traits\Project\States;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -88,10 +86,11 @@ class ProjectObserver
         /*
          * Create chat conversation
          * */
-
         $participants = User::withRole(Role::ADMIN)->get(['id'])->pluck('id');
 
         $participants->push($project->client->id);
+
+        $participants = $participants->unique();
 
         $conversation = ChatFacade::createConversation($participants->toArray());
 

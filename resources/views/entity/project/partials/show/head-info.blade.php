@@ -23,9 +23,7 @@
             <dt>{{_i('Subscription Plan')}}:</dt>
             <dd>
                 {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
-                @if(!$project->getModifications()->isEmpty())
-                    <small>({{_i('modified')}})</small>
-                @endif
+
             </dd>
             <dt>{{_i('Billing Cycle')}}:</dt>
             <dd>1 {{_i('month')}}</dd>

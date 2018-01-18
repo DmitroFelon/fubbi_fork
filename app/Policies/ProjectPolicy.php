@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Project;
 use App\Models\Role;
 use App\User;
-use App\Models\Project;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 //TODO implement actions authorisation
@@ -78,8 +78,11 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $model)
     {
-        $skip = [
 
+
+
+        $skip = [
+            Role::ADMIN
         ];
 
         if (in_array($user->role, $skip)) {
@@ -106,7 +109,7 @@ class ProjectPolicy
 
         $manager = $model->workers()->withRole(Role::ACCOUNT_MANAGER)->first(['id']);
 
-        if($manager and $user->id == $manager->id) {
+        if ($manager and $user->id == $manager->id) {
             return true;
         }
     }

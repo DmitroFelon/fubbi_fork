@@ -7,7 +7,7 @@
         <div class="ibox-title">
             <h5>{{ucfirst($plan->name)}}</h5>
             <div class="ibox-tools">
-                <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
+                <a href="{{url()->action('PlanController@edit', $plan->id)}}"
                    class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>
