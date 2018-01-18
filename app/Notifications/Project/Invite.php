@@ -7,13 +7,14 @@ use App\Notifications\NotificationPayload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class Invite extends Notification
 {
     use Queueable;
 
     protected $invitation;
-   
+
     /**
      * Create a new notification instance.
      *
@@ -51,7 +52,7 @@ class Invite extends Notification
             ->line('Thank you for using our application!');
 
         if (method_exists($this->invitation->invitable, 'export')) {
-            $email->attach($this->invitation->invitable->export());
+            $email->line('<a href="' . Storage::url('exports/' . $this->invitation->invitable->export() . '">Project Export</a>'));
         }
 
         return $email;

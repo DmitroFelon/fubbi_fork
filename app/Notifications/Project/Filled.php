@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class Filled extends Notification implements ShouldQueue
 {
@@ -35,7 +36,7 @@ class Filled extends Notification implements ShouldQueue
     {
         return ['mail', 'database'];
     }
-   
+
     /**
      * Get the mail representation of the notification.
      *
@@ -49,7 +50,7 @@ class Filled extends Notification implements ShouldQueue
             ->line(_i('New project "%s" has beed filled.', [$this->project->name]))
             ->action('Review project', url()->action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!')
-            ->attach($this->project->export());
+            ->line('<a href="' . Storage::url('exports/' . $this->project->export() . '">Project Export</a>'));
     }
 
     /**
