@@ -375,10 +375,11 @@ class Project extends Model implements HasMediaConversions, Invitable
         $pdf     = $pdf->loadView('pdf.export', compact('meta', 'project'));
 
         //zip everything
-        $path        = public_path('storage/exports/');
+        $path        = storage_path('app/piblic/exports/');
         $zipper      = new \Chumper\Zipper\Zipper;
         $main_folder = 'project - ' . $this->name;
-        $full_path   = $path . $this->name . '-' . $this->id . '.zip';
+        $zip_name    = $this->name . '-' . $this->id . '.zip';
+        $full_path   = $path . $zip_name;
         $pdf_path    = $path . $this->name . '-' . $this->id . '.pdf';
         $pdf->save($pdf_path);
         $zipper->make($full_path)->folder($main_folder)->add($pdf_path);
@@ -400,7 +401,7 @@ class Project extends Model implements HasMediaConversions, Invitable
         $zipper->close();
 
         //save path to zip to metadata
-        $this->setMeta('export', $full_path);
+        $this->setMeta('export', $zip_name);
         $this->save();
 
         return $full_path;
