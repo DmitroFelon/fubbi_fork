@@ -102,7 +102,7 @@
                         </a>
                     </div>
                 </div>
-                <div data-view="pages.admin.dashboard.widgets.charges.last" class="ibox-content preloaded">
+                <div style="display: none" data-view="pages.admin.dashboard.widgets.charges.last" class="ibox-content preloaded">
                     @include('partials.navbar-elements.spinner')
                 </div>
             </div>
@@ -117,7 +117,7 @@
                         </a>
                     </div>
                 </div>
-                <div data-view="pages.admin.dashboard.widgets.charges.pending" class="ibox-content preloaded">
+                <div style="display: none" data-view="pages.admin.dashboard.widgets.charges.pending" class="ibox-content preloaded">
                     @include('partials.navbar-elements.spinner')
                 </div>
             </div>
@@ -132,7 +132,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="ibox-content preloaded" data-view="pages.admin.dashboard.widgets.charges.rejected">
+                <div style="display: none" class="ibox-content preloaded" data-view="pages.admin.dashboard.widgets.charges.rejected">
                     @include('partials.navbar-elements.spinner')
                 </div>
             </div>

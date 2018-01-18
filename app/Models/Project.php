@@ -375,7 +375,7 @@ class Project extends Model implements HasMediaConversions, Invitable
         $pdf     = $pdf->loadView('pdf.export', compact('meta', 'project'));
 
         //zip everything
-        $path        = storage_path('app/exports/');
+        $path        = storage_path('app/public/exports/');
         $zipper      = new \Chumper\Zipper\Zipper;
         $main_folder = 'project - ' . $this->name;
         $full_path   = $path . $this->name . '-' . $this->id . '.zip';

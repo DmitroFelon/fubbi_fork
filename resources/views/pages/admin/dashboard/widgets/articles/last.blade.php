@@ -2,7 +2,7 @@
     <table class="table table-stripped table-hover small m-t-md">
         <tbody>
         @foreach($last_articles as $article)
-            <tr onclick="location.href='#';" class="pointer b-r-md">
+            <tr onclick="location.href='{{action('Project\ArticlesController@show', [$article->project->id, $article])}}';" class="pointer b-r-md">
                 <td class="no-borders">
                     <i class="fa fa-circle text-navy"></i>
                 </td>

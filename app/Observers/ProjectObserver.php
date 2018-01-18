@@ -321,7 +321,7 @@ class ProjectObserver
 
     public function reset(Project $project)
     {
-        
+
     }
 
 

@@ -74,7 +74,7 @@
                         </h3>
                         {!! Form::bsSelect('type', $filters['types'], '', _i('Content Type'), null, ['required']) !!}
                         {!! Form::bsText('file', null, _i('Article File'), _i('Upload file'), [], 'file') !!}
-                        {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), ['required'], 'file') !!}
+                        {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), [], 'file') !!}
                         {{--{!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}--}}
                         {{Form::submit('Upload article', ['class' => 'btn btn-primary'])}}
                     </div>

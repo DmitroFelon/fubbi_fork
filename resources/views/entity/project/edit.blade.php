@@ -16,17 +16,18 @@
                 <br>
                 <small class="text-muted">
                     {{_i('Selected plan')}}
-                    : {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
+                    : {{ title_case(str_replace('-',' ',$project->subscription->stripe_plan))}}
                 </small>
 
-                <div class="m-t-md">
-                    <span class="text-primary">
-                        <a target="_blank" href="{{action('ResearchController@index')}}">
-                            {{_i('Make a research before filling quiz')}}
-                        </a>
-                    </span>
-                </div>
-
+                @role([\App\Models\Role::CLIENT])
+                    <div class="m-t-md">
+                        <span class="text-primary">
+                            <a target="_blank" href="{{action('ResearchController@index')}}">
+                                {{_i('Make a research before filling quiz')}}
+                            </a>
+                        </span>
+                    </div>
+                @endrole
             </div>
         </div>
     </div>
@@ -39,9 +40,6 @@
 
 @endsection
 
-
 @section('before-scripts')
-
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
 @endsection
