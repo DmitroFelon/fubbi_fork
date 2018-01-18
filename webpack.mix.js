@@ -32,7 +32,6 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/jasny/jasny-bootstrap.min.js',
             'resources/assets/js/plugins/steps/jquery.steps.min.js',
             'resources/assets/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js',
-            /* 'resources/assets/js/plugins/blueimp/jquery.blueimp-gallery.min.js',*/
             'resources/assets/js/plugins/footable/footable.all.min.js',
             'resources/assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
             'resources/assets/js/plugins/iCheck/icheck.min.js',

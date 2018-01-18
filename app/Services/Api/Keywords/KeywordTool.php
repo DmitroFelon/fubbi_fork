@@ -19,11 +19,29 @@ use Illuminate\Support\Collection;
 class KeywordTool implements KeywordsFactoryInterface
 {
 
-    const SOURCE_GOOGLE    = 'google';
-    const SOURCE_youtube   = 'youtube';
-    const SOURCE_bing      = 'bing';
-    const SOURCE_AMAZON    = 'amazon';
-    const SOURCE_EBAY      = 'ebay';
+    /**
+     *
+     */
+    const SOURCE_GOOGLE = 'google';
+    /**
+     *
+     */
+    const SOURCE_YOUTUBE = 'youtube';
+    /**
+     *
+     */
+    const SOURCE_BING = 'bing';
+    /**
+     *
+     */
+    const SOURCE_AMAZON = 'amazon';
+    /**
+     *
+     */
+    const SOURCE_EBAY = 'ebay';
+    /**
+     *
+     */
     const SOURCE_APP_STORE = 'app-store';
 
     /**
@@ -31,10 +49,11 @@ class KeywordTool implements KeywordsFactoryInterface
      * @param string $country
      * @param string $language
      * @param string $metrics
+     * @param string $source
      * @return Collection
      * @throws \Exception
      */
-    public function suggestions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
+    public function suggestions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork', $source = self::SOURCE_GOOGLE):Collection
     {
         $apikey = config('keywordtool.apikey');
 
@@ -48,11 +67,11 @@ class KeywordTool implements KeywordsFactoryInterface
         ];
 
         try {
-            $results = $this->call($params);
+            $results = $this->call($params, $source);
         } catch (\Exception $e) {
             throw new \Exception(json_encode($e->getMessage()));
         }
-        
+
         $results  = $results->collapse();
         $keywords = collect($results->keyBy('string'));
         $keywords->transform(
@@ -69,10 +88,12 @@ class KeywordTool implements KeywordsFactoryInterface
      * @param $keyword
      * @param string $country
      * @param string $language
-     * @return \Illuminate\Support\Collection
+     * @param string $metrics
+     * @param string $source
+     * @return Collection
      * @throws \Exception
      */
-    public function questions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
+    public function questions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork', $source = self::SOURCE_GOOGLE):Collection
     {
         $apikey = config('keywordtool.apikey');
 
@@ -87,7 +108,7 @@ class KeywordTool implements KeywordsFactoryInterface
         ];
 
         try {
-            $results = $this->call($params);
+            $results = $this->call($params, $source);
         } catch (\Exception $e) {
             throw new \Exception(json_encode($e->getMessage()));
         }
@@ -110,16 +131,17 @@ class KeywordTool implements KeywordsFactoryInterface
 
     /**
      * @param $params
+     * @param string $source
      * @return Collection
      * @throws \Exception
      */
-    private function call($params)
+    private function call(array $params, string $source = self::SOURCE_GOOGLE)
     {
         $ch = curl_init();
         curl_setopt(
             $ch,
             CURLOPT_URL,
-            sprintf("https://api.keywordtool.io/v2/search/suggestions/%s?%s", self::SOURCE_GOOGLE, http_build_query($params))
+            sprintf("https://api.keywordtool.io/v2/search/suggestions/%s?%s", $source, http_build_query($params))
         );
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $output = curl_exec($ch);
@@ -137,4 +159,21 @@ class KeywordTool implements KeywordsFactoryInterface
         return collect($results['results']);
     }
 
+    /**
+     * @param string $source
+     * @return string
+     */
+    public static function getSourceName(string $source) :string
+    {
+        $names = [
+            self::SOURCE_GOOGLE    => 'Google',
+            self::SOURCE_YOUTUBE   => 'Youtube',
+            self::SOURCE_BING      => 'Bing',
+            self::SOURCE_AMAZON    => 'Amazon',
+            self::SOURCE_EBAY      => 'Ebay',
+            self::SOURCE_APP_STORE => 'App Store',
+        ];
+
+        return $names[$source] ?? '';
+    }
 }

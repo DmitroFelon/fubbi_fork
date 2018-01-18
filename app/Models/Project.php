@@ -8,7 +8,6 @@ use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\hasArticles;
-use App\Models\Traits\Project\hasOutlines;
 use App\Models\Traits\Project\hasPlan;
 use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
@@ -78,7 +77,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     use hasStates;
     use hasWorkers;
     use hasTeams;
-    use hasOutlines;
     use hasArticles;
     use Metable;
     use FormProjectAccessors;
@@ -444,6 +442,7 @@ class Project extends Model implements HasMediaConversions, Invitable
 
         $meta->transform(function ($item) use ($meta_to_skip) {
 
+            //skip modified plan attributes
             if (strpos($item->key, 'modificator_') !== false or in_array($item->key, $meta_to_skip)) {
                 return null;
             }

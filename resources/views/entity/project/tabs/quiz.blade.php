@@ -23,11 +23,11 @@
             <div class="text-muted">{{_i('Drag and drop')}}</div>
             <ul id="themes-order-list" class="list-group sortable">
                 @isset($project)
-                    @foreach($project->prepareTagsInput('themes_order') as $row)
-                        @if($row != '')
-                            <li class="list-group-item" data-value="{{$row}}">{{$row}}</li>
-                        @endif
-                    @endforeach
+                @foreach($project->prepareTagsInput('themes_order') as $row)
+                    @if($row != '')
+                        <li class="list-group-item" data-value="{{$row}}">{{$row}}</li>
+                    @endif
+                @endforeach
                 @endisset
             </ul>
         </div>
@@ -35,12 +35,12 @@
         @for($i=0;$i<=6;$i++)
             @if($i==0)
                 {!! Form::bsText(
-                   'questions[]', ((isset($project->questions[$i]))?$project->questions[$i]:''),
+                   'questions['.$i.']', ((isset($project->questions[$i]))?$project->questions[$i]:''),
                    _i('What are the top 7 questions clients desperately want answers to?'),
-                   null, ['id' => 'questions-'.$i]
+                   null, ['id' => 'questions-'.$i, 'required']
                ) !!}
             @else
-                {!! Form::bsText('questions[]', ((isset($project->questions[$i]))?$project->questions[$i]:''), null, null, ['id' => 'questions-'.$i]) !!}
+                {!! Form::bsText('questions['.$i.']', ((isset($project->questions[$i]))?$project->questions[$i]:''), null, null, ['id' => 'questions-'.$i, 'required']) !!}
             @endif
         @endfor
     </fieldset>
@@ -50,19 +50,19 @@
         <div class="row">
             <h4 class="text-center"><strong>Who is your ideal target audience?</strong></h4>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                {!! Form::bsText('audience[age]', null, _i('Age'), null, [], 'number') !!}
+                {!! Form::bsText('audience[age]', null, _i('Age'), null, ['required'], 'number') !!}
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                {!! Form::bsText('audience[sex]', null, _i('Sex'), null, []) !!}
+                {!! Form::bsText('audience[sex]', null, _i('Sex'), null, ['required']) !!}
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                {!! Form::bsText('audience[Income]', null, _i('Income'), null, []) !!}
+                {!! Form::bsText('audience[Income]', null, _i('Income'), null, ['required']) !!}
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                {!! Form::bsText('audience[education]', null, _i('Education'), null, []) !!}
+                {!! Form::bsText('audience[education]', null, _i('Education'), null, ['required']) !!}
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                {!! Form::bsText('audience[profession]', null, _i('Profession'), null, []) !!}
+                {!! Form::bsText('audience[profession]', null, _i('Profession'), null, ['required']) !!}
             </div>
         </div>
         {!! Form::bsText('homepage', null, _i('What is the home page url of the website we are creating content for?'), '', ['required'], 'url') !!}
@@ -72,28 +72,87 @@
     <h1>Step 3</h1>
     <fieldset>
         {!! Form::bsSelect('language', ['en-us' => 'English - United States', 'en-gb' => 'English - Great Britain', 'en-au' => 'English - Australia'], null, _i('What language do you want us to write content in?'), '', ['required']) !!}
-        <h4 class="text-center"><strong>{{_i("Here are our three writing styles. Please review each one of them and then select
-            one.")}}</strong></h4>
-        <ol>
+        <h4 class="text-center">
+            <strong>
+                {{_i("Here are our three writing styles. Please review each one of them and then select one.")}}
+            </strong>
+        </h4>
+        <ol class="writting-style-list">
             <li>
                 <strong>{{_i("Fact based")}}:</strong>
                 <a target="_blank"
-                   href="https://drive.google.com/open?id=1FcI8StKK3ykMggGZsQBzAw0gPdutfYC0pY1hTluxL1M">{{_i("Click Here")}}</a>
+                   href="https://drive.google.com/open?id=1FcI8StKK3ykMggGZsQBzAw0gPdutfYC0pY1hTluxL1M">
+                    {{_i("Click Here")}}
+                </a>
             </li>
             <li>
                 <strong>{{_i("Emotional")}}:</strong>
                 <a target="_blank"
-                   href="https://docs.google.com/document/d/1p8cmQaUfzK0tZfGWsmgLllcHDXlJs6TAFTqTr148iFk/edit">{{_i("Click Here")}}</a>
+                   href="https://docs.google.com/document/d/1p8cmQaUfzK0tZfGWsmgLllcHDXlJs6TAFTqTr148iFk/edit">
+                    {{_i("Click Here")}}
+                </a>
             </li>
             <li>
                 <strong>{{_i("Middle Road")}}:</strong>
-                <a target="_blank
-            "
-                   href="https://docs.google.com/document/d/1NrZsKQHzt9_82nwxS9twRn3P1EdYNnaHlAvEc-0rW2Y/edit">{{_i("Click Here")}}</a>
+                <a target="_blank"
+                   href="https://docs.google.com/document/d/1NrZsKQHzt9_82nwxS9twRn3P1EdYNnaHlAvEc-0rW2Y/edit">
+                    {{_i("Click Here")}}
+                </a>
             </li>
         </ol>
         {!! Form::bsSelect('writing_style', config('fubbi.form.quiz.writing_style'),
          null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
+
+        <h4 class="text-center">
+            <strong>
+                {{_i("Here are our graphic styles. Please check each one of them then
+                    select ONE that you would like us to model in your social media posts.")}}
+            </strong>
+        </h4>
+        <ol class="writting-style-list">
+            <li>
+                <strong>{{_i("Clean Lines")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/Clean+lines+1.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+            <li>
+                <strong>{{_i("Borders")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/Boarders+2.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+            <li>
+                <strong>{{_i("Fade")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/fade+3.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+            <li>
+                <strong>{{_i("Cut Out")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/Cut+out+4.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+            <li>
+                <strong>{{_i("Vibrant")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/vibrant+5.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+            <li>
+                <strong>{{_i("Boxed Text")}}:</strong>
+                <a target="_blank"
+                   href="https://s3.us-east-2.amazonaws.com/fubbico/Graphics+Styles/boxed+text+6.jpg">
+                    {{_i("Click Here")}}
+                </a>
+            </li>
+        </ol>
         {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
 
         @if($project->plan->id != 'fubbi-basic-plan')

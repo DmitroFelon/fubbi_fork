@@ -228,12 +228,53 @@ jQuery(document).ready(function ($) {
                 }
             }
         },
-        onStepChanging: function (event, currentIndex) {
-            //todo add validation
-            preUploadQuiz();
-            return true;
+        onStepChanging: function (event, currentIndex, newIndex) {
 
+            if (currentIndex > newIndex) {
+                preUploadQuiz();
+                return true;
+            }
+
+            var form = $("#quiz-form");
+
+            if (currentIndex < newIndex) {
+
+                // To remove error styles
+                form.find(".body:eq(" + newIndex + ") label.error").remove();
+                form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+            }
+
+            $.validator.addMethod(
+                "tagsInput",
+                function (value, element) {
+                    var result = ($('#themes option:selected').size() < 10);
+                    return !result;
+                },
+                "Please fill at least 10 themes"
+            );
+
+            if (currentIndex === 0) {
+                form.validate({
+                    rules: {
+                        "themes[]": {tagsInput: true}
+                    },
+                    messages: {
+                        "themes[]": "Please fill at least 10 themes"
+                    }
+                })
+            }
+
+
+            form.validate().settings.ignore = ":disabled,:hidden:not('#themes')";
+
+            if (form.valid()) {
+                preUploadQuiz();
+                return true;
+            }
+
+            return false;
         },
+
         onStepChanged: function (event, currentIndex) {
             //todo save data to server
             if (typeof(Storage) !== "undefined") {
@@ -344,7 +385,7 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        var wrapper = $('div[data-theme="' + theme + '"]');
+        var wrapper = $('div.keywords-wrapper[data-theme="' + theme + '"]');
 
         wrapper.append(
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
@@ -374,7 +415,7 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        var wrapper = $('div[data-question-theme="' + theme + '"]');
+        var wrapper = $('div.keywords-wrapper[data-question-theme="' + theme + '"]');
 
         wrapper.append(
             '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">' +
@@ -491,6 +532,10 @@ jQuery(document).ready(function ($) {
             contentType: false,
             data: formData
         })
+    }
+
+    function validateQuizStep() {
+
     }
 
     function preUploadQuiz() {

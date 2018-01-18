@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
+use App\Services\Api\KeywordTool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -25,14 +26,15 @@ class ResearchController extends Controller
             ? trim($request->input('theme'))
             : null;
 
+        $source = ($request->has('source'))
+            ? trim($request->input('source'))
+            : KeywordTool::SOURCE_GOOGLE;
+
         $country = ($request->has('country'))
             ? $request->input('country')
             : 'au';
 
-        $language = ($request->has('language'))
-            ? $request->input('language')
-            : 'en';
-
+        $language = 'en';
 
         if (strlen($country) > 2) {
             $countries = config('fubbi.countries', []);
@@ -42,20 +44,18 @@ class ResearchController extends Controller
                 : 'au';
         }
 
-        $metrics = ($request->has('metrics'))
-            ? $request->input('metrics')
-            : 'googlesearchnetwork';
+        $metrics = 'googlesearchnetwork';
 
-
-        $questions = Cache::remember('questions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics, 60 * 24, function () use ($api, $theme, $country, $language, $metrics) {
-            return $api->questions($theme, $country, $language, $metrics);
+        $questions = Cache::remember('questions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics. '.' . $source, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
+            return $api->questions($theme, $country, $language, $metrics, $source);
         });
 
-        $suggestions = Cache::remember('suggestions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics, 60 * 24, function () use ($api, $theme, $country, $language, $metrics) {
-            return $api->suggestions($theme, $country, $language, $metrics);
+        $suggestions = Cache::remember('suggestions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics. '.' . $source, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
+            return $api->suggestions($theme, $country, $language, $metrics, $source);
         });
 
-        return view('entity.research.partials.result', compact('questions', 'suggestions'));
+        $title = KeywordTool::getSourceName($source);
 
+        return view('entity.research.partials.result', compact('title', 'questions', 'suggestions'));
     }
 }

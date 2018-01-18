@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Notifications\Project\Created;
 use App\Notifications\Project\StatusChanged;
+use App\Notifications\Project\ThirdArticleReject;
 use App\Notifications\Worker\Attached;
 use App\Notifications\Worker\Detached;
 use App\User;
@@ -311,6 +312,13 @@ class ProjectObserver
     public function lastDeclineArticle(Project $project)
     {
         $article = Article::find($project->eventData['lastDeclineArticle']);
+
+
+        $manager = $project->workers()->withRole(Role::ACCOUNT_MANAGER)->first();
+
+        if ($manager) {
+            $manager->notify(new ThirdArticleReject($project, $article));
+        }
 
         activity('project_progress')
             ->causedBy(Auth::user())

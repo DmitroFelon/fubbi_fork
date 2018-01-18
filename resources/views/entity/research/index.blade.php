@@ -25,17 +25,28 @@
             $('#research').on('click', function () {
                 var theme = $('#theme').val();
                 var country = $('#country').val();
-                var language = $('#language').val();
-                var metrics = $('#metrics').val();
 
-                $.get('{{action('ResearchController@load')}}', {
-                    theme: theme,
-                    country: country,
-                    language: language,
-                    metrics: metrics
-                }, function (data) {
-                    $("#result").show();
-                    $("#result").html(data);
+                var sources = [
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_GOOGLE }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_YOUTUBE }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_BING }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_AMAZON }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_EBAY }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_APP_STORE }}",
+                ];
+
+                $("#result").show();
+                $("#result").html('')
+
+                sources.forEach(function (source) {
+                    $.get('{{action('ResearchController@load')}}', {
+                        theme: theme,
+                        country: country,
+                        source: source
+                    }, function (data) {
+
+                        $("#result").append(data);
+                    });
                 });
             });
         });
