@@ -377,4 +377,18 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }
+
+    public function isWorker()
+    {
+        $workers = [
+            Role::WRITER,
+            Role::DESIGNER,
+            Role::ACCOUNT_MANAGER,
+            Role::EDITOR,
+            Role::RESEARCHER,
+        ];
+
+        return (in_array($this->role, $workers));
+
+    }
 }

@@ -21,7 +21,7 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    \Illuminate\Support\Facades\Log::debug('test');
+    
 });
 
 Broadcast::routes();

@@ -222,12 +222,6 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
-            [
-                'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
-                'icon'  => 'fa fa-users',
-                'order' => 100,
-            ]
         ];
     }
 
@@ -243,12 +237,6 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
-            [
-                'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
-                'icon'  => 'fa fa-users',
-                'order' => 100,
-            ]
         ];
     }
 
@@ -264,12 +252,7 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
-            [
-                'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
-                'icon'  => 'fa fa-users',
-                'order' => 100,
-            ]
+
         ];
     }
 
@@ -282,12 +265,7 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
-            [
-                'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
-                'icon'  => 'fa fa-users',
-                'order' => 100,
-            ]
+
         ];
     }
 }

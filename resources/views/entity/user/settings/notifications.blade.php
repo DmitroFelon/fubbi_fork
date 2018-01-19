@@ -20,6 +20,6 @@
     @endforeach
 </div>
 @endrole()
-{{Form::submit(_i('Save'), ['class' => 'btn btn-primary'])}}
+{{Form::submit(_i('Save'), ['class' => 'btn btn-primary m-t-md'])}}
 
 {{Form::close()}}
