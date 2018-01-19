@@ -11,13 +11,10 @@
 |
 */
 
-use App\Mail\UserRegistered;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-if (env('APP_ENV') === 'remote') {
-    URL::forceSchema('https');
-}
 
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
