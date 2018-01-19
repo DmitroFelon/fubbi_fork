@@ -60,7 +60,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6">
+       {{-- <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('New Articles')}}</h5>
@@ -74,8 +74,8 @@
                     @include('partials.navbar-elements.spinner')
                 </div>
             </div>
-        </div>
-        <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        </div>--}}
+        <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('Declined Articles')}}</h5>

@@ -79,7 +79,7 @@
                             </div>
                         </div>
                         <div class='form-row'>
-                            <div class='col-md-12 error form-group hide'>
+                            <div class='col-md-12 error form-group hide m-t-md'>
                                 <div class='alert-danger alert'>
                                     {{_i('Please correct the errors and try again.')}}
                                 </div>

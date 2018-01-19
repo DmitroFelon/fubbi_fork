@@ -3,11 +3,9 @@
 namespace App;
 
 use Activity;
-use App\Models\Annotation;
 use App\Models\Article;
 use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
-use App\Models\Outline;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
@@ -371,6 +369,11 @@ class User extends Authenticatable implements HasMedia
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function relatedClientArticles()
+    {
+        return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
+    }
+
+    public function relatedWorkerArticles()
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }

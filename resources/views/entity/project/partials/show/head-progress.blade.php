@@ -13,13 +13,15 @@
     </div>
 </div>
 
+<hr>
+
 <div class="row">
     <div class="col-lg-4">
         <dl class="dl-horizontal">
-            <dt>{{_i('Total Articles')}}:</dt>
+            <dt>{{_i('Articles')}}:</dt>
             <dd>
-                {{$project->articles->count()}} - <a
-                        href="{{action('Project\ArticlesController@index', [$project])}}">{{_i('Review')}}</a>
+                {{$project->articles->count()}} -
+                <a class="btn btn-xs btn-primary" href="{{action('Project\ArticlesController@index', [$project])}}">{{_i('Review')}}</a>
             </dd>
         </dl>
     </div>
@@ -27,7 +29,7 @@
         <dl class="dl-horizontal">
             <dt>{{_i('Accepted')}}:</dt>
             <dd>
-                {{$project->articles()->accepted()->count()}} - <a
+                {{$project->articles()->accepted()->count()}} - <a class="btn btn-xs btn-primary"
                         href="{{action('Project\ArticlesController@index', [$project, 'status' => '1'])}}">{{_i('Review')}}</a>
             </dd>
         </dl>
@@ -40,7 +42,7 @@
                 <dl class="dl-horizontal">
                     <dt>{{$project->getServiceName($service)}}:</dt>
                     <dd>
-                        {{$project->getArticleByType($service)->count()}} - <a
+                        {{$project->getArticleByType($service)->count()}} - <a class="btn btn-xs btn-primary"
                                 href="{{action('Project\ArticlesController@index', [$project, 'type' => $service])}}">{{_i('Review')}}</a>
                     </dd>
                 </dl>
@@ -49,7 +51,7 @@
                 <dl class="dl-horizontal">
                     <dt>{{_i('Accepted')}}:</dt>
                     <dd>
-                        {{$project->getArticleByType($service)->accepted()->count()}} - <a
+                        {{$project->getArticleByType($service)->accepted()->count()}} - <a class="btn btn-xs btn-primary"
                                 href="{{action('Project\ArticlesController@index', [$project, 'type' => $service, 'status' => '1'])}}">{{_i('Review')}}</a>
                     </dd>
                 </dl>

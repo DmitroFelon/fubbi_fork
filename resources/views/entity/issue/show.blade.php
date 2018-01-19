@@ -5,6 +5,9 @@
     <div class="ibox">
         <div class="ibox-title">
             <h5>{{_i('Issue %d', [$issue->id])}} </h5>
+            @foreach($issue->tags as $tag)
+                <span class="label label-primary m-l-xs m-r-xs">{{$tag->name}}</span>
+            @endforeach
             <div class="ibox-tools">
 
                 @role([\App\Models\Role::ADMIN])

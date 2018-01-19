@@ -39,7 +39,7 @@ class ArticlePolicy
      */
     public function index(User $user, Project $model)
     {
-        return $user->projects()->find($model->id)->exists();
+        return ($user->projects()->find($model->id)) ? true : false;
     }
 
     /**
@@ -50,8 +50,7 @@ class ArticlePolicy
      */
     public function update(User $user, Project $model, Article $article)
     {
-
-        return $user->projects()->find($model->id)->exists();
+        return ($user->projects()->find($model->id)) ? true : false;
     }
 
     /**
@@ -61,7 +60,16 @@ class ArticlePolicy
      */
     public function create(User $user, Project $model)
     {
-        return $user->projects()->find($model->id)->exists();
+
+        $deny = [
+            Role::CLIENT,
+        ];
+
+        if (in_array($user->role, $deny)) {
+            return false;
+        }
+
+        return ($user->projects()->find($model->id)) ? true : false;
     }
 
     /**
@@ -72,7 +80,7 @@ class ArticlePolicy
      */
     public function delete(User $user, Project $model, Article $article)
     {
-        return $user->projects()->find($model->id)->exists();
+        return ($user->projects()->find($model->id)) ? true : false;
     }
 
     /**
@@ -83,6 +91,6 @@ class ArticlePolicy
      */
     public function accept(User $user, Project $model, Article $article)
     {
-        return ($model->client_id == $user->id);
+        return ($model->client_id === $user->id);
     }
 }

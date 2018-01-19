@@ -12,9 +12,6 @@
 */
 
 use App\Mail\UserRegistered;
-use App\Services\Google\Drive;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +20,7 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    $project = \App\Models\Project::find(11);
-    $project->reset();
+    \Illuminate\Support\Facades\Log::debug('test');
 });
 
 Broadcast::routes();
@@ -150,3 +146,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
 });
+
+
+if (env('APP_ENV') === 'remote') {
+    URL::forceSchema('https');
+}

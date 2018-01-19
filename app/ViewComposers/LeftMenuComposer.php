@@ -175,6 +175,12 @@ class LeftMenuComposer
                 'order' => 100,
             ],
             [
+                'name'  => 'Content',
+                'url'   => action('ArticlesController@index'),
+                'icon'  => 'fa fa-files-o',
+                'order' => 100,
+            ],
+            [
                 'name'  => 'Research',
                 'url'   => action('ResearchController@index'),
                 'icon'  => 'fa fa-search',

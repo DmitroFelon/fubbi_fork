@@ -4,6 +4,6 @@
 <h3 class="text-center">{{_i('Progress')}}</h3>
 
 
-<div class="bg-muted p-sm">
+<div class="p-sm">
     @include('entity.project.partials.show.head-progress')
 </div>

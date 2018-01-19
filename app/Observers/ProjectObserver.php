@@ -254,21 +254,6 @@ class ProjectObserver
      */
     public function setState(Project $project)
     {
-        /*$states_to_skip = [
-            ProjectStates::KEYWORDS_FILLING,
-            ProjectStates::QUIZ_FILLING,
-            ProjectStates::PLAN_SELECTION,
-            ProjectStates::CREATED,
-            ProjectStates::REJECTED_BY_CLIENT,
-            ProjectStates::ACCEPTED_BY_MANAGER,
-            ProjectStates::REJECTED_BY_MANAGER,
-            ProjectStates::FILLING_BY_RESEARCHER,
-        ];
-
-        if (in_array($project->state, $states_to_skip)) {
-            return;
-        }*/
-
         $project->client->notify(new StatusChanged($project));
 
         activity('project_progress')
@@ -303,7 +288,7 @@ class ProjectObserver
             ->causedBy(Auth::user())
             ->performedOn($project)
             ->withProperties(['article' => $article])
-            ->log('Article ' . $article->title . ' has been declined.');
+            ->log('Article "' . $article->title . '" has been declined.');
     }
 
     /**
@@ -324,7 +309,7 @@ class ProjectObserver
             ->causedBy(Auth::user())
             ->performedOn($project)
             ->withProperties(['article' => $article])
-            ->log('Writer: ' . $article->author->name . ' has spent 3 attempts wtih article: ' . $article->id);
+            ->log('Writer: ' . $article->author->name . ' has spent 3 attempts wtih article: "' . $article->title . '"');
     }
 
     public function reset(Project $project)

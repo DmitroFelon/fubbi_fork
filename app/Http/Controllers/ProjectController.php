@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProject;
-use App\Models\Article;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Keyword;
 use App\Models\Project;
@@ -21,11 +20,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use Kodeine\Metable\MetaData;
 use Spatie\MediaLibrary\Media;
 use Stripe\Error\InvalidRequest;
 use Stripe\Plan;
-use Stripe\Subscription;
 
 /**
  * Class ProjectController
@@ -40,8 +37,8 @@ class ProjectController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('can:index,' . Project::class)->only([
-            'index',
+        $this->middleware('can:index,' . Project::class)->only(['index']);
+        $this->middleware('can:project.show,project')->only([
             'show',
             'get_stored_files',
             'remove_stored_files',
@@ -62,6 +59,10 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+
+        if ($user->projects->count() == 1) {
+            return redirect()->action("ProjectController@show", $user->projects->first());
+        }
 
         switch ($user->role) {
             case \App\Models\Role::ADMIN:
@@ -122,7 +123,7 @@ class ProjectController extends Controller
         $filters['status'] = [
             ''         => _i('Any status'),
             'active'   => _i('Active'),
-            'deactive' => _i('Deactive'),
+            'deactive' => _i('Inactive'),
 
         ];
 
@@ -172,6 +173,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+
 
         $keywords           = $project->keywords;
         $keywords_questions = $project->keywords_questions;
@@ -249,6 +251,11 @@ class ProjectController extends Controller
         }
 
         $project = $project->filling($request);
+
+        if ($project->state == ProjectStates::MANAGER_REVIEW) {
+            return redirect()->action('ProjectController@show', $project)
+                             ->with('success', _i('Thank You, our team is working on your content'));
+        }
 
         return redirect()->action('ProjectController@edit', [$project, 's' => $project->state]);
     }

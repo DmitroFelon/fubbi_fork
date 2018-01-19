@@ -10,14 +10,11 @@ use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use App\Services\Api\Keywords\LocalKeywords;
-use App\Services\Api\KeywordTool;
-use App\Services\CustomFileSystem;
 use App\User;
 use Form;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Musonza\Chat\Messages\Message;
-use Spatie\MediaLibrary\Filesystem\Filesystem;
 
 /**
  * Class AppServiceProvider
@@ -92,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
+        $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
         $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
         $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
     }

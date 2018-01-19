@@ -27,6 +27,26 @@ class ProjectPolicy
         return true;
     }
 
+    public function show(User $user, Project $model)
+    {
+        $skip = [
+            Role::ADMIN,
+            Role::ACCOUNT_MANAGER
+        ];
+
+        if (in_array($user->role, $skip)) {
+            return true;
+        }
+
+        if ($model->client_id === $user->id) {
+            return true;
+        }
+
+        $result = $model->workers->find($user->id);
+
+        return $result->isNotEmpty();
+    }
+
     /**
      * Determine whether the user can create projects.
      *
@@ -78,7 +98,6 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $model)
     {
-
 
 
         $skip = [

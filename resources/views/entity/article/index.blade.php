@@ -7,8 +7,12 @@
                 @if(isset($project))
                     <h5> {{$project->name}} </h5>
                     <div class="ibox-tools">
-                        <a target="_blank" href="{{url()->action('Project\ArticlesController@create', [$project])}}"
-                           class="btn btn-primary btn-xs">{{_i('Create new Article')}}</a>
+
+                        @can('articles.create', $project)
+                            <a target="_blank" href="{{url()->action('Project\ArticlesController@create', [$project])}}"
+                               class="btn btn-primary btn-xs">{{_i('Create new Article')}}</a>
+                        @endcan
+
                     </div>
                 @else
                     <h5>
@@ -18,7 +22,7 @@
             </div>
             <div class="ibox-content">
                 <div class="row m-b-sm m-t-sm">
-                    @if(Auth::user()->role != \App\Models\Role::CLIENT)
+
                         @if(isset($project))
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 <a href="{{action('Project\ArticlesController@index', $project)}}"
@@ -73,7 +77,7 @@
                     </span>
                         </div>
                         {{Form::close()}}
-                    @endif()
+
                 </div>
                 <hr>
                 <div class="project-list">

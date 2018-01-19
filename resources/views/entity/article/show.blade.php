@@ -8,22 +8,40 @@
                     {{$article->title}}
                 </h5>
 
-                @role([\App\Models\Role::CLIENT])
-                @if($article->accepted == null or $article->accepted == false)
+                @can('articles.accept', [$project, $article])
                     <div class="ibox-tools">
                         <a href="{{url()->action('Project\ArticlesController@accept', [$project, $article])}}"
                            class="btn btn-primary btn-xs">{{_i('Accept article')}}</a>
                         <a href="{{url()->action('Project\ArticlesController@decline', [$project, $article])}}"
                            class="btn btn-danger btn-xs">{{_i('Decline Article')}}</a>
                     </div>
-                @endif
-                @endrole
+                @endcan
             </div>
             <div class="ibox-content">
-                @role([\App\Models\Role::CLIENT])
-                <div data-rating="{{$article->ratingPercent}}" class="ratable">
+
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 p-xs">
+                        @if($article->accepted === 1)
+                            <strong>{{_i('Status')}} : {{_i('accepted')}} </strong>
+                        @elseif($article->accepted === 0)
+                            <strong>{{_i('Status')}} : {{_i('declined')}} </strong>
+                        @else
+                            <strong>{{_i('Status')}} : {{_i('new')}} </strong>
+                        @endif
+                    </div>
+                    @can('articles.accept', [$project, $article])
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div data-rating="{{$article->ratingPercent}}" class="ratable">
+                            </div>
+                        </div>
+                    @endcan
+                    @cannot('articles.accept', [$project, $article])
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 p-xs">
+                            <strong>Rating: {{round($article->avgRating, 2)}}</strong>
+                        </div>
+                    @endcannot
                 </div>
-                @endrole
+                <hr>
                 <div class="row">
                     @if($article->google_id)
                         @include('entity.article.partials.google-preview')

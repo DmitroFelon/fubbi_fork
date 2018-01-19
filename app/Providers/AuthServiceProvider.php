@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Article;
 use App\Models\Project;
 use App\Models\Team;
 use App\Policies\ArticlePolicy;
@@ -48,6 +47,7 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('project.update', ProjectPolicy::class . '@update');
         $gate->define('project.accept-review', ProjectPolicy::class . '@accept_review');
         $gate->define('project.invite', ProjectPolicy::class . '@invite_users');
+        $gate->define('project.show', ProjectPolicy::class . '@show');
 
         /*
          * articles additional policies

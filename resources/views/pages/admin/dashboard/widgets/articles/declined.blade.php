@@ -22,6 +22,9 @@
                 <td class="no-borders">
                     <strong> {{_i('Disapprovals')}} </strong> : {{$article->attempts}}
                 </td>
+                <td class="no-borders">
+                    <strong> {{_i('Rating')}} </strong> : {{round($article->avgRating, 2)}}
+                </td>
             </tr>
         @endforeach
         </tbody>

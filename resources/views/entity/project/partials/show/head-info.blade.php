@@ -11,8 +11,10 @@
         </dl>
     </div>
 </div>
+<hr>
 <div class="row">
     <div class="col-lg-4">
+        <h3 class="m-b-md text-center">{{_i('Plan requirments')}}</h3>
         <dl class="dl-horizontal">
             <dt>Client:</dt>
             <dd>
@@ -29,7 +31,8 @@
             <dd>1 {{_i('month')}}</dd>
         </dl>
     </div>
-    <div class="col-lg-4" id="cluster_info">
+    <div class="col-lg-4">
+        <h3 class="m-b-md text-center">{{_i('Updates')}}</h3>
         <dl class="dl-horizontal">
             <dt>{{_i('Updated')}}:</dt>
             <dd>
@@ -74,6 +77,7 @@
         </dl>
     </div>
     <div class="col-lg-4">
+        <h3 class="m-b-md text-center">{{_i('Plan requirments')}}</h3>
         <dl class="dl-horizontal">
             @foreach($project->plan_metadata as $key => $value)
                 <dt>

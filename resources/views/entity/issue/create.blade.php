@@ -12,11 +12,13 @@
 
             {!! Form::bsText('title', null, _i('Title'), null, ['required'], 'text') !!}
 
-            {!! Form::bsText('body', null, _i('Body'), null, ['required'], 'text') !!}
-
             {!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}
 
-            {{Form::submit('Upload article', ['class' => 'form-control btn btn-primary'])}}
+            {!! Form::label(_i('Desctiption'), _i('Desctiption')) !!}
+
+            {!! Form::textarea('body', null, ['required', 'class' => 'form-control']) !!}
+
+            {{Form::submit('Create an Issue', ['class' => 'btn btn-primary m-t-md'])}}
 
             {!! Form::close() !!}
 

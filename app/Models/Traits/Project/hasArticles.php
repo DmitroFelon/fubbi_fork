@@ -74,11 +74,9 @@ trait hasArticles
 
         $article->save();
 
-        if ($attempts > 3) {
+        if ($attempts == 3) {
             $this->eventData['lastDeclineArticle'] = $article_id;
             $this->fireModelEvent('lastDeclineArticle', false);
-            //todo notify about limit of attempts 
-            //todo move 3 to settings 
         } else {
             $this->eventData['declineArticle'] = $article_id;
             $this->fireModelEvent('declineArticle', false);
