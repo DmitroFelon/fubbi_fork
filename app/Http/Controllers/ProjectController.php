@@ -207,28 +207,33 @@ class ProjectController extends Controller
             ? $request->input('s')
             : $project->state;
 
-        $plans = Cache::remember(
-            'public_plans',
-            60,
-            function () {
-                $available_plans = [
-                    'fubbi-basic-plan',
-                    'fubbi-bronze-plan',
-                    'fubbi-silver-plan',
-                    'fubbi-gold-plan',
-                ];
+        if ($step == ProjectStates::PLAN_SELECTION) {
+            $plans = Cache::remember(
+                'public_plans',
+                60,
+                function () {
+                    $available_plans = [
+                        'fubbi-basic-plan',
+                        'fubbi-bronze-plan',
+                        'fubbi-silver-plan',
+                        'fubbi-gold-plan',
+                    ];
 
-                $filtered_plans = Collection::make();
+                    $filtered_plans = collect();
 
-                foreach (Plan::all()->data as $plan) {
-                    if (in_array($plan->id, $available_plans)) {
-                        $filtered_plans->push($plan);
+                    foreach (Plan::all()->data as $plan) {
+                        if (in_array($plan->id, $available_plans)) {
+                            $filtered_plans->push($plan);
+                        }
                     }
-                }
 
-                return $filtered_plans->reverse();
-            }
-        );
+                    return $filtered_plans->reverse();
+                }
+            );
+        } else {
+            $plans = collect();
+        }
+
 
         $keywords = $project->getMeta('keywords');
 
@@ -249,6 +254,7 @@ class ProjectController extends Controller
         if (!$request->has('_step')) {
             abort(404);
         }
+
 
         $project = $project->filling($request);
 

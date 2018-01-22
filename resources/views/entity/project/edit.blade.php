@@ -20,13 +20,13 @@
                 </small>
 
                 @role([\App\Models\Role::CLIENT])
-                    <div class="m-t-md">
+                <div class="m-t-md">
                         <span class="text-primary">
                             <a target="_blank" href="{{action('ResearchController@index')}}">
                                 {{_i('Make a research before filling quiz')}}
                             </a>
                         </span>
-                    </div>
+                </div>
                 @endrole
             </div>
         </div>
@@ -41,5 +41,7 @@
 @endsection
 
 @section('before-scripts')
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    @if($project->step == \App\Models\Helpers\ProjectStates::PLAN_SELECTION)
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    @endif
 @endsection

@@ -23,10 +23,12 @@ trait hasPlan
      */
     public function getPlanAttribute($value)
     {
-        //Cache::forget('stripe_plan_' . $this->subscription->stripe_plan);
-
         return Cache::remember('stripe_plan_' . $this->subscription->stripe_plan, 10, function () {
-            return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
+            try {
+                return $this->plan = Plan::retrieve($this->subscription->stripe_plan);
+            } catch (\Exception $e) {
+                return null;
+            }
         });
     }
 
@@ -39,13 +41,17 @@ trait hasPlan
      */
     public function getPlanMetadataAttribute($value)
     {
-        //Cache::forget('plan_matadata_' . $this->id);
         $project = $this;
 
         $result = Cache::remember('plan_matadata_' . $this->id, 10, function () use ($project) {
-            $metadata = (isset($this->plan) and !is_null($this->plan))
-                ? collect($this->plan->metadata->jsonSerialize())
-                : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
+
+            try {
+                $metadata = (isset($this->plan) and !is_null($this->plan))
+                    ? collect($this->plan->metadata->jsonSerialize())
+                    : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
+            } catch (\Exception $e) {
+                return null;
+            }
             return $metadata->transform(function ($item, $key) use ($project) {
                 if ($this->isModified($key)) {
                     return $item;

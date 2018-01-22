@@ -63,13 +63,13 @@
 
 <div id="help-video-wrapper">
     @isset($help_video_src)
-        @foreach($help_video_src as $video)
-            <button data-name="{{$video->name}}" data-player="{{$video->player}}"
-                    class="btn btn-warning btn-lg question-btn">
-                <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
-            </button>
+    @foreach($help_video_src as $video)
+        <button data-name="{{$video->name}}" data-player="{{$video->player}}"
+                class="btn btn-warning btn-lg question-btn">
+            <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
+        </button>
 
-        @endforeach
+    @endforeach
     @endisset
 </div>
 
@@ -88,7 +88,14 @@
 
 <script>
     jQuery(document).ready(function ($) {
-
+        jQuery(".condition-cb").on('change', function () {
+            var target = $("#" + $(this).attr('data-target'));
+            if ($(this).is(':checked')) {
+                target.show();
+            } else {
+                target.hide();
+            }
+        });
     });
 </script>
 

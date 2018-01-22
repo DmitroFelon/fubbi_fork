@@ -182,31 +182,29 @@
             </div>
         @endif
 
+
         <div class="row">
+            <label for="is-seo-block"
+                   class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i('Do you have an SEO Company?')}}
+            </label>
+            <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-seo-block"
+                       type="checkbox" value="yes" data-target="seo-block" class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+        <div style="display:none;" id="seo-block" class="row">
+            <h4 class="text-center"><strong>{{_i('SEO Contact Name')}}</strong></h4>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                {!! Form::bsText('seo_first_name', null, ' ', _i("First Name"), ['required'], '') !!}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                {!! Form::bsText('seo_last_name', null, ' ', _i("Last Name"), ['required']) !!}
+            </div>
+            <h4 class="text-center"><strong>{{_i("SEO Contact Email")}}</strong></h4>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="panel-group">
-                    <div class="panel panel-default">
-                        <div class="panel-heading collapsible" data-toggle="collapse" href="#seo-block">
-                            <h4 class="panel-title">
-                                <span>{{_i("Do you have an SEO Company?")}}</span>
-                                <i class="text-right fa fa-expand right" aria-hidden="true"></i>
-                            </h4>
-                        </div>
-                        <div id="seo-block" class="panel-collapse row collapse">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    {!! Form::bsText('seo_first_name', null, _i("SEO Contact Name"), _i("First Name"), [], '') !!}
-                                </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    {!! Form::bsText('seo_last_name', null, ' ', _i("Last Name"), []) !!}
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    {!! Form::bsText('seo_email', null, _i("SEO Contact Email"), null, [], 'email') !!}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {!! Form::bsText('seo_email', null, ' ', null, ['required'], 'email') !!}
             </div>
         </div>
 
@@ -216,51 +214,153 @@
         {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a writing style that would like for your content"), null, [], 'url') !!}
 
         <div class="row m-t-md">
+            <label for="is-compliance_guideline-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i('Do you have branding guidelines?')}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-compliance_guideline-block"
+                       type="checkbox" value="yes" data-target="compliance_guideline-block"
+                       class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+        <div style="display: none" class="row" id="compliance_guideline-block">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label class="control-label">{{_i('Do you have branding guidelines?')}}</label>
+                <label class="control-label"> </label>
                 <div id="compliance_guideline-group" class="dropzone">
                 </div>
             </div>
         </div>
 
         <div class="row m-t-md">
+            <label for="is-logo-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i('Do you have a high resolution logo that we can use?')}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-logo-block"
+                       type="checkbox" value="yes" data-target="logo-block"
+                       class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+        <div style="display: none" class="row" id="logo-block">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label class="control-label">{{_i('Do you have a high resolution logo that we can use?')}}</label>
+                <label class="control-label"></label>
                 <div id="logo-group" class="dropzone">
                 </div>
             </div>
         </div>
 
         <div class="row m-t-md">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label class="control-label">{{_i("Do you want us to add images to your articles?")}}</label>
-                <div id="article_images-group" class="dropzone">
-                </div>
+            <label for="is-article_images-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i("Do you want us to add images to your articles?")}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-article_images"
+                       type="checkbox" value="yes" data-target="article_images-block"
+                       class="js-switch condition-cb"/>
             </div>
-            <span class="text-muted">
-                {{_i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images for your content. If you have photos you want to upload, you can do that too. Please understand that images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image samples.")}}
-            </span>
+
         </div>
 
-        {!! Form::bsSelect('article_images_links[]',$project->prepareTagsInput('article_images_links'), null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'required', 'class'=>'tagsinput' ] ) !!}
-        {!! Form::bsSelect('avoid_keywords[]',$project->prepareTagsInput('avoid_keywords'), null, _i('Do you have keywords that you want us to avoid or content that you would not want us to use? Separate by coma or click "enter".'), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
-        {!! Form::bsSelect('image_pages[]',$project->prepareTagsInput('image_pages'), null, _i("You can also send us URLs of web pages that have the kind of images you like. Just type the urls below."), _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+        <div style="display: none" class="row" id="article_images-block">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="control-label"></label>
+                <div id="article_images-group" class="dropzone">
+                </div>
+                <span class="text-muted">
+                {{_i("Not all clients do as it’s somewhat subjective. If yes, please help us prepare the perfect images
+                 for your content. If you have photos you want to upload, you can do that too. Please understand that
+                 images can be “very” expensive but we’ll do the best we can for you. Please upload at least 5 image
+                  samples.")}}
+            </span>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                {!! Form::bsSelect('article_images_links[]',$project->prepareTagsInput('article_images_links'),
+                         null, _i("You can do that by sharing examples to 5 articles with images that you like – just type in the URL."),
+                          _i('Separate by coma or click "enter".'), ['multiple' => 'multiple', 'required', 'class'=>'tagsinput' ] ) !!}
+
+                {!! Form::bsSelect('image_pages[]',$project->prepareTagsInput('image_pages'),
+                 null, _i("You can also send us URLs of web pages that have the kind of images you like.
+                  Just type the urls below."), _i('Separate by coma or click "enter".'),
+                   ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+            </div>
+
+        </div>
+
+        <div class="row m-t-md">
+            <label for="is-avoid_keywords-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i("Do you have keywords that you want us to avoid or content that you would not want us to use?")}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-avoid_keywords"
+                       type="checkbox" value="yes" data-target="avoid_keywords-block"
+                       class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+        <div style="display: none" class="" id="avoid_keywords-block">
+            {!! Form::bsSelect('avoid_keywords[]',$project->prepareTagsInput('avoid_keywords'),
+            null, _i('Avoid Keywords'), _i('Separate by coma or click "enter".'),
+              ['multiple' => 'multiple', 'class'=>'tagsinput']) !!}
+        </div>
+
+
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
 
-        {!! Form::bsText('cta', null, _i("Do you want us to add calls to action (CTA) to the end of your articles?"), _i("Examples include phoning your office for a complimentary consultation or review. Other times it might be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with specific information i.e. if you want them to download a free report, please share a link to the download offer. If you want people to phone your office please provide details of what you’ll share on the phone call. We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
 
         <div class="row m-t-md">
+            <label for="is-cta-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i("Do you want us to add calls to action (CTA) to the end of your articles?")}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-cta"
+                       type="checkbox" value="yes" data-target="cta-block"
+                       class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+        <div style="display: none" class="" id="cta-block">
+            {!! Form::bsText('cta', null, _i(""),
+             _i("Examples include phoning your office for a complimentary consultation or review. Other times it might
+              be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with
+               specific information i.e. if you want them to download a free report, please share a link to the download offer.
+                If you want people to phone your office please provide details of what you’ll share on the phone call.
+                 We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}
+        </div>
+
+
+        <div class="row m-t-md">
+            <label for="is-ready_content-block"
+                   class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i("Do you already have content you've produced that you wish to
+                see in future articles? If so, please upload transcripts.")}}
+            </label>
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <input id="is-ready_content"
+                       type="checkbox" value="yes" data-target="ready_content-block"
+                       class="js-switch condition-cb"/>
+            </div>
+        </div>
+
+
+        <div style="display: none" class="row" id="ready_content-block">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <label class="control-label">{{_i("Do you already have content you've produced that you wish to see in future articles? If so, please upload transcripts.")}}</label>
+                <label class="control-label">{{_i("")}}</label>
                 <div id="ready_content-group" class="dropzone">
                 </div>
-            </div>
-
-            <span class="text-muted">
-                {{_i("Note: You do not have to upload all your content now. Just enough to get us started with producing your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts")}}
+                <span class="text-muted">
+                {{_i("Note: You do not have to upload all your content now. Just enough to get us started with producing
+                your articles and social posts. You can send us more at a later date. Please upload up to 10 transcripts")}}
             </span>
+            </div>
         </div>
 
         <div class="row m-t-md">
