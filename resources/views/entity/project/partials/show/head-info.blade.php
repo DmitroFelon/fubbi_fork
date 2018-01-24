@@ -49,7 +49,7 @@
 
                 @foreach($project->workers as $worker)
                     <dd class="project-people">
-                        <a target="_blank" href="{{url()->action('UserController@show', $worker)}}">
+                        <a class="participant-name" target="_blank" href="{{url()->action('UserController@show', $worker)}}">
                             {{$worker->name}}
                         </a>
                         @role([\App\Models\Role::ADMIN])
