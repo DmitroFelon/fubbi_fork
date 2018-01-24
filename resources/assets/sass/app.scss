@@ -166,3 +166,10 @@ td.project-actions .btn {
   width: 10em;
   display: inline-block;
 }
+
+a.participant-name {
+  width: 75%;
+  display: inline-block;
+  line-break: strict;
+  margin-right: 10%;
+}
