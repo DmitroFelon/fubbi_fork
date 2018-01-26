@@ -6,7 +6,6 @@ use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
 use Ghanem\Rating\Traits\Ratingable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -249,7 +248,6 @@ class Article extends Model implements HasMedia
     }
 
     /**
-     * @param Project $project
      * @return string
      */
     public function generateTitle()

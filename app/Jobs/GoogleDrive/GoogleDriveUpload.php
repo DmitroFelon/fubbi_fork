@@ -1,18 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imad
- * Date: 1/5/18
- * Time: 11:56 AM
- */
 
-namespace App\Jobs;
+namespace App\Jobs\GoogleDrive;
 
 use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
 use App\Services\Google\GoogleDrivePath;
-use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,8 +14,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\Media;
 
-
-class GoogleDriveCreate
+/**
+ * Class GoogleDriveUpload
+ * @package App\Jobs
+ */
+class GoogleDriveUpload implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GoogleDrivePath;
 
@@ -35,6 +31,10 @@ class GoogleDriveCreate
      */
     protected $article;
     /**
+     * @var Media
+     */
+    protected $file;
+    /**
      * @var null
      */
     protected $name;
@@ -43,18 +43,19 @@ class GoogleDriveCreate
      */
     protected $drive;
 
-
     /**
      * Create a new job instance.
      *
      * @param Project $project
      * @param Article $article
+     * @param Media $file
      * @param null $name
      */
-    public function __construct(Project $project, Article $article, $name)
+    public function __construct(Project $project, Article $article, Media $file, $name)
     {
         $this->project = $project;
         $this->article = $article;
+        $this->file    = $file;
         $this->name    = $name;
         $this->drive   = new Drive();
     }
@@ -72,7 +73,8 @@ class GoogleDriveCreate
             //get the top folder
             $file_parent = last($this->createPath($expected_path));
 
-            $file = $this->drive->createFile(
+            $file = $this->drive->uploadFile(
+                $this->file->getPath(),
                 $this->name,
                 $file_parent
             );
@@ -89,5 +91,4 @@ class GoogleDriveCreate
             Log::error($e->getMessage());
         }
     }
-
 }

@@ -51,7 +51,7 @@
             @foreach($value as $subkey => $subvalue)
                 @if($subvalue)
                     <span style="text-indent:25px;">
-                        - {{ (is_int($subkey)) ? $subvalue : $subkey . ' : ' . $subvalue }}
+                        - {!!  (is_int($subkey)) ? $subvalue : $subkey . ' : ' . $subvalue !!}
                     </span> <br>
                 @endif
             @endforeach

@@ -10,18 +10,18 @@ namespace App\Models\Interfaces;
 
 /**
  * Interface Invitable
- * 
- * Used in models which should be invitable 
+ *
+ * Used in models which should be invitable
  *
  * @package App\Models\Interfaces
  */
 interface Invitable
 {
-	public function getInvitableName();
+    public function getInvitableName();
 
-	public function getInvitableId();
+    public function getInvitableId();
 
-	public function getInvitableUrl();
-	
-	public function getInvitableNotification();
+    public function getInvitableUrl();
+
+    public function getInvitableNotification();
 }

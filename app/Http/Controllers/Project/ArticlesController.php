@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\GoogleDriveCreate;
-use App\Jobs\GoogleDriveUpload;
+use App\Jobs\GoogleDrive\GoogleDriveCreate;
+use App\Jobs\GoogleDrive\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
 use App\Services\Google\Drive;
@@ -84,7 +84,7 @@ class ArticlesController extends Controller
 
         $filters['types'] = $article->getTypes($project);
 
-        return view('entity.article.create', compact('project', 'filters')); 
+        return view('entity.article.create', compact('project', 'filters'));
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Models\Invite;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
+use App\Models\Traits\User\hasNotificationSettings;
 use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,14 +57,12 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereStripeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Annotation[] $annotations
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User withRole($role)
  * @property string $first_name
  * @property string $last_name
  * @property string $phone
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Outline[] $outlines
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePhone($value)
@@ -81,6 +80,7 @@ class User extends Authenticatable implements HasMedia
     use Searchable;
     use Metable;
     use Ratingable;
+    use hasNotificationSettings;
 
     /**
      * The attributes that are mass assignable.

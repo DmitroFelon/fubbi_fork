@@ -22,6 +22,8 @@ Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
     
+    
+    return redirect()->action('ProjectController@index')->with('');
 });
 
 Broadcast::routes();

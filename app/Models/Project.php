@@ -13,6 +13,7 @@ use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
 use App\Notifications\Project\Invite;
+use App\Services\Project\Export;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,7 +38,6 @@ use Venturecraft\Revisionable\Revision;
  * @property-read \App\User $client
  * @property-read \Illuminate\Database\Eloquent\Collection|Revision[] $revisionHistory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Topic[] $topics
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $workers
  * @method static Builder|\App\Models\Project meta()
  * @mixin \Eloquent
@@ -57,9 +57,8 @@ use Venturecraft\Revisionable\Revision;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
  * @property int $subscription_id
  * @property-read \Kalnoy\Nestedset\Collection|\BrianFaust\Commentable\Models\Comment[] $comments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Outline[] $outlines
  * @property-read \Laravel\Cashier\Subscription $subscription
- * @property-read \App\Models\Task $task
+ 
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereSubscriptionId($value)
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read mixed $plan
@@ -79,7 +78,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     use hasTeams;
     use hasArticles;
     use Metable;
-    use FormProjectAccessors;
     use HasMediaTrait;
     use hasInvite;
     use hasPlan;
@@ -305,104 +303,12 @@ class Project extends Model implements HasMediaConversions, Invitable
             return $ready_export;
         }
 
-        $data        = [];
-        $collections = $this->media->groupBy('collection_name')->keys();
-        //collect media files
-        foreach ($collections as $collection) {
-            $collection_files = $this->getMedia($collection);
-            if (strpos($collection, 'meta-') !== false) {
-                if ($collection_files->isNotEmpty()) {
-                    $collection_files->each(function (Media $item) use (&$data, $collection) {
-                        $collection = str_replace('meta-', '', $collection);
-                        $collection = str_replace('-collection', '', $collection);
-                        $collection = str_replace('-', ' ', $collection);
-                        $collection = str_replace('_', ' ', $collection);
-
-                        if (File::exists($item->getPath())) {
-                            $data['keywords_media'][$collection][] = $item->getPath();
-                        }
-
-                    });
-                }
-            } else {
-                if ($collection_files->isNotEmpty()) {
-                    $collection_files->each(function (Media $item) use (&$data, $collection) {
-                        $collection = str_replace('-', ' ', $collection);
-                        $collection = str_replace('_', ' ', $collection);
-
-                        if (File::exists($item->getPath())) {
-                            $data['media'][$collection][] = $item->getPath();
-                        }
-
-                    });
-                }
-            }
+        try {
+            return Export::make($this);
+        } catch (\Exception $e) {
+            throw $e;
         }
 
-        $meta = $this->getMeta();
-        $skip = [
-            'quora_username',
-            'quora_password',
-            'keywords',
-            'questions',
-            'themes',
-            'themes_order',
-            'conversation_id',
-            'keywords_questions',
-            'keywords_meta',
-            'seo_first_name',
-            'seo_last_name',
-            'seo_email',
-            'google_access',
-            'export',
-            'plan'
-        ];
-        $meta = $meta->filter(function ($item, $key) use ($skip) {
-            if (strpos($key, 'modificator_') !== false) {
-                return null;
-            }
-            if (in_array($key, $skip)) {
-                return null;
-            }
-            return $item;
-        });
-        $meta = $meta->filter();
-
-        $pdf     = App::make('dompdf.wrapper');
-        $project = $this;
-        $pdf     = $pdf->loadView('pdf.export', compact('meta', 'project'));
-
-        //zip everything
-        $path        = storage_path('app/public/exports/');
-        $zipper      = new \Chumper\Zipper\Zipper;
-        $main_folder = 'project - ' . $this->name;
-        $zip_name    = $this->name . '-' . $this->id . '.zip';
-        $full_path   = $path . $zip_name;
-        $pdf_path    = $path . $this->name . '-' . $this->id . '.pdf';
-        $pdf->save($pdf_path);
-        $zipper->make($full_path)->folder($main_folder)->add($pdf_path);
-        //set media
-
-
-        if (isset($data['media'])) {
-            foreach ($data['media'] as $collection => $files) {
-                $zipper->folder($main_folder . '/' . $collection)->add($files);
-            }
-        }
-
-        if (isset($data['keywords_media'])) {
-            foreach ($data['keywords_media'] as $collection => $files) {
-                $zipper->folder($main_folder . '/keywords media/' . $collection)->add($files);
-            }
-        }
-
-        $zipper->close();
-
-        //save path to zip to metadata
-        $this->setMeta('export', $zip_name);
-        $this->save();
-
-        return $full_path;
     }
 
     /**

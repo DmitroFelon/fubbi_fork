@@ -6,14 +6,12 @@
  * Time: 2:46 PM
  */
 
-namespace App\Services;
-
+namespace App\Services\ImageFilters;
 
 use Intervention\Image\Filters\FilterInterface;
 
 class SmallImageFilter implements FilterInterface
 {
-
     /**
      * Applies filter to given image
      *
