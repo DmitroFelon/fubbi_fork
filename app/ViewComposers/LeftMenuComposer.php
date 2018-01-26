@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -55,41 +56,48 @@ class LeftMenuComposer
         if (Auth::check()) {
             $role  = $this->user->role;
             $links = $this->{$role}();
+
+            $links = collect($links);
+
+            if ($this->user->isWorker() or $this->user->role == Role::ADMIN) {
+                $links->push(
+                    [
+                        'name'  => 'Dashboard',
+                        'url'   => action('DashboardController@dashboard'),
+                        'icon'  => 'fa fa-dashboard',
+                        'order' => 150,
+                    ]
+                );
+            }
+            $links->push(
+                [
+                    'name'  => 'Messages',
+                    'url'   => action('MessageController@index'),
+                    'icon'  => 'fa fa-envelope',
+                    'order' => 100,
+                ]
+            );
+            $links->push(
+                [
+                    'name'  => 'Settings',
+                    'url'   => action('SettingsController@index'),
+                    'icon'  => 'fa fa-gear',
+                    'order' => 100,
+                ]
+            );
+            $links->push(
+                [
+                    'name'  => 'Issues',
+                    'url'   => action('IssueController@index'),
+                    'icon'  => 'fa fa-bug',
+                    'order' => 100,
+                ]
+            );
+            $links = $links->sortBy('order', SORT_NUMERIC, true);
+
         } else {
             $links = $this->guest();
         }
-
-
-        $links = collect($links);
-
-        $links->push(
-            [
-                'name'  => 'Messages',
-                'url'   => action('MessageController@index'),
-                'icon'  => 'fa fa-envelope',
-                'order' => 100,
-            ]
-        );
-
-        $links->push(
-            [
-                'name'  => 'Settings',
-                'url'   => action('SettingsController@index'),
-                'icon'  => 'fa fa-gear',
-                'order' => 100,
-            ]
-        );
-
-        $links->push(
-            [
-                'name'  => 'Issues',
-                'url'   => action('IssueController@index'),
-                'icon'  => 'fa fa-bug',
-                'order' => 100,
-            ]
-        );
-
-        $links = $links->sortBy('order', SORT_NUMERIC, true);
 
         $view->with('items', $links);
     }
@@ -111,12 +119,6 @@ class LeftMenuComposer
     public function admin()
     {
         return [
-            [
-                'name'  => 'Dashboard',
-                'url'   => action('DashboardController@dashboard'),
-                'icon'  => 'fa fa-dashboard',
-                'order' => 120,
-            ],
             [
                 'name'  => 'Users',
                 'url'   => action('UserController@index'),

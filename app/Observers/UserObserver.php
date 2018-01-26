@@ -8,7 +8,9 @@
 
 namespace App\Observers;
 
+use App\Models\Helpers\NotificationTypes;
 use App\Models\Role;
+use App\Notifications\Client\Registered;
 use App\Notifications\RegistrationConfirmation;
 use App\User;
 use Illuminate\Support\Facades\Request;
@@ -21,9 +23,14 @@ class UserObserver
         if (Request::input('role')) {
             $user->notify(new RegistrationConfirmation($user));
         } else {
-            $admins = User::withRole(\App\Models\Role::ADMIN)->get();
-            $admins->each(function (User $item, $key) use ($user) {
-                $item->notify(new \App\Notifications\Client\Registered($user));
+
+            $admins = User::withRole(Role::ADMIN)->get();
+
+            $admins->each(function (User $admin) use ($user) {
+                //check is this notification not disabled
+                if ($admin->isNotificationEnabled(NotificationTypes::CLIENT_REGISTERED)) {
+                    $admin->notify(new Registered($user));
+                }
             });
         }
     }

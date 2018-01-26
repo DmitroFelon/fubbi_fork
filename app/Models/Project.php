@@ -58,7 +58,6 @@ use Venturecraft\Revisionable\Revision;
  * @property int $subscription_id
  * @property-read \Kalnoy\Nestedset\Collection|\BrianFaust\Commentable\Models\Comment[] $comments
  * @property-read \Laravel\Cashier\Subscription $subscription
- 
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereSubscriptionId($value)
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read mixed $plan
@@ -123,6 +122,7 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     protected $observables = [
         'setState',
+        'suspend', // fured when subscription stopped
         'reset', //fired when billing cycle renewed
         'filled',
         'attachWorker',
@@ -423,5 +423,18 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function prepareTagsInput($key)
     {
         return (is_array($this->$key)) ? array_combine(array_values($this->$key), array_values($this->$key)) : [];
+    }
+
+    public function suspend()
+    {
+        try {
+            $client = $this->client;
+            if ($client->subscription($this->name)) {
+                $client->subscription($this->name)->cancel();
+                $this->fireModelEvent('suspend');
+            }
+        } catch (\Exception $e) {
+            $this->forceDelete();
+        }
     }
 }

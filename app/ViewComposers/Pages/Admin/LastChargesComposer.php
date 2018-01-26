@@ -30,7 +30,7 @@ class LastChargesComposer
         $data = [];
 
         if ($this->request->has('customer')) {
-            $user = User::find($this->request->input('customer'));
+            $user = User::search($this->request->input('customer'))->first();
             $data = (!$user) ? [] : ['customer' => $user->stripe_id];
         }
 

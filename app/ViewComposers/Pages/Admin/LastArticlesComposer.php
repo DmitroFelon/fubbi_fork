@@ -10,6 +10,7 @@ namespace App\ViewComposers\Pages\Admin;
 
 
 use App\Models\Article;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,10 +31,13 @@ class LastArticlesComposer
         $query = Article::new();
 
         if ($this->request->has('customer') and $this->request->input('customer') > 0) {
-            $client_id = $this->request->input('customer');
-            $query->whereHas('project', function ($query) use ($client_id) {
-                $query->where('client_id', $client_id);
-            });
+            $user = User::search($this->request->input('customer'))->first();
+            if ($user) {
+                $client_id = $user->id;
+                $query->whereHas('project', function ($query) use ($client_id) {
+                    $query->where('client_id', $client_id);
+                });
+            }
         }
 
         if ($this->request->has('date_from')) {

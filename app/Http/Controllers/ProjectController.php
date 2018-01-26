@@ -276,11 +276,14 @@ class ProjectController extends Controller
     {
 
         try {
+            
             $client = $project->client;
 
             if ($client->subscription($project->name)) {
                 $client->subscription($project->name)->cancel();
             }
+            
+            
         } catch (InvalidRequest $e) {
             $project->forceDelete();
         }

@@ -4,6 +4,7 @@ namespace App;
 
 use Activity;
 use App\Models\Article;
+use App\Models\Helpers\NotificationTypes;
 use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
 use App\Models\Project;
@@ -373,11 +374,17 @@ class User extends Authenticatable implements HasMedia
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function relatedWorkerArticles()
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
     }
 
+    /**
+     * @return bool
+     */
     public function isWorker()
     {
         $workers = [
@@ -389,6 +396,22 @@ class User extends Authenticatable implements HasMedia
         ];
 
         return (in_array($this->role, $workers));
+    }
 
+    /**
+     * @param string $notification_type
+     * @return bool
+     */
+    public function isNotificationEnabled(string $notification_type)
+    {
+        $disabled_notifications = $this->{NotificationTypes::META_NAME};
+
+        if (!is_array($disabled_notifications) or empty($disabled_notifications)) {
+            return true;
+        }
+
+        return (isset($disabled_notifications[$notification_type]) and $disabled_notifications[$notification_type])
+            ? false
+            : true;
     }
 }

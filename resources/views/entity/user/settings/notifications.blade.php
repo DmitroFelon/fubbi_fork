@@ -1,5 +1,5 @@
 {{Form::open(['method' => 'POST', 'action' => 'SettingsController@save', 'id' => 'settings-main-notifications'])}}
-<h3 class="text-center">{{_i('Disable project notifications')}}</h3>
+<h3 class="text-center">{{_i('Disable notifications')}}</h3>
 <br>
 <div class="row">
     @foreach($project_notifications_checkboxes as $name => $data)

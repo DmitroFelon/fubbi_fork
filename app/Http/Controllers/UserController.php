@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Services\User\SearchSuggestions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -55,7 +56,7 @@ class UserController extends Controller
             return isset($user->role);
         });
 
-        $search_suggestions = $this->searchSuggestions();
+        $search_suggestions = SearchSuggestions::toView();
 
         //separate users by roles
         $groupedByRoles = $users->groupBy('role');
@@ -149,7 +150,15 @@ class UserController extends Controller
         if ($request->input('password')) {
             $user->password = bcrypt($request->input('password'));
         }
-        $user->phone = $request->input('phone');
+
+        $user->phone               = $request->input('phone');
+        $user->address_line_1      = $request->input('address_line_1');
+        $user->address_line_2      = $request->input('address_line_2');
+        $user->zip                 = $request->input('zip');
+        $user->city                = $request->input('city');
+        $user->country             = $request->input('country');
+        $user->state               = $request->input('state');
+        $user->how_did_you_find_us = $request->input('how_did_you_find_us');
 
         $user->save();
 
@@ -157,34 +166,4 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    private function searchSuggestions()
-    {
-        return Cache::remember(
-            'user_search_suggestions',
-            10,
-            function () {
-                $search_suggestions = collect();
-                User::all()->map(
-                    function (User $user) use ($search_suggestions) {
-                        $search_suggestions->push($user->name);
-                        $search_suggestions->push($user->email);
-                    }
-                );
-                $search_suggestions = $search_suggestions->toArray();
-
-                return '["' . implode('", "', $search_suggestions) . '"]';
-            }
-        );
-    }
 }

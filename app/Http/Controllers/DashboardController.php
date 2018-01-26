@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Services\User\SearchSuggestions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -134,6 +136,8 @@ class DashboardController extends Controller
             return User::withRole('client')->get();
         });
 
+        $search_suggestions = SearchSuggestions::toView(Role::CLIENT);
+
         $date_from = ($request->has('date_from'))
             ? $request->input('date_from')
             : now()->subYear(1)->format('m/d/Y');
@@ -142,7 +146,7 @@ class DashboardController extends Controller
             ? $request->input('date_to')
             : now()->format('m/d/Y');
 
-        return view('pages.admin.dashboard.index', compact('clients', 'date_from', 'date_to'));
+        return view('pages.admin.dashboard.index', compact('clients', 'date_from', 'date_to', 'search_suggestions'));
     }
 
     /**

@@ -9,37 +9,34 @@
 namespace App\Models\Traits\User;
 
 
+use App\Models\Helpers\NotificationTypes;
 use App\Models\Role;
 
 trait hasNotificationSettings
 {
 
     protected $project_notifications_checkboxes = [
-        'project-status'   => [
+        NotificationTypes::PROJECT_STATUS   => [
             'label'       => 'Disable project status update notification',
             'description' => '',
         ],
-        'project-material' => [
+        NotificationTypes::PROJECT_MATERIAL => [
             'label'       => 'Disable project materials update notification',
             'description' => '',
         ],
-        'project-message'  => [
-            'label'       => 'Disable new project messages notification',
-            'description' => '',
-        ]
     ];
 
     protected $billing_notification_checkboxes = [
-        'billing-success' => [
+        NotificationTypes::BILLING_SUCCESS => [
             'label'       => 'Disable notification about seccesfull payment',
             'description' => ''
 
         ],
-        'billing-reject'  => [
+        NotificationTypes::BILLING_REJECT  => [
             'label'       => 'Disable notification about rejected payment',
             'description' => ''
         ],
-        'billing-remind'  => [
+        NotificationTypes::BILLING_REMIND  => [
             'label'       => 'Disable reminder about payment',
             'description' => ''
         ]
@@ -56,19 +53,19 @@ trait hasNotificationSettings
         $project_notifications_checkboxes = $this->project_notifications_checkboxes;
 
         if ($this->isWorker()) {
-            $project_notifications_checkboxes['project-items_not_due']       = [
+            $project_notifications_checkboxes[NotificationTypes::ARTICLE_NOT_DUE]     = [
                 'label'       => _i('Item not due yet'),
                 'description' => _i(' ')
             ];
-            $project_notifications_checkboxes['project-items_due_1']         = [
+            $project_notifications_checkboxes[NotificationTypes::ARTICLE_DUE_1]       = [
                 'label'       => _i('Item 1 business day overdue'),
                 'description' => _i(' ')
             ];
-            $project_notifications_checkboxes['project-items_due_2']         = [
+            $project_notifications_checkboxes[NotificationTypes::ARTICLE_DUE_2]       = [
                 'label'       => _i('Item 2 business day overdue'),
                 'description' => _i(' ')
             ];
-            $project_notifications_checkboxes['project-article_disapproved'] = [
+            $project_notifications_checkboxes[NotificationTypes::ARTICLE_DISAPPROVED] = [
                 'label'       => _i('Disapprovals'),
                 'description' => _i(' ')
             ];
@@ -76,12 +73,12 @@ trait hasNotificationSettings
 
         if ($this->role == Role::ADMIN) {
 
-            $project_notifications_checkboxes['client-registered'] = [
+            $project_notifications_checkboxes[NotificationTypes::CLIENT_REGISTERED] = [
                 'label'       => _i('New Clients'),
                 'description' => _i(' ')
             ];
 
-            $project_notifications_checkboxes ['client-pause'] = [
+            $project_notifications_checkboxes [NotificationTypes::PROJECT_PAUSE] = [
                 'label'       => _i('Account pauses'),
                 'description' => _i(' ')
 

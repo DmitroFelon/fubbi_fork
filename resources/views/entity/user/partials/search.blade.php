@@ -5,6 +5,7 @@
            data-provide="typeahead"
            data-source='{{$search_suggestions}}'
            placeholder="{{_i('Search user')}}"
+           autocomplete="off"
            class="input form-control">
     <span class="input-group-btn">
         <button type="submit" class="btn btn btn-primary">

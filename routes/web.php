@@ -21,9 +21,7 @@ Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 Auth::routes();
 
 Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    
-    
-    return redirect()->action('ProjectController@index')->with('');
+    dd(\App\Services\User\SearchSuggestions::get('client'));
 });
 
 Broadcast::routes();
@@ -56,6 +54,9 @@ Route::middleware(['auth'])->group(function () {
             'help_videos' => 'HelpVideosController'
         ]);
     });
+
+    Route::get('dashboard', ['uses' => 'DashboardController@dashboard', 'as' => 'dashboard']);
+    Route::get('dashboard/preload/{view}', ['uses' => 'DashboardController@preloadView', 'as' => 'preloadView']);
 
     Route::prefix('notification')->group(
         function () {

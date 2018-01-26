@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Helpers\NotificationTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -38,11 +39,11 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-        if ($request->input('disabled_notifications')) {
-            $disabled_notifications = collect($request->input('disabled_notifications'));
-            $user->setMeta('disabled_notifications', $disabled_notifications->toArray());
+        if ($request->input(NotificationTypes::META_NAME)) {
+            $disabled_notifications = collect($request->input(NotificationTypes::META_NAME));
+            $user->setMeta(NotificationTypes::META_NAME, $disabled_notifications->toArray());
         } else {
-            $user->setMeta('disabled_notifications', []);
+            $user->setMeta(NotificationTypes::META_NAME, []);
         }
 
         $user->save();

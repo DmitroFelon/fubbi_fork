@@ -15,12 +15,12 @@
         <div class="ibox-content">
             <div class="row">
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <table class="table small">
+                    <table class="table small user-datails">
                         <tbody>
                         <tr>
                             <td>
                                 <strong>
-                                    {{_i('Phone:')}}
+                                    {{_i('Phone')}}:
                                 </strong>
                                 {{$user->phone}}
                             </td>
@@ -28,7 +28,7 @@
                         <tr>
                             <td>
                                 <strong>
-                                    {{_i('Email:')}}
+                                    {{_i('Email')}}:
                                 </strong>
                                 {{$user->email}}
                             </td>
@@ -36,9 +36,72 @@
                         <tr>
                             <td>
                                 <strong>
-                                    {{$user->projects->count()}}
+                                    {{_i('Projects')}}:
                                 </strong>
-                                {{_i('Projects')}}
+                                {{$user->projects->count()}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'Address Line 1' )}}:
+                                </strong>
+                                {{$user->address_line_1}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'Address Line 2' )}}:
+                                </strong>
+                                {{$user->address_line_2}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'Zip/Postal Code' )}}:
+                                </strong>
+                                {{$user->zip}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'City' )}}:
+                                </strong>
+                                {{$user->city}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'Country' )}}:
+                                </strong>
+                                {{$user->country}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i( 'State/Province' )}}:
+                                </strong>
+                                {{$user->state}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{_i('How did You find us')}}:
+                                </strong>
+                                {{$user->how_did_you_find_us}}
+
                             </td>
                         </tr>
                         </tbody>

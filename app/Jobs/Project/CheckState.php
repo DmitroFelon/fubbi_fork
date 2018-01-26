@@ -7,15 +7,14 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Notifications\Project\Delayed;
 use App\Notifications\Project\Remind;
-use App\Notifications\Project\Subscription;
 use App\Notifications\Project\WillRemoved;
 use App\Notifications\Worker\Progress;
 use App\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -71,8 +70,6 @@ class CheckState implements ShouldQueue
             ProjectStates::QUIZ_FILLING,
             ProjectStates::KEYWORDS_FILLING
         ];
-
-        Log::debug($this->project->client->name . ' filling reminder start');
 
         if ($this->project->created_at->diffInDays(now()) > 1 and in_array($this->project->state, $filling_states)) {
             $this->project->client->notify(new Remind($this->project));

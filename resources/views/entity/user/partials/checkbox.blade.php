@@ -4,7 +4,7 @@
                 {{($disabled_notifications->has($name))?'checked':''}}
                 class="keywords-checkbox"
                 type="checkbox"
-                name="disabled_notifications[{{$name}}]"
+                name="{{\App\Models\Helpers\NotificationTypes::META_NAME}}[{{$name}}]"
                 value="true"> <i></i>
         {{$data['label']}}
     </label>

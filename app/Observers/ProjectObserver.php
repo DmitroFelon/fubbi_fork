@@ -317,5 +317,10 @@ class ProjectObserver
 
     }
 
+    public function suspend(Project $project)
+    {
+            
+    }
+
 
 }
