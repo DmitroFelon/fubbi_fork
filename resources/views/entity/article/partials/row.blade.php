@@ -27,8 +27,8 @@
     </td>
 
     <td>
-        @if($article->ratingPercent> 0)
-            <span class="ratable" data-rating-read="1"
+        @if($article->ratingPercent > 0)
+            <span class="ratable" data-rateyo-read-only="true"
                   data-rating="{{$article->ratingPercent}}"></span>
         @endif
     </td>

@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12"> {{-- Decliened Articles widget --}}
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>{{_i('Declined Articles')}}</h5>
@@ -26,9 +26,55 @@
                     @include('partials.navbar-elements.spinner')
                 </div>
             </div>
-        </div> {{-- Decliened Articles widget --}}
+        </div>
+
+        <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4"> {{-- Articles by rating section--}}
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{{_i('Articles with 5 stars')}}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content preloaded" data-view="pages.admin.dashboard.widgets.articles.by_rate?rate=5&">
+                    @include('partials.navbar-elements.spinner')
+                </div>
+            </div>
+        </div>
+        <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4"> {{-- Articles by rating section--}}
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{{_i('Articles with 4 stars')}}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content preloaded" data-view="pages.admin.dashboard.widgets.articles.by_rate?rate=4&">
+                    @include('partials.navbar-elements.spinner')
+                </div>
+            </div>
+        </div>
+        <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4"> {{-- Articles by rating section--}}
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>{{_i('Articles with less than 3 stars')}}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content preloaded" data-view="pages.admin.dashboard.widgets.articles.by_rate?rate=3&">
+                    @include('partials.navbar-elements.spinner')
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row">
+    <div class="row"> {{-- Payments section --}}
         <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
@@ -100,7 +146,19 @@
              * Preload necessary widget from view composer
              * */
             preloaded_erappers.each(function (item) {
-                $(this).load("/dashboard/preload/" + $(this).attr('data-view') + window.location.search);
+                var query = '';
+                var base_url = "/dashboard/preload/" + $(this).attr('data-view');
+                if (window.location.search) {
+                    query = window.location.search.substr(1);
+                }
+
+                if (base_url.substr(-1) != '&') {
+                    query = '?' + query;
+                }
+
+                console.log(base_url + query)
+
+                $(this).load(base_url + query);
             });
         });
     </script>

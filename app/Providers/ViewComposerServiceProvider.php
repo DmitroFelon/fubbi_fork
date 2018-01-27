@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use App\ViewComposers\LeftMenuComposer;
 use App\ViewComposers\MasterComposer;
+use App\ViewComposers\Pages\Admin\ArticlesByRate;
 use App\ViewComposers\Pages\Admin\DeclinedArticlesComposer;
 use App\ViewComposers\Pages\Admin\LastArticlesComposer;
 use App\ViewComposers\Pages\Admin\LastChargesComposer;
@@ -50,6 +51,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     {
         View::composer('pages.admin.dashboard.widgets.articles.last', LastArticlesComposer::class);
         View::composer('pages.admin.dashboard.widgets.articles.declined', DeclinedArticlesComposer::class);
+        View::composer('pages.admin.dashboard.widgets.articles.by_rate', ArticlesByRate::class);
         View::composer('pages.admin.dashboard.widgets.charges.last', LastChargesComposer::class);
         View::composer('pages.admin.dashboard.widgets.charges.pending', PendingChargesComposer::class);
         View::composer('pages.admin.dashboard.widgets.charges.rejected', RejectedChargesComposer::class);

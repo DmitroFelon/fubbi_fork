@@ -155,6 +155,10 @@ class DashboardController extends Controller
      */
     public function preloadView(string $view)
     {
+        if (!View::exists($view)) {
+            abort(404);
+        }
+
         return view($view);
     }
 }

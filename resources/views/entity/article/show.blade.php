@@ -29,17 +29,16 @@
                             <strong>{{_i('Status')}} : {{_i('new')}} </strong>
                         @endif
                     </div>
-                    @can('articles.accept', [$project, $article])
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        @can('articles.accept', [$project, $article])
                             <div data-rating="{{$article->ratingPercent}}" class="ratable">
                             </div>
-                        </div>
-                    @endcan
-                    @cannot('articles.accept', [$project, $article])
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 p-xs">
-                            <strong>Rating: {{round($article->avgRating, 2)}}</strong>
-                        </div>
-                    @endcannot
+                        @endcan
+                        @cannot('articles.accept', [$project, $article])
+                            <span data-rateyo-read-only="true" data-rating="{{$article->ratingPercent}}" class="ratable">
+                            </span>
+                        @endcannot
+                    </div>
                 </div>
                 <hr>
                 <div class="row">

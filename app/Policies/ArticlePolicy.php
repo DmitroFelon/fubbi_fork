@@ -23,12 +23,19 @@ class ArticlePolicy
      */
     public function before(User $user, $ability)
     {
+
+        $strict_abilities = [
+            'articles.accept'
+        ];
+
         $skip = [
             Role::ADMIN,
         ];
 
-        if (in_array($user->role, $skip)) {
-            return true;
+        if (!in_array($ability, $strict_abilities)) {
+            if (in_array($user->role, $skip)) {
+                return true;
+            }
         }
     }
 
@@ -91,6 +98,8 @@ class ArticlePolicy
      */
     public function accept(User $user, Project $model, Article $article)
     {
-        return ($model->client_id === $user->id);
+        $res = ($model->client_id === $user->id);
+
+        return $res;
     }
 }

@@ -15,13 +15,15 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
+//Stripe routes
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
+//Auth
 Auth::routes();
 
-Route::get('test', function (\Barryvdh\DomPDF\PDF $pdf) {
-    dd(\App\Services\User\SearchSuggestions::get('client'));
+//just for tests
+Route::get('test', function () {
+    \App\Models\Article::withRating(5)->get();
 });
 
 Broadcast::routes();
@@ -40,6 +42,7 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
         ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
+//Main routes group
 Route::middleware(['auth'])->group(function () {
 
     Route::group(['middleware' => ['role:admin']], function () {

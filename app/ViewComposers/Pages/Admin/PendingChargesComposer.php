@@ -36,6 +36,8 @@ class PendingChargesComposer
     public function compose(View $view)
     {
 
+        $I = $this->request->input();
+
         $pending_charges = Cache::remember('pending_charges', 60, function () {
             $all_charges     = Charge::all(['limit' => 100]);
             $pending_charges = collect($all_charges->data);

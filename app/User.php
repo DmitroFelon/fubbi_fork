@@ -83,6 +83,7 @@ class User extends Authenticatable implements HasMedia
     use Ratingable;
     use hasNotificationSettings;
 
+
     /**
      * The attributes that are mass assignable.
      *

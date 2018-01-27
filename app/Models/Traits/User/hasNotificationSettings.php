@@ -88,6 +88,4 @@ trait hasNotificationSettings
 
         return $project_notifications_checkboxes;
     }
-
-
 }

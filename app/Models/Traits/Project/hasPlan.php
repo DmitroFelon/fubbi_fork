@@ -43,15 +43,26 @@ trait hasPlan
     {
         $project = $this;
 
-        $result = Cache::remember('plan_matadata_' . $this->id, 10, function () use ($project) {
+        $result = Cache::remember('plan_matadata_' . $this->id, 60, function () use ($project) {
 
             try {
-                $metadata = (isset($this->plan) and !is_null($this->plan))
-                    ? collect($this->plan->metadata->jsonSerialize())
-                    : collect(Plan::retrieve($this->subscription->stripe_plan)->metadata->jsonSerialize());
+                if (isset($this->plan) and !is_null($this->plan)) {
+                    $metadata = (isset($this->plan->metadata) and method_exists($this->plan->metadata, 'jsonSerialize'))
+                        ? $this->plan->metadata->jsonSerialize()
+                        : null;
+                } else {
+                    $plan     = Plan::retrieve($this->subscription->stripe_plan);
+                    $metadata = (isset($plan->metadata) and method_exists($plan->metadata, 'jsonSerialize'))
+                        ? $plan->metadata->jsonSerialize()
+                        : null;
+                }
+
+                $metadata = collect($metadata);
+
             } catch (\Exception $e) {
                 return null;
             }
+
             return $metadata->transform(function ($item, $key) use ($project) {
                 if ($this->isModified($key)) {
                     return $item;
@@ -60,6 +71,7 @@ trait hasPlan
                     return $item;
                 }
             });
+
         });
 
         $project->save();

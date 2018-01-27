@@ -51,7 +51,7 @@ class ArticlesController extends Controller
             $articles_query->where('active', true);
         }
 
-        $articles = $articles_query->simplePaginate(10);
+        $articles = $articles_query->paginate(10);
 
         $filters['types'] = Article::getAllTypes();
 

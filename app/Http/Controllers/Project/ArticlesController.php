@@ -7,10 +7,10 @@ use App\Jobs\GoogleDrive\GoogleDriveCreate;
 use App\Jobs\GoogleDrive\GoogleDriveUpload;
 use App\Models\Article;
 use App\Models\Project;
-use App\Services\Google\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class ArticlesController
@@ -35,22 +35,19 @@ class ArticlesController extends Controller
      * Display a listing of the resource.
      *
      * @param \App\Models\Project $project
-     * @param Article $article
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Project $project, Article $article, Request $request)
+    public function index(Project $project, Request $request)
     {
         $articles_query = $project->articles();
 
         if ($request->has('type') and $request->input('type') != '') {
             $articles_query->where('type', $request->input('type'));
         }
-
         if ($request->has('active') and $request->input('active') != '') {
             $articles_query->where('active', true);
         }
-
         if ($request->has('status') and $request->input('status') != '') {
             if ($request->input('status') == 1) {
                 $articles_query->accepted();
@@ -59,11 +56,9 @@ class ArticlesController extends Controller
             }
         }
 
-        $articles = $articles_query->simplePaginate(10);
+        $articles = $articles_query->paginate(10);
 
-        //dd($articles);
-
-        $filters['types'] = $article->getTypes($project);
+        $filters['types'] = Article::getTypes($project);
 
         $filters['statuses'] = [
             ''    => _i('Select status'),
@@ -77,12 +72,12 @@ class ArticlesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Project $project
      * @return \Illuminate\Http\Response
      */
-    public function create(Project $project, Article $article)
+    public function create(Project $project)
     {
-
-        $filters['types'] = $article->getTypes($project);
+        $filters['types'] = Article::getTypes($project);
 
         return view('entity.article.create', compact('project', 'filters'));
     }
@@ -98,7 +93,7 @@ class ArticlesController extends Controller
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      * @internal param Drive $google
      */
-    public function store(Project $project, Article $article, Drive $drive, Request $request)
+    public function store(Project $project, Article $article, Request $request)
     {
 
         //save article
@@ -225,6 +220,8 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Set unique rating
+     *
      * @param Project $project
      * @param Article $article
      * @param Request $request
@@ -232,17 +229,13 @@ class ArticlesController extends Controller
      */
     public function rate(Project $project, Article $article, Request $request)
     {
-        $user = Auth::user();
+        Auth::user()->relatedClientArticles()
+            ->findOrFail($article->id)
+            ->ratingUnique(
+                ['rating' => $request->input('rate')],
+                Auth::user()
+            );
 
-        $article = $user->relatedClientArticles()->find($article->id);
-
-        if (!$article) {
-            abort(403);
-        }
-        $rate = $request->input('rate');
-
-        $article->ratingUnique(['rating' => $rate], $user);
-
-        return true;
+        return Response::json(['result' => true]);
     }
 }

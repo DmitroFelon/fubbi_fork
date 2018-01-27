@@ -66,12 +66,23 @@ class Role extends Model
     /**
      * @const string
      */
-    const DESIGNER = 'designer';
-    
+    const RESEARCHER = 'researcher';
+
     /**
      * @const string
      */
-    const RESEARCHER = 'researcher';
+    const DESIGNER = 'designer';
+
+    const TABLE = 'roles';
+
+    const COLUMN = 'name';
+
+    const WORKERS = [
+        self::WRITER,
+        self::DESIGNER,
+        self::EDITOR,
+        self::RESEARCHER,
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

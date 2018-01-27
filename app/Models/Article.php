@@ -98,9 +98,6 @@ class Article extends Model implements HasMedia
     {
         parent::boot();
 
-       /* static::addGlobalScope('active', function (Builder $builder) {
-            $builder->where('active', true);
-        });*/
     }
 
     /**
@@ -146,6 +143,13 @@ class Article extends Model implements HasMedia
     public function scopeNew($query)
     {
         return $query->where('accepted', '=', null);
+    }
+
+    public function scopeWithRating($query, $rating, $compare = '=')
+    {
+        return \App\Models\Article::whereHas('ratings', function ($query) use ($rating, $compare) {
+            $query->where('rating', $compare, $rating);
+        });
     }
 
     /**
@@ -201,7 +205,7 @@ class Article extends Model implements HasMedia
      * @param Project $project
      * @return \Illuminate\Support\Collection
      */
-    public function getTypes(Project $project)
+    public static function getTypes(Project $project)
     {
         $types = collect(
             [
