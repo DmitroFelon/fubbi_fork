@@ -7,12 +7,16 @@
 </div>
 {{Form::open(['action' => 'ProjectController@index', 'method' => 'get'])}}
 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-    {{ Form::select(
-           'user',
-           $filters['users'],
-           request('user'),
-           ['class' => 'form-control'])
-       }}
+    <input type="text"
+           value="{{(request()->input('customer'))?request()->input('customer'):''}}"
+           name="customer"
+           id="customer-select"
+           data-provide="typeahead"
+           data-source='{{$search_suggestions}}'
+           placeholder="{{_i('Search customer')}}"
+           autocomplete="off"
+           class="input form-control">
+    <small class="description">{{_i('Start typing client\'s name or email')}}</small>
 </div>
 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
     {{ Form::select(

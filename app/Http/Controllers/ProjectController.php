@@ -8,6 +8,7 @@ use App\Models\Keyword;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
+use App\Services\User\SearchSuggestions;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,8 +81,9 @@ class ProjectController extends Controller
                     }
                 }
 
-                if ($request->has('user') and $request->get('user')) {
-                    $projects = $projects->where('client_id', $request->get('user'));
+                if ($request->has('customer') and $request->get('customer') != '') {
+                    $user = User::search($request->input('customer'))->first();
+                    $projects = $projects->where('client_id', $user->id);
                 }
 
                 if ($request->has('month') and $request->get('month')) {
@@ -111,7 +113,6 @@ class ProjectController extends Controller
         });
         $filters['users'] = $clients->filter()->put('', _i('All clients'))->reverse()->toArray();
 
-
         $filters['months'] = [
             ''   => _('All time'),
             '1'  => _('1 month'),
@@ -127,7 +128,9 @@ class ProjectController extends Controller
 
         ];
 
-        return view('entity.project.index', ['projects' => $projects, 'filters' => $filters]);
+        $search_suggestions = SearchSuggestions::toView(Role::CLIENT);
+
+        return view('entity.project.index', compact('projects', 'filters', 'search_suggestions'));
     }
 
     /**
@@ -276,14 +279,14 @@ class ProjectController extends Controller
     {
 
         try {
-            
+
             $client = $project->client;
 
             if ($client->subscription($project->name)) {
                 $client->subscription($project->name)->cancel();
             }
-            
-            
+
+
         } catch (InvalidRequest $e) {
             $project->forceDelete();
         }
