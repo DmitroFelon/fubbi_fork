@@ -32,7 +32,10 @@
                     @endforeach
                     </tbody>
                 </table>
-                <div class="text-center">{{ $projects->links() }}</div>
+                @if(method_exists($projects, 'links'))
+                    <div class="text-center">{{ $projects->links() }}</div>
+                @endif
+
             </div>
         </div>
     </div>

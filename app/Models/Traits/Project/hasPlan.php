@@ -152,19 +152,6 @@ trait hasPlan
     }
 
     /**
-     * @param $service
-     * @return mixed
-     *
-     * Get outlined enity of service for current project
-     */
-    public function getServiceOutlines(string $service)
-    {
-        $r = $this->outlines()->withAnyTags([$service], 'service_type')->get();
-
-        return $r;
-    }
-
-    /**
      * @param string $service
      */
     public function isRequireService(string $service)

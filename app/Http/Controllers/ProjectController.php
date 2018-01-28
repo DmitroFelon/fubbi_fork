@@ -59,7 +59,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
+        $user = Auth::user();
 
         if ($user->projects->count() == 1) {
             return redirect()->action("ProjectController@show", $user->projects->first());
@@ -82,7 +82,7 @@ class ProjectController extends Controller
                 }
 
                 if ($request->has('customer') and $request->get('customer') != '') {
-                    $user = User::search($request->input('customer'))->first();
+                    $user     = User::search($request->input('customer'))->first();
                     $projects = $projects->where('client_id', $user->id);
                 }
 
@@ -99,7 +99,10 @@ class ProjectController extends Controller
                 }
                 break;
             default:
-                $projects = $user->projects()->paginate(10);
+                //if user accepted to the project personally
+                $projects = $user->projects()->get();
+                $projects = $user->teamProjects()->merge($projects);
+
                 break;
         }
 

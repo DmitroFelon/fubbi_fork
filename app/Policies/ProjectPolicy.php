@@ -44,7 +44,15 @@ class ProjectPolicy
 
         $result = $model->workers->find($user->id);
 
-        return $result->isNotEmpty();
+        if($result) {
+            return;
+        }
+
+        if($user->teamProjects()->get('id', $model->id)){
+            return true;
+        }
+
+        return false;
     }
 
     /**

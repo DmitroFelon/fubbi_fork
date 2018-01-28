@@ -137,7 +137,7 @@ class TeamController extends Controller
             });
         }
 
-        return redirect()->action('TeamController@index');
+        return redirect()->action('TeamController@index')->with('success', _('Users have been invited'));
     }
 
     /**

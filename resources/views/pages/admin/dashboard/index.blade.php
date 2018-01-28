@@ -1,5 +1,7 @@
 @extends('master')
 
+@role(\App\Models\Role::ADMIN)
+
 @section('before-content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-12">
@@ -9,6 +11,9 @@
         </div>
     </div>
 @endsection
+
+@endrole()
+
 
 @section('content')
     <div class="row">
@@ -74,7 +79,8 @@
             </div>
         </div>
     </div>
-    <div class="row"> {{-- Payments section --}}
+    @role(\App\Models\Role::ADMIN)
+        <div class="row"> {{-- Payments section --}}
         <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
@@ -124,6 +130,7 @@
             </div>
         </div> {{-- Rejected payments widget --}}
     </div>
+    @endrole()
 @endsection
 
 @section('scripts')

@@ -10,9 +10,11 @@ namespace App\ViewComposers\Pages\Admin;
 
 
 use App\Models\Article;
+use App\Models\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DeclinedArticlesComposer
@@ -27,7 +29,11 @@ class DeclinedArticlesComposer
 
     public function compose(View $view)
     {
-        $query = Article::declined();
+        if (Auth::user()->role == Role::ADMIN) {
+            $query = Article::declined();
+        } else {
+            $query = Auth::user()->articles()->declined();
+        }
 
         if ($this->request->has('customer') and $this->request->input('customer') > 0) {
             $user = User::search($this->request->input('customer'))->first();

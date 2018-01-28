@@ -10,9 +10,11 @@ namespace App\ViewComposers\Pages\Admin;
 
 
 use App\Models\Article;
+use App\Models\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ArticlesByRate
@@ -28,8 +30,13 @@ class ArticlesByRate
     public function compose(View $view)
     {
 
-        $rate  = $this->request->input('rate');
-        $query = Article::withRating($rate, ($rate == 3) ? '<=' : '=');
+        $rate = $this->request->input('rate');
+
+        if (Auth::user()->role == Role::ADMIN) {
+            $query = Article::withRating($rate, ($rate == 3) ? '<=' : '=');
+        } else {
+            $query = Auth::user()->articles()->withRating($rate, ($rate == 3) ? '<=' : '=');
+        }
 
         if ($this->request->has('customer') and $this->request->input('customer') != '') {
             $user = User::search($this->request->input('customer'))->first();
@@ -50,8 +57,8 @@ class ArticlesByRate
             $query->where('created_at', '<', $to);
         }
 
-        $articles       = $query->take(10)->get();
-        
+        $articles = $query->take(10)->get();
+
         $articles_count = $query->count();
 
         return $view->with(compact('articles', 'articles_count'));

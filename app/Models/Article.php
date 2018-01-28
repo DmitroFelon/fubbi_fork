@@ -147,7 +147,7 @@ class Article extends Model implements HasMedia
 
     public function scopeWithRating($query, $rating, $compare = '=')
     {
-        return \App\Models\Article::whereHas('ratings', function ($query) use ($rating, $compare) {
+        return $query->whereHas('ratings', function ($query) use ($rating, $compare) {
             $query->where('rating', $compare, $rating);
         });
     }

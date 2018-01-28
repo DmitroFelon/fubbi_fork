@@ -32,7 +32,7 @@
                     @endauth
                 </div>
                 <div class="logo-element">
-                    IN+
+                    F
                 </div>
             </li>
             @foreach($items as $item)
@@ -48,7 +48,7 @@
             @guest
             <li class="nav-header">
                 <div class="logo-element">
-                    IN+
+                    F
                 </div>
             </li>
             <li class="{{isActiveRoute('login')}}">

@@ -23,7 +23,7 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    \App\Models\Article::withRating(5)->get();
+    dd(Auth::user()->teamProjects());
 });
 
 Broadcast::routes();

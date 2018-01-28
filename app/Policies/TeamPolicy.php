@@ -46,12 +46,17 @@ class TeamPolicy
             return true;
         }
 
-        $result = $user->projects()->whereHas('teams', function ($query) use ($model) {
-            $query->where('id', $model->id);
-        })->get();
 
-        return $result->isNotEmpty();
+        if($user->teams->find($model->id)){
+            return true;
+        }
 
+        if ($user->getInviteToTeam($model->id)) {
+            return true;
+        }
+
+
+        return false;
     }
 
     /**

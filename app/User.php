@@ -267,7 +267,8 @@ class User extends Authenticatable implements HasMedia
      */
     public function getInviteToProject($project_id)
     {
-        return $this->invites()->projects()->where('invitable_id', $project_id)->new()->get()->first();
+        return $this->invites()->projects()
+                    ->where('invitable_id', $project_id)->new()->get()->first();
     }
 
     /**
@@ -276,7 +277,8 @@ class User extends Authenticatable implements HasMedia
      */
     public function getInviteToTeam($team_id)
     {
-        return $this->invites()->teams()->where('invitable_id', $team_id)->new()->get()->first();
+        return $this->invites()->teams()
+                    ->where('invitable_id', $team_id)->new()->get()->first();
     }
 
     /**
@@ -381,6 +383,23 @@ class User extends Authenticatable implements HasMedia
     public function relatedWorkerArticles()
     {
         return $this->hasManyThrough(Article::class, Project::class, 'client_id', 'project_id');
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function teamProjects()
+    {
+        $projects = collect();
+
+        $this->teams->each(function (Team $team) use ($projects) {
+            $team->projects->each(function (Project $project) use ($projects) {
+                $projects->push($project);
+            });
+        });
+
+        return $projects;
     }
 
     /**

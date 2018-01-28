@@ -46,6 +46,11 @@ class ArticlePolicy
      */
     public function index(User $user, Project $model)
     {
+
+        if($user->teamProjects()->get('id', $model->id)){
+            return true;
+        }
+
         return ($user->projects()->find($model->id)) ? true : false;
     }
 
@@ -76,6 +81,10 @@ class ArticlePolicy
             return false;
         }
 
+        if($user->teamProjects()->get('id', $model->id)){
+            return true;
+        }
+
         return ($user->projects()->find($model->id)) ? true : false;
     }
 
@@ -87,6 +96,11 @@ class ArticlePolicy
      */
     public function delete(User $user, Project $model, Article $article)
     {
+
+        if($user->teamProjects()->get('id', $model->id)){
+            return true;
+        }
+
         return ($user->projects()->find($model->id)) ? true : false;
     }
 
