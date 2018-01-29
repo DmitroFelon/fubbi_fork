@@ -24,34 +24,27 @@ class Export
         //collect media files
         foreach ($collections as $collection) {
             $collection_files = $project->getMedia($collection);
-            if (strpos($collection, 'meta-') !== false) {
-                if ($collection_files->isNotEmpty()) {
-                    $collection_files->each(function (Media $item) use (&$data, $collection) {
-                        $collection = str_replace('meta-', '', $collection);
-                        $collection = str_replace('-collection', '', $collection);
-                        $collection = str_replace('-', ' ', $collection);
-                        $collection = str_replace('_', ' ', $collection);
+            if ($collection_files->isNotEmpty()) {
+                $collection_files->each(function (Media $item) use (&$data, $collection) {
+                    $collection = str_replace('-', ' ', $collection);
+                    $collection = str_replace('_', ' ', $collection);
 
-                        if (File::exists($item->getPath())) {
-                            $data['keywords_media'][$collection][] = $item->getPath();
-                        }
+                    if (File::exists($item->getPath())) {
+                        $data['media'][$collection][] = $item->getPath();
+                    }
 
-                    });
-                }
-            } else {
-                if ($collection_files->isNotEmpty()) {
-                    $collection_files->each(function (Media $item) use (&$data, $collection) {
-                        $collection = str_replace('-', ' ', $collection);
-                        $collection = str_replace('_', ' ', $collection);
-
-                        if (File::exists($item->getPath())) {
-                            $data['media'][$collection][] = $item->getPath();
-                        }
-
-                    });
-                }
+                });
             }
         }
+
+        $project->ideas->each(function (App\Models\Idea $idea) use (&$data) {
+            $idea->getMedia()->each(function (Media $item) use (&$data, $idea) {
+                if (File::exists($item->getPath())) {
+                    $data['themes_media'][str_replace('-', ' ', $idea->theme)][] = $item->getPath();
+                }
+            });
+        });
+
 
         $meta = $project->getMeta();
         $skip = [
@@ -103,9 +96,9 @@ class Export
             }
         }
 
-        if (isset($data['keywords_media'])) {
-            foreach ($data['keywords_media'] as $collection => $files) {
-                $zipper->folder($main_folder . '/keywords media/' . $collection)->add($files);
+        if (isset($data['themes_media'])) {
+            foreach ($data['themes_media'] as $subfolder => $files) {
+                $zipper->folder($main_folder . '/themes media/' . $subfolder)->add($files);
             }
         }
 

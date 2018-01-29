@@ -39,6 +39,9 @@
         </tr>
     @endforeach
 </table>
+
+<hr>
+
 <div class="page-break"></div>
 
 <center>
@@ -66,62 +69,66 @@
 <div class="page-break"></div>
 
 <center>
-    <h2>Keywords</h2>
+    <h2>Ideas</h2>
 </center>
 
-@if(is_array($project->keywords))
-    @foreach($project->keywords as $theme => $keywords)
-        @if(empty($keywords))
-            @continue
-        @endif
-        <div>
-            <b>{{$theme}} : </b> <br>
-            {{implode(', ', array_keys($keywords))}}
-        </div>
+@foreach($project->ideas()->themes()->get() as $idea)
+    <div>
+        <b>{{ucfirst($idea->theme)}} : </b> <br>
+        <ul>
+            @if($idea->keywords()->accepted()->get()->isEmpty())
+                <li>-</li>
+            @else
+                @foreach($idea->keywords()->accepted()->get() as $keyword)
+                    <li>{{$keyword->text}}</li>
+                @endforeach
+            @endif
+        </ul>
         <br>
-    @endforeach
-@endif
+        <h3> Info: </h3>
+        <ul>
+            <li><b> Points covered : </b> <br> {{$idea->points_covered}} </li>
+            <li><b> Points avoid : </b> <br> {{$idea->points_avoid}} </li>
+            <li><b> References : </b> <br> {{$idea->references}} </li>
+            <li><b> This month : </b> <br> {{ ($idea->this_month) ? 'Yes' : 'No' }} </li>
+            <li><b> Next month : </b> <br> {{ ($idea->next_month) ? 'Yes' : 'No' }} </li>
+        </ul>
+    </div>
+    <br>
+    <hr>
+@endforeach
 <div class="page-break"></div>
 
 <center>
-    <h2>Keywords Questions</h2>
+    <h2>Questions</h2>
 </center>
-@if(is_array($project->keywords_questions))
-    @foreach($project->keywords_questions as $theme => $keywords)
-        @if(empty($keywords))
-            @continue
-        @endif
-        <div>
-            <b>{{$theme}} : </b> <br>
-            {{implode(', ', array_keys($keywords))}}
-        </div>
+@foreach($project->ideas()->questions()->get() as $idea)
+    <div>
+        <b>{{ucfirst($idea->theme)}} : </b> <br>
+        <ul>
+            @if($idea->keywords()->accepted()->get()->isEmpty())
+                <li>-</li>
+            @else
+                @foreach($idea->keywords()->accepted()->get() as $keyword)
+                    <li>{{$keyword->text}}</li>
+                @endforeach
+            @endif
+        </ul>
         <br>
-    @endforeach
-@endif
-<div class="page-break"></div>
+        <h3> Info: </h3>
+        <ul>
+            <li><b> Points covered : </b> <br> {{$idea->points_covered}} </li>
+            <li><b> Points avoid : </b> <br> {{$idea->points_avoid}} </li>
+            <li><b> References : </b> <br> {{$idea->references}} </li>
+            <li><b> This month : </b> <br> {{ ($idea->this_month) ? 'Yes' : 'No' }} </li>
+            <li><b> Next month : </b> <br> {{ ($idea->next_month) ? 'Yes' : 'No' }} </li>
+        </ul>
 
-<center>
-    <h2>Keywords Additional Info</h2>
-</center>
-@if(is_array($project->keywords_meta))
-    @foreach($project->keywords_meta as $theme => $data)
-        @if(empty($data))
-            @continue
-        @endif
-        <div>
-            <b>{{$theme}} : </b> <br>
-            @foreach($data as $key => $value)
-                @if(!$value)
-                    @continue
-                @endif
-                <span style="text-indent:25px;"> - {{$key}} : {{$value}}</span> <br>
-            @endforeach
-        </div>
-        <br>
-    @endforeach
-@endif
+    </div>
+    <br>
+    <hr>
+@endforeach
 <div class="page-break"></div>
-
 
 </body>
 </html>
