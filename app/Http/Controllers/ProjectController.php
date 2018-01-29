@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProject;
 use App\Models\Helpers\ProjectStates;
-use App\Models\Keyword;
+use App\Models\Idea;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Spatie\MediaLibrary\Media;
 use Stripe\Error\InvalidRequest;
@@ -143,8 +145,13 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $step = 'plan';
+        if (Session::has('quiz')) {
+            return redirect()
+                ->action('ProjectController@edit', [Session::get('quiz'), 's' => ProjectStates::QUIZ_FILLING])
+                ->with('info', _i('Please, complete the quiz'));
+        }
 
+        $step  = 'plan';
         $plans = Cache::remember(
             'public_plans',
             60,
@@ -167,7 +174,9 @@ class ProjectController extends Controller
                 return $filtered_plans->reverse();
             }
         );
-
+        header("Cache-Control: no-store, must-revalidate, max-age=0");
+        header("Pragma: no-cache");
+        header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         return view('entity.project.create', compact('plans', 'step'));
     }
 
@@ -179,14 +188,11 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
-
         $keywords           = $project->keywords;
         $keywords_questions = $project->keywords_questions;
         $metadata           = $project->metaToView();
         $manager            = $project->workers()->withRole(Role::ACCOUNT_MANAGER)->first(['id']);
         $manager_id         = ($manager) ? $manager->id : null;
-
 
         $users = [];
         $teams = [];
@@ -216,7 +222,7 @@ class ProjectController extends Controller
         if ($step == ProjectStates::PLAN_SELECTION) {
             $plans = Cache::remember(
                 'public_plans',
-                60,
+                60 * 24 * 365,
                 function () {
                     $available_plans = [
                         'fubbi-basic-plan',
@@ -240,9 +246,6 @@ class ProjectController extends Controller
             $plans = collect();
         }
 
-
-        $keywords = $project->getMeta('keywords');
-
         $articles = $project->articles;
 
         return view('entity.project.edit', compact('keywords', 'articles', 'project', 'step', 'plans'));
@@ -260,7 +263,6 @@ class ProjectController extends Controller
         if (!$request->has('_step')) {
             abort(404);
         }
-
 
         $project = $project->filling($request);
 
@@ -431,13 +433,25 @@ class ProjectController extends Controller
         return Response::json($files->filter()->toArray(), 200);
     }
 
+    public function get_stored_idea_files(Idea $idea, Request $request)
+    {
+        $files = $idea->getMedia();
+
+        $files->transform(function (Media $media) use ($idea) {
+            $media->url = $idea->prepareMediaConversion($media);
+            return $media;
+        });
+
+        return Response::json($files->filter()->toArray(), 200);
+    }
+
     /**
      * @param Project $project
      * @param Request $request
      */
     public function remove_stored_files(Project $project, Media $media, Request $request)
     {
-        $project->media->find($media->id)->delete();
+        $project->media()->findOrFail($media->id)->delete();
         return Response::json('success', 200);
     }
 
@@ -465,6 +479,7 @@ class ProjectController extends Controller
      */
     public function prefill_files(Project $project, Request $request)
     {
+
         $files = $project->addFiles($request);
         $files->transform(function (Media $media) use ($project) {
             $media->url = $project->prepareMediaConversion($media);
@@ -476,16 +491,22 @@ class ProjectController extends Controller
 
     /**
      * @param Project $project
+     * @param Idea $idea
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function prefill_meta_files(Project $project, Request $request)
+    public function prefill_meta_files(Project $project, Idea $idea, Request $request)
     {
-        $files = $project->addMetaFiles($request);
-        $files->transform(function (Media $media) use ($project) {
-            $media->url = $project->prepareMediaConversion($media);
-            return $media;
-        });
+        $files = collect();
+
+        if ($request->hasFile('files')) {
+            foreach ($request->files as $file) {
+                $media      = $idea->addMedia($file)->toMediaCollection();
+                $media->url = $idea->prepareMediaConversion($media);
+                $files->push($media);
+            }
+        }
 
         return Response::json($files, 200);
     }

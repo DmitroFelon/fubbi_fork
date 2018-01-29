@@ -59,6 +59,18 @@ use Spatie\Tags\Tag;
  * @property string|null $google_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article meta()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereGoogleId($value)
+ * @property string $type
+ * @property int $active
+ * @property-read mixed $avg_rating
+ * @property-read mixed $count_negative
+ * @property-read mixed $count_positive
+ * @property-read mixed $sum_rating
+ * @property-read mixed $rating_percent
+ * @property-read \App\Models\Project $project
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Ghanem\Rating\Models\Rating[] $ratings
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article withRating($rating, $compare = '=')
  */
 class Article extends Model implements HasMedia
 {
@@ -76,7 +88,8 @@ class Article extends Model implements HasMedia
         'title',
         'body',
         'type',
-        'user_id'
+        'user_id',
+        'idea_id'
     ];
 
     /**
@@ -94,11 +107,6 @@ class Article extends Model implements HasMedia
      */
     protected $dates = ['deleted_at'];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-    }
 
     /**
      * One article may belong to many projects
@@ -108,6 +116,14 @@ class Article extends Model implements HasMedia
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function idea()
+    {
+        return $this->belongsTo(Idea::class);
     }
 
     /**
@@ -145,6 +161,12 @@ class Article extends Model implements HasMedia
         return $query->where('accepted', '=', null);
     }
 
+    /**
+     * @param $query
+     * @param $rating
+     * @param string $compare
+     * @return mixed
+     */
     public function scopeWithRating($query, $rating, $compare = '=')
     {
         return $query->whereHas('ratings', function ($query) use ($rating, $compare) {

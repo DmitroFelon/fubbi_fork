@@ -45,7 +45,7 @@ class ProjectPolicy
         $result = $model->workers->find($user->id);
 
         if($result) {
-            return;
+            return true;
         }
 
         if($user->teamProjects()->get('id', $model->id)){

@@ -79,6 +79,13 @@ class ArticlesController extends Controller
     {
         $filters['types'] = Article::getTypes($project);
 
+        $filters['ideas'] = array_combine(
+            $project->ideas->pluck('id')->toArray(),
+            $project->ideas->pluck('theme')->toArray()
+        );
+
+        $filters['ideas'][''] = _('Select Idea');
+
         return view('entity.article.create', compact('project', 'filters'));
     }
 
@@ -95,6 +102,9 @@ class ArticlesController extends Controller
      */
     public function store(Project $project, Article $article, Request $request)
     {
+
+        $i = $request->input();
+
 
         //save article
         $article->fill(

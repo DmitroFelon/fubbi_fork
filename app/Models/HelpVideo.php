@@ -7,7 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class HelpVideo
+ *
  * @package App\Models
+ * @property int $id
+ * @property string $name
+ * @property string $url
+ * @property \Page $page
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read mixed|string $player
+ * @property-read string $thumbnail
+ * @property-read mixed|string $youtube_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo wherePage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\HelpVideo whereUrl($value)
+ * @mixin \Eloquent
  */
 class HelpVideo extends Model
 {

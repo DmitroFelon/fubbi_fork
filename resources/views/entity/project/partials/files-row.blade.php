@@ -9,6 +9,18 @@
                     <img class="blueimp-gallery-image"
                          src="{{$media->getFullUrl('dropzone')}}">
                 </a>
+            @elseif($media->mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+                <a href="{{$media->getFullUrl()}}"
+                   target="_blank">
+                    <img class="blueimp-gallery-image"
+                         src="/img/docx.png">
+                </a>
+            @elseif($media->mime_type == 'application/pdf')
+                <a href="{{$media->getFullUrl()}}"
+                   target="_blank">
+                    <img class="blueimp-gallery-image"
+                         src="/img/pdf.png">
+                </a>
             @else
                 <a target="_blank" href="{{$media->getFullUrl()}}">
                     <i class="fa fa-file"></i>

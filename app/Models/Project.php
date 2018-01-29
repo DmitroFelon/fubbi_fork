@@ -6,7 +6,6 @@ namespace App\Models;
 use App;
 use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
-use App\Models\Traits\Project\FormProjectAccessors;
 use App\Models\Traits\Project\hasArticles;
 use App\Models\Traits\Project\hasPlan;
 use App\Models\Traits\Project\hasStates;
@@ -69,6 +68,7 @@ use Venturecraft\Revisionable\Revision;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activity
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Idea[] $ideas
  */
 class Project extends Model implements HasMediaConversions, Invitable
 {
@@ -159,6 +159,14 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ideas()
+    {
+        return $this->hasMany(Idea::class);
     }
 
     /**
@@ -269,6 +277,7 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function reset()
     {
         $this->created_at = Carbon::now();
+        $this->updated_at = Carbon::now();
         $this->unsetMeta('export');
         $this->save();
 
@@ -337,29 +346,21 @@ class Project extends Model implements HasMediaConversions, Invitable
     {
         $meta_to_skip = [
             'themes_order',
+            'questions',
             'keywords_meta',
             'keywords',
             'keywords_questions',
             'export',
             'conversation_id'
         ];
-
-        $meta = $this->metas;
-
+        $meta         = clone $this->metas;
         $meta->transform(function ($item) use ($meta_to_skip) {
-
             //skip modified plan attributes
             if (strpos($item->key, 'modificator_') !== false or in_array($item->key, $meta_to_skip)) {
                 return null;
             }
 
-            //is link
-            $item->value = (filter_var($item->value, FILTER_VALIDATE_URL))
-                ? '<a href="' . $item->value . '">' . $item->value . '</a>'
-                : $item->value;
-
             return $item;
-
         });
 
         return $meta->filter();
@@ -425,6 +426,15 @@ class Project extends Model implements HasMediaConversions, Invitable
         return (is_array($this->$key)) ? array_combine(array_values($this->$key), array_values($this->$key)) : [];
     }
 
+    public function prepareTagsInputThemes()
+    {
+        $themes = $this->ideas()->themes()->get()->pluck('theme')->toArray();
+        return array_combine($themes, $themes);
+    }
+
+    /**
+     *
+     */
     public function suspend()
     {
         try {

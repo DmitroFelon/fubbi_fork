@@ -46,11 +46,15 @@ class ResearchController extends Controller
 
         $metrics = 'googlesearchnetwork';
 
-        $questions = Cache::remember('questions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics. '.' . $source, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
+        $key = 'questions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics . '.' . $source;
+
+        $questions = Cache::remember($key, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
             return $api->questions($theme, $country, $language, $metrics, $source);
         });
 
-        $suggestions = Cache::remember('suggestions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics. '.' . $source, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
+        $key = 'suggestions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics . '.' . $source;
+
+        $suggestions = Cache::remember($key, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
             return $api->suggestions($theme, $country, $language, $metrics, $source);
         });
 

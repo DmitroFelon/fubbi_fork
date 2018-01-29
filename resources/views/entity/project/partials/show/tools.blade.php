@@ -30,10 +30,13 @@
     @endcan
 @endrole
 
-<a href="{{url()->action('Project\ArticlesController@create', $project)}}"
-   class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
-    {{_i('Add article')}}
-</a>
+
+@can('articles.create', $project)
+    <a href="{{url()->action('Project\ArticlesController@create', $project)}}"
+       class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
+        {{_i('Add article')}}
+    </a>
+@endcan
 <a class="collapse-link">
     <i class="fa fa-chevron-up"></i>
 </a>

@@ -17,19 +17,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class ArticlesByRate
+ * @package App\ViewComposers\Pages\Admin
+ */
 class ArticlesByRate
 {
 
+    /**
+     * @var Request
+     */
     protected $request;
 
+    /**
+     * ArticlesByRate constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
+    /**
+     * @param View $view
+     * @return $this
+     */
     public function compose(View $view)
     {
-
         $rate = $this->request->input('rate');
 
         if (Auth::user()->role == Role::ADMIN) {
@@ -62,8 +76,6 @@ class ArticlesByRate
         $articles_count = $query->count();
 
         return $view->with(compact('articles', 'articles_count'));
-
-
     }
 
 }

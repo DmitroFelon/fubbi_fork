@@ -20,13 +20,13 @@
                 </small>
 
                 @role([\App\Models\Role::CLIENT])
-                <div class="m-t-md">
-                        <span class="text-primary">
-                            <a target="_blank" href="{{action('ResearchController@index')}}">
-                                {{_i('Make a research before filling quiz')}}
-                            </a>
-                        </span>
-                </div>
+                    <div class="m-t-md">
+                            <span class="text-primary">
+                                <a target="_blank" href="{{action('ResearchController@index')}}">
+                                    {{_i('Make a research before filling quiz')}}
+                                </a>
+                            </span>
+                    </div>
                 @endrole
             </div>
         </div>

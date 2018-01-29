@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddActiveColumnToArticlesTable extends Migration
 {
@@ -26,7 +26,7 @@ class AddActiveColumnToArticlesTable extends Migration
     public function down()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->removeColumn('active');
+            $table->dropColumn('active');
         });
     }
 }

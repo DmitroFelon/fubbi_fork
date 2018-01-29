@@ -21,10 +21,11 @@ class GoogleKeywords implements KeywordsFactoryInterface
 	 * @param $keyword
 	 * @param string $country
 	 * @param string $language
-	 * @return \Illuminate\Support\Collection
+	 * @param string $metrics
+	 * @return Collection
 	 * @throws \Exception
 	 */
-	public function suggestions($keyword, $country = 'au', $language = 'en'):Collection
+	public function suggestions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
 	{
 		$params = [
 			'cx'     => '014431535617793814068:kmrzg_w7iqo',
@@ -65,9 +66,10 @@ class GoogleKeywords implements KeywordsFactoryInterface
 	 * @param $keyword
 	 * @param string $country
 	 * @param string $language
-	 * @return \Illuminate\Support\Collection
+	 * @param string $metrics
+	 * @return Collection
 	 */
-	public function questions($keyword, $country = 'au', $language = 'en'):Collection
+	public function questions($keyword, $country = 'au', $language = 'en', $metrics = 'googlesearchnetwork'):Collection
 	{
 		// TODO: Implement questions() method.
 	}

@@ -32,7 +32,7 @@
                             <th class="footable-sortable">{{_i('Status')}}</th>
                             <th>{{_i('Type')}}</th>
                             <th class="footable-sortable">{{_i('Rating')}}</th>
-                            <th class="">{{_i('Project')}}</th>
+                            <th class="">{{_i('Idea')}}</th>
                             <th class="">{{_i('This month')}}</th>
                         </tr>
                         </thead>

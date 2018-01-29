@@ -4,7 +4,8 @@
 
 <div class="ibox-content">
     {!! Form::model($project,
-    ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update', $project->id]])
+    ['files' => true, 'method' => 'PUT', 'role'=>'form', 'id' => 'quiz-form', 'action' => ['ProjectController@update',
+     $project->id]])
     !!}
     {!! Form::hidden('_step', \App\Models\Helpers\ProjectStates::QUIZ_FILLING) !!}
     {!! Form::hidden('_project_id', $project->id ) !!}
@@ -12,41 +13,66 @@
     <h1>Step 1</h1>
     <fieldset>
         {!! Form::bsSelect(
-            'themes[]', $project->prepareTagsInput('themes'), null,
+            'themes[]', $project->prepareTagsInputThemes(), null,
             _i("Type content themes here"),
             _i("Type at least 10 themes. Separate by coma or click 'enter'."),
             ['required', 'id' => 'themes', 'class'=>'tagsinput', 'multiple']
         ) !!}
-        <div class="form-group @unless( isset($project) and $project->themes_order != '' ) hide @endunless"
+        <div class="form-group @unless( isset($project) and $project->themes_order != '' ) @endunless"
              id="themes-order-list-wrapper">
             {!! Form::label('', _i("Please reorder themes in order of priority.")) !!}
             <div class="text-muted">{{_i('Drag and drop')}}</div>
+
             <ul id="themes-order-list" class="list-group sortable">
-                @isset($project)
-                @foreach($project->prepareTagsInput('themes_order') as $row)
-                    @if($row != '')
-                        <li class="list-group-item" data-value="{{$row}}">{{$row}}</li>
-                    @endif
+                @foreach($project->ideas()->themes()->get() as $row)
+                    <li class="list-group-item" data-value="{{$row->theme}}">{{$row->theme}}</li>
                 @endforeach
-                @endisset
             </ul>
         </div>
 
-        @for($i=0;$i<=6;$i++)
-            @if($i==0)
-                {!! Form::bsText(
-                   'questions['.$i.']', ((isset($project->questions[$i]))?$project->questions[$i]:''),
-                   _i('What are the top 7 questions clients desperately want answers to?'),
-                   null, ['id' => 'questions-'.$i, 'required']
-               ) !!}
-            @else
-                {!! Form::bsText('questions['.$i.']', ((isset($project->questions[$i]))?$project->questions[$i]:''), null, null, ['id' => 'questions-'.$i, 'required']) !!}
+
+        @if($project->ideas()->questions()->count() == 0)
+            @for($i=0;$i<=6;$i++)
+                @if($i == 0)
+                    {!! Form::bsText(
+                       'questions['.$i.']', null,
+                       _i('What are the top 7 questions clients desperately want answers to?'),
+                       null, ['required']
+                   ) !!}
+                @else
+                    {!! Form::bsText('questions['.$i.']', null,
+                     null, null, ['required']) !!}
+                @endif
+            @endfor
+        @else
+            @foreach($project->ideas()->questions()->get() as $idea)
+                @if($loop->first)
+                    {!! Form::bsText(
+                       'questions['.$idea->id.']', $idea->theme,
+                       _i('What are the top 7 questions clients desperately want answers to?'),
+                       null, ['required']
+                   ) !!}
+                @else
+                    {!! Form::bsText('questions['.$idea->id.']', $idea->theme,
+                     null, null, ['required']) !!}
+                @endif
+            @endforeach
+
+            @if($project->ideas()->questions()->count() < 7)
+                @for($i=0; $i < 7 - $project->ideas()->questions()->count(); $i++)
+                    {!! Form::bsText('questions['.$i.']', null,
+                          null, null, ['required']) !!}
+                @endfor
             @endif
-        @endfor
+
+        @endif
+
     </fieldset>
     <h1>Step 2</h1>
     <fieldset>
-        {!! Form::bsText('relevance', null, _i('Is it essential that the content we create for you be relevant to a specific country, state or city? Please explain'), '', ['required']) !!}
+        {!! Form::bsText('relevance', null,
+         _i('Is it essential that the content we create for you be relevant to a specific country, state or city? Please explain'),
+          '', ['required']) !!}
         <div class="row">
             <h4 class="text-center"><strong>Who is your ideal target audience?</strong></h4>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -65,13 +91,13 @@
                 {!! Form::bsText('audience[profession]', null, _i('Profession'), null, ['required']) !!}
             </div>
         </div>
-        {!! Form::bsText('homepage', null, _i('What is the home page url of the website we are creating content for?'), '', ['required'], 'url') !!}
-
-
+        {!! Form::bsText('homepage', null,
+         _i('What is the home page url of the website we are creating content for?'), '', ['required'], 'url') !!}
     </fieldset>
     <h1>Step 3</h1>
     <fieldset>
-        {!! Form::bsSelect('language', ['en-us' => 'English - United States', 'en-gb' => 'English - Great Britain', 'en-au' => 'English - Australia'], null, _i('What language do you want us to write content in?'), '', ['required']) !!}
+        {!! Form::bsSelect('language', ['en-us' => 'English - United States', 'en-gb' => 'English - Great Britain',
+         'en-au' => 'English - Australia'], null, _i('What language do you want us to write content in?'), '', ['required']) !!}
         <h4 class="text-center">
             <strong>
                 {{_i("Here are our three writing styles. Please review each one of them and then select one.")}}
@@ -153,7 +179,8 @@
                 </a>
             </li>
         </ol>
-        {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null, _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
+        {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null,
+         _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
 
         @if($project->plan->id != 'fubbi-basic-plan')
             <div class="row">
@@ -162,17 +189,20 @@
                         <div class="panel panel-default">
                             <div class="panel-heading collapsible" data-toggle="collapse" href="#quora-block">
                                 <h4 class="panel-title">
-                                    <span>{{_i("For some of our packages we publish on Quora. Do you have a Quora account? (it’s a secure field)")}}</span>
+                                    <span>{{_i("For some of our packages we publish on Quora.
+                                     Do you have a Quora account? (it’s a secure field)")}}</span>
                                     <i class="text-right fa fa-expand right" aria-hidden="true"></i>
                                 </h4>
                             </div>
                             <div id="quora-block" class="panel-collapse row collapse">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        {!! Form::bsText('quora_username', null, _i("Username"), null, ['autocomplete' => 'off']) !!}
+                                        {!! Form::bsText('quora_username', null, _i("Username"), null,
+                                         ['autocomplete' => 'off']) !!}
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        {!! Form::bsText('quora_password', null, _i("Password"), null, ['autocomplete' => 'new-password'], 'password') !!}
+                                        {!! Form::bsText('quora_password', null, _i("Password"), null,
+                                         ['autocomplete' => 'new-password'], 'password') !!}
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +241,8 @@
     </fieldset>
     <h1>Step 4</h1>
     <fieldset>
-        {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a writing style that would like for your content"), null, [], 'url') !!}
+        {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a
+         writing style that would like for your content"), null, [], 'url') !!}
 
         <div class="row m-t-md">
             <label for="is-compliance_guideline-block"
@@ -313,8 +344,6 @@
     </fieldset>
     <h1>Step 5</h1>
     <fieldset>
-
-
         <div class="row m-t-md">
             <label for="is-cta-block"
                    class="col-lg-4 col-md-12 col-sm-12 col-xs-12 control-label">
@@ -365,7 +394,12 @@
 
         <div class="row m-t-md">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes', _i("Do you want to review outlines before we send you articles to approve?"), _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've worked with writers before and you've never been happy, or... 2. If you know you're very selective , or... 3. Your audience has 'very' acute knowledge about a subject that is highly specialised"), []) !!}
+                {!! Form::bsSelect('articles_preview', ['yes' => 'Yes', 'no' => 'No'], 'yes',
+                 _i("Do you want to review outlines before we send you articles to approve?"),
+                  _i("Note: Most clients say 'no'. You however should say 'yes' if 1. you've
+                  worked with writers before and you've never been happy, or... 2.
+                   If you know you're very selective , or... 3. Your audience has 'very' acute
+                   knowledge about a subject that is highly specialised"), []) !!}
             </div>
         </div>
 
@@ -373,4 +407,18 @@
     </fieldset>
     {!! Form::close() !!}
 </div>
+
+
+<script>
+    window.onbeforeunload = function (e) {
+        var message = "{{_i('Are You sure?')}}",
+                e = e || window.event;
+        // For IE and Firefox
+        if (e) {
+            e.returnValue = message;
+        }
+        // For Safari and Chrome
+        return message;
+    };
+</script>
 

@@ -14,6 +14,7 @@ use App\ViewComposers\Pages\Admin\ArticlesByRate;
 use App\ViewComposers\Pages\Admin\DeclinedArticlesComposer;
 use App\ViewComposers\Pages\Admin\LastArticlesComposer;
 use App\ViewComposers\Pages\Admin\LastChargesComposer;
+use App\ViewComposers\Pages\Admin\OverdueArticles;
 use App\ViewComposers\Pages\Admin\PendingChargesComposer;
 use App\ViewComposers\Pages\Admin\RejectedChargesComposer;
 use App\ViewComposers\TopMenuComposer;
@@ -52,6 +53,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         View::composer('pages.admin.dashboard.widgets.articles.last', LastArticlesComposer::class);
         View::composer('pages.admin.dashboard.widgets.articles.declined', DeclinedArticlesComposer::class);
         View::composer('pages.admin.dashboard.widgets.articles.by_rate', ArticlesByRate::class);
+        View::composer('pages.admin.dashboard.widgets.articles.overdue', OverdueArticles::class);
         View::composer('pages.admin.dashboard.widgets.charges.last', LastChargesComposer::class);
         View::composer('pages.admin.dashboard.widgets.charges.pending', PendingChargesComposer::class);
         View::composer('pages.admin.dashboard.widgets.charges.rejected', RejectedChargesComposer::class);

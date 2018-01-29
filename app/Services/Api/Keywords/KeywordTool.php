@@ -74,14 +74,7 @@ class KeywordTool implements KeywordsFactoryInterface
 
         $results  = $results->collapse();
         $keywords = collect($results->keyBy('string'));
-        $keywords->transform(
-            function ($item, $key) {
-                //set each $keyword => false
-                return false;
-            }
-        );
-        return $keywords;
-
+        return $keywords->keys();
     }
 
     /**
@@ -113,20 +106,12 @@ class KeywordTool implements KeywordsFactoryInterface
             throw new \Exception(json_encode($e->getMessage()));
         }
 
-
         $categories_count = $results->count();
         $results          = $results->collapse();
         //remove sub categories from result
         $results  = $results->slice($categories_count);
         $keywords = collect($results->keyBy('string'));
-        $keywords->transform(
-            function ($item, $key) {
-                return false;
-            }
-        );
-        return $keywords;
-
-        throw new \Exception('Empty response');
+        return $keywords->keys();
     }
 
     /**

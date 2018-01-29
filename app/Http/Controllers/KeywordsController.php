@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Idea;
+use App\Models\Keyword;
 use App\Models\Project;
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use Illuminate\Support\Facades\Session;
@@ -15,71 +17,64 @@ class KeywordsController extends Controller
 {
     /**
      * @param \App\Models\Project $project
-     * @param string $theme
+     * @param Idea $idea
      * @param \App\Services\Api\Keywords\KeywordsFactoryInterface $api
      * @return string
      */
-    public function index(Project $project, string $theme, KeywordsFactoryInterface $api)
+    public function index(Project $project, Idea $idea, KeywordsFactoryInterface $api)
     {
         $max_count = config('fubbi.keywords_count');
 
         try {
-            $keywords_full           = ($project->getMeta('keywords'))
-                ? collect($project->getMeta('keywords'))
-                : collect();
-            
-            $keywords_questions_full = ($project->getMeta('keywords_questions'))
-                ? collect($project->getMeta('keywords_questions'))
-                : collect();
 
-            //get keywords for theme
-            $theme = trim($theme);
-            if ($keywords_full->has($theme) and !empty($keywords_full->get($theme))) {
-                // get from database if exist
-                $keywords = collect($keywords_full->get($theme));
-            } else {
-                // load from api,
-                // "KeywordTool" by default
-                $keywords = $api->suggestions($theme);
+            if ($idea->keywords()->suggestions()->get()->isEmpty()) {
+                $keywords = $api->suggestions($idea->theme);
+
+                $keywords_to_be_saved = collect();
 
                 if ($keywords->count() > $max_count) {
-                    $keywords->shuffle();
-                    $keywords = $keywords->take($max_count);
+                    $keywords = $keywords->shuffle()->take($max_count);
                 }
 
-                $keywords_full->put($theme, $keywords->toArray());
-                $project->setMeta('keywords', $keywords_full);
-                $project->save();
+                $keywords->each(function ($item) use ($keywords_to_be_saved) {
+                    $keywords_to_be_saved->push(
+                        ['text' => $item, 'accepted' => false, 'type' => Keyword::TYPE_SUGGESTION]
+                    );
+                });
+
+                $keywords_to_be_saved = $keywords_to_be_saved->toArray();
+
+                $keywords = $idea->keywords()->createMany($keywords_to_be_saved);
+
+            } else {
+                $keywords = $idea->keywords()->suggestions()->get();
             }
 
-            //get keywords for questions
-            if ($keywords_questions_full->has($theme) and !empty($keywords_questions_full->get($theme))) {
-                // get from database if exist
-                $keywords_questions = collect($keywords_questions_full->get($theme));
-            } else {
-                // load from api,
-                // "KeywordTool" by default
-                $keywords_questions = $api->questions($theme);
+            if ($idea->keywords()->questions()->get()->isEmpty()) {
+                $keywords_questions = $api->questions($idea->theme);
+
+                $keywords_to_be_saved = collect();
 
                 if ($keywords_questions->count() > $max_count) {
-                    $keywords_questions->shuffle();
-                    $keywords_questions = $keywords_questions->take($max_count);
+                    $keywords_questions = $keywords_questions->shuffle()->take($max_count);
                 }
 
-                $keywords_questions_full->put($theme, $keywords_questions->toArray());
-                $project->setMeta('keywords_questions', $keywords_questions_full);
-                $project->save();
+                $keywords_questions->each(function ($item) use ($keywords_to_be_saved) {
+                    $keywords_to_be_saved->push(
+                        ['text' => $item, 'accepted' => false, 'type' => Keyword::TYPE_QUESTION]
+                    );
+                });
+
+                $keywords_to_be_saved = $keywords_to_be_saved->toArray();
+
+                $keywords_questions = $idea->keywords()->createMany($keywords_to_be_saved);
+
+            } else {
+                $keywords_questions = $idea->keywords()->questions()->get();
             }
 
-            $keywords_meta = $project->getMeta('keywords_meta');
-            
 
-            $meta = (isset($keywords_meta[$theme]))
-                ? collect($keywords_meta[$theme])
-                : collect();
-
-
-            return view('entity.project.partials.form.keywords-step', compact('project', 'keywords', 'keywords_questions', 'theme', 'meta'));
+            return view('entity.project.partials.form.keywords-step', compact('project', 'keywords', 'keywords_questions', 'idea'));
         } catch (\Exception $e) {
             return '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
         }

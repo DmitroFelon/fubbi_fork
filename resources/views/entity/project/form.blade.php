@@ -2,5 +2,3 @@
     @includeIf(\App\Models\Helpers\ProjectStates::getTab($step))
 @endrole
 
-
-

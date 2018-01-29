@@ -37,7 +37,7 @@
                         <div class='form-row'>
                             <div class='col-xs-12 form-group card required'>
                                 <label for="card_number" class='control-label'>{{_i('Card Number')}}</label>
-                                <input value="4242424242424242"
+                                <input value=""
                                        id="card_number"
                                        data-mask="9999-9999-9999-9999"
                                        maxlength="16" minlength="16" autocomplete='off' class='form-control card-number'

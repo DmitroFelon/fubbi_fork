@@ -19,52 +19,7 @@
             <div class="ibox-content">
                 {{Form::open(['id' => 'article-form', 'enctype'=>"multipart/form-data",  'role'=>'form', 'multipart', 'route'=>['project.articles.store', $project->id] ])}}
                 <div class="bg-muted p-sm">
-                    <h3>
-                        {{_i('Checklist')}}
-                    </h3>
-                    <div class="row">
-                        @foreach($project->getRequirements()->chunk(6) as $chunk)
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                @foreach($chunk as $row)
-                                    <div class="i-checks">
-                                        <label>
-                                            <input tabindex="{{$loop->parent->index+$loop->index}}" type="checkbox"
-                                                   required
-                                                   name="c"
-                                                   value="1"> <i></i>
-                                            {{_i($row['string'])}}
-                                        </label>
-                                    </div>
-                                    @if($row['media_collection'])
-                                        <div class="well m-t-xs m-b-md">
-                                            <h5><strong>{{_i('Files')}}:</strong></h5>
-                                            @foreach($project->getMedia($row['media_collection']) as $media)
-                                                <div class="border-bottom">
-                                                    <a target="_blank"
-                                                       href="{{$media->getFullUrl()}}">{{$media->getFullUrl()}}
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    @if($row['meta_name'])
-                                        <div class=" well m-t-xs m-b-md">
-                                            <h5><strong>{{_i('Quiz result')}}:</strong></h5>
-                                            @foreach(collect($project->{$row['meta_name']}) as $meta)
-                                                <div class="border-bottom">
-                                                    @if(filter_var($meta, FILTER_VALIDATE_URL))
-                                                        <a target="_blank" href="{{$meta}}">{{$meta}}</a>
-                                                    @else
-                                                        {{$meta}}
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
+                    @include('entity.article.partials.checklist')
                 </div>
 
                 <div class="row">
@@ -73,9 +28,18 @@
                             {{_i('Content')}}
                         </h3>
                         {!! Form::bsSelect('type', $filters['types'], '', _i('Content Type'), null, ['required']) !!}
+
+                        <div class="row">
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                {!! Form::bsSelect('idea_id', $filters['ideas'], '', _i('Associate with idea'), null, ['id' => 'ideas-select', 'required']) !!}
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div id="idea-details" class="description p-h-md"></div>
+                            </div>
+                        </div>
+
                         {!! Form::bsText('file', null, _i('Article File'), _i('Upload file'), [], 'file') !!}
                         {!! Form::bsText('copyscape', null, _i('Copyscape Screenshot'), _i('Upload Copyscape Screenshot'), [], 'file') !!}
-                        {{--{!! Form::bsText('tags', null,_i("Tags"),_i("Separate by coma or click 'enter'."), ['required', 'class'=> 'tagsinput' ]) !!}--}}
                         {{Form::submit('Upload article', ['class' => 'btn btn-primary'])}}
                     </div>
                 </div>
@@ -88,9 +52,7 @@
 @endsection
 
 @section('scripts')
-
     <script type="text/javascript">
-
         function stopRKey(evt) {
             var evt = (evt) ? evt : ((event) ? event : null);
             var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
@@ -98,9 +60,19 @@
                 return false;
             }
         }
-
         document.onkeypress = stopRKey;
 
+        $('#ideas-select').on('change', function () {
+            var val = $(this).val();
+            if (!val) {
+                $("#idea-details").html('');
+                return;
+            }
+            $("#idea-details").html(
+                    '<a class="m-md" target="_blank" href="/ideas/' + val + '">' +
+                    '<strong>{{_i('Check Idea')}}</strong>' +
+                    '</a>'
+            );
+        });
     </script>
-
 @endsection

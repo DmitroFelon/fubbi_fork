@@ -6,6 +6,7 @@ use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class SubscriptionController extends Controller
 {
@@ -25,8 +26,9 @@ class SubscriptionController extends Controller
             $project->subscription_id = $subscription->id;
             //set state
             $project->setState(ProjectStates::QUIZ_FILLING);
-
             $project->save();
+
+            Session::put('quiz', $project->id);
 
             return redirect()
                 ->action('ProjectController@edit', [$project, 's' => ProjectStates::QUIZ_FILLING])

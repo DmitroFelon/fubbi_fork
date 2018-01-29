@@ -155,8 +155,6 @@ jQuery(document).ready(function ($) {
     /*
      * Init keywords form with steps
      * */
-
-
     var keyword_dropzones = [];
 
     $("#keywords-form").steps({
@@ -175,9 +173,6 @@ jQuery(document).ready(function ($) {
             }
         },
         onStepChanging: function (event, currentIndex) {
-            /*if (!validateKeywords(event, currentIndex)) {
-             return false;
-             }*/
 
             preUploadKeywords();
 
@@ -190,14 +185,21 @@ jQuery(document).ready(function ($) {
             }
         },
         onFinishing: function (event, currentIndex) {
-            /*if (!validateKeywords(event, currentIndex)) {
-             return false;
-             }*/
 
             preUploadKeywords();
             return true;
         },
         onContentLoaded: function () {
+            var textareas = document.getElementsByClassName("autoheight");
+            for (var i = 0; i < textareas.length; i++) {
+                textareas[i].addEventListener('onload', function () {
+                    var el = this;
+                    setTimeout(function () {
+                        el.style.cssText = 'height:auto; padding:0';
+                        el.style.cssText = 'height:' + el.scrollHeight + 'px';
+                    }, 0);
+                }, false);
+            }
             var _project_id = $("input[name=_project_id]").val();
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
@@ -214,14 +216,14 @@ jQuery(document).ready(function ($) {
             });
 
             var dropzone = new Dropzone('div#' + meta_dropzone_id, {
-                url: "/projects/" + _project_id + "/prefill_meta_files",
-                paramName: meta_dropzone_collection,
+                url: "/ideas/" + idea_id + "/prefill_meta_files",
+                paramName: 'files',
                 method: 'POST',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 addRemoveLinks: true,
-                init: dropzone_init,
+                init: dropzone_init_meta,
                 success: dropzone_success,
-                removedfile: dropzone_removedfile
+                removedfile: dropzone_removedfile_meta
             });
 
             keyword_dropzones.push(dropzone);
@@ -384,7 +386,6 @@ jQuery(document).ready(function ($) {
     function preUploadKeywords() {
         var formData = new FormData(document.getElementById("keywords-form"));
         var _project_id = $("input[name=_project_id]").val();
-
         $.post({
             url: '/projects/' + _project_id + '/prefill',
             processData: false,
@@ -618,6 +619,23 @@ jQuery(document).ready(function ($) {
         }
     }
 
+    function dropzone_init_meta() {
+        var thisDropzone = this;
+        $.get('/ideas/' + idea_id + '/get_stored_idea_files',
+            {collection: thisDropzone.options.paramName},
+            function (data) {
+                data.forEach(function (item) {
+                    thisDropzone.emit("addedfile", item);
+                    setDropzoneThumbnail(item, thisDropzone);
+                    thisDropzone.emit("complete", item);
+                });
+            });
+    }
+
+    function dropzone_removedfile_meta(item) {
+        $.get('/ideas/' + item.model_id + '/remove_stored_file/' + item.id);
+        item.previewElement.remove();
+    }
 })
 
 

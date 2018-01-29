@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Models\Traits\User\hasNotificationSettings;
 use Ghanem\Rating\Traits\Ratingable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -71,6 +72,17 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property null $role
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Invite[] $invites
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereDeletedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Musonza\Chat\Conversations\Conversation[] $conversations
+ * @property-read mixed $avg_rating
+ * @property-read mixed $count_negative
+ * @property-read mixed $count_positive
+ * @property-read \Illuminate\Support\Collection $disabled_notifications
+ * @property-read mixed $sum_rating
+ * @property-read mixed $rating_percent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Ghanem\Rating\Models\Rating[] $ratings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $relatedClientArticles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $relatedWorkerArticles
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User meta()
  */
 class User extends Authenticatable implements HasMedia
 {
@@ -246,7 +258,7 @@ class User extends Authenticatable implements HasMedia
 
     /**
      * @param $team_id
-     * @return mixed
+     * @return Builder
      */
     public function hasInvitetoTeam($team_id)
     {

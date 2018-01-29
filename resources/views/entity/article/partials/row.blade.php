@@ -23,7 +23,7 @@
     @endif
 
     <td>
-        <strong>{{_i('Type')}}:</strong> {{$article->type}}
+        {{$article->type}}
     </td>
 
     <td>
@@ -34,15 +34,13 @@
     </td>
 
     <td>
-        <strong>
-            {{_i('Project')}}:
-        </strong> <a href="{{action('ProjectController@show', $article->project)}}">"{{$article->project->name}}"</a>
+        @if($article->idea)
+            <a target="_blank" href="{{action('IdeaController@show', $article->idea)}}">"{{ucfirst($article->idea->theme)}}"</a>
+        @endif
     </td>
 
     <td>
-        <strong>
-            {{_i('This month')}}:
-        </strong> {{($article->active) ? 'Yes' : 'No'}}
+        {{($article->active) ? 'Yes' : 'No'}}
     </td>
 
 

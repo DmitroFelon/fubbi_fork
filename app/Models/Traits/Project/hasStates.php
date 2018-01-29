@@ -10,9 +10,8 @@ namespace App\Models\Traits\Project;
 
 use App\Exceptions\Project\ImpossibleProjectState;
 use App\Models\Helpers\ProjectStates;
+use App\Models\Idea;
 use App\Models\Keyword;
-use App\Services\Api\KeywordTool;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -76,13 +75,15 @@ trait hasStates
                     'logo',
                     'article_images',
                     'ready_content',
+                    'themes',
+                    'themes_order'
                 ]
             )
         );
         $this->addFiles($request);
-
         $this->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
     }
+
 
     /**
      * @param string $state
@@ -164,55 +165,74 @@ trait hasStates
      */
     private function prefillKeywords(Request $request)
     {
-        if ($request->has('keywords')) {
-            $this->saveKeywords($request->input('keywords'), 'keywords');
-        }
+        $keywords           = collect($request->input('keywords'));
+        $keywords_questions = collect($request->input('keywords_questions'));
+        $meta               = collect($request->input('meta'));
 
-        if ($request->has('keywords_questions')) {
-            $this->saveKeywords($request->input('keywords_questions'), 'keywords_questions');
-        }
 
-        if ($request->has('meta') and is_array($request->get('meta'))) {
+        $meta->each(function ($metadata, $idea_id) use ($request) {
 
-            $old_keywords_meta = ($this->keywords_meta) ? $this->keywords_meta : [];
+            $metafields = [
+                'points_covered',
+                'points_avoid',
+                'references',
+                'this_month',
+                'next_month',
+            ];
+            
+            $idea = Idea::findOrFail($idea_id);
 
-            foreach ($request->get('meta') as $theme => $metas) {
-                $old_keywords_meta[$theme] = $metas;
+            foreach ($metafields as $metafield) {
+                $idea->{$metafield} = $metadata[$metafield] ?? null;
             }
 
-            $this->setMeta('keywords_meta', $old_keywords_meta);
-        }
-
-        $this->save();
-
-        return true;
-    }
-
-    /**
-     * @param $input
-     * @param $name
-     * @return bool
-     */
-    private function saveKeywords($input, $name)
-    {
-        $input = collect($input);
-
-        //set input value to true insted of "1"
-        $input->transform(function ($item) {
-            return array_fill_keys(array_keys($item), true);
+            $idea->save();
         });
 
-        //load keywords from database
-        $keywords = collect($this->getMeta($name));
+        $keywords->each(function ($keyword_texts, $idea_id) use ($request) {
+            Idea::findOrFail($idea_id)->keywords()->suggestions()->update(
+                ['accepted' => false]
+            );
 
-        $input_array = $input->toArray();
-        //cast to array from std
-        $old_array = json_decode(json_encode($keywords->toArray()), true);
+            if (!is_array($keyword_texts)) {
+                return;
+            }
 
-        $keywords = array_replace_recursive($old_array, $input_array);
+            foreach ($keyword_texts as $keyword_text => $state) {
+                Keyword::updateOrCreate(
+                    ['idea_id' => $idea_id, 'text' => $keyword_text],
+                    [
+                        'accepted' => true,
+                        'text'     => $keyword_text,
+                        'idea_id'  => $idea_id,
+                        'type'     => Keyword::TYPE_SUGGESTION
+                    ]
+                );
+            }
 
-        $this->setMeta($name, $keywords);
+        });
+        $keywords_questions->each(function ($keyword_texts, $idea_id) {
+            Idea::findOrFail($idea_id)->keywords()->questions()->update(
+                ['accepted' => false]
+            );
 
+            if (!is_array($keyword_texts)) {
+                return;
+            }
+
+            foreach ($keyword_texts as $keyword_text => $state) {
+                Keyword::updateOrCreate(
+                    ['idea_id' => $idea_id, 'text' => $keyword_text],
+                    [
+                        'accepted' => true,
+                        'text'     => $keyword_text,
+                        'idea_id'  => $idea_id,
+                        'type'     => Keyword::TYPE_QUESTION
+                    ]
+                );
+            }
+
+        });
         return true;
     }
 
@@ -233,10 +253,44 @@ trait hasStates
                     'logo',
                     'article_images',
                     'ready_content',
+                    'themes',
+                    'themes_order'
                 ]
             )
         );
+
+        $themes = ($request->has('themes_order'))
+            ? $request->input('themes_order')
+            : $request->input('themes');
+
+        $themes = collect($themes);
+
+        if ($themes->isNotEmpty()) {
+            $themes->each(function ($item) {
+                $idea = $this->ideas()->updateOrCreate(
+                    ['theme' => $item],
+                    ['theme' => $item, 'type' => Idea::TYPE_THEME]
+                );
+                return $idea;
+            });
+        }
+
+        $questions = $request->input('questions');
+
+        $questions = collect($questions);
+
+        if ($questions->isNotEmpty()) {
+            $questions->each(function ($item, $key) {
+                $idea = $this->ideas()->updateOrCreate(
+                    ['id' => $key, 'type' => Idea::TYPE_QUESTION],
+                    ['theme' => $item, 'type' => Idea::TYPE_QUESTION]
+                );
+                return $idea;
+            });
+        }
+
         $this->save();
+
         return true;
     }
 

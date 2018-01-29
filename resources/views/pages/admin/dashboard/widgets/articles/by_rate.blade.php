@@ -5,9 +5,6 @@
             <tr onclick="location.href='{{action('Project\ArticlesController@show', [$article->project->id, $article])}}';"
                 class="clickable-row b-r-md">
                 <td class="no-borders">
-                    <i class="fa fa-circle text-danger"></i>
-                </td>
-                <td class="no-borders">
                     <strong> {{_i('Created at')}} </strong> : {{$article->created_at->format('m-d-Y')}}
                 </td>
                 <td class="no-borders">

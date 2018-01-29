@@ -23,7 +23,7 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    dd(Auth::user()->teamProjects());
+    Session::put('quiz', 17);
 });
 
 Broadcast::routes();
@@ -87,7 +87,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('{project}/prefill', 'ProjectController@prefill');
         Route::put('{project}/prefill', 'ProjectController@prefill');
         Route::post('{project}/prefill_files', 'ProjectController@prefill_files');
-        Route::post('{project}/prefill_meta_files', 'ProjectController@prefill_meta_files');
         Route::get('{project}/get_stored_files', 'ProjectController@get_stored_files');
         Route::get('{project}/remove_stored_file/{media}', 'ProjectController@remove_stored_files');
         Route::get('{project}/export', 'ProjectController@export');
@@ -96,6 +95,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('{project}/invite_team', 'ProjectController@invite_team');
 
         Route::get('{project}/remove_from_project/{user}', 'ProjectController@remove_from_project');
+    });
+
+    Route::prefix('ideas')->group(function () {
+        Route::post('{idea}/prefill_meta_files', 'IdeaController@prefill_meta_files');
+        Route::get('{idea}/get_stored_idea_files', 'IdeaController@get_stored_idea_files');
+        Route::get('{idea}/remove_stored_file/{media}', 'IdeaController@remove_stored_files');
+        Route::get('{idea}', 'IdeaController@show');
     });
 
     Route::namespace('Project')->group(
@@ -126,7 +132,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('subscribe', 'SubscriptionController');
 
-    Route::get('keywords/{project}/{theme}', 'KeywordsController@index');
+    Route::get('keywords/{project}/{idea}', 'KeywordsController@index');
     Route::get('research', 'ResearchController@index');
     Route::get('research/load', 'ResearchController@load');
 
