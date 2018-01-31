@@ -14,10 +14,18 @@ use App\Models\Project;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\Media;
 
+/**
+ * Class Export
+ * @package App\Services\Project
+ */
 class Export
 {
 
-    public static function make(Project $project) : string
+    /**
+     * @param Project $project
+     * @return string
+     */
+    public function make(Project $project) : string
     {
         $data        = [];
         $collections = $project->media->groupBy('collection_name')->keys();

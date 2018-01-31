@@ -35,6 +35,12 @@ use Spatie\MediaLibrary\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Idea whereThisMonth($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Idea whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Keyword[] $keywords
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Idea questions()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Idea themes()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Idea whereType($value)
  */
 class Idea extends Model implements HasMediaConversions
 {

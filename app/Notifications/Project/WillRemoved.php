@@ -3,10 +3,10 @@
 namespace App\Notifications\Project;
 
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class WillRemoved extends Notification
 {
@@ -44,12 +44,15 @@ class WillRemoved extends Notification
      */
     public function toMail($notifiable)
     {
+
         return (new MailMessage)
             ->subject(_i('Project will be removed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('Project "%s" will be removed at: %s.', [
                 $this->project->name,
-                $this->project->subscription->ends_at
+                ($this->project->subscription->ends_at)
+                    ? $this->project->subscription->ends_at->format('m.d.y h:i:s')
+                    : Carbon::now()->format('m.d.y h:i:s')
             ]))
             ->action('Review project', action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!');

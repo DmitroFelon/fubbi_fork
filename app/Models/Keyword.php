@@ -7,7 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Keyword
+ *
  * @package App\Models
+ * @property int $id
+ * @property int $idea_id
+ * @property string $type
+ * @property string $text
+ * @property int $accepted
+ * @property-read \App\Models\Idea $idea
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword accepted()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword questions()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword suggestions()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword whereAccepted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword whereIdeaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Keyword whereType($value)
+ * @mixin \Eloquent
  */
 class Keyword extends Model
 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use App\Services\Api\KeywordTool;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -46,17 +47,32 @@ class ResearchController extends Controller
 
         $metrics = 'googlesearchnetwork';
 
-        $key = 'questions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics . '.' . $source;
+        $key = implode('.', [
+            $theme,
+            $country,
+            $language,
+            $metrics,
+            $source,
+        ]);
 
-        $questions = Cache::remember($key, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
-            return $api->questions($theme, $country, $language, $metrics, $source);
-        });
 
-        $key = 'suggestions.' . $theme . '.' . $country . '.' . $language . '.' . $metrics . '.' . $source;
+        $questions = Cache::remember('questions.' . $key, Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
+            function () use ($api, $theme, $country, $language, $metrics, $source) {
+                try {
+                    return $api->questions($theme, $country, $language, $metrics, $source);
+                } catch (\Exception $e) {
 
-        $suggestions = Cache::remember($key, 60 * 24, function () use ($api, $theme, $country, $language, $metrics, $source) {
-            return $api->suggestions($theme, $country, $language, $metrics, $source);
-        });
+                }
+            });
+
+        $suggestions = Cache::remember('suggestions.' . $key, Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
+            function () use ($api, $theme, $country, $language, $metrics, $source) {
+                try {
+                    return $api->suggestions($theme, $country, $language, $metrics, $source);
+                } catch (\Exception $e) {
+
+                }
+            });
 
         $title = KeywordTool::getSourceName($source);
 

@@ -71,6 +71,9 @@ use Spatie\Tags\Tag;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article withRating($rating, $compare = '=')
+ * @property int|null $idea_id
+ * @property-read \App\Models\Idea|null $idea
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereIdeaId($value)
  */
 class Article extends Model implements HasMedia
 {

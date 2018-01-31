@@ -84,8 +84,13 @@ class ProjectController extends Controller
                 }
 
                 if ($request->has('customer') and $request->get('customer') != '') {
-                    $user     = User::search($request->input('customer'))->first();
-                    $projects = $projects->where('client_id', $user->id);
+                    $client = User::search($request->input('customer'))->first();
+                    if ($client) {
+                        $projects = $projects->where('client_id', $client->id);
+                    } else {
+                        Session::flash('error', _('Client not found'));
+                    }
+
                 }
 
                 if ($request->has('month') and $request->get('month')) {
@@ -154,7 +159,7 @@ class ProjectController extends Controller
         $step  = 'plan';
         $plans = Cache::remember(
             'public_plans',
-            60,
+            Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
             function () {
                 $available_plans = [
                     'fubbi-basic-plan',
@@ -174,9 +179,11 @@ class ProjectController extends Controller
                 return $filtered_plans->reverse();
             }
         );
+
         header("Cache-Control: no-store, must-revalidate, max-age=0");
         header("Pragma: no-cache");
         header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+        
         return view('entity.project.create', compact('plans', 'step'));
     }
 
@@ -519,7 +526,12 @@ class ProjectController extends Controller
      */
     public function export(Project $project)
     {
-        return response()->download($project->export());
+        try {
+            return response()->download($project->export());
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 
     /**

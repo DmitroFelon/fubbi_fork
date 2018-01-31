@@ -1,3 +1,4 @@
+
 @if($articles->isNotEmpty())
     <table class="table table-stripped table-hover small m-t-md">
         <tbody>
@@ -5,7 +6,7 @@
             <tr onclick="location.href='{{action('Project\ArticlesController@show', [$article->project->id, $article])}}';"
                 class="clickable-row b-r-md">
                 <td class="no-borders">
-                    <strong> {{_i('Created at')}} </strong> : {{$article->created_at->format('m-d-Y')}}
+                    <strong> {{_i('Created at')}} </strong> : {{$article->updated_at->format('m-d-Y')}}
                 </td>
                 <td class="no-borders">
                     <strong> {{_i('Client')}} </strong> : {{$article->project->client->name}}

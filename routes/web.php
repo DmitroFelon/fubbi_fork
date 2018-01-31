@@ -11,7 +11,8 @@
 |
 */
 
-
+use App\Facades\ProjectExport;
+use App\Notifications\RegistrationConfirmation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +24,51 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    Session::put('quiz', 17);
+
+
 });
+
+
+Route::get('/test_email/{inex}', function ($inex) {
+
+
+    $auth_user                = Auth::user();
+    $demo_user                = \App\User::first();
+    $demo_project             = \App\Models\Project::find(17);
+    $demo_article             = $demo_project->articles()->first();
+    $demo_invitations_team    = \App\Models\Invite::teams()->first();
+    $demo_invitations_project = \App\Models\Invite::projects()->first();
+
+
+    $notifications = [
+        new RegistrationConfirmation($auth_user),
+
+        new \App\Notifications\Worker\Attached($demo_project),
+        new \App\Notifications\Worker\Detached($demo_project),
+        new \App\Notifications\Worker\Progress($demo_project),
+
+        new \App\Notifications\Team\Invite($demo_invitations_team),
+
+        new \App\Notifications\Project\Delayed($demo_project),
+        new \App\Notifications\Project\Filled($demo_project),
+        //new \App\Notifications\Project\Invite($demo_invitations_project),
+        new \App\Notifications\Project\Remind($demo_project),
+        new \App\Notifications\Project\Removed($demo_project),
+        new \App\Notifications\Project\Subscription($demo_project),
+        new \App\Notifications\Project\ThirdArticleReject($demo_project, $demo_article),
+        new \App\Notifications\Project\WillRemoved($demo_project),
+
+        new \App\Notifications\Client\Registered($demo_user),
+
+
+    ];
+
+    $n        = $notifications[$inex];
+    $mailable = new \App\Mail\TestingEmail($n->toMail($auth_user));
+
+    return $mailable;
+});
+
 
 Broadcast::routes();
 //chat

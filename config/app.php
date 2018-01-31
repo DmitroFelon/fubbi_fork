@@ -224,6 +224,10 @@ return [
          * Bugsnag
          * */
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        /*
+         * Project Export
+         * */
+        \App\Providers\ProjectExportProvider::class
     ],
 
     /*
@@ -309,7 +313,10 @@ return [
          * Bugsnug
          * */
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
-
+        /*
+         * Project Export
+         * */
+        'ProjectExport' => \App\Facades\ProjectExport::class
 
     ],
 

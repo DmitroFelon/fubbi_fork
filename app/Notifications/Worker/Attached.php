@@ -4,14 +4,20 @@ namespace App\Notifications\Worker;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
+/**
+ * Class Attached
+ * @package App\Notifications\Worker
+ */
 class Attached extends Notification
 {
     use Queueable;
 
+    /**
+     * @var Project
+     */
     protected $project;
 
     /**
@@ -21,7 +27,6 @@ class Attached extends Notification
      */
     public function __construct(Project $project)
     {
-        //todo remind workers to complete project articles
         $this->project = $project;
     }
 

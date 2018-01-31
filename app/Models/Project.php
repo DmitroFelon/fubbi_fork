@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use App;
+use App\Facades\ProjectExport;
 use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\hasArticles;
@@ -12,7 +13,6 @@ use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
 use App\Notifications\Project\Invite;
-use App\Services\Project\Export;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -306,16 +306,15 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     public function export()
     {
-        $ready_export = trim($this->getMeta('export'));
-        //return path to zip if exist
-        if ($ready_export and File::exists(storage_path('app/public/exports/') . $ready_export)) {
-            return $ready_export;
-        }
-
         try {
-            return Export::make($this);
+            $ready_export = trim($this->getMeta('export'));
+            //return path to zip if exist
+            if ($ready_export and File::exists(storage_path('app/public/exports/') . $ready_export)) {
+                return storage_path('app/public/exports/') . $ready_export;
+            }
+            return ProjectExport::make($this);
         } catch (\Exception $e) {
-            throw $e;
+            throw new \Exception(_('Somethig wrong happened while project export, please try later.'));
         }
 
     }

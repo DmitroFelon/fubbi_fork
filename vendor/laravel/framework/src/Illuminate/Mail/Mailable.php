@@ -277,7 +277,7 @@ class Mailable implements MailableContract, Renderable
 
     /**
      * Queue the message for sending.
-     *
+     *  
      * @param  \Illuminate\Contracts\Queue\Factory $queue
      * @return mixed
      */
