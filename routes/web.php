@@ -34,7 +34,7 @@ Route::get('/test_email/{inex}', function ($inex) {
 
     $auth_user                = Auth::user();
     $demo_user                = \App\User::first();
-    $demo_project             = \App\Models\Project::find(17);
+    $demo_project             = \App\Models\Project::first();
     $demo_article             = $demo_project->articles()->first();
     $demo_invitations_team    = \App\Models\Invite::teams()->first();
     $demo_invitations_project = \App\Models\Invite::projects()->first();
