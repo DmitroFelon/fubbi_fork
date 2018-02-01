@@ -49,7 +49,7 @@ class TrivecartController extends Controller
             $stripe_subscription = Subscription::retrieve($subscription_id);
             $custome_card        = collect($stripe_customer->sources->data)->first();
 
-            $user = User::whereEmail($customer_email)->get();
+            $user = User::whereEmail($customer_email)->first();
             if (!$user) {
 
                 $user = User::create([
