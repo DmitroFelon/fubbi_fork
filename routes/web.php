@@ -19,18 +19,16 @@ use Illuminate\Support\Facades\Route;
 //Stripe routes
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
+Route::any('thrivecart', 'TrivecartController');
+
 //Auth
 Auth::routes();
 
 //just for tests
-Route::get('test', function () {
-
-
+Route::get('test222', function (\App\Observers\ProjectObserver $projectObserver) {
 });
 
-
 Route::get('/test_email/{inex}', function ($inex) {
-
 
     $auth_user                = Auth::user();
     $demo_user                = \App\User::first();
@@ -38,7 +36,6 @@ Route::get('/test_email/{inex}', function ($inex) {
     $demo_article             = $demo_project->articles()->first();
     $demo_invitations_team    = \App\Models\Invite::teams()->first();
     $demo_invitations_project = \App\Models\Invite::projects()->first();
-
 
     $notifications = [
         new RegistrationConfirmation($auth_user),
@@ -69,14 +66,12 @@ Route::get('/test_email/{inex}', function ($inex) {
     return $mailable;
 });
 
-
+//Socket auth
 Broadcast::routes();
-//chat
 Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
     return true;
 });
-
-//Notifications and messages
+//Notifications
 Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
     $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);
     if (!$conversation) {
