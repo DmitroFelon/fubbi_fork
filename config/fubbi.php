@@ -1,25 +1,14 @@
 <?php
 
 return [
-
-
-    'videos' => [
-
-        'project' => [
-            'create' => 'http://www.youtube.com/embed/jgpJVI3tDbY',
-            'edit'   => [
-                'plan'     => 'http://www.youtube.com/embed/MkYSmIPBEGE',
-                'quiz'     => 'http://www.youtube.com/embed/Qc7UzQB8gtI',
-                'keywords' => 'http://www.youtube.com/embed/pmoGdaOeUkQ'
-            ],
-            'main'   => 'http://www.youtube.com/embed/LFGsZ6ythQQ',
-        ]
-
+    'plans'             => [
+        'fubbi-basic-plan',
+        'fubbi-bronze-plan',
+        'fubbi-silver-plan',
+        'fubbi-gold-plan',
     ],
-
-    'keywords_count' => 25,
-
-    'form'      => [
+    'keywords_count'    => 25,
+    'form'              => [
         'quiz' => [
             'writing_style' => [
                 ''            => 'Select writing style',
@@ -38,7 +27,7 @@ return [
             ],
         ],
     ],
-    'countries' => [
+    'countries'         => [
         ''   => 'Select Country',
         'af' => 'Afghanistan (google.com.af)',
         'al' => 'Albania (google.al)',
@@ -231,5 +220,24 @@ return [
         'vn' => 'Vietnam (google.com.vn)',
         'zm' => 'Zambia (google.co.zm)',
         'zw' => 'Zimbabwe (google.co.zw)'
+    ],
+    'thrive_cart_plans' => [
+        32 => 'thrivecart-3315-product-32-1000-month-usd'
+    ],
+    'services'          => [
+        'thrivecart-3315-product-32-1000-month-usd' => [
+            "articles_count"     => "4",
+            "articles_words"     => "1750-1750",
+            "facebook_posts"     => "30",
+            "instagram_posts"    => "30",
+            "twitter_posts"      => "30",
+            "pinterest_posts"    => "true",
+            "linkedin_posts"     => "30",
+            "marketing_calendar" => "true",
+            "linkedin_articles"  => "3",
+            "slideshare"         => "2",
+            "medium"             => "2",
+            "quora"              => "2",
+        ]
     ]
 ];
