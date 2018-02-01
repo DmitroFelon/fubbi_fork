@@ -64,7 +64,7 @@ class TrivecartController extends Controller
                     'card_last_four' => $custome_card->last4,
                 ]);
 
-                $role = Role::where('name', Role::CLIENT)->first();
+                $role = Role::where('name', Role::CLIENT)->first(); 
                 $user->attachRole($role);
 
                 $user->setMeta('address_line_1', $custome_card->address_line1);
