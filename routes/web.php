@@ -26,26 +26,11 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    /*$plan = \Stripe\Plan::retrieve('thrivecart-3315-product-32-1000-month-usd');
-    dd($plan->amount);*/
 
-    try {
-        $cus = \Stripe\Customer::retrieve('cus_CFADEmnrM8Py8h');
-
-        var_dump(
-            collect($cus->sources->data)->first()
-        );
-
-        dd($cus);
-
-    } catch (\Exception $e) {
-        echo $e->getMessage();
-    } finally {
-        $sub = \Stripe\Subscription::retrieve('sub_CFC0kteLgpASPS');
-        dd($sub);
-    }
+    $project = \App\Models\Project::first();
 
 
+    dd($project->subscription);
 });
 
 Route::get('/test_email/{inex}', function ($inex) {

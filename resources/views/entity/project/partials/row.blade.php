@@ -23,7 +23,7 @@
         :{{$project->articles()->accepted()->count()}}
     </td>
     <td>
-        @if($project->client->subscription($project->name)->onGracePeriod())
+        @if($project->subscription->onGracePeriod())
             <strong>{{_i('Will be stopped at')}}:</strong> {{$project->subscription->ends_at->format('Y-m-d')}}
         @endif
     </td>
@@ -39,7 +39,7 @@
            class="btn btn-white btn-sm lazur-bg">
             <i class="fa fa-cloud"></i> {{_i('Chat')}}
         </a>
-        @if($project->client->subscription( $project->name)->onGracePeriod())
+        @if($project->subscription->onGracePeriod())
             <a href="{{action('ProjectController@resume', $project)}}" class="btn btn-white btn-sm grey-bg">
                 <i class="fa fa-refresh"></i> {{_i('Resume')}}
             </a>
