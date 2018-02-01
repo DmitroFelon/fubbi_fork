@@ -27,10 +27,10 @@ Auth::routes();
 //just for tests
 Route::get('test', function () {
 
-    $project = \App\Models\Project::first();
 
+    Cache::put(base64_encode(Request::ip()), 999, 60);
 
-    dd($project->subscription);
+    dd(Cache::get(base64_encode(Request::ip())));
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -72,16 +72,16 @@ Route::get('/test_email/{inex}', function ($inex) {
 });
 
 
-Route::get('cart_redirect', function () {
+Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 
-    $user_id = \Illuminate\Support\Facades\Cache::get(Request::ip());
+    $customer_data = $request->input('thrivecart');
+    $email         = $customer_data['customer']['email'] ?? false;
 
-    if (!is_int($user_id)) {
-        dd($user_id);
+    if (!$email) {
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
     }
 
-    $user = \App\User::findOrFail($user_id);
+    $user = \App\User::whereEmail($email)->firstOrFail();
 
     Auth::login($user, true);
 
