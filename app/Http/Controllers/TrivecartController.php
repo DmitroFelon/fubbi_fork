@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class TrivecartController extends Controller
@@ -22,5 +23,7 @@ class TrivecartController extends Controller
         Log::debug($request->getContent());
 
         Log::debug($request->input());
+
+        return new Response('Webhook Handled', 200);
     }
 }
