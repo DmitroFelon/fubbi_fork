@@ -88,7 +88,7 @@ class TrivecartController extends Controller
             $project                  = new Project;
             $project->client_id       = $user->id;
             $project->subscription_id = $subscription->getKey();
-            $project->name            = 'Project #' . intval($user->projects()->count()) + 1;
+            $project->name            = 'Project #' . $request->input('order_id');
             $project->state           = ProjectStates::QUIZ_FILLING;
 
             $project->save();
