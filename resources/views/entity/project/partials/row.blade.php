@@ -33,7 +33,7 @@
         </a>
         <a href="{{action('ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
             <i class="fa fa-download"></i> {{_i('Export')}}
-        </a>
+        </a> 
         @role([\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])
         <a href="{{action('MessageController@index', ['c' => $project->conversation_id])}}"
            class="btn btn-white btn-sm lazur-bg">
