@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //Stripe routes
 Route::post('stripe/webhook', 'WebhookController@handleWebhook');
 
-Route::any('thrivecart', 'TrivecartController@handle');
+Route::post('thrivecart', 'TrivecartController@handle');
 
 //Auth
 Auth::routes();
