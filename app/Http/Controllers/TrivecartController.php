@@ -73,7 +73,11 @@ class TrivecartController extends Controller
                 $user->setMeta('country', $custome_card->address_country);
                 $user->setMeta('state', $custome_card->address_state);
                 $user->save();
-                Cache::put($customer['ip_address'], $user->id, now()->addHour());
+
+                Log::debug('ip: ' . $customer['ip_address']);
+
+
+                Cache::put($customer['ip_address'], $user->id, 60);
             }
 
             $subscription              = new \Laravel\Cashier\Subscription;
