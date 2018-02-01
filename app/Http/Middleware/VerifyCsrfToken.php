@@ -13,6 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'stripe/*',
-        'thrivecart',
+        'cart_redirect',
     ];
 }
