@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class TrivecartController extends Controller
 {
-    public function __invoke(Request $request)
+    public function handle(Request $request)
     {
         $hash                = $request->input('thrivecart_secret');
         $event               = $request->input('event');
@@ -22,7 +22,5 @@ class TrivecartController extends Controller
         Log::debug($request->getContent());
 
         Log::debug($request->input());
-
-
     }
 }
