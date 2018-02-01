@@ -8,13 +8,15 @@ use App\Facades\ProjectExport;
 use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\hasArticles;
+use App\Models\Traits\Project\hasCycles;
+use App\Models\Traits\Project\hasIdeas;
 use App\Models\Traits\Project\hasPlan;
+use App\Models\Traits\Project\hasServices;
 use App\Models\Traits\Project\hasStates;
 use App\Models\Traits\Project\hasTeams;
 use App\Models\Traits\Project\hasWorkers;
 use App\Notifications\Project\Invite;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -69,17 +71,25 @@ use Venturecraft\Revisionable\Revision;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activity
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Idea[] $ideas
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project\Cycle[] $cycles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection $cycle
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project\Service[] $services
  */
 class Project extends Model implements HasMediaConversions, Invitable
 {
+
+    use hasCycles;
+    use hasServices;
+    use hasIdeas;
     use hasStates;
+    use hasPlan;
     use hasWorkers;
     use hasTeams;
     use hasArticles;
-    use Metable;
-    use HasMediaTrait;
     use hasInvite;
-    use hasPlan;
+
+    use HasMediaTrait;
+    use Metable;
     use SoftDeletes;
     use LogsActivity;
 
@@ -159,14 +169,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function ideas()
-    {
-        return $this->hasMany(Idea::class);
     }
 
     /**
@@ -268,55 +270,9 @@ class Project extends Model implements HasMediaConversions, Invitable
         return Invite::class;
     }
 
-    /**
-     * Fired at the beginning of the new billing cycle
-     *
-     * resets atciles, asks to re-fill quiz and keywords
-     *
-     */
-    public function reset()
+    public function test()
     {
-        $this->created_at = Carbon::now();
-        $this->updated_at = Carbon::now();
-        $this->unsetMeta('export');
-        $this->save();
-
-        $this->articles()->where('active', true)->update(['active' => false]);
-        $this->fireModelEvent('reset', false);
-    }
-
-    /**
-     * @return float|int
-     */
-    public function getProgress()
-    {
-        $key              = 'articles_count';
-        $require_articles = ($this->isModified($key))
-            ? $this->getModified($key)
-            : $this->plan_metadata['articles_count'];
-
-        $total_articles_accepted = $this->articles()->accepted()->count();
-
-        return ($require_articles > 0)
-            ? $total_articles_accepted / $require_articles * 100 : 0;
-    }
-
-    /**
-     * @return string
-     */
-    public function export()
-    {
-        try {
-            $ready_export = trim($this->getMeta('export'));
-            //return path to zip if exist
-            if ($ready_export and File::exists(storage_path('app/public/exports/') . $ready_export)) {
-                return storage_path('app/public/exports/') . $ready_export;
-            }
-            return ProjectExport::make($this);
-        } catch (\Exception $e) {
-            throw new \Exception(_('Somethig wrong happened while project export, please try later.'));
-        }
-
+        $this->fireModelEvent('created', false);
     }
 
     /**
@@ -425,25 +381,14 @@ class Project extends Model implements HasMediaConversions, Invitable
         return (is_array($this->$key)) ? array_combine(array_values($this->$key), array_values($this->$key)) : [];
     }
 
+    /**
+     * @return array
+     */
     public function prepareTagsInputThemes()
     {
         $themes = $this->ideas()->themes()->get()->pluck('theme')->toArray();
         return array_combine($themes, $themes);
     }
 
-    /**
-     *
-     */
-    public function suspend()
-    {
-        try {
-            $client = $this->client;
-            if ($client->subscription($this->name)) {
-                $client->subscription($this->name)->cancel();
-                $this->fireModelEvent('suspend');
-            }
-        } catch (\Exception $e) {
-            $this->forceDelete();
-        }
-    }
+
 }

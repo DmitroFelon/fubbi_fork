@@ -101,8 +101,10 @@ trait hasPlan
             'quora'              => _i('Quora'),
         ];
 
-        return $plan_services[$service] ?? '';
+        return $plan_services[$service] ?? 'service';
     }
+
+    
 
     /**
      * @return array

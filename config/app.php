@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -184,10 +184,6 @@ return [
          * Roles provider
          * */
         Zizaco\Entrust\EntrustServiceProvider::class,
-        /*
-         * Configs
-         * */
-        Garf\LaravelConf\LaravelConfServiceProvider::class,
         /*
          * Get online users
          * */
@@ -279,11 +275,7 @@ return [
          * Roles
          * */
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-
-        /**
-         * Configs
-         * */
-        'Conf' => Garf\LaravelConf\ConfFacade::class,
+        
         /*
          * Get online users
          * */

@@ -16,10 +16,7 @@ class InviteObserver
     {
 
         $notification = $invite->invitable->getInvitableNotification();
-
-        $invite->user->notify(
-            new $notification($invite)
-        );
+        $invite->user->notify(new $notification($invite));
     }
 
     public function accepted(Invite $invite)

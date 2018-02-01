@@ -105,12 +105,13 @@ class ProjectObserver
         $project->setMeta('conversation_id', $conversation->id);
         $project->save();
 
-
-        activity('project_state')
-            ->causedBy(Auth::user())
-            ->performedOn($project)
-            ->withProperties([])
-            ->log('Project ' . $project->name . ' has beeb created');
+        if (Auth::check()) {
+            activity('project_state')
+                ->causedBy(Auth::user())
+                ->performedOn($project)
+                ->withProperties([])
+                ->log('Project ' . $project->name . ' has beeb created');
+        }
     }
 
     /**
@@ -319,7 +320,7 @@ class ProjectObserver
 
     public function suspend(Project $project)
     {
-            
+
     }
 
 

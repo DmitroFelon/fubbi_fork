@@ -156,26 +156,19 @@ class ProjectController extends Controller
                 ->with('info', _i('Please, complete the quiz'));
         }
 
-        $step  = 'plan';
+        $step = ProjectStates::PLAN_SELECTION;
+
         $plans = Cache::remember(
             'public_plans',
             Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
             function () {
-                $available_plans = [
-                    'fubbi-basic-plan',
-                    'fubbi-bronze-plan',
-                    'fubbi-silver-plan',
-                    'fubbi-gold-plan',
-                ];
-
-                $filtered_plans = Collection::make();
-
+                $available_plans = config('fubbi.plans');
+                $filtered_plans  = Collection::make();
                 foreach (Plan::all()->data as $plan) {
                     if (in_array($plan->id, $available_plans)) {
                         $filtered_plans->push($plan);
                     }
                 }
-
                 return $filtered_plans->reverse();
             }
         );
@@ -183,7 +176,7 @@ class ProjectController extends Controller
         header("Cache-Control: no-store, must-revalidate, max-age=0");
         header("Pragma: no-cache");
         header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-        
+
         return view('entity.project.create', compact('plans', 'step'));
     }
 
@@ -226,36 +219,23 @@ class ProjectController extends Controller
             ? $request->input('s')
             : $project->state;
 
-        if ($step == ProjectStates::PLAN_SELECTION) {
-            $plans = Cache::remember(
-                'public_plans',
-                60 * 24 * 365,
-                function () {
-                    $available_plans = [
-                        'fubbi-basic-plan',
-                        'fubbi-bronze-plan',
-                        'fubbi-silver-plan',
-                        'fubbi-gold-plan',
-                    ];
-
-                    $filtered_plans = collect();
-
-                    foreach (Plan::all()->data as $plan) {
-                        if (in_array($plan->id, $available_plans)) {
-                            $filtered_plans->push($plan);
-                        }
+        $plans = ($step == ProjectStates::PLAN_SELECTION)
+            ? Cache::rememberForever('public_plans', function () {
+                $filtered_plans = collect();
+                collect(Plan::all()->data)->each(function ($plan) use ($filtered_plans) {
+                    if (in_array($plan->id, config('fubbi.plans'))) {
+                        $filtered_plans->push($plan);
                     }
+                });
+                return $filtered_plans->reverse();
+            })
+            : collect();
 
-                    return $filtered_plans->reverse();
-                }
-            );
-        } else {
-            $plans = collect();
-        }
+        $articles = ($step == ProjectStates::QUIZ_FILLING)
+            ? $project->articles
+            : collect();
 
-        $articles = $project->articles;
-
-        return view('entity.project.edit', compact('keywords', 'articles', 'project', 'step', 'plans'));
+        return view('entity.project.edit', compact('articles', 'project', 'step', 'plans'));
     }
 
     /**

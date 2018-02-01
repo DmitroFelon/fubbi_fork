@@ -106,6 +106,10 @@ class User extends Authenticatable implements HasMedia
         'last_name',
         'phone',
         'email',
+        'stripe_id',
+        'card_brand',
+        'card_last_four',
+        'trial_ends_at',
         'password',
     ];
 
@@ -236,15 +240,11 @@ class User extends Authenticatable implements HasMedia
      */
     public function inviteTo(Invitable $whereInvite)
     {
-        $invite = new Invite(
-            [
-                'invitable_type' => get_class($whereInvite),
-                'invitable_id'   => $whereInvite->getInvitableId(),
-                'user_id'        => $this->id,
-            ]
-        );
-
-        $invite->save();
+        Invite::create([
+            'invitable_type' => get_class($whereInvite),
+            'invitable_id'   => $whereInvite->getInvitableId(),
+            'user_id'        => $this->id,
+        ]);
     }
 
     /**

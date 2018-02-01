@@ -103,19 +103,13 @@ class ArticlesController extends Controller
     public function store(Project $project, Article $article, Request $request)
     {
 
-        $i = $request->input();
-
-
-        //save article
-        $article->fill(
-            $request->except(['_token', '_method'])
-        );
-
-        //temp title
-        $article->title = 'title';
-
+        //fill article
+        $article->fill($request->except(['_token', '_method']));
+        
+        $article->title      = 'title';
         $article->user_id    = Auth::user()->id;
         $article->project_id = $project->id;
+        $article->cycle_id   = $project->cycles()->latest('id');
 
         $article->save();
 

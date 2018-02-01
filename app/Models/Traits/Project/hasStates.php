@@ -9,10 +9,13 @@
 namespace App\Models\Traits\Project;
 
 use App\Exceptions\Project\ImpossibleProjectState;
+use App\Facades\ProjectExport;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Idea;
 use App\Models\Keyword;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Mockery\CountValidator\Exception;
@@ -83,7 +86,6 @@ trait hasStates
         $this->addFiles($request);
         $this->setState(\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING);
     }
-
 
     /**
      * @param string $state
@@ -179,7 +181,7 @@ trait hasStates
                 'this_month',
                 'next_month',
             ];
-            
+
             $idea = Idea::findOrFail($idea_id);
 
             foreach ($metafields as $metafield) {
@@ -292,6 +294,73 @@ trait hasStates
         $this->save();
 
         return true;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getProgress()
+    {
+        $key              = 'articles_count';
+        $require_articles = ($this->isModified($key))
+            ? $this->getModified($key)
+            : $this->plan_metadata['articles_count']??0;
+
+        $total_articles_accepted = $this->articles()->accepted()->count();
+
+        return ($require_articles > 0)
+            ? $total_articles_accepted / $require_articles * 100 : 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function export()
+    {
+        try {
+            $ready_export = trim($this->getMeta('export'));
+            //return path to zip if exist
+            if ($ready_export and File::exists(storage_path('app/public/exports/') . $ready_export)) {
+                return storage_path('app/public/exports/') . $ready_export;
+            }
+            return ProjectExport::make($this);
+        } catch (\Exception $e) {
+            throw new \Exception(_('Somethig wrong happened while project export, please try later.'));
+        }
+
+    }
+
+    /**
+     * Fired at the beginning of the new billing cycle
+     *
+     * resets atciles, asks to re-fill quiz and keywords
+     *
+     */
+    public function reset()
+    {
+        $this->created_at = Carbon::now();
+        $this->updated_at = Carbon::now();
+        $this->unsetMeta('export');
+        $this->save();
+
+        $this->articles()->where('active', true)->update(['active' => false]);
+        $this->fireModelEvent('reset', false);
+    }
+
+    /**
+     *
+     */
+    public function suspend()
+    {
+        try {
+            $client = $this->client;
+            if ($client->subscription($this->name)) {
+                $client->subscription($this->name)->cancel();
+                $this->fireModelEvent('suspend');
+            }
+        } catch (\Exception $e) {
+            $this->forceDelete();
+        }
     }
 
 }

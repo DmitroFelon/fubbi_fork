@@ -74,6 +74,8 @@ use Spatie\Tags\Tag;
  * @property int|null $idea_id
  * @property-read \App\Models\Idea|null $idea
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereIdeaId($value)
+ * @property int $cycle_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Article whereCycleId($value)
  */
 class Article extends Model implements HasMedia
 {
@@ -153,6 +155,16 @@ class Article extends Model implements HasMedia
     public function scopeDeclined($query)
     {
         return $query->where('accepted', '=', false);
+    }
+
+    /**
+     * @param $query
+     * @param $cycle_id
+     * @return mixed
+     */
+    public function scopeByCycle($query, $cycle_id)
+    {
+        return $query->where('cycle_id', $cycle_id);
     }
 
     /**
@@ -241,13 +253,11 @@ class Article extends Model implements HasMedia
                 'Social Posts Texts' => _i('Social Posts Texts'),
             ]
         );
-
         collect($project->getVariableServices())->each(function ($item) use ($types, $project) {
             if ($project->isRequireService($item)) {
                 $types->put($item, $project->getServiceName($item));
             }
         });
-
         return $types;
     }
 
@@ -256,10 +266,8 @@ class Article extends Model implements HasMedia
      */
     public static function getAllTypes()
     {
-
         $project = new Project();
-
-        $types = collect(
+        $types   = collect(
             [
                 ''                   => _i('Select Type'),
                 'Article Outline'    => _i('Article Outline'),
