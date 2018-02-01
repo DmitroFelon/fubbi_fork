@@ -12,8 +12,11 @@ use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use App\Services\Api\KeywordTool;
 use App\User;
 use Form;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
 use Musonza\Chat\Messages\Message;
 
 /**
@@ -89,17 +92,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        if (!App::environment('production')) {
+            $this->app->configureMonologUsing(function (Logger $monolog) {
+                $processUser = posix_getpwuid(posix_geteuid());
+                $processName = $processUser['name'];
+
+                $filename = storage_path('logs/laravel-' . php_sapi_name() . '-' . $processName . '.log');
+                $handler  = new RotatingFileHandler($filename);
+                $monolog->pushHandler($handler);
+            });
+        }
+
         $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
         //$this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
         //$this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
 
-        /*$this->app->configureMonologUsing(function (Logger $monolog) {
-            $processUser = posix_getpwuid(posix_geteuid());
-            $processName = $processUser['name'];
 
-            $filename = storage_path('logs/laravel-' . php_sapi_name() . '-' . $processName . '.log');
-            $handler  = new RotatingFileHandler($filename);
-            $monolog->pushHandler($handler);
-        });*/
     }
 }
