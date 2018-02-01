@@ -6,6 +6,7 @@ use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Role;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -59,12 +60,12 @@ class TrivecartController extends Controller
                     'password'       => Hash::make(str_random(8)),
                     'phone'          => $customer['contactno']??'',
                     'stripe_id'      => $stripe_subscription->customer,
-                    'trial_ends_at'  => $stripe_subscription->trial_end,
+                    'trial_ends_at'  => Carbon::createFromTimestamp($stripe_subscription->trial_end),
                     'card_brand'     => $custome_card->brand,
                     'card_last_four' => $custome_card->last4,
                 ]);
 
-                $role = Role::where('name', Role::CLIENT)->first(); 
+                $role = Role::where('name', Role::CLIENT)->first();
                 $user->attachRole($role);
 
                 $user->setMeta('address_line_1', $custome_card->address_line1);
