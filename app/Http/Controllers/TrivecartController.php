@@ -10,5 +10,7 @@ class TrivecartController extends Controller
     public function __invoke(Request $request)
     {
         Log::debug($request->getContent());
+
+        return ['ok'];
     }
 }
