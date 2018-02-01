@@ -92,6 +92,7 @@ Route::get('cart_redirect', function () {
     $user_id = \Illuminate\Support\Facades\Cache::get(Request::ip());
 
     if (!is_int($user_id)) {
+        dd($user_id);
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
     }
 
