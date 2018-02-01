@@ -25,7 +25,8 @@ Route::any('thrivecart', 'TrivecartController');
 Auth::routes();
 
 //just for tests
-Route::get('test222', function (\App\Observers\ProjectObserver $projectObserver) {
+Route::get('test', function () {
+    Log::debug('test');
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
