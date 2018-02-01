@@ -26,7 +26,26 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    Log::debug('test');
+    /*$plan = \Stripe\Plan::retrieve('thrivecart-3315-product-32-1000-month-usd');
+    dd($plan->amount);*/
+
+    try {
+        $cus = \Stripe\Customer::retrieve('cus_CFADEmnrM8Py8h');
+
+        var_dump(
+            collect($cus->sources->data)->first()
+        );
+
+        dd($cus);
+
+    } catch (\Exception $e) {
+        echo $e->getMessage();
+    } finally {
+        $sub = \Stripe\Subscription::retrieve('sub_CFC0kteLgpASPS');
+        dd($sub);
+    }
+
+
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -67,8 +86,25 @@ Route::get('/test_email/{inex}', function ($inex) {
     return $mailable;
 });
 
+
+Route::get('cart_redirect', function () {
+
+    $user_id = \Illuminate\Support\Facades\Cache::get(Request::ip());
+
+    if (!is_int($user_id)) {
+        return redirect()->action('DashboardController@index')->with('error', 'Session expired');
+    }
+
+    $user = \App\User::findOrFail($user_id);
+
+    Auth::login($user, true);
+
+    return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
+});
+
 //Socket auth
 Broadcast::routes();
+
 Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
     return true;
 });
