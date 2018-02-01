@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
+use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,7 +52,6 @@ class TrivecartController extends Controller
 
             $user = User::whereEmail($customer_email)->first();
             if (!$user) {
-
                 $user = User::create([
                     'email'          => $customer_email,
                     'first_name'     => $customer['first_name'] ?? '',
@@ -63,6 +63,10 @@ class TrivecartController extends Controller
                     'card_brand'     => $custome_card->brand,
                     'card_last_four' => $custome_card->last4,
                 ]);
+
+                $role = Role::where('name', Role::CLIENT)->first();
+                $user->attachRole($role);
+
                 $user->setMeta('address_line_1', $custome_card->address_line1);
                 $user->setMeta('zip', $custome_card->address_zip);
                 $user->setMeta('city', $custome_card->address_city);
@@ -84,7 +88,7 @@ class TrivecartController extends Controller
             $project                  = new Project;
             $project->client_id       = $user->id;
             $project->subscription_id = $subscription->getKey();
-            $project->name            = 'Project #' . $user->projects()->count() + 1;
+            $project->name            = 'Project #' . intval($user->projects()->count()) + 1;
             $project->state           = ProjectStates::QUIZ_FILLING;
 
             $project->save();
