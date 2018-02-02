@@ -187,7 +187,12 @@ a.participant-name {
   display: inline-block;
 }
 
-.autoheight{
-  overflow:hidden;
-  display:block;
+.autoheight {
+  overflow: hidden;
+  display: block;
+}
+
+input[data-focus="true"] {
+  border-color: #1ab394;
+  box-shadow: 0 0 1em 0 #1ab394;
 }

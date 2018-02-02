@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Helpers\ProjectStates;
 use App\Models\Role;
 use App\Services\User\SearchSuggestions;
 use App\User;
@@ -161,6 +162,17 @@ class UserController extends Controller
         $user->how_did_you_find_us = $request->input('how_did_you_find_us');
 
         $user->save();
+
+        if ($request->has('redirect_to_last_project')) {
+            $last_project = $user->projects()->latest('id')->first();
+
+            return redirect()
+                ->action('ProjectController@edit', [
+                    $last_project,
+                    's' => ProjectStates::QUIZ_FILLING
+                ])
+                ->with('success', _i('Please, fill the quiz.'));
+        }
 
         return redirect()->back()->with('success', _i('Profile has been saved successfully'));
 

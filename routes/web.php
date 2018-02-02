@@ -26,7 +26,7 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    dd(config('fubbi.thrivecart_key'));
+    dd(Auth::user()->projects);
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -80,6 +80,8 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     $user = \App\User::whereEmail($email)->firstOrFail();
     Auth::logout();
     Auth::login($user, true);
+
+    \Illuminate\Support\Facades\Session::flash('change_password');
 
     return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
 });

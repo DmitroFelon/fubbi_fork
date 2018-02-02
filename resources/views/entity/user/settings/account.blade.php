@@ -12,11 +12,11 @@
 
 <div class="row">
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        {!! Form::bsText('password', null, _i('Password'), null, [], 'password') !!}
+        {!! Form::bsText('password', null, _i('Password'), null, ['data-focus' =>  (\Illuminate\Support\Facades\Session::has('change_password')) ? 'true' : 'false'], 'password') !!}
     </div>
 
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        {!! Form::bsText('password_confirmation', null, _i('Repeat Password'), null, [], 'password') !!}
+        {!! Form::bsText('password_confirmation', null, _i('Repeat Password'), null, ['data-focus' =>  (\Illuminate\Support\Facades\Session::has('change_password')) ? 'true' : 'false'], 'password') !!}
     </div>
 
 
@@ -65,10 +65,14 @@
 <div class="row">
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        {!! Form::bsText('how_did_you_find_us', null, _i('How Did You find us?'), null, [], 'text') !!}
+        {!! Form::bsText('how_did_you_find_us', null, _i('How Did You find us?'), null, ['data-focus' =>  (\Illuminate\Support\Facades\Session::has('change_password')) ? 'true' : 'false'], 'text') !!}
     </div>
 
 </div>
+
+@if(\Illuminate\Support\Facades\Session::has('change_password'))
+    <input type="hidden" name="redirect_to_last_project" value="1">
+@endif
 
 
 {{Form::submit(_i('Save'), ['class' => 'btn btn-primary'])}}
