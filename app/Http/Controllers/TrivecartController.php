@@ -19,8 +19,6 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::debug($request->input());
-
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret'); // todo check on each request
         $product_id = $request->input('base_product'); // todo check on each request
@@ -74,9 +72,6 @@ class TrivecartController extends Controller
                 $user->setMeta('country', $custome_card->address_country);
                 $user->setMeta('state', $custome_card->address_state);
                 $user->save();
-
-                Log::debug('ip: ' . $customer['ip_address'] . ' user id: ' . $user->id);
-                Cache::put(strval($customer['ip_address']), $user->id, 60);
             }
 
             $subscription              = new \Laravel\Cashier\Subscription;

@@ -70,9 +70,6 @@ Route::get('/test_email/{inex}', function ($inex) {
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 
-
-    Log::debug($request->input());
-
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
 
