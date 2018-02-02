@@ -44,6 +44,11 @@ class DashboardController extends Controller
      */
     public function index($page = 'home', $action = 'main', $id = null)
     {
+
+        if (!Auth::check()) {
+            return view('landing');
+        }
+
         $user = Auth::user();
 
         $role = $user->role;

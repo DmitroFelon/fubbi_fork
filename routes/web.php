@@ -215,7 +215,8 @@ Route::middleware(['auth'])->group(function () {
         ]
     );
 
-    Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+    
 });
 
+Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
 
