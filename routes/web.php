@@ -26,7 +26,6 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    dd(Auth::user()->projects);
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -66,7 +65,6 @@ Route::get('/test_email/{inex}', function ($inex) {
 
     return $mailable;
 });
-
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 

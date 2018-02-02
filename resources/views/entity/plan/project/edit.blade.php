@@ -13,17 +13,17 @@
     <div class="ibox">
         <div class="ibox-title">
             <h5>
-                {{ _i('Modify %s plan for project "%s"', [$plan->name, $project->name]) }}
+                {{ _i('Modify %s plan for project "%s"', [$plan_id, $project->name]) }}
             </h5>
             <div class="ibox-tools">
-                <a target="_blank" href="{{url()->action('PlanController@edit', $plan->id)}}"
+                <a target="_blank" href="{{url()->action('PlanController@edit', $plan_id)}}"
                    class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>
         <div class="ibox-content">
             <div class="project-list">
-                {!! Form::open(['action' => ['Project\PlanController@update', $project->id, $plan->id], 'method' => 'put']) !!}
-                    @include('entity.plan.form')
+                {!! Form::open(['action' => ['Project\PlanController@update', $project->id, $plan_id], 'method' => 'put']) !!}
+                @include('entity.plan.form')
                 {!! Form::close() !!}
             </div>
         </div>

@@ -1,33 +1,31 @@
 <div class="row">
-    @foreach ($plan->metadata->split(2) as $chunk)
+    @foreach ($services->chunk(6) as $chunk)
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <table class="m-b-md">
-                @foreach ($chunk as $key => $value)
+                @foreach ($chunk as $service)
                     <tr>
                         <th>
-                            <label for="{{$key}}">
-                                {{ucwords( str_replace('_',' ',$key) )}}
+                            <label for="{{$service->name}}">
+                                {{$service->display_name}}
                             </label>
                         </th>
                         <td>
-                            @if($value == 'true' or $value == 'false')
-                                <input type="hidden" name="{{$key}}" value="false">
+                            @if($service->type == \App\Models\Project\Service::TYPE_BOOLEAN)
+                                <input type="hidden" name="{{$service->name}}" value="0">
                                 <div class="i-checks">
                                     <label>
                                         <input
                                                 type="checkbox"
-                                                name="{{$key}}"
+                                                name="{{$service->name}}"
                                                 value="true"
-                                                {{($value == 'true')?'checked="checked"':''}}> <i></i>
+                                                {{($service->value)?'checked="checked"':''}}> <i></i>
                                     </label>
                                 </div>
                             @else
-                                <input class="form-control" id="{{$key}}" name="{{$key}}"
-                                       value="{{$value}}">
+                                <input class="form-control" id="{{$service->name}}"
+                                       name="{{$service->name}}"
+                                       value="{{$service->value}}">
                             @endif
-                            <small>
-                                {{ _i('Default value: %s', [$project->plan->metadata->$key]) }}
-                            </small>
                         </td>
                     </tr>
                 @endforeach

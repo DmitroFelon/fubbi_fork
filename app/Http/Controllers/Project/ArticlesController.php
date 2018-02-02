@@ -105,7 +105,7 @@ class ArticlesController extends Controller
 
         //fill article
         $article->fill($request->except(['_token', '_method']));
-        
+
         $article->title      = 'title';
         $article->user_id    = Auth::user()->id;
         $article->project_id = $project->id;

@@ -3,6 +3,7 @@
 namespace App\Models\Project;
 
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,15 +19,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type
  * @property-read mixed $value
  * @property-read \App\Models\Project $project
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service customized()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereCustom($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereDefault($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereProjectId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project\Service withType($type)
+ * @method static Builder|\App\Models\Project\Service customized()
+ * @method static Builder|\App\Models\Project\Service whereCustom($value)
+ * @method static Builder|\App\Models\Project\Service whereDefault($value)
+ * @method static Builder|\App\Models\Project\Service whereDisplayName($value)
+ * @method static Builder|\App\Models\Project\Service whereId($value)
+ * @method static Builder|\App\Models\Project\Service whereName($value)
+ * @method static Builder|\App\Models\Project\Service whereProjectId($value)
+ * @method static Builder|\App\Models\Project\Service whereType($value)
+ * @method static Builder|\App\Models\Project\Service withType($type)
  * @mixin \Eloquent
  */
 class Service extends Model
@@ -74,13 +75,30 @@ class Service extends Model
     }
 
     /**
-     * @param $query
+     * @param Builder $query
+     */
+    public function scopeRequired(Builder $query)
+    {
+        $empty = ['', 0, false, 'false', 'False', 'No', 'no'];
+        $query->whereNotIn('default', $empty)->orWhereNotIn('custom', $empty);
+    }
+
+    /**
+     * @param Builder $query
      * @param $type
      * @return mixed
      */
-    public function scopeWithType($query, $type)
+    public function scopeWithType(Builder $query, $type)
     {
         return $query->where('type', '=', $type);
+    }
+
+    /**
+     * @param  Builder $query
+     */
+    public function scopeCustomized(Builder $query)
+    {
+        return $query->where('custom', '!=', null);
     }
 
     /**
@@ -91,7 +109,9 @@ class Service extends Model
      */
     public function getDefaultAttribute($value)
     {
-        return $this->castFromType($value);
+        $value = $this->castFromType($value);
+
+        return $value;
     }
 
     /**
@@ -112,9 +132,32 @@ class Service extends Model
      */
     public function getValueAttribute()
     {
-        return ($this->custom !== null)
-            ? $this->custom
+        $custom = $this->getOriginal('custom');
+
+        $value = (!is_null($custom))
+            ? $custom
             : $this->default;
+
+        return $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrintValueAttribute()
+    {
+
+        $value = $this->value;
+
+        $value = ($this->type === self::TYPE_BOOLEAN)
+            ? ($value) ? 'Yes' : 'No'
+            : $value;
+
+        $value = ($value) ? $value : 'No';
+
+        return (is_array($value))
+            ? implode('-', $value)
+            : $value;
     }
 
     /**
@@ -126,14 +169,19 @@ class Service extends Model
      */
     private function castFromType($value)
     {
+
         switch ($this->type) {
             case self::TYPE_INTEGER :
-                return intval($value);
+                $value = intval($value);
+                break;
             case self::TYPE_BOOLEAN :
-                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                break;
             case self::TYPE_RANGE :
-                return explode('-', $value);
+                $value = explode('-', $value);
+                break;
         }
+
         return $value;
     }
 
@@ -142,17 +190,6 @@ class Service extends Model
      */
     public function customize($value)
     {
-        if ($this->type == self::TYPE_RANGE) {
-            $value = implode('-', $value);
-        }
-
-        if ($this->type == self::TYPE_BOOLEAN) {
-            $value = ($value) ? 'true' : 'false';
-        }
-
-        if ($this->type != self::TYPE_RANGE and is_array($value)) {
-            throw new \Exception (sprintf('Value of the "%1$s" attribute should be "%2$s", but "%3$s" has beed passed', $this->display_name, $this->type, gettype($value)));
-        }
 
         $this->custom = strval($value);
 
@@ -172,11 +209,5 @@ class Service extends Model
         $this->save();
     }
 
-    /**
-     * @param $query
-     */
-    public function scopeCustomized($query)
-    {
-        return $query->where('custom', '!=', null);
-    }
+
 }

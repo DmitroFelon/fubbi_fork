@@ -14,7 +14,7 @@
 <hr>
 <div class="row">
     <div class="col-lg-4">
-        <h3 class="m-b-md text-center">{{_i('Plan requirments')}}</h3>
+        <h3 class="m-b-md text-center">{{_i('Summary')}}</h3>
         <dl class="dl-horizontal">
             <dt>Client:</dt>
             <dd>
@@ -49,13 +49,14 @@
 
                 @foreach($project->workers as $worker)
                     <dd class="project-people">
-                        <a class="participant-name" target="_blank" href="{{url()->action('UserController@show', $worker)}}">
+                        <a class="participant-name" target="_blank"
+                           href="{{url()->action('UserController@show', $worker)}}">
                             {{$worker->name}}
                         </a>
                         @role([\App\Models\Role::ADMIN])
                         <a class="text-danger" title="Remove from project"
                            href="{{action('ProjectController@remove_from_project', [$project, $worker])}}">
-                             <i class="fa fa-times"></i>
+                            <i class="fa fa-times"></i>
                         </a>
                         @endrole
                     </dd>
@@ -79,17 +80,12 @@
     <div class="col-lg-4">
         <h3 class="m-b-md text-center">{{_i('Plan requirments')}}</h3>
         <dl class="dl-horizontal">
-            @foreach($project->plan_metadata as $key => $value)
+            @foreach($project->services as $service)
                 <dt>
-                    {{ucwords( str_replace('_',' ',$key) )}}:
+                    {{ $service->display_name }}:
                 </dt>
                 <dd>
-                    @if($project->isModified($key))
-                        {{ (is_bool($project->getModified($key)))
-                        ? ($project->getModified($key)) ?_i('Yes') : _i('No') : $project->getModified($key)  }}
-                    @else
-                        {{ (is_bool($value)) ? ($value) ?_i('Yes') : _i('No') : $value  }}
-                    @endif
+                    {!!  $service->print_value !!} {!!(!is_null($service->getOriginal('custom'))) ? '<i title="modified" class="pull-right fa fa-pencil"></i>' : ''  !!}
                 </dd>
             @endforeach
         </dl>

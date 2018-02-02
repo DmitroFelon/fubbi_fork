@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project\Service;
 use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
@@ -253,11 +254,13 @@ class Article extends Model implements HasMedia
                 'Social Posts Texts' => _i('Social Posts Texts'),
             ]
         );
-        collect($project->getVariableServices())->each(function ($item) use ($types, $project) {
-            if ($project->isRequireService($item)) {
-                $types->put($item, $project->getServiceName($item));
-            }
-        });
+        $project->services()->withType(\App\Models\Project\Service::TYPE_INTEGER)->required()->get()
+                ->each(function (Service $service) use ($types, $project) {
+                    if (!in_array($service->name, ['articles_count'])) {
+                        $types->put($service->name, $service->display_name);
+                    }
+
+                });
         return $types;
     }
 
@@ -277,7 +280,7 @@ class Article extends Model implements HasMedia
             ]
         );
 
-        collect($project->getVariableServices())->each(function ($item) use ($types, $project) {
+        $project->services()->get()->each(function ($item) use ($types, $project) {
             $types->put($item, $project->getServiceName($item));
         });
 

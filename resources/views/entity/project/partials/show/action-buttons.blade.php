@@ -10,7 +10,7 @@
 
 @endif()
 
-<a href="{{url()->action('Project\PlanController@edit', [$project, $project->plan->id])}}" class="btn btn-danger btn-xs pull-right">
+<a href="{{url()->action('Project\PlanController@edit', [$project, $project->subscription->stripe_plan])}}" class="btn btn-danger btn-xs pull-right">
     {{_i('Modify Plan')}}
 </a>
 @endrole()

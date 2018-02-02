@@ -20,8 +20,8 @@ class TrivecartController extends Controller
     public function handle(Request $request)
     {
         $event      = $request->input('event');
-        $hash       = $request->input('thrivecart_secret'); // todo check on each request
-        $product_id = $request->input('base_product'); // todo check on each request
+        $hash       = $request->input('thrivecart_secret');
+        $product_id = $request->input('base_product');
 
         if ($event != 'order.success') {
             Log::error('wrong event: ' . $event);

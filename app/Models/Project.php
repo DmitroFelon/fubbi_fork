@@ -77,7 +77,6 @@ use Venturecraft\Revisionable\Revision;
  */
 class Project extends Model implements HasMediaConversions, Invitable
 {
-
     use hasCycles;
     use hasServices;
     use hasIdeas;
@@ -268,11 +267,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function getInvitableNotification()
     {
         return Invite::class;
-    }
-
-    public function test()
-    {
-        $this->fireModelEvent('created', false);
     }
 
     /**

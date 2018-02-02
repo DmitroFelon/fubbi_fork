@@ -182,7 +182,7 @@
         {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null,
          _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
 
-        @if($project->plan->id != 'fubbi-basic-plan')
+        @if($project->subscription->plan_id != 'fubbi-basic-plan-v2')
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="panel-group">

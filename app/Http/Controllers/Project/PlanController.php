@@ -34,29 +34,15 @@ class PlanController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Project $project
-     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project, $id = null)
+    public function edit(Project $project)
     {
-        $data = $this->output($project);
+        $plan_id = $project->subscription->stripe_plan;
 
-        return view('entity.plan.project.edit', $data);
-    }
+        $services = $project->services;
 
-    private function output(Project $project)
-    {
-        $plan           = $project->plan;
-        $plan->metadata = collect($plan->metadata);
-
-        $plan->metadata->transform(
-            function ($item, $key) use ($project) {
-                $modif = $project->getModified($key);
-                return ($project->isModified($key)) ? $modif : $item;
-            }
-        );
-
-        return compact(['plan', 'project']);
+        return view('entity.plan.project.edit', compact('plan_id', 'services', 'project'));
     }
 
     /**
@@ -69,24 +55,18 @@ class PlanController extends Controller
      */
     public function update(Project $project, $id, Request $request)
     {
-        $plan = $project->plan;
 
-        $plan->metadata = collect($plan->metadata);
+        try {
+            collect($request->input())->each(function ($item, $key) use ($project) {
+                $service = $project->services()->whereName($key)->first();
+                if ($service) {
+                    $service->customize(strval($item));
+                }
+            });
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
-        $input_metadata = collect($request->except(['_method', '_token']));
-
-        $input_metadata->each(function ($value, $key) use ($project) {
-            $project->modify(
-                $key,
-                $value,
-                false
-            );
-        });
-
-        unset($project->plan);
-
-        $project->save();
-
-        return redirect()->action('ProjectController@show', $project);
+        return redirect()->back()->with('success', 'Plan has beed modified succesfully');
     }
 }

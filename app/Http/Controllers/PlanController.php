@@ -37,9 +37,11 @@ class PlanController extends Controller
 
         $data = [];
 
+        Cache::forget('public_plans');
+
         $plans = Cache::remember(
             'public_plans',
-            60,
+            0,
             function () {
 
                 $filtered_plans = Collection::make();
@@ -133,7 +135,7 @@ class PlanController extends Controller
         $plan->metadata = $input->toArray();
         $plan->save();
 
-        return redirect()->action('PlanController@show', $id);
+        return redirect()->action('PlanController@show', $id)->with('success', 'Plan has been modified succesfully');
     }
 
 }
