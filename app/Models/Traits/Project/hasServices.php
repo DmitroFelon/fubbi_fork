@@ -10,7 +10,6 @@ namespace App\Models\Traits\Project;
 
 
 use App\Models\Project\Service;
-use Stripe\Plan;
 
 /**
  * Class hasServices
@@ -28,14 +27,22 @@ trait hasServices
     }
 
     /**
-     * @param Plan $plan
+     * @param string $plan_id
+     * @throws \Exception
+     * @internal param Plan $plan
      */
-    public function setServices(Plan $plan)
+    public function setServices(string $plan_id)
     {
 
         $services = collect();
 
-        collect($plan->metadata->jsonSerialize())->each(function ($value, $key) use ($services) {
+        $conf_services = config('fubbi.services.' . $plan_id, false);
+
+        if (!$conf_services) {
+            throw new \Exception(_i('Unknown subscription plan'));
+        }
+
+        collect($conf_services)->each(function ($value, $key) use ($services) {
             $services->push(new Service([
                     'name'         => $key,
                     'display_name' => $this->getServiceName($key),

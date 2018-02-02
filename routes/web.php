@@ -26,11 +26,7 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-
-
-    Cache::put(base64_encode(Request::ip()), 999, 60);
-
-    dd(Cache::get(base64_encode(Request::ip())));
+    dd(config('fubbi.thrivecart_key'));
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -73,6 +69,9 @@ Route::get('/test_email/{inex}', function ($inex) {
 
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
+
+
+    Log::debug($request->input());return;
 
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;

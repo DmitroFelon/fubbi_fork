@@ -19,17 +19,18 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
+        Log::debug($request->input());
+
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret'); // todo check on each request
         $product_id = $request->input('base_product'); // todo check on each request
-
 
         if ($event != 'order.success') {
             Log::error('wrong event: ' . $event);
             return new Response('Webhook Handled', 200);
         }
 
-        if (!$hash) {
+        if ($hash != config('fubbi.thrivecart_key')) {
             Log::error('wrong hash: ' . $hash);
             return new Response('Webhook Handled', 200);
         }
@@ -39,11 +40,12 @@ class TrivecartController extends Controller
             return new Response('Webhook Handled', 200);
         }
 
-
         try {
             $customer_identifier = $request->input('customer_identifier'); //stripe customer id
             $customer            = $request->input('customer'); //form data
             $subscription_id     = collect($request->input('subscriptions'))->first(); //subscription ids, get first
+
+            $plan_id = config('fubbi.thrive_cart_plans')[$product_id];
 
             $customer_email = $customer['email']??'';
 
@@ -81,7 +83,7 @@ class TrivecartController extends Controller
             $subscription->user_id     = $user->id;
             $subscription->name        = str_random(10);
             $subscription->stripe_id   = $subscription_id;
-            $subscription->stripe_plan = config('fubbi.thrive_cart_plans')[$product_id];
+            $subscription->stripe_plan = $plan_id;
             $subscription->quantity    = 1;
 
             $subscription->save();
@@ -93,6 +95,9 @@ class TrivecartController extends Controller
             $project->state           = ProjectStates::QUIZ_FILLING;
 
             $project->save();
+            $project->setServices($plan_id);
+            $project->setCycle($plan_id);
+
         } catch (\Exception $e) {
             Log::error($e);
         }

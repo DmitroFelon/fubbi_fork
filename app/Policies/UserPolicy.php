@@ -25,7 +25,6 @@ class UserPolicy
         $allow = [
             Role::ADMIN,
             Role::ACCOUNT_MANAGER,
-            Role::CLIENT
         ];
 
         return in_array($user->role, $allow);

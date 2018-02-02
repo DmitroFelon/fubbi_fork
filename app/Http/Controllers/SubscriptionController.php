@@ -7,7 +7,6 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Stripe\Plan;
 
 class SubscriptionController extends Controller
 {
@@ -15,18 +14,13 @@ class SubscriptionController extends Controller
     public function __invoke(Request $request, Project $project)
     {
         try {
-            //get selected plan
-            $plan = Plan::retrieve($request->input('plan_id'));
-
-            if (!method_exists($plan->metadata, 'jsonSerialize')) {
-                throw new \Exception('Plan not found');
-            }
+            $plan_id = $request->input('plan_id');
 
             //create subscription
             $subscription = Auth::user()
                                 ->newSubscription(
                                     $request->input('project_name'),
-                                    $request->input('plan_id'))
+                                    $plan_id)
                                 ->create($request->input('stripeToken'));
             //attach client id
             $project->client_id = Auth::user()->id;
@@ -39,9 +33,9 @@ class SubscriptionController extends Controller
             $project->save();
 
             //fill services
-            $project->setServices($plan);
+            $project->setServices($plan_id);
             //set filrst cycle
-            $project->setCycle($request->input('plan_id'));
+            $project->setCycle($plan_id);
 
             //set quiz flag in case user will click "back" button
             Session::put('quiz', $project->id);
@@ -52,7 +46,7 @@ class SubscriptionController extends Controller
 
         } catch (\Exception $e) {
             redirect()->back()
-                      ->with('error', _i('Something wrong happened while your subscription, please contant to administrator'));
+                      ->with('error', _i('Something wrong happened while your subscription, please contact to administrator'));
         }
     }
 
