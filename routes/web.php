@@ -81,7 +81,7 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     }
 
     $user = \App\User::whereEmail($email)->firstOrFail();
-
+    Auth::logout();
     Auth::login($user, true);
 
     return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
