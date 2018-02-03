@@ -35,12 +35,13 @@
 
     <td>
         @if($article->idea)
-            <a target="_blank" href="{{action('IdeaController@show', $article->idea)}}">"{{ucfirst($article->idea->theme)}}"</a>
+            <a target="_blank"
+               href="{{action('IdeaController@show', $article->idea)}}">"{{ucfirst($article->idea->theme)}}"</a>
         @endif
     </td>
 
     <td>
-        {{($article->active) ? 'Yes' : 'No'}}
+        {{($article->project->cycles()->active() and $article->project->cycles()->active()->id == $article->cycle_id) ? 'Yes' : 'No'}}
     </td>
 
 

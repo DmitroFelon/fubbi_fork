@@ -9,7 +9,6 @@
 namespace App\Models\Traits\Project;
 
 use App\Models\Project\Cycle;
-use Carbon\Carbon;
 
 /**
  * Class hasCycles
@@ -37,12 +36,17 @@ trait hasCycles
     /**
      * @param string $stripe_plan
      */
-    public function setCycle(string $stripe_plan)
+    public function setCycle(string $stripe_plan = null)
     {
+
+        if (is_null($stripe_plan)) {
+            $stripe_plan = $this->subscription->stripe_plan;
+        }
+
         $this->cycles()->create([
             'stripe_plan' => $stripe_plan,
-            'start_date'  => Carbon::now(),
-            'end_date'    => Carbon::now()->addMonth(),
+            'start_date'  => now(),
+            'end_date'    => now()->addMonth(),
         ]);
     }
 

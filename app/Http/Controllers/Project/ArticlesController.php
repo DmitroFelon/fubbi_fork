@@ -47,7 +47,10 @@ class ArticlesController extends Controller
             $articles_query->where('type', $request->input('type'));
         }
         if ($request->has('active') and $request->input('active') != '') {
-            $articles_query->where('active', true);
+            $current_cycle = $project->cycles()->latest('id')->first();
+            if ($current_cycle) {
+                $articles_query->where('cycle_id', $current_cycle->id);
+            }
         }
         if ($request->has('status') and $request->input('status') != '') {
             if ($request->input('status') == 1) {
@@ -116,7 +119,10 @@ class ArticlesController extends Controller
         if ($idea) {
             //if article should be published this month
             if ($idea->this_month) {
-                $article->cycle_id = $project->cycles()->latest('id');
+                $current_cycle = $project->cycles()->latest('id')->first();
+                if ($current_cycle) {
+                    $article->cycle_id = $current_cycle->id;
+                }
             }
         }
 

@@ -303,33 +303,19 @@ trait hasStates
      */
     public function getProgress()
     {
-        $key              = 'articles_count';
-        $require_articles = ($this->isModified($key))
-            ? $this->getModified($key)
-            : $this->plan_metadata['articles_count']??0;
 
-        $total_articles_accepted = $this->articles()->accepted()->count();
+        $service = $this->services()->where('name', 'articles_count')->first();
+        $cycle   = $this->cycles()->latest('id')->first();
+
+        if (!$service or !$cycle) {
+            return 0;
+        }
+
+        $require_articles        = intval($service->value);
+        $total_articles_accepted = $this->articles()->accepted()->where('cycle_id', $cycle->id)->count();
 
         return ($require_articles > 0)
             ? $total_articles_accepted / $require_articles * 100 : 0;
-    }
-
-    /**
-     * @return string
-     */
-    public function export()
-    {
-        try {
-            $ready_export = trim($this->getMeta('export'));
-            //return path to zip if exist
-            if ($ready_export and File::exists(storage_path('app/public/exports/') . $ready_export)) {
-                return storage_path('app/public/exports/') . $ready_export;
-            }
-            return ProjectExport::make($this);
-        } catch (\Exception $e) {
-            throw new \Exception(_('Somethig wrong happened while project export, please try later.'));
-        }
-
     }
 
     /**
@@ -344,8 +330,7 @@ trait hasStates
         $this->updated_at = Carbon::now();
         $this->unsetMeta('export');
         $this->save();
-
-        $this->articles()->where('active', true)->update(['active' => false]);
+        $this->setCycle();
         $this->fireModelEvent('reset', false);
     }
 
