@@ -223,7 +223,7 @@ return [
         /*
          * Project Export
          * */
-        \App\Providers\ProjectExportProvider::class
+        \App\Providers\ProjectExportProvider::class,
     ],
 
     /*

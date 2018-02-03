@@ -26,6 +26,7 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
+
 });
 
 Route::get('/test_email/{inex}', function ($inex) {

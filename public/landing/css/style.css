@@ -8564,3 +8564,18 @@ body.md-skin {
 .separator{
   margin: 1em 0;
 }
+
+#features{
+  margin-top: 7em;
+}
+
+#results p {
+  font-size: 1.8em;
+}
+
+#about p {
+  font-size: 1.2em;
+}
+.big-text{
+  font-size: 1.8em!important;
+}

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>INSPINIA - Landing Page</title>
+    <title>Fubbi</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/landing/css/bootstrap.min.css" rel="stylesheet">
@@ -36,16 +36,18 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a class="page-scroll" href="#page-top">Home</a></li>
                     <li><a class="page-scroll" href="#features">Features</a></li>
-                    <li><a class="page-scroll" href="#team">Team</a></li>
-                    <li><a class="page-scroll" href="#testimonials">Testimonials</a></li>
+                    <li><a class="page-scroll" href="#about">About</a></li>
                     <li><a class="page-scroll" href="#pricing">Pricing</a></li>
                     <li><a class="page-scroll" href="#contact">Contact</a></li>
+                    <li><a class="page-scroll" href="{{action('Auth\LoginController@login')}}">Dashboard</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
-<div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
+
+
+<div id="inSlider" class="carousel carousel-fade m-b-lg" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#inSlider" data-slide-to="0" class="active"></li>
     </ol>
@@ -74,19 +76,10 @@
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
-</div>
+</div> {{-- carousel --}}
 
-
-<section class="container features">
-
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <div class="navy-line"></div>
-            <h1>Discover great feautres</h1>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. </p>
-        </div>
-    </div>
-    <div class="row features-block">
+<section id="features" class="container features m-t-lg">
+    <div class="row m-t-lg">
         <div class="col-lg-6 features-text wow fadeInLeft">
             <h2 class="text-info">Fubbi</h2>
             <p>At any one time, our team includes writers and former editors of media outlets such as
@@ -96,114 +89,112 @@
                 syndicate to your social platforms 231 times per month - FREE!</p>
         </div>
         <div class="col-lg-6 text-right wow fadeInRight">
-            <img src="/landing/img//landing/dashboard.png" alt="dashboard" class="img-responsive pull-right">
+            <iframe class="h-300 img-responsive pull-right" id="ytplayer" type="text/html" width="640" height="360"
+                    src="http://www.youtube.com/embed/L9sanhoNFhs?autoplay=0&origin=http://portal.fubbi.co/"
+                    frameborder="0"></iframe>
         </div>
     </div>
-</section>
 
+</section> {{-- At any one time.... --}}
 
-<section class="features">
+<section id="results" class="p-h-md gray-section features">
     <div class="container">
-
-        <div class="row features-block">
-            <div class="navy-line text-center"></div>
-            <div class="col-lg-6 features-text wow fadeInLeft">
-
-                <p>Content marketing costs 62% less than traditional marketing and
-                    generates about 3 times as many leads</p>
-                <small>Source: DemandMetric</small>
+        <div class="row">
+            <div class="col-lg-6 fadeInLeft">
+                <p>
+                    Content marketing costs 62% less than traditional marketing and
+                    generates about 3 times as many leads
+                </p>
+                <small class="big-text">Source: DemandMetric</small>
             </div>
-            <div class="col-lg-6 features-text text-right wow fadeInRight">
-
-                <p>47% of buyers viewed 3-5 pieces of content before engaging with a sales rep.</p>
-                <small>Demand Gen Report</small>
+            <div class="col-lg-6 text-right fadeInRight">
+                <p>
+                    47% of buyers viewed 3-5 pieces <br> of content before engaging <br> with a sales rep.
+                </p>
+                <small class="big-text">Demand Gen Report</small>
             </div>
         </div>
     </div>
+</section> {{-- results --}}
 
-</section>
-
-<div class="separator"></div>
-
-
-<section class="gray-section">
-    <div class="navy-line text-center"></div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-lg-offset-2 col-md-offset-1 m-t-lg m-b-lg">
-            <div class="separator"></div>
-            <h2 class="separator">Dear Friend,</h2>
-            <div class="separator"></div>
-
-            <p>
-                I will never forget the day.
-            </p>
-
-            <p>
-                I just hopped a plane from our home in Hawaii to meet with the team in Chicago. As I settled into my
-                seat
-                I opened up a sales spreadsheet - we were on track to do $3 million for the month in revenue.
-            </p>
-
-            <p>
-                I then continued on to review our planned media buys - there were dozens needing my approval. In total
-                our
-                spend was close to $1 million in ad buys.
-            </p>
-
-            <p>
-                Things were moving forward. But, at the same time, they were falling apart. That’s because the company
-                had
-                grown incredibly fast - a year earlier we were only doing $300,000 in sales per month.
-            </p>
-
-            <p>
-                That’s a 1000% increase in business.
-            </p>
-
-            <p>
-                Not surprisingly, such astounding growth meant things quickly became… crazy. Almost overnight we were
-                dealing with hundreds of support tickets… we outgrew our CRM… servers were crashing… funnels stopped
-                working… inventory management became a nightmare – the list went on and on.
-            </p>
-
-            <p>
-                We excelled at generating new customers, but such growth made it almost impossible to nurture our
-                customers.
-                We could never find the time to build our community.
-            </p>
-
-            <p>
-                There were holes in our content marketing and our social media efforts.
-            </p>
-
-            <p>
-                Unfortunately, I wasn’t able to take my eye off the $1m per month in media buys we were doing. Or the
-                over
-                40 people in our customer support and telemarketing who needed my focus.
-            </p>
-
-            <p>
-                If anybody gave me an "out-of-the-box" solution to our content marketing headaches, I would have snapped
-                it
-                up in a heartbeat.
-
-            </p>
-
-            <p>
-                Nobody ever did.
-            </p>
-
-            <p>
-                So I decided to create it myself.
-            </p>
-
-        </div>
-    </div>
-</section>
-
-<section class="">
-
+<section id="about" class="">
     <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-lg-offset-2 col-md-offset-1 m-t-lg m-b-lg">
+                <div class="separator"></div>
+                <h2 class="separator">Dear Friend,</h2>
+                <div class="separator"></div>
+
+                <p>
+                    I will never forget the day.
+                </p>
+
+                <p>
+                    I just hopped a plane from our home in Hawaii to meet with the team in Chicago. As I settled into my
+                    seat
+                    I opened up a sales spreadsheet - we were on track to do $3 million for the month in revenue.
+                </p>
+
+                <p>
+                    I then continued on to review our planned media buys - there were dozens needing my approval. In
+                    total
+                    our
+                    spend was close to $1 million in ad buys.
+                </p>
+
+                <p>
+                    Things were moving forward. But, at the same time, they were falling apart. That’s because the
+                    company
+                    had
+                    grown incredibly fast - a year earlier we were only doing $300,000 in sales per month.
+                </p>
+
+                <p>
+                    That’s a 1000% increase in business.
+                </p>
+
+                <p>
+                    Not surprisingly, such astounding growth meant things quickly became… crazy. Almost overnight we
+                    were
+                    dealing with hundreds of support tickets… we outgrew our CRM… servers were crashing… funnels stopped
+                    working… inventory management became a nightmare – the list went on and on.
+                </p>
+
+                <p>
+                    We excelled at generating new customers, but such growth made it almost impossible to nurture our
+                    customers.
+                    We could never find the time to build our community.
+                </p>
+
+                <p>
+                    There were holes in our content marketing and our social media efforts.
+                </p>
+
+                <p>
+                    Unfortunately, I wasn’t able to take my eye off the $1m per month in media buys we were doing. Or
+                    the
+                    over
+                    40 people in our customer support and telemarketing who needed my focus.
+                </p>
+
+                <p>
+                    If anybody gave me an "out-of-the-box" solution to our content marketing headaches, I would have
+                    snapped
+                    it
+                    up in a heartbeat.
+
+                </p>
+
+                <p>
+                    Nobody ever did.
+                </p>
+
+                <p>
+                    So I decided to create it myself.
+                </p>
+
+            </div>
+        </div>
         <div class="navy-line text-center"></div>
         <h2 class="text-center">
             <strong>
@@ -211,29 +202,23 @@
                 The Wall St Journal
             </strong>
         </h2>
-        <div class="row">
+        <div class="row features-text">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="separator"></div>
-
-
                 <p>
                     Our editorial team is second to none.
                 </p>
-
                 <p>
                     At any one time we can have former editors from the New York Times… Wall St Journal… Forbes and
                     numerous
                     others from the world’s most reputable media outlets.
                 </p>
-
                 <p>
                     So we’re probably the most qualified team of content writers around.
                 </p>
-
                 <p>
                     Currently we even have a Pulitzer prize winner on our team!
                 </p>
-
                 <p>
                     <b>
                         For you this means world class, high quality content every single time.
@@ -287,9 +272,41 @@
                      src="https://images.clickfunnel.com/56/ad88609a9411e785c48fa2b56386dd/success_logo.png" alt=""
                      class="img-responsive"></div>
         </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-md-offset-1 col-lg-offset-1">
+                <h2 class="text-center">
+                    “Thank you for helping make my
+                    dream come true”
+                </h2>
+                <p class="text-right">
+                    Rorion Gracie
+                    Co-Founder of the Ultimate Fight Championship (UFC)
+                    Founder Gracie Jui-Jitsu Academy
+                </p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
+                <img class="img-responsive left"
+                     src="https://images.clickfunnel.com/89/7c53c0383811e7b0e995e3055449f8/PK9gBCPS.png" alt="">
+            </div>
+        </div>
     </div>
 
-</section>
+</section> {{-- about --}}
+
+<section class="p-h-md gray-section features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 fadeInLeft text-center">
+                <p class="big-text">
+                    Conversion rates are nearly 6x higher for content marketing adopters than non-
+                    adopters (2.9% vs
+                    0.5%)
+                </p>
+                <small class="big-text">Source: Aberdeen</small>
+            </div>
+        </div>
+    </div>
+</section> {{-- Conversion rates ... --}}
 
 <section id="pricing" class="pricing">
     <div class="container">
@@ -565,20 +582,98 @@
         </div>
     </div>
 
-</section>
+</section> {{-- pricings --}}
+
+<section class="gray-section features m-t-lg">
+
+    <div class="container">
+        <div class="row">
+            <div class="navy-line"></div>
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-lg-offset-2 col-md-offset-1 m-t-lg m-b-lg">
+                <h2 class="text-center">
+                    We'll Post To Your Social Platforms Up To 231
+                    Times Per Month - FREE
+                </h2>
+                <div class="separator"></div>
+                <div class="row">
+                    <p>
+                        As a company founder, your focus is on boosting profits, increasing sales and attracting new
+                        clients.
+                        There are many ways to increase sales, one of the most effective is content marketing.
+                    </p>
+                    <p>
+                        With Fubbi, our world class team of content creators produce your blog content. Then our team of
+                        designers transform you content into snazzy social post designs.
+                    </p>
+                    <p>
+                        Once we design your social posts, we then syndicate your content across your social platforms.
+                        That's
+                        up to 231 ways across 10 platforms every month to get leads and attention.
+                    </p>
+                </div>
+                <div class="row m-t-lg big-text">
+                    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-md-2 col-lg-offset-2">
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Facebook
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Twitter
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Instagram
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            LinkedIn
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Pinterest
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 ">
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Quora
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Medium
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Google +
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Slideshare
+                        </div>
+                        <div class="row text-center">
+                            <i class="fa fa-check pull-left"></i>
+                            Blog
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> {{--  We'll Post To Your Social Platforms Up To 231.... --}}
 
 <section class="features">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Frequently Asked Questions</h1>
+                <h2>Frequently Asked Questions</h2>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="features-text">
-                    <h2>Which businesses can you write for?</h2>
+                    <h3>Which businesses can you write for?</h3>
                     <p>
                         We can write for any businesses in any industry. Our team of writers and editors have hundreds
                         of
@@ -587,21 +682,21 @@
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>Do I have final approval? </h2>
+                    <h3>Do I have final approval? </h3>
                     <p>
                         Yes at every stage you have final approval.
                     </p>
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>Can I change the deliverables of my plan?</h2>
+                    <h3>Can I change the deliverables of my plan?</h3>
                     <p>
                         Yes, but on a case by case basis.
                     </p>
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>What if I'm not happy with my content? </h2>
+                    <h3>What if I'm not happy with my content? </h3>
                     <p>
                         It's really simple. We'll rewrite the content until you're happy. Having said that, rewrites are
                         rare as we tend to get it right first time!
@@ -609,10 +704,11 @@
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>How fast will I get results?</h2>
+                    <h3>How fast will I get results?</h3>
                     <p>
                         Please refer to
-                        <a href="http://fubbi.co/how-long-does-content-marketing-take-to-work/">this video</a>
+                        <a target="_blank" href="http://fubbi.co/how-long-does-content-marketing-take-to-work/">this
+                            video</a>
                         for your answer.
                     </p>
                 </div>
@@ -620,7 +716,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <div class="features-text">
-                    <h2>How much time will I spend approving content and designs?</h2>
+                    <h3>How much time will I spend approving content and designs?</h3>
                     <p>
                         You'll only need to invest between 60 to 90 minutes per month for approvals. That's an average
                         of
@@ -629,7 +725,7 @@
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>Do you get access to my social platform passwords?</h2>
+                    <h3>Do you get access to my social platform passwords?</h3>
                     <p>
                         We do <strong>NOT</strong> get access to your passwords. Our dashboard seamlessly
                         integrates to your social platforms! It
@@ -641,14 +737,14 @@
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>Can I cancel any time? </h2>
+                    <h3>Can I cancel any time? </h3>
                     <p>
                         Yes. You can cancel any time.
                     </p>
                 </div>
                 <div class="separator"></div>
                 <div class="features-text">
-                    <h2>Can you send upload blog content directly to my website?</h2>
+                    <h3>Can you send upload blog content directly to my website?</h3>
                     <p>
                         Yes, if you have WordPress. If you do not have WordPress we will still prepare all your content
                         and
@@ -661,7 +757,7 @@
     </div>
 
 
-</section>
+</section> {{-- questions--}}
 
 <section class="timeline gray-section">
     <div class="container">
@@ -684,7 +780,7 @@
                                 You fill out an onboarding questionnaire. If you know your business well it will take
                                 you 10 minutes.
                             </p>
-                            <span class="vertical-date"> Day 0 </span>
+                            <span class="vertical-date m-t-sm"> Day 0 </span>
                         </div>
                     </div>
 
@@ -699,7 +795,7 @@
                                 days we will come back to you with a list of content ideas to approve. Your initial
                                 onboarding call takes place at this time, too.
                             </p>
-                            <span class="vertical-date"> Days 1-3 </span>
+                            <span class="vertical-date m-t-sm"> Days 1-3 </span>
                         </div>
                     </div>
 
@@ -713,7 +809,7 @@
                                 Once you've approved the content ideas, we then prepare article headlines. You'll
                                 usually get between 30 to 50 specific headlines for your content.
                             </p>
-                            <span class="vertical-date"> Days 3-7 </span>
+                            <span class="vertical-date m-t-sm"> Days 3-7 </span>
                         </div>
                     </div>
 
@@ -726,7 +822,7 @@
                             <p>
                                 Once you approve the article headlines, our team starts writing your content.
                             </p>
-                            <span class="vertical-date"> Day 7-12 </span>
+                            <span class="vertical-date m-t-sm"> Day 7-12 </span>
                         </div>
                     </div>
 
@@ -740,7 +836,7 @@
                                 After you approve the articles, our design team whip up your social posts... they do so
                                 in line with your Branding Guidelines.
                             </p>
-                            <span class="vertical-date"> Days 12-18 </span>
+                            <span class="vertical-date m-t-sm"> Days 12-18 </span>
                         </div>
                     </div>
 
@@ -753,7 +849,7 @@
                             <p>
                                 We plan out your content schedule over the next 30 days.
                             </p>
-                            <span class="vertical-date"> Days 18-24 </span>
+                            <span class="vertical-date m-t-sm"> Days 18-24 </span>
                         </div>
                     </div>
 
@@ -762,7 +858,8 @@
 
         </div>
     </div>
-</section>
+</section> {{-- timeline --}}
+
 <section id="contact" class="features">
     <div class="container">
         <div class="row">
@@ -786,7 +883,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> {{-- footer --}}
 
 <!-- Mainly scripts -->
 <script src="/landing/js/jquery-3.1.1.min.js"></script>
