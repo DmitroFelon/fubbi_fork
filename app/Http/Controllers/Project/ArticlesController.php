@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\GoogleDrive\GoogleDriveCreate;
 use App\Jobs\GoogleDrive\GoogleDriveUpload;
 use App\Models\Article;
+use App\Models\Idea;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,8 +110,18 @@ class ArticlesController extends Controller
         $article->title      = 'title';
         $article->user_id    = Auth::user()->id;
         $article->project_id = $project->id;
-        $article->cycle_id   = $project->cycles()->latest('id');
 
+        $idea = Idea::find($request->input('idea_id'));
+
+        if ($idea) {
+            //if article should be published this month
+            if ($idea->this_month) {
+                $article->cycle_id = $project->cycles()->latest('id');
+            }
+        }
+
+        //if article should be published next month
+        $article->cycle_id = 0;
         $article->save();
 
         //upload file to google docs
