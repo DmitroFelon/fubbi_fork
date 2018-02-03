@@ -166,12 +166,14 @@ class UserController extends Controller
         if ($request->has('redirect_to_last_project')) {
             $last_project = $user->projects()->latest('id')->first();
 
-            return redirect()
-                ->action('ProjectController@edit', [
-                    $last_project,
-                    's' => ProjectStates::QUIZ_FILLING
-                ])
-                ->with('success', _i('Please, fill the quiz.'));
+            if ($last_project) {
+                return redirect()
+                    ->action('ProjectController@edit', [
+                        $last_project,
+                        's' => ProjectStates::QUIZ_FILLING
+                    ])
+                    ->with('success', _i('Please, fill the quiz.'));
+            }
         }
 
         return redirect()->back()->with('success', _i('Profile has been saved successfully'));

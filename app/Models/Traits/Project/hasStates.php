@@ -79,7 +79,8 @@ trait hasStates
                     'article_images',
                     'ready_content',
                     'themes',
-                    'themes_order'
+                    'themes_order',
+                    'questions'
                 ]
             )
         );
@@ -256,7 +257,8 @@ trait hasStates
                     'article_images',
                     'ready_content',
                     'themes',
-                    'themes_order'
+                    'themes_order',
+                    'questions'
                 ]
             )
         );
@@ -284,7 +286,7 @@ trait hasStates
         if ($questions->isNotEmpty()) {
             $questions->each(function ($item, $key) {
                 $idea = $this->ideas()->updateOrCreate(
-                    ['id' => $key, 'type' => Idea::TYPE_QUESTION],
+                    ['theme' => $item, 'type' => Idea::TYPE_QUESTION],
                     ['theme' => $item, 'type' => Idea::TYPE_QUESTION]
                 );
                 return $idea;
