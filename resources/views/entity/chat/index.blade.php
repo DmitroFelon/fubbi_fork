@@ -39,7 +39,7 @@
                                data-sourse="{{action('MessageController@show', $conversation->id)}}"
                                href="#">
                                 <i title="Project"
-                                   class="fa fa-{{ isset($conversation->data['title']) ? 'file' : 'user'  }}"></i>
+                                   class="fa fa-{{ isset($conversation->data['title']) ? 'file project' : 'user'  }}"></i>
                                 {{ isset($conversation->data['title']) ? $conversation->data['title'] : $conversation->data['title-'.Auth::id()] }}
                             </a>
                         </li>
