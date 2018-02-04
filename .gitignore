@@ -1,6 +1,6 @@
 .env
-.idea/
-.storage/
+.idea
+.storage
 .node_modules
 .env
 _ide_helper.php
