@@ -15,6 +15,7 @@
         <div class="tabs-left">
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 <div class="m-b-lg p-w-lg">
+                    @role([\App\Models\Role::ADMIN])
                     <input type="text"
                            id="conversations-search"
                            class="form-control"
@@ -23,6 +24,7 @@
                     <small>
                         {{_i('Type "project" to see only conversations on projects and "user" to see only private conversations')}}
                     </small>
+                    @endrole()
                 </div>
                 <ul id="conversations" class="nav nav-tabs m-l-lg conversations-list">
                     @foreach($conversations as $conversation)
