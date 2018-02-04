@@ -48,6 +48,7 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('project.accept-review', ProjectPolicy::class . '@accept_review');
         $gate->define('project.invite', ProjectPolicy::class . '@invite_users');
         $gate->define('project.show', ProjectPolicy::class . '@show');
+        $gate->define('project.apply_to_project', ProjectPolicy::class . '@apply_to_project');
 
         /*
          * articles additional policies

@@ -13,6 +13,11 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <h3>{{_('Themes')}}</h3>
+                    @if($idea->keywords()->suggestions()->get()->isEmpty())
+                        <div class="text-muted m-b-lg m-t-lg">
+                            {{_i('Empty')}}
+                        </div>
+                    @endif
                     <ul>
                         @foreach($idea->keywords()->suggestions()->get() as $keyword)
                             <li>{{$keyword->text}}</li>
@@ -22,6 +27,11 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <h3>{{_('Questions')}}</h3>
+                    @if($idea->keywords()->questions()->get()->isEmpty())
+                        <div class="text-muted m-b-lg m-t-lg">
+                            {{_i('Empty')}}
+                        </div>
+                    @endif
                     <ul>
                         @foreach($idea->keywords()->questions()->get() as $keyword)
                             <li>{{$keyword->text}}</li>

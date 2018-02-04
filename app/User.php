@@ -280,7 +280,7 @@ class User extends Authenticatable implements HasMedia
     public function getInviteToProject($project_id)
     {
         return $this->invites()->projects()
-                    ->where('invitable_id', $project_id)->new()->get()->first();
+                    ->where('invitable_id', $project_id)->new()->first();
     }
 
     /**

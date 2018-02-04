@@ -52,6 +52,7 @@ class ProjectController extends Controller
         $this->middleware('can:delete,project')->only(['delete', 'destroy', 'resume']);
         $this->middleware('can:project.accept-review,project')->only(['accept_review', 'reject_review']);
         $this->middleware('can:project.invite,project')->only(['invite_users', 'invite_team']);
+        $this->middleware('can:project.apply_to_project,project')->only(['apply_to_project']);
     }
 
     /**
@@ -354,7 +355,7 @@ class ProjectController extends Controller
             $message = _i('You are applied to this project');
         }
 
-        return redirect()->back()->with($message_key, $message);
+        return redirect()->action('ProjectController@show', $project)->with($message_key, $message);
     }
 
     /**

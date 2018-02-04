@@ -158,11 +158,12 @@ class ProjectObserver
 
         $worker_id = $project->eventData['attachWorker'];
 
-        $conversation = ChatFacade::conversation($project->conversation_id);
+        //$conversation = ChatFacade::conversation($project->conversation_id);
 
-        ChatFacade::addParticipants($conversation, $worker_id);
+        //ChatFacade::addParticipants($conversation, $worker_id);
 
         $worker = User::find($worker_id);
+
         activity('project_worker')
             ->causedBy(Auth::user())
             ->performedOn($project)

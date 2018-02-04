@@ -44,11 +44,11 @@ class ProjectPolicy
 
         $result = $model->workers->find($user->id);
 
-        if($result) {
+        if ($result) {
             return true;
         }
 
-        if($user->teamProjects()->get('id', $model->id)){
+        if ($user->teamProjects()->get('id', $model->id)) {
             return true;
         }
 
@@ -144,5 +144,12 @@ class ProjectPolicy
     public function invite_users(User $user, Project $model)
     {
         return $this->accept_review($user, $model);
+    }
+
+    public function apply_to_project(User $user, Project $model)
+    {
+        $invite = $user->getInviteToProject($model->id);
+
+        return ($invite) ? true : false;
     }
 }

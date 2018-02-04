@@ -15,6 +15,9 @@
 
 <hr>
 
+
+<h3 class="m-b-lg">{{_i('Total artcles:')}}</h3>
+
 <div class="row">
     <div class="col-lg-4">
         <dl class="dl-horizontal">
@@ -36,6 +39,11 @@
         </dl>
     </div>
 </div>
+
+<hr>
+
+<h3 class="m-b-lg">{{_i('Articles by type:')}}</h3>
+
 @foreach($project->services()->withType(\App\Models\Project\Service::TYPE_INTEGER)->required()->get() as $service)
     <div class="row">
         <div class="col-lg-4">
