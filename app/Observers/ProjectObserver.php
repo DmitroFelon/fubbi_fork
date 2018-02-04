@@ -137,7 +137,6 @@ class ProjectObserver
             $users = User::withRole($role)->get();
             $users->each(
                 function (User $user, $key) use ($project) {
-                    Log::debug('invitation');
                     $user->inviteTo($project);
                 }
             );
