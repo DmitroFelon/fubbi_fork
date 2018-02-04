@@ -28,6 +28,11 @@
                 </div>
                 <ul id="conversations" class="nav nav-tabs m-l-lg conversations-list">
                     @foreach($conversations as $conversation)
+
+                        @if(!isset($conversation->data['title']) and !isset($conversation->data['title-'.Auth::id()]))
+                            @continue
+                        @endif
+
                         <li class="chat-nav-link {{($loop->first)?'active first-chat ':''}}">
                             <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}"
                                class="message-switcher"
