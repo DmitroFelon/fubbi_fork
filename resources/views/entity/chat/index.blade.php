@@ -16,11 +16,15 @@
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 <div class="m-b-lg p-w-lg">
                     @role([\App\Models\Role::ADMIN])
+                    <label for="conversations-search">
+                        {{_i('Type project title or user name')}}
+                    </label>
                     <input type="text"
                            id="conversations-search"
                            class="form-control"
                            onkeyup="conversationsSearch()"
-                           placeholder="Search...">
+                           title="Project title or user name..."
+                           placeholder="Search">
                     <small>
                         {{_i('Type "project" to see only conversations on projects and "user" to see only private conversations')}}
                     </small>
