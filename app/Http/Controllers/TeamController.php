@@ -83,6 +83,9 @@ class TeamController extends Controller
         if ($request->has('users')) {
             $users = User::whereIn('id', $request->input('users'));
             $users->each(function (User $user) use ($team) {
+                if ($user->id == Auth::user()->id) {
+                    return;
+                }
                 $user->inviteTo($team);
             });
         }
