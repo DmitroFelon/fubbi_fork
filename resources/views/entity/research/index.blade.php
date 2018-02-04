@@ -11,8 +11,11 @@
             {!! Form::bsText('country',null, _i('Country'), '', ['id' => 'country', 'list' => 'countries'] ) !!}
             @include('entity.research.partials.countries')
             <button id="research" class="btn btn-primary">{{_('Research')}}</button>
-
-            <div style="display: none;" id="result" class="m-t-md"></div>
+            <div style="display:none;" id="spinner-wrapper" class="text-center">
+                @include('components.spinner')
+            </div>
+            <div id="result" class="m-t-md">
+            </div>
         </div>
     </div>
 @endsection
@@ -39,13 +42,23 @@
                 $("#result").html('')
 
                 sources.forEach(function (source) {
-                    $.get('{{action('ResearchController@load')}}', {
+                    $.ajax({
+                        url: "{{action('ResearchController@load')}}",
+                        method: 'get',
                         theme: theme,
                         country: country,
-                        source: source
-                    }, function (data) {
-
-                        $("#result").append(data);
+                        source: source,
+                        beforeSend: function () {
+                            $("#spinner-wrapper").css('display', 'block');
+                        },
+                        success: function (data) {
+                            $("#spinner-wrapper").css('display', 'none');
+                            $("#result").append(data);
+                        },
+                        error: function (data) {
+                            //$("#spinner-wrapper").css('display', 'none');
+                            $("#result").append("<div>Can't load keywords</div>");
+                        }
                     });
                 });
             });

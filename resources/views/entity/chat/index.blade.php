@@ -26,7 +26,8 @@
                            title="Project title or user name..."
                            placeholder="Search">
                     <small>
-                        {{_i('Type "project" to see only conversations on projects and "user" to see only private conversations')}}
+                        {{_i('Type "project" to see only conversations on projects
+                         and "user" to see only private conversations')}}
                     </small>
                     @endrole()
                 </div>

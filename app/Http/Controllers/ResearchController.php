@@ -23,6 +23,7 @@ class ResearchController extends Controller
      */
     public function load(Request $request, KeywordsFactoryInterface $api)
     {
+
         $theme = ($request->has('theme'))
             ? trim($request->input('theme'))
             : null;
@@ -61,7 +62,7 @@ class ResearchController extends Controller
                 try {
                     return $api->questions($theme, $country, $language, $metrics, $source);
                 } catch (\Exception $e) {
-
+                    return collect('Error');
                 }
             });
 
@@ -70,7 +71,7 @@ class ResearchController extends Controller
                 try {
                     return $api->suggestions($theme, $country, $language, $metrics, $source);
                 } catch (\Exception $e) {
-
+                    return collect('Error');
                 }
             });
 
