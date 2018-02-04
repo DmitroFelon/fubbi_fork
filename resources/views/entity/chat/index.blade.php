@@ -14,18 +14,26 @@
     <div class="tabs-container ">
         <div class="tabs-left">
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <ul class="nav nav-tabs m-l-lg conversations-list">
+                <div class="m-b-lg p-w-lg">
+                    <input type="text"
+                           id="conversations-search"
+                           class="form-control"
+                           onkeyup="conversationsSearch()"
+                           placeholder="Search...">
+                    <small>
+                        {{_i('Type "project" to see only conversations on projects and "user" to see only private conversations')}}
+                    </small>
+                </div>
+                <ul id="conversations" class="nav nav-tabs m-l-lg conversations-list">
                     @foreach($conversations as $conversation)
                         <li class="chat-nav-link {{($loop->first)?'active first-chat ':''}}">
                             <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}"
                                class="message-switcher"
                                data-sourse="{{action('MessageController@show', $conversation->id)}}"
-                               href="#">{{ isset($conversation->data['title']) ? $conversation->data['title'] : $conversation->data['title-'.Auth::id()] }}
-                                @if(isset($conversation->data['title']))
-                                    <i title="Project" class="pull-left fa fa-file"></i>
-                                @else
-                                    <i title="Private message" class="pull-left fa fa-user"></i>
-                                @endif
+                               href="#">
+                                <i title="Project"
+                                   class="fa fa-{{ isset($conversation->data['title']) ? 'file' : 'user'  }}"></i>
+                                {{ isset($conversation->data['title']) ? $conversation->data['title'] : $conversation->data['title-'.Auth::id()] }}
                             </a>
                         </li>
                     @endforeach
@@ -66,6 +74,24 @@
 
 @section('scripts')
     <script>
+        function conversationsSearch() {
+            // Declare variables
+            var input, filter, ul, li, a, i;
+            input = document.getElementById('conversations-search');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("conversations");
+            li = ul.getElementsByTagName('li');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
         //get necessary chat id
         var urlParams = new URLSearchParams(window.location.search);
 
