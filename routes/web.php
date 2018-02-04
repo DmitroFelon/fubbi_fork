@@ -26,7 +26,10 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    
+    $project = \App\Models\Project::first();
+
+    $project->test();
+
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -186,6 +189,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('messages')->group(function () {
         Route::get('read/{id}', 'MessageController@read');
+        Route::get('user/{user}', 'MessageController@user');
         Route::get('clear', 'MessageController@clear');
     });
 
@@ -216,7 +220,7 @@ Route::middleware(['auth'])->group(function () {
         ]
     );
 
-    
+
 });
 
 Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');

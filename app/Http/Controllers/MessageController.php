@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Events\ChatMessage;
 use App\Models\Project;
+use App\Models\Role;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Musonza\Chat\Chat;
 use Musonza\Chat\Facades\ChatFacade;
-use Musonza\Chat\Messages\Message;
 use Musonza\Chat\Notifications\MessageSent;
 
 
+/**
+ * Class MessageController
+ * @package App\Http\Controllers
+ */
 class MessageController extends Controller
 {
     /**
@@ -24,20 +29,25 @@ class MessageController extends Controller
         $user          = Auth::user();
         $conversations = $user->conversations;
 
-        $conversations->transform(function ($item, $key) {
-            $project = Project::meta()->where(function ($query) use ($item) {
-                $query->where('projects_meta.key', 'conversation_id')
-                      ->where('projects_meta.value', $item->id);
-            })->get();
+        if ($user->role == Role::ADMIN) {
+            $users = User::all();
+            $users->each(function (User $user) use ($chat, $conversations) {
+                $conversation = $chat->getConversationBetween($user->id, Auth::user()->id);
+                if (!$conversation) {
+                    $conversation = $chat->createConversation([$user->id, Auth::user()->id]);
+                    $conversation->update([
+                        'data' => [
+                            'title-' . $user->id        => Auth::user()->name,
+                            'title-' . Auth::user()->id => $user->name
+                        ]
+                    ]);
+                    $conversation->save();
+                }
+                $conversations->push($conversation);
+            });
+        }
 
-            if ($project->isNotEmpty()) {
-                return $item;
-            } else {
-                return null;
-            }
-        });
-
-        $conversations = $conversations->filter();
+        $conversations = $conversations->unique();
 
         if ($conversations->count() == 1 and !$request->has('c')) {
             return redirect()->action('MessageController@index', ['c' => $conversations->first()->id]);
@@ -111,7 +121,10 @@ class MessageController extends Controller
         return view('entity.chat.show', $data);
     }
 
-
+    /**
+     * @param $id
+     * @return array
+     */
     public function read($id)
     {
         $user         = Auth::user();
@@ -121,6 +134,9 @@ class MessageController extends Controller
         return ['read'];
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function clear()
     {
         $user = Auth::user();

@@ -7,7 +7,7 @@
                 {{str_limit($message_notification->message->body, 7, ' ...') }}
             </small>
             <span class="pull-right text-muted small">
-                {{ $message_notification->conversation->data['title'] }}
+                {{ $message_notification->conversation->data['title'] ?? $message_notification->conversation->data['title-'.Auth::id()] }}
             </span>
         </div>
     </a>

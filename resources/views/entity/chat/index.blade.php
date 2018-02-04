@@ -11,15 +11,22 @@
 @endsection
 
 @section('content')
-    <div class="tabs-container">
+    <div class="tabs-container ">
         <div class="tabs-left">
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs m-l-lg conversations-list">
                     @foreach($conversations as $conversation)
                         <li class="chat-nav-link {{($loop->first)?'active first-chat ':''}}">
-                            <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}" class="message-switcher"
+                            <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}"
+                               class="message-switcher"
                                data-sourse="{{action('MessageController@show', $conversation->id)}}"
-                               href="#">{{$conversation->data['title']}}</a>
+                               href="#">{{ isset($conversation->data['title']) ? $conversation->data['title'] : $conversation->data['title-'.Auth::id()] }}
+                                @if(isset($conversation->data['title']))
+                                    <i title="Project" class="pull-left fa fa-file"></i>
+                                @else
+                                    <i title="Private message" class="pull-left fa fa-user"></i>
+                                @endif
+                            </a>
                         </li>
                     @endforeach
                 </ul>
@@ -55,20 +62,15 @@
             </div>
         </div>
     </div>
-    </div>
 @endsection
 
 @section('scripts')
-    <style>
-
-    </style>
     <script>
         //get necessary chat id
         var urlParams = new URLSearchParams(window.location.search);
 
         if (urlParams.has('c')) {
             var link = $(".message-switcher[data-conversation-id='" + urlParams.get('c') + "']");
-            //link.click();
             loadChat(link);
         } else {
             var link = $(".first-chat a.message-switcher");

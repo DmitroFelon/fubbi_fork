@@ -15,6 +15,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Musonza\Chat\Conversations\Conversation;
 use Musonza\Chat\Facades\ChatFacade;
 
 /**
@@ -93,7 +94,9 @@ class ProjectObserver
 
         $participants = $participants->unique();
 
-        $conversation = ChatFacade::createConversation($participants->toArray());
+        $conversation = (Conversation::find($project->conversation_id))
+            ? Conversation::find($project->conversation_id)
+            : ChatFacade::createConversation($participants->toArray());
 
         $conversation->update([
             'data' => [
@@ -158,11 +161,13 @@ class ProjectObserver
 
         $worker_id = $project->eventData['attachWorker'];
 
-        //$conversation = ChatFacade::conversation($project->conversation_id);
-
-        //ChatFacade::addParticipants($conversation, $worker_id);
+        $conversation = ChatFacade::conversation($project->conversation_id);
 
         $worker = User::find($worker_id);
+
+        if ($worker and $worker->role == Role::ACCOUNT_MANAGER) {
+            ChatFacade::addParticipants($conversation, $worker_id);
+        }
 
         activity('project_worker')
             ->causedBy(Auth::user())
@@ -171,7 +176,6 @@ class ProjectObserver
             ->log('User ' . $worker->name . ' has beed attached to project ' . $project->name);
 
         $worker->notify(new Attached($project));
-
     }
 
     /**

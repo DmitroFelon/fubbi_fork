@@ -343,7 +343,7 @@ trait hasStates
             $client = $this->client;
             if ($client->subscription($this->name)) {
                 $client->subscription($this->name)->cancel();
-                $this->fireModelEvent('suspend');
+                $this->fireModelEvent('suspend', false);
             }
         } catch (\Exception $e) {
             $this->forceDelete();
