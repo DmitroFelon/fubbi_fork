@@ -37,6 +37,7 @@
                             <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}"
                                class="message-switcher"
                                data-sourse="{{action('MessageController@show', $conversation->id)}}"
+                               data-search="{{ isset($conversation->data['title']) ? 'project'.$conversation->data['title'] : 'user'.$conversation->data['title-'.Auth::id()]  }}"
                                href="#">
                                 <i title="Project"
                                    class="fa fa-{{ isset($conversation->data['title']) ? 'file project' : 'user user'  }}"></i>
@@ -92,7 +93,7 @@
             // Loop through all list items, and hide those who don't match the search query
             for (i = 0; i < li.length; i++) {
                 a = li[i].getElementsByTagName("a")[0];
-                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                if (a.getAttribute('data-search').toUpperCase().indexOf(filter) > -1) {
                     li[i].style.display = "";
                 } else {
                     li[i].style.display = "none";
