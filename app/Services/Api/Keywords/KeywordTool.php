@@ -10,6 +10,7 @@ namespace App\Services\Api;
 
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class KeywordTool
@@ -132,13 +133,18 @@ class KeywordTool implements KeywordsFactoryInterface
         $output = curl_exec($ch);
 
         if (curl_error($ch)) {
-            throw new \Exception(curl_error($ch));
+            if (App::environment('production')) {
+                throw new \Exception('Keyword Tool returned an empty result');
+            }else{
+                throw new \Exception(curl_error($ch));
+            }
+            
         }
 
         $results = json_decode($output, true);
 
         if (!isset($results['results']) or empty($results['results'])) {
-            throw new \Exception('KeywordTool Api error');
+            throw new \Exception('Keyword Tool returned an empty result');
         }
 
         return collect($results['results']);

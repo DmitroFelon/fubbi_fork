@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Notifications\Project;
+namespace App\Notifications\Chat;
 
-use App\Models\Project;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Musonza\Chat\Conversations\Conversation;
+use Musonza\Chat\Messages\Message;
 
-class Delayed extends Notification
+class PrivateMessage extends Notification
 {
     use Queueable;
 
-    protected $project;
+    protected $message;
 
     /**
      * Create a new notification instance.
-     *
-     * @param Project $project
+     * @param Conversation $conversation
      */
-    public function __construct(Project $project)
+    public function __construct(Message $message)
     {
-        //Notify manager
-        $this->project = $project;
+        $this->message = $message;
     }
 
     /**
@@ -30,7 +30,7 @@ class Delayed extends Notification
      * @param  mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(User $notifiable)
     {
         return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
             ? [] : ['mail'];
@@ -45,11 +45,10 @@ class Delayed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(_i('Project is delayed!'))
+            ->subject(_i('New Message'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" is delayed.', [$this->project->name]))
-            ->line(_i('Please, contact to workers.'))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->line(_i('You have a new message from "%s".', [$this->message->sender->name]))
+            ->action('Open conversation', action('MessageController@index', ['c' => $this->message->conversation->id]))
             ->line('Thank you for using our application!');
     }
 

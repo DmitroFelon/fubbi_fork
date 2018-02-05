@@ -6,6 +6,7 @@ use App\Models\Project\Service;
 use App\Services\Google\Drive;
 use App\User;
 use BrianFaust\Commentable\Traits\HasComments;
+use Carbon\Carbon;
 use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -297,6 +298,24 @@ class Article extends Model implements HasMedia
         $this->title = $title;
         $this->save();
         return $title;
+    }
+
+    public function ScopeOverdue($query, $overdue = 1, $compare = '')
+    {
+        switch ($overdue) {
+            case 1: // not overdue
+                $query->whereBetween('updated_at', [Carbon::now()->subDay(1), Carbon::now()]);
+                break;
+            case 2: // 2 days overdue
+                $query->whereBetween('updated_at', [Carbon::now()->subDay(2), Carbon::now()->subDay(1)]);
+                break;
+            case 3: // 3 days overdue
+                $query->whereBetween('updated_at', [0, Carbon::now()->subDay(2)]);
+                break;
+            default:
+                $query->whereBetween('updated_at', [0, Carbon::now()->subDay($overdue - 1)]);
+                break;
+        }
     }
 
 }

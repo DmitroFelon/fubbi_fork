@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Team;
+use App\Notifications\Article\Disaproved;
 use App\Notifications\Project\Created;
 use App\Notifications\Project\StatusChanged;
 use App\Notifications\Project\ThirdArticleReject;
@@ -289,6 +290,18 @@ class ProjectObserver
     {
         $article = Article::find($project->eventData['declineArticle']);
 
+        $manager = $project->workers()->withRole(Role::ACCOUNT_MANAGER)->first();
+
+        $author = $article->author;
+
+        if ($manager) {
+            $manager->notify(new Disaproved($article));
+        }
+
+        if ($author) {
+            $author->notify(new Disaproved($article));
+        }
+
         activity('project_progress')
             ->causedBy(Auth::user())
             ->performedOn($project)
@@ -307,7 +320,7 @@ class ProjectObserver
         $manager = $project->workers()->withRole(Role::ACCOUNT_MANAGER)->first();
 
         if ($manager) {
-            $manager->notify(new ThirdArticleReject($project, $article));
+            $manager->notify(new ThirdArticleReject($article));
         }
 
         activity('project_progress')

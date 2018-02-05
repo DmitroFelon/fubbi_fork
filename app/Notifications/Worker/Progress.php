@@ -4,9 +4,8 @@ namespace App\Notifications\Worker;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class Progress extends Notification
 {
@@ -21,7 +20,6 @@ class Progress extends Notification
      */
     public function __construct(Project $project)
     {
-        //todo remind workers to complete project articles
         $this->project = $project;
     }
 
@@ -33,7 +31,8 @@ class Progress extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
+            ? [] : ['mail'];
     }
 
     /**

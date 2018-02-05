@@ -9,24 +9,90 @@
 namespace App\Models\Helpers;
 
 
+/**
+ * Class NotificationTypes
+ * @package App\Models\Helpers
+ */
 class NotificationTypes
 {
+    /**
+     * @const array
+     */
+    const CLIENT = [
+        \App\Notifications\Chat\PrivateMessage::class        => 'Private Messages',
+        \App\Notifications\Client\OutstandingApproval::class => 'Outstanding Approvals',
+        \App\Notifications\Client\QuizIncomplete::class      => 'Onboarding quiz incomplete',
+        \App\Notifications\Client\KeywordsIncomplete::class  => 'Keyword filling incomplete',
+    ];
 
-    const META_NAME = 'disabled_notifications';
+    /**
+     * @const array
+     */
+    const WRITER = [
+        \App\Notifications\Chat\PrivateMessage::class      => 'Private Messages',
+        \App\Notifications\Worker\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Worker\ArticleDisaproval::class => 'Item Disaproval',
+    ];
 
-    const PROJECT_STATUS   = 'project-status';
-    const PROJECT_PAUSE    = 'project-pause';
-    const PROJECT_MATERIAL = 'project-material';
+    /**
+     * @const array
+     */
+    const DESIGNER = [
+        \App\Notifications\Chat\PrivateMessage::class      => 'Private Messages',
+        \App\Notifications\Worker\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Worker\ArticleDisaproval::class => 'Item Disaproval',
+    ];
 
-    const ARTICLE_NOT_DUE     = 'project-items_not_due';
-    const ARTICLE_DUE_1       = 'project-items_due_1';
-    const ARTICLE_DUE_2       = 'project-items_due_2';
-    const ARTICLE_DISAPPROVED = 'project-article_disapproved';
+    /**
+     * @const array
+     */
+    const RESEARCHER = [
+        \App\Notifications\Chat\PrivateMessage::class      => 'Private Messages',
+        \App\Notifications\Worker\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Worker\ArticleDisaproval::class => 'Item Disaproval',
+    ];
 
-    const BILLING_SUCCESS = 'billing-success';
-    const BILLING_REJECT  = 'billing-reject';
-    const BILLING_REMIND  = 'billing-remind';
+    /**
+     * @const array
+     */
+    const EDITOR = [
+        \App\Notifications\Chat\PrivateMessage::class      => 'Private Messages',
+        \App\Notifications\Worker\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Worker\ArticleDisaproval::class => 'Item Disaproval',
+    ];
 
-    const CLIENT_REGISTERED = 'client-registered';
+    /**
+     * @const array
+     */
+    const ACCOUNT_MANAGER = [
+        \App\Notifications\Chat\PrivateMessage::class       => 'Private Messages',
+        \App\Notifications\Manager\ArticleDisaproval::class => 'Item Disaprovals',
+        \App\Notifications\Manager\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Manager\InviteOverdue::class     => 'Invites Overdue',
+        \App\Notifications\Manager\ArticleLowRating::class  => '3 star rating or below',
+    ];
 
+    /**
+     * @const array
+     */
+    const ADMIN = [
+        \App\Notifications\Chat\PrivateMessage::class       => 'Private Messages',
+        \App\Notifications\Manager\ArticleDisaproval::class => 'Item Disaprovals',
+        \App\Notifications\Manager\ArticleOverdue::class    => 'Item Overdue',
+        \App\Notifications\Manager\InviteOverdue::class     => 'Invites Overdue',
+        \App\Notifications\Manager\ArticleLowRating::class  => '3 star rating or below',
+        \App\Notifications\Client\Registered::class         => 'New Client',
+    ];
+
+    /**
+     * @param string $role
+     * @return \Illuminate\Support\Collection
+     */
+    public static function get(string $role)
+    {
+        return (defined('self::' . strtoupper($role)))
+            ? collect(constant('self::' . strtoupper($role)))
+            : collect();
+
+    }
 }

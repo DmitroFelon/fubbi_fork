@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Project;
+namespace App\Notifications\Manager;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Delayed extends Notification
+class InviteOverdue extends Notification
 {
     use Queueable;
 
@@ -20,7 +20,6 @@ class Delayed extends Notification
      */
     public function __construct(Project $project)
     {
-        //Notify manager
         $this->project = $project;
     }
 
@@ -45,11 +44,15 @@ class Delayed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(_i('Project is delayed!'))
+            ->subject(_i('Invite Overdue'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" is delayed.', [$this->project->name]))
-            ->line(_i('Please, contact to workers.'))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->line(_i('Project "%s" requires workers: ', [
+                $this->project->name,
+                implode(', ', $this->project->requireWorkers())
+            ]))
+            ->action('Review project', action('ProjectController@show', [
+                $this->project
+            ]))
             ->line('Thank you for using our application!');
     }
 

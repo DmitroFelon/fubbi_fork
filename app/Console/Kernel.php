@@ -2,13 +2,11 @@
 
 namespace App\Console;
 
-use App\Jobs\Project\CheckState;
 use App\Models\Project;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\Process\Process;
 
 class Kernel extends ConsoleKernel
 {
@@ -31,9 +29,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(
             function () {
-                \App\Models\Project::where('id', 11)->get()->each(function (\App\Models\Project $project) {
+                \App\Models\Project::all()->each(function (\App\Models\Project $project) {
                     dispatch(new \App\Jobs\Project\CheckState($project));
                 });
+
+                dispatch(new \App\Jobs\Article\CheckState());
             }
         )->name('monitor_projects_state')->dailyAt('8:00');
     }

@@ -21,10 +21,8 @@ class SettingsController extends Controller
         $user = Auth::user();
 
         $data = [
-            'project_notifications_checkboxes' => $user->getProjectNotifications(),
-            'billing_notification_checkboxes'  => $user->getBillingNotifications(),
-            'disabled_notifications'           => $user->disabled_notifications,
-            'user'                             => $user,
+            'notifications_checkboxes' => NotificationTypes::get($user->role),
+            'user'                     => $user,
         ];
 
         return view('entity.user.settings', $data);
@@ -39,14 +37,19 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-        if ($request->input(NotificationTypes::META_NAME)) {
-            $disabled_notifications = collect($request->input(NotificationTypes::META_NAME));
-            $user->setMeta(NotificationTypes::META_NAME, $disabled_notifications->toArray());
-        } else {
-            $user->setMeta(NotificationTypes::META_NAME, []);
-        }
+        $disabled_notifications = ($request->has('disabled_notifications'))
+            ? $request->input('disabled_notifications')
+            : [];
 
-        $user->save();
+        $disabled_notifications = collect(array_keys($disabled_notifications))->transform(function ($disabled_notification) {
+            return ['name' => $disabled_notification];
+        });
+
+        $user->disabled_notifications()->delete();
+
+        $user->disabled_notifications()->createMany(
+            $disabled_notifications->toArray()
+        );
 
         return redirect()->back()->with(
             'success', _i('Notification options have beed saved')

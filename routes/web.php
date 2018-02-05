@@ -26,10 +26,8 @@ Auth::routes();
 
 //just for tests
 Route::get('test', function () {
-    $project = \App\Models\Project::first();
-
-    $project->test();
-
+    $user = Activity::users()->where('user_id', 1)->get();
+    dd($user);
 });
 
 Route::get('/test_email/{inex}', function ($inex) {
@@ -56,7 +54,7 @@ Route::get('/test_email/{inex}', function ($inex) {
         new \App\Notifications\Project\Remind($demo_project),
         new \App\Notifications\Project\Removed($demo_project),
         new \App\Notifications\Project\Subscription($demo_project),
-        new \App\Notifications\Project\ThirdArticleReject($demo_project, $demo_article),
+        new \App\Notifications\Project\ThirdArticleReject($demo_article),
         new \App\Notifications\Project\WillRemoved($demo_project),
 
         new \App\Notifications\Client\Registered($demo_user),

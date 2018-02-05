@@ -3,6 +3,7 @@
 namespace App\Notifications\Client;
 
 use App\Notifications\NotificationPayload;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,15 +13,15 @@ class Registered extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $new_user;
+    protected $user;
 
     /**
      * Create a new notification instance.
      *
      */
-    public function __construct($new_user)
+    public function __construct(User $user)
     {
-        $this->new_user = $new_user;
+        $this->user = $user;
     }
 
     /**
@@ -31,7 +32,8 @@ class Registered extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
+            ? ['database'] : ['database', 'mail'];
     }
 
     /**
@@ -42,10 +44,11 @@ class Registered extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->subject('New user has been registered.')
-                                ->line('New user has been registered.')
-                                ->action('See new client', url('/users/' . $this->new_user->id))
-                                ->line('Thank you for using our application!');
+        return (new MailMessage)
+            ->subject('New client')
+            ->line(_i('New client %s has beed registered.', [$this->user->name]))
+            ->action('See new client', action('UserController@show', $this->user))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -56,16 +59,11 @@ class Registered extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-
-
         $notification = NotificationPayload::make(
-            _i(
-                'New user %s has beed registered.',
-                [$this->new_user->name]
-            ),
-            url()->action('UserController@show', $this->new_user),
-            get_class($this->new_user),
-            $this->new_user->id
+            _i('New user %s has beed registered.', [$this->user->name]),
+            url()->action('UserController@show', $this->user),
+            get_class($this->user),
+            $this->user->id
         );
 
         return $notification->toArray();

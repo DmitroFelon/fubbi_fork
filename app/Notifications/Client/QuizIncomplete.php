@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Notifications\Project;
+namespace App\Notifications\Client;
 
+use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Delayed extends Notification
+class QuizIncomplete extends Notification
 {
     use Queueable;
 
@@ -16,11 +17,9 @@ class Delayed extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param Project $project
      */
     public function __construct(Project $project)
     {
-        //Notify manager
         $this->project = $project;
     }
 
@@ -45,12 +44,13 @@ class Delayed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(_i('Project is delayed!'))
+            ->subject(_i('Quiz incomplete'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" is delayed.', [$this->project->name]))
-            ->line(_i('Please, contact to workers.'))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->line(_i('Please complete quiz filling'))
+            ->action('Complete', action('ProjectController@edit', [
+                $this->project,
+                's' => ProjectStates::QUIZ_FILLING
+            ]))
             ->line('Thank you for using our application!');
     }
-
 }

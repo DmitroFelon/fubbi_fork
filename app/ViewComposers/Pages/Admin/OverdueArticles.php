@@ -12,7 +12,6 @@ namespace App\ViewComposers\Pages\Admin;
 use App\Models\Article;
 use App\Models\Role;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -61,18 +60,7 @@ class OverdueArticles
             }
         }
 
-
-        switch ($overdue) {
-            case 1: // not overdue
-                $query->whereBetween('updated_at', [Carbon::now()->subDay(1), Carbon::now()]);
-                break;
-            case 2: // 2 days overdue
-                $query->whereBetween('updated_at', [Carbon::now()->subDay(2), Carbon::now()->subDay(1)]);
-                break;
-            case 3: // 3 days overdue
-                $query->whereBetween('updated_at', [0, Carbon::now()->subDay(2)]);
-                break;
-        }
+        $query->overdue($overdue);
 
         $articles       = $query->take(10)->get();
         $articles_count = $query->count();

@@ -138,7 +138,7 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
         $clients = Cache::remember('clients', 60, function () {
-            return User::withRole('client')->get();
+            return User::withRole(Role::CLIENT)->get();
         });
 
         $search_suggestions = SearchSuggestions::toView(Role::CLIENT);

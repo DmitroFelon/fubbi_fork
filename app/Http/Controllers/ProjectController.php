@@ -116,7 +116,7 @@ class ProjectController extends Controller
 
         $filters = [];
 
-        $filters['users'] = User::without(['notifications', 'invites'])->withRole('client')
+        $filters['users'] = User::without(['notifications', 'invites'])->withRole(Role::CLIENT)
                                 ->get(['id', 'first_name', 'last_name', 'email']);
         //prepare and filter users for the view
         $clients          = $filters['users']->keyBy('id')->transform(function (User $user) {

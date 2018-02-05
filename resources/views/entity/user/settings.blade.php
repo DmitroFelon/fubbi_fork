@@ -13,7 +13,9 @@
 @section('content')
 
     <div class="ibox">
-        <div class="ibox-title"></div>
+        <div class="ibox-title">
+            <h5>Settings</h5>
+        </div>
         <div class="ibox-content">
             @if ($errors->any())
                 <div class="alert alert-danger">

@@ -5,6 +5,9 @@ namespace App\Jobs\Project;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use App\Models\Role;
+use App\Notifications\Client\KeywordsIncomplete;
+use App\Notifications\Client\QuizIncomplete;
+use App\Notifications\Manager\InviteOverdue;
 use App\Notifications\Project\Delayed;
 use App\Notifications\Project\Remind;
 use App\Notifications\Project\WillRemoved;
@@ -15,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -94,7 +98,7 @@ class CheckState implements ShouldQueue
     }
 
     /**
-     *
+     * Check projects state
      */
     public function progress()
     {
@@ -106,7 +110,37 @@ class CheckState implements ShouldQueue
                 } else {
                     $user->notify(new Progress($this->project));
                 }
+
+                User::withRole(Role::ADMIN)->get()->each(function (User $user) {
+                    $user->notify(new Delayed($this->project));
+                });
             });
         }
+
+        if ($this->project->created_at->diffInDays(now()) > 3 and $this->project->requireWorkers()) {
+            //todo notify workers about progress
+            $this->project->workers->each(function (User $user) {
+                if ($user->role == Role::ACCOUNT_MANAGER) {
+                    $user->notify(new InviteOverdue($this->project));
+                }
+                User::withRole(Role::ADMIN)->get()->each(function (User $user) {
+                    $user->notify(new InviteOverdue($this->project));
+                });
+            });
+        }
+
+        if ($this->project->created_at->diffInDays(now()) > 3 and $this->project->state == ProjectStates::QUIZ_FILLING) {
+            $this->project->client->notify(
+                new QuizIncomplete($this->project)
+            );
+        }
+
+        if ($this->project->created_at->diffInDays(now()) > 3 and $this->project->state == ProjectStates::QUIZ_FILLING) {
+            $this->project->client->notify(
+                new KeywordsIncomplete($this->project)
+            );
+        }
     }
+
+
 }

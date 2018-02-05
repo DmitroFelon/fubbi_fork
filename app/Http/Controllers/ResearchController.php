@@ -62,7 +62,7 @@ class ResearchController extends Controller
                 try {
                     return $api->questions($theme, $country, $language, $metrics, $source);
                 } catch (\Exception $e) {
-                    return collect('Error');
+                    return collect($e->getMessage());
                 }
             });
 
@@ -71,7 +71,7 @@ class ResearchController extends Controller
                 try {
                     return $api->suggestions($theme, $country, $language, $metrics, $source);
                 } catch (\Exception $e) {
-                    return collect('Error');
+                    return collect($e->getMessage());
                 }
             });
 

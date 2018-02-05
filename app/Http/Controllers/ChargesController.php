@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -59,7 +60,7 @@ class ChargesController extends Controller
             });
 
             $clients = Cache::remember('clients', 60, function () {
-                return User::withRole('client')->get();
+                return User::withRole(Role::CLIENT)->get();
             });
 
             return view('pages.admin.charges.index',
