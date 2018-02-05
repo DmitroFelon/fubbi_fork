@@ -45,12 +45,24 @@ class Filled extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+
+        try {
+            $export = $this->project->export();
+        } catch (\Exception $e) {
+            $export = false;
+        }
+        
+        $message = (new MailMessage)
             ->subject('New project has beed filled.')
             ->line(_i('New project "%s" has beed filled.', [$this->project->name]))
             ->action('Review project', url()->action('ProjectController@show', $this->project))
-            ->line('Thank you for using our application!')
-            ->line('<a href="' . Storage::url('exports/' . $this->project->export() . '">Project Export</a>'));
+            ->line('Thank you for using our application!');
+        if ($export) {
+            $message->line('<a href="' . Storage::url('exports/' . $this->project->export() . '">Project Export</a>'));
+        }
+
+        return $message;
+
     }
 
     /**
