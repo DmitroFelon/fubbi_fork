@@ -12,7 +12,6 @@
 */
 
 use App\Facades\ProjectExport;
-use App\Notifications\RegistrationConfirmation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,42 +29,50 @@ Route::get('test', function () {
     dd($user);
 });
 
-Route::get('/test_email/{inex}', function ($inex) {
+Route::get('/test_email/{inex}', function ($index) {
 
-    $auth_user                = Auth::user();
-    $demo_user                = \App\User::first();
-    $demo_project             = \App\Models\Project::first();
-    $demo_article             = $demo_project->articles()->first();
-    $demo_invitations_team    = \App\Models\Invite::teams()->first();
-    $demo_invitations_project = \App\Models\Invite::projects()->first();
+    try {
+        $auth_user                = Auth::user();
+        $demo_user                = \App\User::first();
+        $demo_project             = \App\Models\Project::first();
 
-    $notifications = [
-        new RegistrationConfirmation($auth_user),
+        $demo_article             = (!is_null($demo_project)) ? $demo_project->articles()->first() : null;
+        $demo_invitations_team    = \App\Models\Invite::teams()->first();
+        $demo_invitations_project = \App\Models\Invite::projects()->first();
 
-        new \App\Notifications\Worker\Attached($demo_project),
-        new \App\Notifications\Worker\Detached($demo_project),
-        new \App\Notifications\Worker\Progress($demo_project),
+        $notifications = [
+            ($demo_user) ? new \App\Notifications\Client\Registered($demo_user):null,
+            ($demo_project) ? new \App\Notifications\Worker\Attached($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Worker\Detached($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Worker\Progress($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Project\Delayed($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Project\Filled($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Project\Remind($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Project\Removed($demo_project):null,
+            ($demo_project) ? new \App\Notifications\Project\Subscription($demo_project):null,
 
-        new \App\Notifications\Team\Invite($demo_invitations_team),
+            ($demo_project) ? new \App\Notifications\Project\WillRemoved($demo_project):null,
 
-        new \App\Notifications\Project\Delayed($demo_project),
-        new \App\Notifications\Project\Filled($demo_project),
-        //new \App\Notifications\Project\Invite($demo_invitations_project),
-        new \App\Notifications\Project\Remind($demo_project),
-        new \App\Notifications\Project\Removed($demo_project),
-        new \App\Notifications\Project\Subscription($demo_project),
-        new \App\Notifications\Project\ThirdArticleReject($demo_article),
-        new \App\Notifications\Project\WillRemoved($demo_project),
+            ($demo_invitations_project) ? new \App\Notifications\Project\Invite($demo_invitations_project):null,
+            ($demo_invitations_team) ? new \App\Notifications\Team\Invite($demo_invitations_team):null,
 
-        new \App\Notifications\Client\Registered($demo_user),
+            ($demo_article) ? new \App\Notifications\Project\ThirdArticleReject($demo_article):null,
+        ];
+
+        if (!isset($notifications[$index])) {
+            return 'Undefined notification';
+        }
+
+        $n        = $notifications[$index - 1];
+        $mailable = new \App\Mail\TestingEmail($n->toMail($auth_user));
+
+        return $mailable;
+
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 
 
-    ];
-
-    $n        = $notifications[$inex];
-    $mailable = new \App\Mail\TestingEmail($n->toMail($auth_user));
-
-    return $mailable;
 });
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
