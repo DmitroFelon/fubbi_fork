@@ -58,7 +58,7 @@ class Filled extends Notification implements ShouldQueue
             ->action('Review project', url()->action('ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
         if ($export) {
-            $message->line('<a href="' . Storage::url('exports/' . $this->project->export() . '">Project Export</a>'));
+            $message->line('<a href="' . Storage::url('exports/' . $export . '">Project Export</a>'));
         }
 
         return $message;
