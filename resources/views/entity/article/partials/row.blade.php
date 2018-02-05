@@ -41,7 +41,7 @@
     </td>
 
     <td>
-        {{($article->project->cycles()->active() and $article->project->cycles()->active()->id == $article->cycle_id) ? 'Yes' : 'No'}}
+        {{($article->project->cycles()->active()->isNotEmpty() and $article->project->cycles()->active()->id == $article->cycle_id) ? 'Yes' : 'No'}}
     </td>
 
 
