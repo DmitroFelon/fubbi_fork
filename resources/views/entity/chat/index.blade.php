@@ -41,7 +41,7 @@
                         <li class="chat-nav-link {{($loop->first)?'active first-chat ':''}}">
                             <a onclick="loadChat(this)" data-conversation-id="{{$conversation->id}}"
                                class="message-switcher"
-                               data-sourse="{{action('MessageController@show', $conversation->id)}}"
+                               data-sourse="{{action('Resources\MessageController@show', $conversation->id)}}"
                                data-search="{{ isset($conversation->data['title']) ? 'project'.$conversation->data['title'] : 'user'.$conversation->data['title-'.Auth::id()]  }}"
                                href="#">
                                 <i title="Project"

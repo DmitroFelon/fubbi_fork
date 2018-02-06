@@ -72,7 +72,7 @@ class LeftMenuComposer
             $links->push(
                 [
                     'name'  => 'Messages',
-                    'url'   => action('MessageController@index'),
+                    'url'   => action('Resources\MessageController@index'),
                     'icon'  => 'fa fa-envelope',
                     'order' => 100,
                 ]
@@ -88,7 +88,7 @@ class LeftMenuComposer
             $links->push(
                 [
                     'name'  => 'Issues',
-                    'url'   => action('IssueController@index'),
+                    'url'   => action('Resources\IssueController@index'),
                     'icon'  => 'fa fa-bug',
                     'order' => 100,
                 ]
@@ -121,31 +121,31 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Users',
-                'url'   => action('UserController@index'),
+                'url'   => action('Resources\UserController@index'),
                 'icon'  => 'fa fa-user',
                 'order' => 100,
             ],
             [
                 'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
+                'url'   => action('Resources\TeamController@index'),
                 'icon'  => 'fa fa-users',
                 'order' => 100,
             ],
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
             [
                 'name'  => 'Plans',
-                'url'   => action('PlanController@index'),
+                'url'   => action('Resources\PlanController@index'),
                 'icon'  => 'fa fa-gear',
                 'order' => 100,
             ],
             [
                 'name'  => 'Articles',
-                'url'   => action('ArticlesController@index'),
+                'url'   => action('Resources\ArticlesController@index'),
                 'icon'  => 'fa fa-file-word-o',
                 'order' => 100,
             ],
@@ -157,7 +157,7 @@ class LeftMenuComposer
             ],
             [
                 'name'  => 'Help Videos',
-                'url'   => action('HelpVideosController@index'),
+                'url'   => action('Resources\HelpVideosController@index'),
                 'icon'  => 'fa fa-youtube',
                 'order' => 100,
             ],
@@ -172,13 +172,13 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
             [
                 'name'  => 'Content',
-                'url'   => action('ArticlesController@index'),
+                'url'   => action('Resources\ArticlesController@index'),
                 'icon'  => 'fa fa-files-o',
                 'order' => 100,
             ],
@@ -199,13 +199,13 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
             [
                 'name'  => 'Teams',
-                'url'   => action('TeamController@index'),
+                'url'   => action('Resources\TeamController@index'),
                 'icon'  => 'fa fa-users',
                 'order' => 100,
             ]
@@ -220,7 +220,7 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
@@ -235,7 +235,7 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
@@ -250,7 +250,7 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],
@@ -263,7 +263,7 @@ class LeftMenuComposer
         return [
             [
                 'name'  => 'Projects',
-                'url'   => action('ProjectController@index'),
+                'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,
             ],

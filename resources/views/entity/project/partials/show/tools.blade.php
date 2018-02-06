@@ -1,4 +1,4 @@
-<a href="{{action('ProjectController@export', $project)}}" class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
+<a href="{{action('Resources\ProjectController@export', $project)}}" class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
     <i class="fa fa-download"></i> {{_i('Export')}}
 </a>
 
@@ -23,7 +23,7 @@
 
 @role([\App\Models\Role::ADMIN, \App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::CLIENT])
 @can('project.update', $project)
-    <a href="{{url()->action('ProjectController@edit', $project)}}"
+    <a href="{{url()->action('Resources\ProjectController@edit', $project)}}"
        class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
         {{_i('Edit project')}}
     </a>

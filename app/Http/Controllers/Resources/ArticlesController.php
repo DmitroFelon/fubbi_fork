@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Role;
 use App\Services\Google\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Mockery\CountValidator\Exception;
 
 class ArticlesController extends Controller
 {
@@ -85,4 +87,65 @@ class ArticlesController extends Controller
         $drive->addPermission($google_id, $permissions);
         return redirect()->back()->with('success', 'Permissions has been provided');
     }
+
+
+    /**
+     * @param Article $article
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export(Article $article, Request $request)
+    {
+        try {
+            $as    = ($request->has('as')) ? $request->input('as') : Drive::MS_WORD;
+            $media = $article->export($as);
+
+            if (!$media) {
+                throw new Exception(_i('Some error happened while exporting, try later please.'));
+            }
+
+            return response()->download($media->getPath(), $article->title . '.' . Drive::getExtension($as));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', _i('Some error happened while exporting, try later please.'));
+        }
+    }
+
+    public function batch_export(Request $request)
+    {
+        $as  = ($request->has('as')) ? $request->input('as') : Drive::MS_WORD;
+        $ids = $request->has('ids') ? $request->input('ids') : [];
+
+        $path      = storage_path('app/public/exports/');
+        $zipper    = new \Chumper\Zipper\Zipper;
+        $zip_name  = rand() . '.zip';
+        $full_path = $path . $zip_name;
+        $zipper->make($full_path);
+        $drive = new Drive();
+
+        try {
+            foreach ($ids as $id) {
+                $article = Article::find($id);
+                if (!$article) {
+                    continue;
+                }
+                $media = $article->export($as, $drive);
+                if (!$media) {
+                    continue;
+                }
+                $zipper->add(
+                    $media->getPath(),
+                    $article->title . '.' . Drive::getExtension($as)
+                );
+            }
+            $zipper->close();
+            return response()->download($full_path);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', _i($e->getMessage()));
+        } finally {
+            $zipper->close();
+        }
+    }
+
+
 }

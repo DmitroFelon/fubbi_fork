@@ -15,7 +15,7 @@
 </a>
 @endrole()
 @role([\App\Models\Role::CLIENT])
-<a href="{{url()->action('ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
+<a href="{{url()->action('Resources\ProjectController@edit', $project)}}" class="btn btn-white btn-xs pull-right">
     {{_i('Edit project')}}
 </a>
 @endrole()

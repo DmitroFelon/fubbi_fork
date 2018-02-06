@@ -1,7 +1,7 @@
 <div class="col-lg-4">
     <div class="ibox">
         <div class="ibox-title">
-            <a href="{{url()->action('TeamController@edit', $team)}}"
+            <a href="{{url()->action('Resources\TeamController@edit', $team)}}"
                class="btn btn-white btn-xs pull-right">
                 {{_i('Edit team')}}
             </a>
@@ -21,13 +21,13 @@
             <hr>
             <div class="team-members">
                 <h4>{{_i('Team Members')}}</h4>
-                <a data-id="{{$team->owner->id}}" target="_blank" href="{{url()->action('UserController@show', $team->owner)}}">
+                <a data-id="{{$team->owner->id}}" target="_blank" href="{{url()->action('Resources\UserController@show', $team->owner)}}">
                     {{$team->owner->name}}
                 </a>
                 <span class="label label-primary pull-right">{{_i('Owner')}}</span>
                 <br>
                 @foreach($team->users as $user)
-                    <a target="_blank" href="{{url()->action('UserController@show', $user)}}">
+                    <a target="_blank" href="{{url()->action('Resources\UserController@show', $user)}}">
                         {{$user->name}}
                     </a>
                     @if($user->id == $team->owner_id)

@@ -47,7 +47,7 @@ class QuizIncomplete extends Notification
             ->subject(_i('Quiz incomplete'))
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('Please complete quiz filling'))
-            ->action('Complete', action('ProjectController@edit', [
+            ->action('Complete', action('Resources\ProjectController@edit', [
                 $this->project,
                 's' => ProjectStates::QUIZ_FILLING
             ]))

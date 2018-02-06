@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProject;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Idea;
@@ -65,7 +66,7 @@ class ProjectController extends Controller
         $user = Auth::user();
 
         if ($user->projects->count() == 1) {
-            return redirect()->action("ProjectController@show", $user->projects->first());
+            return redirect()->action('Resources\ProjectController@show', $user->projects->first());
         }
 
         switch ($user->role) {
@@ -103,7 +104,7 @@ class ProjectController extends Controller
             case \App\Models\Role::CLIENT:
                 $projects = $user->projects()->paginate(10);
                 if ($projects->isEmpty()) {
-                    return redirect()->action('ProjectController@create');
+                    return redirect()->action('Resources\ProjectController@create');
                 }
                 break;
             default:
@@ -153,7 +154,7 @@ class ProjectController extends Controller
     {
         if (Session::has('quiz')) {
             return redirect()
-                ->action('ProjectController@edit', [Session::get('quiz'), 's' => ProjectStates::QUIZ_FILLING])
+                ->action('Resources\ProjectController@edit', [Session::get('quiz'), 's' => ProjectStates::QUIZ_FILLING])
                 ->with('info', _i('Please, complete the quiz'));
         }
 
@@ -255,11 +256,11 @@ class ProjectController extends Controller
         $project = $project->filling($request);
 
         if ($project->state == ProjectStates::MANAGER_REVIEW) {
-            return redirect()->action('ProjectController@show', $project)
+            return redirect()->action('Resources\ProjectController@show', $project)
                              ->with('success', _i('Thank You, our team is working on your content'));
         }
 
-        return redirect()->action('ProjectController@edit', [$project, 's' => $project->state]);
+        return redirect()->action('Resources\ProjectController@edit', [$project, 's' => $project->state]);
     }
 
     /**
@@ -285,7 +286,7 @@ class ProjectController extends Controller
         }
 
 
-        return redirect()->action('ProjectController@index');
+        return redirect()->action('Resources\ProjectController@index');
     }
 
     /**
@@ -300,7 +301,7 @@ class ProjectController extends Controller
             $client->subscription($project->name)->resume();
         }
 
-        return redirect()->action('ProjectController@index');
+        return redirect()->action('Resources\ProjectController@index');
     }
 
     /**
@@ -313,7 +314,7 @@ class ProjectController extends Controller
     {
         $project->setState(\App\Models\Helpers\ProjectStates::ACCEPTED_BY_MANAGER);
 
-        return redirect()->action('ProjectController@show', [$project]);
+        return redirect()->action('Resources\ProjectController@show', [$project]);
     }
 
     /**
@@ -327,7 +328,7 @@ class ProjectController extends Controller
     {
         $project->setState(\App\Models\Helpers\ProjectStates::REJECTED_BY_MANAGER);
 
-        return redirect()->action('ProjectController@show', [$project]);
+        return redirect()->action('Resources\ProjectController@show', [$project]);
     }
 
     /**
@@ -355,7 +356,7 @@ class ProjectController extends Controller
             $message = _i('You are applied to this project');
         }
 
-        return redirect()->action('ProjectController@show', $project)->with($message_key, $message);
+        return redirect()->action('Resources\ProjectController@show', $project)->with($message_key, $message);
     }
 
     /**
@@ -397,7 +398,7 @@ class ProjectController extends Controller
         }
         $invite->decline();
 
-        return redirect()->action('ProjectController@show', [$project])->with($message_key, $message);
+        return redirect()->action('Resources\ProjectController@show', [$project])->with($message_key, $message);
     }
 
     /**
@@ -421,6 +422,11 @@ class ProjectController extends Controller
         return Response::json($files->filter()->toArray(), 200);
     }
 
+    /**
+     * @param Idea $idea
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function get_stored_idea_files(Idea $idea, Request $request)
     {
         $files = $idea->getMedia();
@@ -512,7 +518,6 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
 
     /**

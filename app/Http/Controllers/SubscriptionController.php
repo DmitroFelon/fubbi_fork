@@ -41,7 +41,7 @@ class SubscriptionController extends Controller
             Session::put('quiz', $project->id);
 
             return redirect()
-                ->action('ProjectController@edit', [$project, 's' => ProjectStates::QUIZ_FILLING])
+                ->action('Resources\ProjectController@edit', [$project, 's' => ProjectStates::QUIZ_FILLING])
                 ->with('success', _i('Your subscribtion has been created successfully'));
 
         } catch (\Exception $e) {

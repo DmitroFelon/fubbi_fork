@@ -5,7 +5,7 @@
         <div class="ibox-title">
             <h5>{{ _i('Help Videos') }}</h5>
             <div class="ibox-tools">
-                <a href="{{action('HelpVideosController@create')}}"
+                <a href="{{action('Resources\HelpVideosController@create')}}"
                    class="btn btn-primary btn-xs">{{ _i('Add new video') }}</a>
             </div>
         </div>
@@ -22,7 +22,7 @@
                                 @foreach($videos as $video)
                                     <tr>
                                         <td class="project-title">
-                                            <a href="{{action('HelpVideosController@show', $video)}}">{{ $video->name }}</a>
+                                            <a href="{{action('Resources\HelpVideosController@show', $video)}}">{{ $video->name }}</a>
                                             <br/>
                                             <small>{{$video->created_at}}</small>
                                         </td>
@@ -37,13 +37,13 @@
                                                 : </strong> {{ implode(', ', $video->page->pluck('name')->toArray() ) }}
                                         </td>
                                         <td>
-                                            <a href="{{action('HelpVideosController@edit', $video)}}"
+                                            <a href="{{action('Resources\HelpVideosController@edit', $video)}}"
                                                class="btn btn-white btn-sm blue-bg">
                                                 <i class="fa fa-pencil"></i> {{_i('Edit')}}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{action('HelpVideosController@destroy', $video)}}"
+                                            <a href="{{action('Resources\HelpVideosController@destroy', $video)}}"
                                                class="btn btn-white btn-sm red-bg">
                                                 <i class="fa fa-pencil"></i> {{_i('Delete')}}
                                             </a>

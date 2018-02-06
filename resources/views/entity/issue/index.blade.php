@@ -7,7 +7,7 @@
         <div class="ibox-title">
             <h5>{{ _i('Issues') }}</h5>
             <div class="ibox-tools">
-                <a href="{{action('IssueController@create')}}"
+                <a href="{{action('Resources\IssueController@create')}}"
                    class="btn btn-primary btn-xs">{{ _i('Add new issue') }}</a>
             </div>
         </div>
@@ -27,7 +27,7 @@
                                             {!! $issue->printState() !!}
                                         </td>
                                         <td class="">
-                                            <a href="{{action('IssueController@show', $issue)}}">
+                                            <a href="{{action('Resources\IssueController@show', $issue)}}">
                                                 ISSUE-{{$issue->id}}
                                             </a>
                                             <br>

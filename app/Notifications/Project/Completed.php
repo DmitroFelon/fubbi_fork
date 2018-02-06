@@ -4,9 +4,9 @@ namespace App\Notifications\Project;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class Completed extends Notification  implements ShouldQueue
 {
@@ -46,7 +46,7 @@ class Completed extends Notification  implements ShouldQueue
 
         return (new MailMessage)
                     ->line('Project completed.')
-                    ->action('Review project', url()->action('ProjectController@show', ['id' => $this->project->id]))
+                    ->action('Review project', url()->action('Resources\ProjectController@show', ['id' => $this->project->id]))
                     ->line('Thank you for using our application!');
     }
 

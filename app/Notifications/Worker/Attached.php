@@ -53,7 +53,7 @@ class Attached extends Notification
             ->subject('You have been attached to project!')
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('You have beed attached to project: "%s".', [$this->project->name]))
-            ->action('Review Project', action('ProjectController@show', $this->project))
+            ->action('Review Project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 

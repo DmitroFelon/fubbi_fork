@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Kodeine\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -219,25 +220,48 @@ class Article extends Model implements HasMedia
 
     }
 
+    public function getIsThisMonthAttribute()
+    {
+        $project = $this->project;
+        if (!$project) {
+            return false;
+        }
+
+        $current_cycle = $project->cycles()->active()->first();
+
+        if (!$current_cycle) {
+            return false;
+        }
+
+        if ($current_cycle->id == $this->cycle_id) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param string $as
      * @return \Spatie\MediaLibrary\Media
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      */
-    public function export($as = Drive::MS_WORD)
+    public function export($as = Drive::MS_WORD, $api = null)
     {
-        $api = new Drive();
-
-        $file = $api->exportFile($this->google_id, $as);
-
-        $file_name = $this->google_id . '.' . Drive::getExtension($as);
-
-        file_put_contents(storage_path('app/temp/' . $file_name), $file);
-
-        $media = $this->addMedia(storage_path('app/temp/' . $file_name))->toMediaCollection('google_export');
-
-        return $media;
+        try {
+            if(!$this->google_id){
+                return;
+            }
+            $api       = (is_null($api)) ? new Drive() : $api;
+            $file      = $api->exportFile($this->google_id, $as);
+            $file_name = $this->google_id . '.' . Drive::getExtension($as);
+            $path      = storage_path('app/temp/' . $file_name);
+            File::put($path, $file);
+            $media = $this->addMedia($path)->toMediaCollection('google_export');
+            return $media;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**

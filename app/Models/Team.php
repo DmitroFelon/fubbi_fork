@@ -7,8 +7,8 @@ use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Notifications\Team\Invite;
 use App\User;
-use Illuminate\Database\Eloquent\Model;
 use Ghanem\Rating\Traits\Ratingable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
@@ -94,7 +94,7 @@ class Team extends Model implements Invitable
      */
     public function getInvitableUrl():string
     {
-        return url()->action('TeamController@show', $this);
+        return url()->action('Resources\TeamController@show', $this);
     }
 
     /**

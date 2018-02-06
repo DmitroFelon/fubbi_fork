@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -135,7 +136,7 @@ class PlanController extends Controller
         $plan->metadata = $input->toArray();
         $plan->save();
 
-        return redirect()->action('PlanController@show', $id)->with('success', 'Plan has been modified succesfully');
+        return redirect()->action('Resources\PlanController@show', $id)->with('success', 'Plan has been modified succesfully');
     }
 
 }

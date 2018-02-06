@@ -5,8 +5,6 @@ namespace App\Notifications\Chat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\View;
 use Musonza\Chat\Facades\ChatFacade;
 
@@ -69,7 +67,7 @@ class Message extends Notification
         $data = [
             'message_id'       => $this->message->id,
             'conversation_id'  => $this->message->conversation_id,
-            'conversation_url' => action('MessageController@index', ['c' => $this->message->conversation_id]),
+            'conversation_url' => action('Resources\MessageController@index', ['c' => $this->message->conversation_id]),
             'message_text'     => $this->message->body,
             'sender_name'      => $this->message->sender->name,
             'sender_id'        => $this->message->sender->id,

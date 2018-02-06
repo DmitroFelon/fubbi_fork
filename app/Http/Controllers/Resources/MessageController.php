@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
 use App\Events\ChatMessage;
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Role;
 use App\User;
@@ -50,7 +51,7 @@ class MessageController extends Controller
         $conversations = $conversations->unique();
 
         if ($conversations->count() == 1 and !$request->has('c')) {
-            return redirect()->action('MessageController@index', ['c' => $conversations->first()->id]);
+            return redirect()->action('Resources\MessageController@index', ['c' => $conversations->first()->id]);
         }
 
         return view('entity.chat.index', [

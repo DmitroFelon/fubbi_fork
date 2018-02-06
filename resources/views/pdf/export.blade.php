@@ -16,7 +16,7 @@
 <h4>Client: {{$project->client->name}}</h4>
 <h4>Plan: {{$project->plan->name}}</h4>
 <p>
-    Link: <a href="{{action('ProjectController@show', $project)}}">Click</a>
+    Link: <a href="{{action('Resources\ProjectController@show', $project)}}">Click</a>
 </p>
 
 <center>

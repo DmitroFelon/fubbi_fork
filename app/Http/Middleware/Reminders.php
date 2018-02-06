@@ -47,7 +47,7 @@ class Reminders
 
                      $message = _i(
                          '<a class="text-info" href="%s">Please complete the project: "%s" </a>',
-                         [action('ProjectController@edit', [$project, 's' => $project->state]), $project->name]
+                         [action('Resources\ProjectController@edit', [$project, 's' => $project->state]), $project->name]
                      );
 
                      Session::flash('info', $message);

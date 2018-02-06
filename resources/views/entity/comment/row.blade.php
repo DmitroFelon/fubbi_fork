@@ -1,7 +1,7 @@
 <div class="social-feed-box">
     <div class="social-avatar">
         <div class="media-body">
-            <a target="_blank" href="{{url()->action('UserController@show', $comment->creator)}}">
+            <a target="_blank" href="{{url()->action('Resources\UserController@show', $comment->creator)}}">
                 {{$comment->creator->name}}
             </a>
             <small class="text-muted">

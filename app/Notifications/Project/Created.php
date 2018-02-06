@@ -47,7 +47,7 @@ class Created extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('New project has beed created.')
             ->line(_i('New project "%s" has beed created.', [$this->project->name]))
-            ->action('Review project', url()->action('ProjectController@show', $this->project))
+            ->action('Review project', url()->action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 
@@ -64,7 +64,7 @@ class Created extends Notification implements ShouldQueue
                 'New project %s has beed created.',
                 [$this->project->name]
             ),
-            url()->action('ProjectController@show', $this->project),
+            url()->action('Resources\ProjectController@show', $this->project),
             get_class($this->project),
             $this->project->id
         );

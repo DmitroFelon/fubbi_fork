@@ -5,7 +5,7 @@
             <strong>{{_i('See in Google Docs')}}</strong>
         </a>
         <a class="btn btn-primary pull-right m-sm"
-           href="{{action('ArticlesController@request_access', $article )}}">
+           href="{{action('Resources\ArticlesController@request_access', $article )}}">
             <strong>{{_i('Request access')}}</strong>
         </a>
     </div>

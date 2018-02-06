@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Helpers\Page;
 use App\Models\HelpVideo;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class HelpVideosController extends Controller
         $helpVideo->fill($request->except(['_token', '_method']));
         $helpVideo->save();
 
-        return redirect()->action('HelpVideosController@index')->with('success', _i('Video has been created.'));
+        return redirect()->action('Resources\HelpVideosController@index')->with('success', _i('Video has been created.'));
     }
 
     /**
@@ -79,7 +80,7 @@ class HelpVideosController extends Controller
         $helpVideo->fill($request->except(['_token', '_method']));
         $helpVideo->save();
 
-        return redirect()->action('HelpVideosController@index')->with('success', _i('Video has been updated.'));
+        return redirect()->action('Resources\HelpVideosController@index')->with('success', _i('Video has been updated.'));
     }
 
     /**
@@ -93,6 +94,6 @@ class HelpVideosController extends Controller
     {
         $helpVideo->delete();
 
-        return redirect()->action('HelpVideosController@index')->with('success', _i('Video has been removed.'));
+        return redirect()->action('Resources\HelpVideosController@index')->with('success', _i('Video has been removed.'));
     }
 }

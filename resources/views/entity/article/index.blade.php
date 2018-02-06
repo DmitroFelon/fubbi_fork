@@ -21,11 +21,15 @@
                 @endif
             </div>
             <div class="ibox-content">
-                @include('entity.article.partials.search')
+                <div class="row m-b-sm m-t-sm">
+                    @include('entity.article.partials.search')
+                    @include('entity.article.partials.export')
+                </div>
+
                 <hr>
                 <div class="project-list">
                     <span class="pull-right">{{_i('Count')}} : {!! $articles->total() !!} </span>
-                    <table class="table table-hover ">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th class="footable-sortable">{{_i('Info')}}</th>
@@ -34,6 +38,7 @@
                             <th class="footable-sortable">{{_i('Rating')}}</th>
                             <th class="">{{_i('Idea')}}</th>
                             <th class="">{{_i('This month')}}</th>
+                            <th class="footable-sortable" class=""></th>
                         </tr>
                         </thead>
                         <tbody>

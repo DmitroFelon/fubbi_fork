@@ -4,9 +4,9 @@ namespace App\Notifications;
 
 use App\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Cache;
 
 class RegistrationConfirmation extends Notification implements ShouldQueue
@@ -63,7 +63,7 @@ class RegistrationConfirmation extends Notification implements ShouldQueue
                 'Thank You for registration.',
                 [$this->user->name]
             ),
-            url()->action('UserController@show', $this->user),
+            url()->action('Resources\UserController@show', $this->user),
             get_class($this->user),
             $this->user->id
         );

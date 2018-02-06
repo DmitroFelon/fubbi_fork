@@ -18,7 +18,7 @@
         <dl class="dl-horizontal">
             <dt>Client:</dt>
             <dd>
-                <a target="_blank" href="{{url()->action('UserController@show', $project->client)}}">
+                <a target="_blank" href="{{url()->action('Resources\UserController@show', $project->client)}}">
                     {{$project->client->name}}
                 </a>
             </dd>
@@ -50,12 +50,12 @@
                 @foreach($project->workers as $worker)
                     <dd class="project-people">
                         <a class="participant-name" target="_blank"
-                           href="{{url()->action('UserController@show', $worker)}}">
+                           href="{{url()->action('Resources\UserController@show', $worker)}}">
                             {{$worker->name}}
                         </a>
                         @role([\App\Models\Role::ADMIN])
                         <a class="text-danger" title="Remove from project"
-                           href="{{action('ProjectController@remove_from_project', [$project, $worker])}}">
+                           href="{{action('Resources\ProjectController@remove_from_project', [$project, $worker])}}">
                             <i class="fa fa-times"></i>
                         </a>
                         @endrole
@@ -68,7 +68,7 @@
 
                 @foreach($project->teams as $team)
                     <dd class="project-people">
-                        <a target="_blank" href="{{url()->action('TeamController@show', $team)}}">
+                        <a target="_blank" href="{{url()->action('Resources\TeamController@show', $team)}}">
                             {{$team->name}}
                         </a>
                     </dd>

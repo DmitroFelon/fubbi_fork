@@ -54,7 +54,7 @@ class WillRemoved extends Notification
                     ? $this->project->subscription->ends_at->format('m.d.y h:i:s')
                     : Carbon::now()->format('m.d.y h:i:s')
             ]))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->action('Review project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 

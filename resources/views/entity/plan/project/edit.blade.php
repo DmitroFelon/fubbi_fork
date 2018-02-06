@@ -16,7 +16,7 @@
                 {{ _i('Modify %s plan for project "%s"', [$plan_id, $project->name]) }}
             </h5>
             <div class="ibox-tools">
-                <a target="_blank" href="{{url()->action('PlanController@edit', $plan_id)}}"
+                <a target="_blank" href="{{url()->action('Resources\PlanController@edit', $plan_id)}}"
                    class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>

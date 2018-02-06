@@ -107,11 +107,11 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         if ($user->projects()->count() == 1) {
-            return redirect()->action("ProjectController@show", $user->projects()->first());
+            return redirect()->action('Resources\ProjectController@show', $user->projects()->first());
         } elseif ($user->projects()->count() > 1) {
-            return redirect()->action("ProjectController@index");
+            return redirect()->action('Resources\ProjectController@index');
         } else {
-            return redirect()->action("ProjectController@create");
+            return redirect()->action('Resources\ProjectController@create');
         }
     }
 
@@ -120,7 +120,7 @@ class DashboardController extends Controller
      */
     private function workers()
     {
-        return redirect()->action("ProjectController@index");
+        return redirect()->action('Resources\ProjectController@index');
     }
 
     /**

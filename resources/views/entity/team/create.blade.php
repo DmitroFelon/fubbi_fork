@@ -11,7 +11,7 @@
         <div class="ibox-content">
 
             <div class="row">
-                {{Form::open(['id' => 'team-form', 'action' => 'TeamController@store'])}}
+                {{Form::open(['id' => 'team-form', 'action' => 'Resources\TeamController@store'])}}
 
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-6">
                     {!! Form::bsText( 'name', null, _i('Name of the new team'), null, ['required' ] ) !!}

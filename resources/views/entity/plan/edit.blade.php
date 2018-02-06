@@ -16,7 +16,7 @@
         </div>
         <div class="ibox-content">
             <div class="project-list">
-                {!! Form::open(['action' => ['PlanController@update', $plan->id], 'method' => 'put']) !!}
+                {!! Form::open(['action' => ['Resources\PlanController@update', $plan->id], 'method' => 'put']) !!}
                 <div class="row">
                     @foreach ($plan->meta->split(2) as $chunk)
                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

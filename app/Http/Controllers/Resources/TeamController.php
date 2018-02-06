@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\User;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class TeamController extends Controller
             case 'client':
                 $teams = $user->teams()->with('users')->get();
                 if ($teams->isEmpty()) {
-                    return redirect()->action('ProjectController@create');
+                    return redirect()->action('Resources\ProjectController@create');
                 }
                 break;
             default:
@@ -90,7 +91,7 @@ class TeamController extends Controller
             });
         }
 
-        return redirect()->action('TeamController@index');
+        return redirect()->action('Resources\TeamController@index');
     }
 
     /**
@@ -140,7 +141,7 @@ class TeamController extends Controller
             });
         }
 
-        return redirect()->action('TeamController@index')->with('success', _('Users have been invited'));
+        return redirect()->action('Resources\TeamController@index')->with('success', _('Users have been invited'));
     }
 
     /**

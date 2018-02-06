@@ -1,5 +1,5 @@
 @if($rejected_charges->isNotEmpty())
-    <table class="table table-stripped small m-t-md">
+    <table class="table table-stripped small m-t-md footable">
         <tbody>
         @foreach($rejected_charges as $charge)
             <tr>
@@ -11,7 +11,7 @@
                 </td>
                 <td class="no-borders">
                     @if(!is_null($charge->customer))
-                        <a href="{{action('UserController@show', $charge->customer)}}">
+                        <a href="{{action('Resources\UserController@show', $charge->customer)}}">
                             {{$charge->customer->name }}, {{$charge->customer->email}}
                         </a>
                     @else
@@ -21,6 +21,13 @@
             </tr>
         @endforeach
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5">
+                <ul class="pagination pull-right"></ul>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 @else
     <div class="p-sm text-muted">

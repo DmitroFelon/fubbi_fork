@@ -2,7 +2,7 @@
     <td class="client-avatar"><i class="fa fa-user fa-2x"></i></td>
     <td>
         <a target="_blank"
-           href="{{url()->action('UserController@show', $user)}}">
+           href="{{url()->action('Resources\UserController@show', $user)}}">
             {{$user->name}}
         </a>
     </td>

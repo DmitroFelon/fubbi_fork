@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Issue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,7 +56,7 @@ class IssueController extends Controller
 
         $issue->save();
 
-        return redirect(action('IssueController@show', $issue))->with('success', _i('Issue created'));
+        return redirect(action('Resources\IssueController@show', $issue))->with('success', _i('Issue created'));
     }
 
     /**
@@ -81,7 +82,7 @@ class IssueController extends Controller
         $issue->state = Issue::STATE_FIXED;
         $issue->save();
 
-        return redirect(action('IssueController@index'))->with('success', _i('Issue updated'));
+        return redirect(action('Resources\IssueController@index'))->with('success', _i('Issue updated'));
     }
 
     /**
@@ -93,6 +94,6 @@ class IssueController extends Controller
     public function destroy(Issue $issue)
     {
         $issue->delete();
-        return redirect(action('IssueController@index'))->with('success', _i('Issue removed'));
+        return redirect(action('Resources\IssueController@index'))->with('success', _i('Issue removed'));
     }
 }

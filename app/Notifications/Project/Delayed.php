@@ -49,7 +49,7 @@ class Delayed extends Notification
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('Project "%s" is delayed.', [$this->project->name]))
             ->line(_i('Please, contact to workers.'))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->action('Review project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 

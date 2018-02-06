@@ -11,14 +11,18 @@
                     <strong> {{_i('Client')}} </strong> : {{$article->project->client->name}}
                 </td>
                 <td class="no-borders">
-                    <strong> {{_i('Author')}} </strong> : {{$article->author->name}}
-                </td>
-                <td class="no-borders">
                     <strong> {{_i('Rating')}} </strong> : {{round($article->avgRating, 2)}}
                 </td>
             </tr>
         @endforeach
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5">
+                <ul class="pagination pull-right"></ul>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 @else
     <div class="p-sm text-muted">

@@ -50,7 +50,7 @@ class InviteOverdue extends Notification
                 $this->project->name,
                 implode(', ', $this->project->requireWorkers())
             ]))
-            ->action('Review project', action('ProjectController@show', [
+            ->action('Review project', action('Resources\ProjectController@show', [
                 $this->project
             ]))
             ->line('Thank you for using our application!');

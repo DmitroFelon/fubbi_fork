@@ -32,7 +32,7 @@ class Drive
     /**
      *
      */
-    const PDF  = 'application/pdf';
+    const PDF = 'application/pdf';
     /**
      *
      */
@@ -240,7 +240,8 @@ class Drive
         $this->service->getClient()->setUseBatch(true);
         $batch = $this->service->createBatch();
 
-        foreach ($emails as $email => $role) {
+        //add permissions by role
+        /*foreach ($emails as $email => $role) {
             $userPermissionCollection = collect();
             $userPermissionCollection->put('type', $type);
             $userPermissionCollection->put('role', $role);
@@ -250,7 +251,16 @@ class Drive
             $request        = $this->service->permissions->create(
                 $file_id, $userPermission);
             $batch->add($request, $email);
-        }
+        }*/
+
+        //add access to anyone
+        $userPermissionCollection = collect();
+        $userPermissionCollection->put('type', 'anyone');
+
+        $userPermission = new Google_Service_Drive_Permission($userPermissionCollection->toArray());
+        $request        = $this->service->permissions->create(
+            $file_id, $userPermission);
+        $batch->add($request);
 
         $result = $batch->execute();
 
@@ -371,13 +381,17 @@ class Drive
      */
     public function exportFile($file_id, $as = self::MS_WORD)
     {
-        $response = $this->service->files->export($file_id, $as, [
-            'alt' => 'media'
-        ]);
+        try {
+            $response = $this->service->files->export($file_id, $as, [
+                'alt' => 'media'
+            ]);
 
-        $content = $response->getBody()->getContents();
+            $content = $response->getBody()->getContents();
 
-        return $content;
+            return $content;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**

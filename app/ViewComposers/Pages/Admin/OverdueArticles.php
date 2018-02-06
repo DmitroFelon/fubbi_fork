@@ -12,8 +12,10 @@ namespace App\ViewComposers\Pages\Admin;
 use App\Models\Article;
 use App\Models\Role;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 /**
@@ -37,38 +39,35 @@ class OverdueArticles
         $this->request = $request;
     }
 
-    /**
-     *
-     */
+
     public function compose(View $view)
     {
-        $overdue = $this->request->input('overdue');
+        $key = 'overdue_articles'. $this->request->input('overdue').$this->request->input('customer');
+        $articles = Cache::remember(base64_encode($key), Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY, function () {
+            $overdue = $this->request->input('overdue');
 
-        if (Auth::user()->role == Role::ADMIN) {
-            $query = Article::new();
-        } else {
-            $query = Auth::user()->articles()->new();
-        }
-
-        if ($this->request->has('customer') and $this->request->input('customer') > 0) {
-            $user = User::search($this->request->input('customer'))->first();
-            if ($user) {
-                $client_id = $user->id;
-                $query->whereHas('project', function ($query) use ($client_id) {
-                    $query->where('client_id', $client_id);
-                });
+            if (Auth::user()->role == Role::ADMIN) {
+                $query = Article::new();
+            } else {
+                $query = Auth::user()->articles()->new();
             }
-        }
 
-        $query->overdue($overdue);
+            if ($this->request->has('customer') and $this->request->input('customer') > 0) {
+                $user = User::search($this->request->input('customer'))->first();
+                if ($user) {
+                    $client_id = $user->id;
+                    $query->whereHas('project', function ($query) use ($client_id) {
+                        $query->where('client_id', $client_id);
+                    });
+                }
+            }
 
-        $articles       = $query->take(10)->get();
-        $articles_count = $query->count();
+            $query->overdue($overdue);
 
-        return $view->with(compact('articles', 'articles_count'));
+            return $query->get();
 
-
-        return $view->with(compact(''));
+        });
+        return $view->with(compact('articles'));
     }
 
 }

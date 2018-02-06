@@ -4,9 +4,8 @@ namespace App\Notifications\Project;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class StatusChanged extends Notification
 {
@@ -49,7 +48,7 @@ class StatusChanged extends Notification
                 $this->project->name,
                 ucfirst(str_replace('_', ' ', $this->project->state))
             ]))
-            ->action('Review project', url()->action('ProjectController@show', $this->project))
+            ->action('Review project', url()->action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 

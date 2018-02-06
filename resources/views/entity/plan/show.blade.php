@@ -7,7 +7,7 @@
         <div class="ibox-title">
             <h5>{{ucfirst($plan->name)}}</h5>
             <div class="ibox-tools">
-                <a href="{{url()->action('PlanController@edit', $plan->id)}}"
+                <a href="{{url()->action('Resources\PlanController@edit', $plan->id)}}"
                    class="btn btn-primary btn-xs">{{_i('Edit plan')}}</a>
             </div>
         </div>
@@ -43,7 +43,7 @@
                         <ul>
                             @foreach($plan->projects as $project)
                                 <li>
-                                    <a target="_blank" href="{{url()->action('ProjectController@show', $project)}}">
+                                    <a target="_blank" href="{{url()->action('Resources\ProjectController@show', $project)}}">
                                         {{$project->name}}
                                     </a>
                                 </li>

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
+use App\Http\Controllers\Controller;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Role;
 use App\Services\User\SearchSuggestions;
@@ -108,7 +109,7 @@ class UserController extends Controller
 
         Cache::set('temp_password_' . $user->id, $request->input('password'));
 
-        return redirect()->action('UserController@index');
+        return redirect()->action('Resources\UserController@index');
 
     }
 
@@ -168,7 +169,7 @@ class UserController extends Controller
 
             if ($last_project) {
                 return redirect()
-                    ->action('ProjectController@edit', [
+                    ->action('Resources\ProjectController@edit', [
                         $last_project,
                         's' => ProjectStates::QUIZ_FILLING
                     ])

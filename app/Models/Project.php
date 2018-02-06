@@ -260,7 +260,7 @@ class Project extends Model implements HasMediaConversions, Invitable
      */
     public function getInvitableUrl()
     {
-        return url()->action('ProjectController@show', $this);
+        return url()->action('Resources\ProjectController@show', $this);
     }
 
     /**

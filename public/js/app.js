@@ -554,7 +554,11 @@ jQuery(document).ready(function ($) {
     /*
      * Init footable table
      * */
-    $('.footable').footable();
+    $('.footable').footable({
+        "paging": {
+            "enabled": true
+        }
+    });
     /*
      * iChecks
      * */

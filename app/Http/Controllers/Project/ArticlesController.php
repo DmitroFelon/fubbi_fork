@@ -259,4 +259,5 @@ class ArticlesController extends Controller
 
         return Response::json(['result' => true]);
     }
+
 }

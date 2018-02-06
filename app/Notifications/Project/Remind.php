@@ -4,9 +4,8 @@ namespace App\Notifications\Project;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class Remind extends Notification
 {
@@ -49,7 +48,7 @@ class Remind extends Notification
             ->subject(_i('Project filling'))
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('Please complete filling your project "%s".', [$this->project->name]))
-            ->action('Review project', action('ProjectController@show', $this->project))
+            ->action('Review project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
 

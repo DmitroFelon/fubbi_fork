@@ -40,7 +40,7 @@
             @slot('title') Quiz result @endslot
             @slot('tools')
             @can('project:edit', $project)
-            <a href="{{url()->action('ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
+            <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
                class="btn btn-primary btn-xs m-r-sm p-w-sm">
                 {{_i('Edit')}}
             </a>
@@ -58,7 +58,7 @@
             @slot('title') Ideas @endslot
             @slot('tools')
             @can('project:edit', $project)
-            <a href="{{url()->action('ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
+            <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
                class="btn btn-primary btn-xs m-r-sm p-w-sm">
                 {{_i('Edit')}}
             </a>

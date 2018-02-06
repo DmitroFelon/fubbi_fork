@@ -84,7 +84,7 @@
                                 <td>
 
                                     @if(!is_null($charge->customer))
-                                        <a href="{{action('UserController@show', $charge->customer)}}">
+                                        <a href="{{action('Resources\UserController@show', $charge->customer)}}">
                                             {{$charge->customer->name }}, {{$charge->customer->email}}
                                         </a>
                                     @else

@@ -212,9 +212,10 @@
                     query = '?' + query;
                 }
 
-                console.log(base_url + query)
+                $(this).load(base_url + query, function() {
+                    $('.footable').footable();
+                });
 
-                $(this).load(base_url + query);
             });
         });
     </script>

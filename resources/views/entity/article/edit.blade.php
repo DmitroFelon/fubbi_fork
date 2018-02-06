@@ -6,7 +6,7 @@
             <div class="ibox-title">
                 <h5>
                     {{_i('Upload article for project: ')}}
-                    <a href="{{action('ProjectController@show', $project)}}">{{$project->name}}</a>
+                    <a href="{{action('Resources\ProjectController@show', $project)}}">{{$project->name}}</a>
                 </h5>
                  <span class="pull-right">
                      @foreach($article->tags as $tag)
