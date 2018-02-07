@@ -46,7 +46,7 @@ class DashboardController extends Controller
     {
 
         if (!Auth::check()) {
-            return view('landing');
+            //return view('landing');
         }
 
         $user = Auth::user();

@@ -111,8 +111,6 @@ Broadcast::channel('conversation.{conversation_id}', function ($user, $conversat
         ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
-
-
 //Main routes group
 Route::middleware(['auth'])->group(function () {
 
@@ -241,7 +239,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('', ['as' => 'settings', 'uses' => 'SettingsController@index']);
     });
 
+    Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+
 });
 
-Route::get('/{page?}/{action?}/{id?}', 'DashboardController@index');
+
 
