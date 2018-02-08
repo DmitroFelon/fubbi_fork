@@ -198,16 +198,6 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function getDisabledNotificationsAttribute()
-    {
-        return ($this->getMeta('disabled_notifications'))
-            ? collect($this->getMeta('disabled_notifications'))
-            : collect();
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function projects()
