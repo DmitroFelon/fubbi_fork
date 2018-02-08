@@ -79,6 +79,8 @@ Route::get('/test_email/{inex}', function ($index) {
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 
+    dd($request->input());
+
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
 
@@ -155,7 +157,6 @@ Route::middleware(['auth'])->group(function () {
     );
 
 
-
     Route::namespace('Resources')->group(function () {
         Route::prefix('projects')->group(function () {
             Route::post('{project}/prefill', 'ProjectController@prefill');
@@ -199,7 +200,6 @@ Route::middleware(['auth'])->group(function () {
                 'articles' => 'ArticlesController',
             ]
         );
-
 
 
     });

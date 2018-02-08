@@ -20,6 +20,7 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
+        Log::debug('TrivecartController:handle start');
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret');
         $product_id = $request->input('base_product');
@@ -97,6 +98,8 @@ class TrivecartController extends Controller
         } catch (\Exception $e) {
             Log::error($e);
         }
+
+        Log::debug('TrivecartController:handle end');
 
         return new Response('Webhook Handled', 200);
     }
