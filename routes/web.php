@@ -31,7 +31,7 @@ Route::get('test', function () {
     dd($user);
 });
 
-Route::get('/test_email/{inex}', function ($index) {
+Route::get('/test_email/{index}', function ($index) {
 
     try {
         $auth_user    = Auth::user();
@@ -79,11 +79,12 @@ Route::get('/test_email/{inex}', function ($index) {
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 
-    dd($request->input());
 
+    //looking for a new client account created by webhook handler
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
 
+    //if client tries to open the link again
     if (!$email) {
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
     }
@@ -92,6 +93,18 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     Auth::logout();
     Auth::login($user, true);
 
+    //in case user already has an account
+    if ($user->projects()->count() > 1) {
+        $project = $user->projects()->latest()->get();
+        if ($project) {
+            return redirect()->action('Project\ArticlesController@edit', [
+                $project,
+                ['s' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING]
+            ]);
+        }
+    }
+
+    //in case user has to set the password
     \Illuminate\Support\Facades\Session::flash('change_password');
 
     return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
