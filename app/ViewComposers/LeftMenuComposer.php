@@ -54,7 +54,10 @@ class LeftMenuComposer
     {
 
         if (Auth::check()) {
-            $role  = $this->user->role;
+            $role = $this->user->role;
+            if (!$role) {
+                $role = Role::CLIENT;
+            }
             $links = $this->{$role}();
 
             $links = collect($links);
