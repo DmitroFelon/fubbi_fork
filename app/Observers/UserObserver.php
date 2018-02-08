@@ -27,7 +27,7 @@ class UserObserver
 
             $admins->each(function (User $admin) use ($user) {
                 //check is this notification not disabled
-                if ($admin->isNotificationEnabled(\App\Notifications\Client\Registered::class)) {
+                if ($admin->disabledNotifications()->where('name', \App\Notifications\Client\Registered::class)->get()->isEmpty() ) {
                     $admin->notify(new Registered($user));
                 }
             });

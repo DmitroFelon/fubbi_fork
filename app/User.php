@@ -4,7 +4,6 @@ namespace App;
 
 use Activity;
 use App\Models\Article;
-use App\Models\Helpers\NotificationTypes;
 use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
 use App\Models\Project;
@@ -435,16 +434,10 @@ class User extends Authenticatable implements HasMedia
      * @param string $notification_type
      * @return bool
      */
-    public function isNotificationEnabled(string $notification_type)
+    public function isNotificationEnabled($notification_type)
     {
-        $disabled_notifications = $this->{NotificationTypes::META_NAME};
-
-        if (!is_array($disabled_notifications) or empty($disabled_notifications)) {
-            return true;
-        }
-
-        return (isset($disabled_notifications[$notification_type]) and $disabled_notifications[$notification_type])
-            ? false
-            : true;
+        return ($this->disabledNotifications()->where('name', $notification_type)->get())
+            ? false : true;
+        
     }
 }
