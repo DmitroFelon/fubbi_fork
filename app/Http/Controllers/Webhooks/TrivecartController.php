@@ -54,17 +54,20 @@ class TrivecartController extends Controller
 
             $user = User::whereEmail($customer_email)->first();
             if (!$user) {
-                $user = User::create([
+                $tmp_password = str_random(8);
+                $user         = User::create([
                     'email'          => $customer_email,
                     'first_name'     => $customer['first_name'] ?? '',
                     'last_name'      => $customer['last_name'] ?? '',
-                    'password'       => Hash::make(str_random(8)),
+                    'password'       => Hash::make($tmp_password),
                     'phone'          => $customer['contactno']??'',
                     'stripe_id'      => $stripe_subscription->customer,
                     'trial_ends_at'  => Carbon::createFromTimestamp($stripe_subscription->trial_end),
                     'card_brand'     => $custome_card->brand,
                     'card_last_four' => $custome_card->last4,
                 ]);
+
+                $user->tmp_password = $tmp_password;
                 $user->save();
 
                 $role = Role::where('name', Role::CLIENT)->first();

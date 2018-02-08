@@ -44,10 +44,14 @@ class RegistrationConfirmation extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->line('Thank You for registration')
-                                ->line('Your password is: ' . Cache::get('temp_password_' . $this->user->id))
-                                ->action('See your profile', url('/users/' . $this->user->id))
-                                ->line('Thank you for using our application!');
+        $message = (new MailMessage)->line('Thank You for registration');
+        if ($this->user->tmp_password) {
+            $message->line('Your password is: ' . $this->user->tmp_password);
+        }
+        $message->action('See your profile', url('/users/' . $this->user->id))
+                ->line('Thank you for using our application!');
+
+        return $message;
     }
 
     /**

@@ -19,21 +19,16 @@ class UserObserver
 {
     public function created(User $user)
     {
-        if (Request::input('role')) {
-            $user->notify(new RegistrationConfirmation($user));
-        } else {
-
-            $admins = User::withRole(Role::ADMIN)->get();
-
-            $admins->each(function (User $admin) use ($user) {
-                //check is this notification not disabled
-                if ($admin->disabled_notifications()->where('name', \App\Notifications\Client\Registered::class)->get()
-                          ->isEmpty()
-                ) {
-                    $admin->notify(new Registered($user));
-                }
-            });
-        }
+        $user->notify(new RegistrationConfirmation($user));
+        $admins = User::withRole(Role::ADMIN)->get();
+        $admins->each(function (User $admin) use ($user) {
+            //check if this notification is not disabled
+            if ($admin->disabled_notifications()->where('name', \App\Notifications\Client\Registered::class)->get()
+                      ->isEmpty()
+            ) {
+                $admin->notify(new Registered($user));
+            }
+        });
     }
 
 }
