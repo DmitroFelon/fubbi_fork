@@ -20,7 +20,6 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
-        return ['test'];
         Log::debug('TrivecartController:handle start');
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret');
