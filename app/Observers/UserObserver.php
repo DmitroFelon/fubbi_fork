@@ -8,7 +8,6 @@
 
 namespace App\Observers;
 
-use App\Models\Helpers\NotificationTypes;
 use App\Models\Role;
 use App\Notifications\Client\Registered;
 use App\Notifications\RegistrationConfirmation;
@@ -28,7 +27,7 @@ class UserObserver
 
             $admins->each(function (User $admin) use ($user) {
                 //check is this notification not disabled
-                if ($admin->isNotificationEnabled(NotificationTypes::CLIENT_REGISTERED)) {
+                if ($admin->isNotificationEnabled(\App\Notifications\Client\Registered::class)) {
                     $admin->notify(new Registered($user));
                 }
             });
