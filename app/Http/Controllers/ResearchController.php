@@ -56,8 +56,9 @@ class ResearchController extends Controller
             $source,
         ]);
 
+        $remember = Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY;
 
-        $questions = Cache::remember('questions.' . $key, Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
+        $questions = Cache::remember('questions.' . $key, $remember,
             function () use ($api, $theme, $country, $language, $metrics, $source) {
                 try {
                     return $api->questions($theme, $country, $language, $metrics, $source);
@@ -66,7 +67,7 @@ class ResearchController extends Controller
                 }
             });
 
-        $suggestions = Cache::remember('suggestions.' . $key, Carbon::MINUTES_PER_HOUR * Carbon::HOURS_PER_DAY,
+        $suggestions = Cache::remember('suggestions.' . $key, $remember,
             function () use ($api, $theme, $country, $language, $metrics, $source) {
                 try {
                     return $api->suggestions($theme, $country, $language, $metrics, $source);

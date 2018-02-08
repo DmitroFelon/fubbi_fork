@@ -45,18 +45,20 @@
                     $.ajax({
                         url: "{{action('ResearchController@load')}}",
                         method: 'get',
-                        theme: theme,
-                        country: country,
-                        source: source,
+                        data: {
+                            theme: theme,
+                            country: country,
+                            source: source
+                        },
                         beforeSend: function () {
                             $("#spinner-wrapper").css('display', 'block');
                         },
                         success: function (data) {
                             $("#spinner-wrapper").css('display', 'none');
                             $("#result").append(data);
+                            console.log('data');
                         },
                         error: function (data) {
-                            //$("#spinner-wrapper").css('display', 'none');
                             $("#result").append("<div>Can't load keywords</div>");
                         }
                     });

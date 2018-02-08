@@ -13,7 +13,7 @@
                     @endforeach
                     @if(collect($questions)->isEmpty())
                         <div class="text-muted">
-                            Empty
+                            {{_i('Keyword Tool returned an empty result')}}
                         </div>
                     @endif
                 </div>
@@ -31,7 +31,7 @@
                     @endforeach
                     @if(collect($suggestions)->isEmpty())
                         <div class="text-muted">
-                            Empty
+                            {{_i('Keyword Tool returned an empty result')}}
                         </div>
                     @endif
                 </div>
