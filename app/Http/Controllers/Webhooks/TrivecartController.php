@@ -20,7 +20,6 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::debug('TrivecartController:handle start');
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret');
         $product_id = $request->input('base_product');
@@ -66,6 +65,8 @@ class TrivecartController extends Controller
                     'card_brand'     => $custome_card->brand,
                     'card_last_four' => $custome_card->last4,
                 ]);
+                $user->save();
+
                 $role = Role::where('name', Role::CLIENT)->first();
                 $user->attachRole($role);
                 $user->setMeta('address_line_1', $custome_card->address_line1);
