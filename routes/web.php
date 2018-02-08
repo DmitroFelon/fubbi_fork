@@ -36,7 +36,7 @@ Route::get('/test_email/{index}', function ($index) {
     try {
         $auth_user    = Auth::user();
         $demo_user    = \App\User::first();
-        $demo_project = \App\Models\Project::first();
+        $demo_project = \App\Models\Project::find(9);
 
         $demo_article             = (!is_null($demo_project)) ? $demo_project->articles()->first() : null;
         $demo_invitations_team    = \App\Models\Invite::teams()->first();
