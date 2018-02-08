@@ -53,7 +53,7 @@ trait hasServices
             );
         });
 
-        $this->services()->saveMany($services->toArray());
+        $this->services()->saveMany($services);
     }
 
     /**
