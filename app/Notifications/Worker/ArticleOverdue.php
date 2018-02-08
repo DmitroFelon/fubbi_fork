@@ -31,7 +31,7 @@ class ArticleOverdue extends Notification
      */
     public function via($notifiable)
     {
-        return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
+        return ($notifiable->disabled_notifications()->where('name', get_class($this))->get())
             ? [] : ['mail'];
     }
 

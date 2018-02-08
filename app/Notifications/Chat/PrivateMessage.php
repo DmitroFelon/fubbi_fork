@@ -32,7 +32,7 @@ class PrivateMessage extends Notification
      */
     public function via(User $notifiable)
     {
-        return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
+        return ($notifiable->disabled_notifications()->where('name', get_class($this))->get())
             ? [] : ['mail'];
     }
 

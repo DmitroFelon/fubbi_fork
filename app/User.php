@@ -426,7 +426,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function isNotificationEnabled($notification_type)
     {
-        return ($this->disabledNotifications()->where('name', $notification_type)->get())
+        return ($this->disabled_notifications()->where('name', $notification_type)->get())
             ? false : true;
         
     }

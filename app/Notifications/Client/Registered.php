@@ -32,7 +32,7 @@ class Registered extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ($notifiable->disabledNotifications()->where('name', get_class($this))->get())
+        return ($notifiable->disabled_notifications()->where('name', get_class($this))->get())
             ? ['database'] : ['database', 'mail'];
     }
 
