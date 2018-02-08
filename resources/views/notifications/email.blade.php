@@ -1,7 +1,7 @@
 @component('mail::message')
 {{-- Greeting --}}
 @if (! empty($mailMessage->greeting))
-    # {{ $mailMessage->greeting }}
+    # {!! $mailMessage->greeting !!}
 @else
     @if ($mailMessage->level == 'error')
         # Whoops!
@@ -12,7 +12,7 @@
 
 {{-- Intro Lines --}}
 @foreach ($mailMessage->introLines as $line)
-    {{ $line }}
+    {!! $line !!}
 
 @endforeach
 
@@ -31,13 +31,13 @@ switch ($mailMessage->level) {
 }
 ?>
 @component('mail::button', ['url' => $mailMessage->actionUrl, 'color' => $color])
-{{ $mailMessage->actionText }}
+{!! $mailMessage->actionText !!}
 @endcomponent
 @endisset
 
 {{-- Outro Lines --}}
 @foreach ($mailMessage->outroLines as $line)
-    {{ $line }}
+    {!! $line !!}
 
 @endforeach
 
@@ -45,14 +45,14 @@ switch ($mailMessage->level) {
 @if (! empty($mailMessage->salutation))
     {{ $mailMessage->salutation }}
 @else
-    Regards,<br>{{ config('app.name') }}
+    Regards, {!! config('app.name') !!}
 @endif
 
 {{-- Subcopy --}}
 @isset($mailMessage->actionText)
 @component('mail::subcopy')
-If you’re having trouble clicking the "{{ $mailMessage->actionText }}" button, copy and paste the URL below
-into your web browser: [{{ $mailMessage->actionUrl }}]({{ $mailMessage->actionUrl }})
+If you’re having trouble clicking the "{!! $mailMessage->actionText !!}" button, copy and paste the URL below
+into your web browser: [{!! $mailMessage->actionUrl !!}]({!! $mailMessage->actionUrl !!})
 @endcomponent
 @endisset
 @endcomponent

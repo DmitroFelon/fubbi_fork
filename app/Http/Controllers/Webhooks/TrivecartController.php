@@ -73,7 +73,7 @@ class TrivecartController extends Controller
                 $user->setMeta('zip', $custome_card->address_zip);
                 $user->setMeta('city', $custome_card->address_city);
                 $user->setMeta('country', $custome_card->address_country);
-                $user->setMeta('state', $custome_card->address_state);
+                $user->setMeta('state', $customer['address']['state'] ?? '');
                 $user->save();
             }
 
