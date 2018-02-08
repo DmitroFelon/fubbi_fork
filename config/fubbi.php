@@ -226,6 +226,7 @@ return [
         18 => 'fubbi-plan-bronze',
         24 => 'fubbi-silver-plan-v2',
         25 => 'fubbi-gold-plan-v2',
+        33 => 'test-webhooks-product',
     ],
     'services'          => [
         'fubbi-basic-plan-v2'  => [
@@ -271,6 +272,20 @@ return [
             "quora"              => "1",
         ],
         'fubbi-gold-plan-v2'   => [
+            "articles_count"     => "4",
+            "articles_words"     => "1750-1750",
+            "facebook_posts"     => "30",
+            "instagram_posts"    => "30",
+            "twitter_posts"      => "30",
+            "pinterest_posts"    => "30",
+            "linkedin_posts"     => "30",
+            "marketing_calendar" => "true",
+            "linkedin_articles"  => "2",
+            "slideshare"         => "2",
+            "medium"             => "2",
+            "quora"              => "2",
+        ],
+        'test-webhooks-product' => [
             "articles_count"     => "4",
             "articles_words"     => "1750-1750",
             "facebook_posts"     => "30",
