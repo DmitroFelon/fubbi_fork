@@ -82,8 +82,6 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
 
-    dd($customer_data);
-
     //if client tries to open the link again
     if (!$email) {
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
