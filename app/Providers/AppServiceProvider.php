@@ -92,7 +92,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         if (!App::environment('production')) {
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
@@ -103,11 +102,8 @@ class AppServiceProvider extends ServiceProvider
                 $monolog->pushHandler($handler);
             });
         }
-
         $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
         //$this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
         //$this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
-
-
     }
 }

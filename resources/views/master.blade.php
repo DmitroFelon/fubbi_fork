@@ -29,9 +29,9 @@
     @include('layouts.topnavbar')
     @endauth
 
-    @yield('before-content')
-
     @include('partials.messages')
+
+    @yield('before-content')
 
     <!-- Main view  -->
         <div class="row">

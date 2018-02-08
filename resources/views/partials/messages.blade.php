@@ -1,30 +1,31 @@
-@if (session('error'))
-    @foreach(collect(session('error')) as $message)
-        <div class="head-notification row wrapper border-bottom red-bg page-heading">
-            <div class="col-lg-12">
-                <h2 class="text-center">{!! $message !!}</h2>
-            </div>
-        </div>
-    @endforeach
-@endif
 
-@if (session('success'))
-    @foreach(collect(session('success')) as $message)
-        <div class="head-notification row wrapper border-bottom bg-primary page-heading">
-            <div class="col-lg-12">
-                <h2 class="text-center">{!! $message !!}</h2>
+<div class="container-fluid m-t-md">
+    @if (session('error'))
+        @foreach(collect(session('error')) as $message)
+            <div class="alert alert-danger alert-dismissable">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                {!! session()->pull('error') !!}
             </div>
-        </div>
-    @endforeach
-@endif
+        @endforeach
+    @endif
+
+    @if (session('success'))
+        @foreach(collect(session('success')) as $message)
+                <div class="alert alert-success alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {!! session()->pull('success') !!}
+                </div>
+        @endforeach
+    @endif
 
 
-@if (session('info'))
-    @foreach(collect(session('info')) as $message)
-        <div class="head-notification row wrapper border-bottom blue-bg page-heading">
-            <div class="col-lg-12">
-                <h2 class="text-center">{!! $message !!}</h2>
+    @if (session('info'))
+        @foreach(collect(session('info')) as $message)
+            <div class="alert alert-info alert-dismissable">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                {!! session()->pull('info') !!}
             </div>
-        </div>
-    @endforeach
-@endif
+        @endforeach
+    @endif
+</div>
+

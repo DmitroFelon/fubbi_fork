@@ -11,9 +11,12 @@
 |
 */
 
-use App\Facades\ProjectExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+/*View::composer('master', function () {
+    \App\Facades\GlobalNotification::make();
+});*/
 
 Route::namespace('Webhooks')->group(function () {
     //Stripe routes
@@ -34,8 +37,8 @@ Route::get('test', function () {
 Route::get('/test_email/{index}', function ($index) {
 
     try {
-        $auth_user    = Auth::user();
-        $demo_user    = \App\User::first();
+        $auth_user    = \App\User::find(1);
+        $demo_user    = \App\User::find(1);
         $demo_project = \App\Models\Project::find(9);
 
         $demo_article             = (!is_null($demo_project)) ? $demo_project->articles()->first() : null;

@@ -62,13 +62,6 @@
 
 <h3 class="text-center">{{_i('Additional')}}</h3>
 
-<div class="row">
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        {!! Form::bsText('how_did_you_find_us', null, _i('How Did You find us?'), null, ['data-focus' =>  (\Illuminate\Support\Facades\Session::has('change_password')) ? 'true' : 'false'], 'text') !!}
-    </div>
-
-</div>
 
 @if(\Illuminate\Support\Facades\Session::has('change_password'))
     <input type="hidden" name="redirect_to_last_project" value="1">

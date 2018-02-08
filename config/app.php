@@ -224,6 +224,10 @@ return [
          * Project Export
          * */
         \App\Providers\ProjectExportProvider::class,
+        /*
+         * Global notifications
+         * */
+        \App\Providers\GlobalNotificationProvider::class
     ],
 
     /*
@@ -308,7 +312,8 @@ return [
         /*
          * Project Export
          * */
-        'ProjectExport' => \App\Facades\ProjectExport::class
+        'ProjectExport' => \App\Facades\ProjectExport::class,
+        'GlobalNotification' => \App\Facades\GlobalNotification::class
 
     ],
 
