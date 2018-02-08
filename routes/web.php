@@ -91,6 +91,11 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     Auth::logout();
     Auth::login($user, true);
 
+    if (!$user->role) {
+        $role = \App\Models\Role::where('name', \App\Models\Role::CLIENT)->first();
+        $user->attachRole($role);
+    }
+
     //in case user already has an account
     if ($user->projects()->count() > 1) {
         $project = $user->projects()->latest()->get();
