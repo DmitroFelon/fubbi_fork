@@ -88,7 +88,7 @@ class NotificationTypes
      * @param string $role
      * @return \Illuminate\Support\Collection
      */
-    public static function get(string $role)
+    public static function get($role = '')
     {
         return (defined('self::' . strtoupper($role)))
             ? collect(constant('self::' . strtoupper($role)))
