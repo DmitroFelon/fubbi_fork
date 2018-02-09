@@ -42,7 +42,7 @@ class GlobalNotification
         $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
 
         if ($projects->isNotEmpty()) {
-            $message = 'Please, continue filling project: ';
+            $message = 'Please, continue filling project: <br>';
 
             $projects->each(function (Project $project) use (&$message) {
                 $message .= '<a href="' . action('Resources\ProjectController@show', $project) . '">' . $project->name . '</a><br>';
