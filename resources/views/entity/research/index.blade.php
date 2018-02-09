@@ -30,12 +30,7 @@
                 var country = $('#country').val();
 
                 var sources = [
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_GOOGLE }}",
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_YOUTUBE }}",
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_BING }}",
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_AMAZON }}",
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_EBAY }}",
-                    "{{ \App\Services\Api\KeywordTool::SOURCE_APP_STORE }}",
+                    "{{ \App\Services\Api\KeywordTool::SOURCE_GOOGLE }}"
                 ];
 
                 $("#result").show();
