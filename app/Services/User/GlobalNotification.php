@@ -39,15 +39,13 @@ class GlobalNotification
             ProjectStates::KEYWORDS_FILLING,
         ];
 
-        $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
+        $projects = $this->user->projects()->whereIn('state', $filling_states)->where('created_at', '>', now()->subDay())->get();
 
         if ($projects->isNotEmpty()) {
             $message = 'Please, continue filling project: <br>';
 
             $projects->each(function (Project $project) use (&$message) {
-                if($project->created_at->diffInDays() > 1){
-                    $message .= '<a href="' . action('Resources\ProjectController@show', $project) . '">' . $project->name . '</a><br>';
-                }
+                $message .= '<a href="' . action('Resources\ProjectController@show', $project) . '">' . $project->name . '</a><br>';
             });
 
             $this->push('info', $message);
