@@ -17,17 +17,18 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
-        $page_notifications = $user->unreadNotifications()->where('type', '!=', MessageSent::class)
-                                   ->get()->concat(
-                $user->readNotifications()
-                     ->where('type', '!=', MessageSent::class)->get()
-            )->all();
+        $page_notifications = $user
+            ->notifications()
+            ->where('type', '!=', MessageSent::class)
+            ->paginate(10);
 
-        $has_unread_notifications = $user->unreadNotifications()->where('type', '!=', MessageSent::class)->get()
-                                         ->isNotEmpty();
+        $has_unread_notifications = $user
+            ->unreadNotifications()
+            ->where('type', '!=', MessageSent::class)
+            ->get()->isNotEmpty();
 
         $data = [
-            'page_notifications' => $page_notifications,
+            'page_notifications'       => $page_notifications,
             'has_unread_notifications' => $has_unread_notifications,
         ];
 

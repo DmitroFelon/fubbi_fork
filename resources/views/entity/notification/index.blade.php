@@ -9,7 +9,6 @@
 @endsection
 
 @section('content')
-
     <div class="ibox">
         <div class="ibox-content">
             <div class="row">
@@ -24,6 +23,10 @@
                     </div>
                     <div class="activity-stream">
                         @each('entity.notification.partials.page-row', $page_notifications, 'notification', 'entity.notification.partials.page-row-empty')
+                    </div>
+
+                    <div class="">
+                        {!! $page_notifications->links() !!}
                     </div>
                 </div>
             </div>
