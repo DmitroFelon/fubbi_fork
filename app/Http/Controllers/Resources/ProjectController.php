@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Spatie\MediaLibrary\Media;
-use Stripe\Error\InvalidRequest;
 use Stripe\Plan;
 
 /**
@@ -272,21 +271,17 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
 
-        try {
+        /* try {
+             $client = $project->client;
+             if ($client->subscription($project->name)) {
+                 $client->subscription($project->name)->cancel();
+             }
+         } catch (InvalidRequest $e) {
+             $project->forceDelete();
+         }*/
+        return back()->with('error', _i("Can't delete the project. Something goes wrong with Stripe api."));
 
-            $client = $project->client;
-
-            if ($client->subscription($project->name)) {
-                $client->subscription($project->name)->cancel();
-            }
-
-
-        } catch (InvalidRequest $e) {
-            $project->forceDelete();
-        }
-
-
-        return redirect()->action('Resources\ProjectController@index');
+        // return redirect()->action('Resources\ProjectController@index');
     }
 
     /**

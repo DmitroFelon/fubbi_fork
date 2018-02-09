@@ -39,19 +39,7 @@
            class="btn btn-white btn-sm lazur-bg">
             <i class="fa fa-cloud"></i> {{_i('Chat')}}
         </a>
-        @if($project->subscription->onGracePeriod())
-            <a href="{{action('Resources\ProjectController@resume', $project)}}" class="btn btn-white btn-sm grey-bg">
-                <i class="fa fa-refresh"></i> {{_i('Resume')}}
-            </a>
-        @else
-            <form method="post" style="display:inline;"
-                  action="{{action('Resources\ProjectController@destroy', [$project])}}">
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <button class="btn btn-white btn-sm red-bg" type="submit"><i class="fa fa-trash"></i> {{_i('Delete')}}
-                </button>
-            </form>
-        @endif
+
         @endrole()
 
     </td>

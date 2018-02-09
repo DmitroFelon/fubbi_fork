@@ -32,7 +32,7 @@ class MessageObserver
             return $message->user_id !== $user->id;
         });
 
-        if (\Activity::users()->where('user_id', Auth::user()->id)->get()->isEmpty) {
+        if (\Activity::users()->where('user_id', Auth::user()->id)->get()->isEmpty()) {
             Notification::send($recipients, new PrivateMessage($message));
         }
 
