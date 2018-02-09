@@ -1,30 +1,35 @@
-
 <div class="container-fluid m-t-md">
     @if (session('error'))
-        @foreach(collect(session('error')) as $message)
-            <div class="alert alert-danger alert-dismissable">
-                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                {!! session()->pull('error') !!}
-            </div>
+        @foreach(collect(session()->pull('error')) as $message)
+            @if(!\Illuminate\Support\Facades\Session::has(base64_encode($message)) and $message != '')
+                <div data-key="{{base64_encode($message)}}" class="alert alert-danger alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {!! $message !!}
+                </div>
+            @endif
         @endforeach
     @endif
 
     @if (session('success'))
-        @foreach(collect(session('success')) as $message)
-                <div class="alert alert-success alert-dismissable">
+        @foreach(collect(session()->pull('success')) as $message)
+            @if(!\Illuminate\Support\Facades\Session::has(base64_encode($message)) and $message != '')
+                <div data-key="{{base64_encode($message)}}" class="alert alert-success alert-dismissable">
                     <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                    {!! session()->pull('success') !!}
+                    {!! $message !!}
                 </div>
+            @endif
         @endforeach
     @endif
 
 
     @if (session('info'))
-        @foreach(collect(session('info')) as $message)
-            <div class="alert alert-info alert-dismissable">
-                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                {!! session()->pull('info') !!}
-            </div>
+        @foreach(collect(session()->pull('info')) as $message)
+            @if(!\Illuminate\Support\Facades\Session::has(base64_encode($message)) and $message != '')
+                <div data-key="{{base64_encode($message)}}" class="alert alert-info alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {!! $message !!}
+                </div>
+            @endif
         @endforeach
     @endif
 </div>

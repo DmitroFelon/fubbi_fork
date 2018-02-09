@@ -9,38 +9,48 @@
 namespace App\Services\User;
 
 
+use App\Models\Helpers\ProjectStates;
+use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class GlobalNotification
 {
+
+    protected $user;
+
     public function make()
     {
         if (!Auth::check()) {
             return;
         }
-        $role = Auth::user()->role;
+        $role       = Auth::user()->role;
+        $this->user = Auth::user();
         if (method_exists($this, $role)) {
             call_user_func([$this, $role]);
         }
 
     }
 
-
     private function client()
     {
+        $filling_states = [
+            ProjectStates::QUIZ_FILLING,
+            ProjectStates::KEYWORDS_FILLING,
+        ];
 
-    }
+        $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
 
-    private function admin()
-    {
-        Session::remove('info');
-        Session::flash('info', 'admin1');
-        Session::flash('success', 'admin2');
-        Session::flash('error', 'admin3');
+        if ($projects->isNotEmpty()) {
+            $message = 'Please, continue filling project: ';
 
+            $projects->each(function (Project $project) use (&$message) {
+                $message .= '<a href="' . action('Resources\ProjectController@show', $project) . '">' . $project->name . '</a><br>';
+            });
 
-        //dd(Session::pull('info'), Session::get('info'));
+            $this->push('info', $message);
+        }
+
     }
 
     private function account_manager()
@@ -66,6 +76,11 @@ class GlobalNotification
     private function researcher()
     {
 
+    }
+
+    private function push(string $type, string $value)
+    {
+        Session::push($type, $value);
     }
 
 }

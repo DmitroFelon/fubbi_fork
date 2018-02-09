@@ -14,9 +14,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*View::composer('master', function () {
+View::composer('master', function () {
     \App\Facades\GlobalNotification::make();
-});*/
+});
 
 Route::namespace('Webhooks')->group(function () {
     //Stripe routes
@@ -28,10 +28,13 @@ Route::namespace('Webhooks')->group(function () {
 //Auth
 Auth::routes();
 
-//just for tests
+Route::get('coockie/{key}/{value}', function (string $key, string $value) {
+    Session::put($key, $value);
+    return ['ok'];
+});
+
 Route::get('test', function () {
-    $user = Activity::users()->where('user_id', 1)->get();
-    dd($user);
+    dd(\Illuminate\Support\Facades\Session::all());
 });
 
 Route::get('/test_email/{index}', function ($index) {

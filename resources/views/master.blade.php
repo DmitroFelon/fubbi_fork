@@ -96,6 +96,11 @@
                 target.hide();
             }
         });
+
+        $(".alert").on('close.bs.alert', function () {
+            $.get("{{url('coockie')}}/" + $(this).attr('data-key') + "/1")
+        });
+
     });
 </script>
 
