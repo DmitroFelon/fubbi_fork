@@ -64,6 +64,8 @@ class ProjectPolicy
     public function create(User $user)
     {
 
+        return false;
+
         $allow = [
             Role::ADMIN,
             Role::CLIENT,
