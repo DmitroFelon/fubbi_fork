@@ -35,7 +35,6 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 
 Route::get('test', function (\Illuminate\Http\Request $request) {
     $server = $request->server();
-
     if(isset($server['HTTP_X_FORWARDED_PROTO']) and $server['HTTP_X_FORWARDED_PROTO'] == 'http'){
         return redirect()->secure($request->getRequestUri());
     }

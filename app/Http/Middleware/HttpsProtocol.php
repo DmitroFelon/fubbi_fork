@@ -15,7 +15,9 @@ class HttpsProtocol
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->secure()) {
+
+        $server = $request->server();
+        if(isset($server['HTTP_X_FORWARDED_PROTO']) and $server['HTTP_X_FORWARDED_PROTO'] == 'http'){
             return redirect()->secure($request->getRequestUri());
         }
 
