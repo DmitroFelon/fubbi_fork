@@ -34,7 +34,7 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 });
 
 Route::get('test', function (\Illuminate\Http\Request $request) {
-    dd($request->secure());
+    dd($request->server());
 });
 
 Route::get('/test_email/{index}', function ($index) {
