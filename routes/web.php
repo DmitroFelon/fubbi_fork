@@ -34,8 +34,8 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 });
 
 Route::get('test', function () {
-    $project = \App\Models\Project::first();
-    dispatch(new \App\Jobs\Project\CheckState($project));
+
+    return asset('js/app.js');
 });
 
 Route::get('/test_email/{index}', function ($index) {

@@ -99,7 +99,7 @@ class AppServiceProvider extends ServiceProvider
     {
         
         if (!App::environment('production')) {
-            $this->app['url']->forceScheme('https');
+            //$this->app['url']->forceScheme('https');
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $processName = $processUser['name'];
