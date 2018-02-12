@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         $this->observers();
 
         $this->formComponents();
+
+
     }
 
     /**
@@ -95,7 +97,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        
         if (!App::environment('production')) {
+            $this->app['url']->forceScheme('https');
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $processName = $processUser['name'];
