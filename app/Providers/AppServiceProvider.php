@@ -14,6 +14,7 @@ use App\Services\Api\Keywords\KeywordsFactoryInterface;
 use App\Services\Api\KeywordTool;
 use App\User;
 use Form;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -33,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
         Schema::defaultStringLength(191);
 
@@ -43,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->formComponents();
 
-
+        $url->forceScheme('https');
     }
 
     /**
@@ -99,7 +100,8 @@ class AppServiceProvider extends ServiceProvider
     {
         
         if (!App::environment('production')) {
-            //$this->app['url']->forceScheme('https');
+
+
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $processName = $processUser['name'];
