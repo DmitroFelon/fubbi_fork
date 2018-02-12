@@ -33,9 +33,8 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
     return ['ok'];
 });
 
-Route::get('test', function () {
-
-    return asset('js/app.js');
+Route::get('test', function (\Illuminate\Http\Request $request) {
+    dd($request->secure());
 });
 
 Route::get('/test_email/{index}', function ($index) {
