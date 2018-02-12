@@ -39,8 +39,9 @@
     </td>
     <td class="except">
         <div style="" class="btn-group">
-            <button data-toggle="dropdown" class="btn btn-white btn-sm dropdown-toggle yellow-bg">Export <span
-                        class="caret"></span>
+            <button data-toggle="dropdown" class="btn btn-white btn-sm dropdown-toggle yellow-bg ladda-button">
+                 Export
+                <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li>

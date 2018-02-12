@@ -14,7 +14,7 @@
 @section('content')
 
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9"> {{-- Main --}}
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> {{-- Main --}}
 
         <div class="col col-lg-12 col-xs-12 ">
             @component('components.ibox')
@@ -139,12 +139,5 @@
 
 
     </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-        @component('components.ibox')
-        @slot('title') Activity @endslot
-        @include('entity.project.partials.activity')
-        @endcomponent
-    </div> {{-- Activity --}}
 
 @endsection

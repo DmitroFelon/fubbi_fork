@@ -31,7 +31,8 @@ class ArticleOverdue extends Notification
      */
     public function via($notifiable)
     {
-        return ($notifiable->disabled_notifications()->where('name', get_class($this))->get())
+        return [];
+        return ($notifiable->disabled_notifications()->where('name', get_class($this))->first())
             ? [] : ['mail'];
     }
 
@@ -47,7 +48,10 @@ class ArticleOverdue extends Notification
             ->subject(_i('Article Overdue'))
             ->line(_i('Hello %s', [$notifiable->name]))
             ->line(_i('Article "%s" is overdue.', [$this->article->title]))
-            ->action('Review article', action('Project\ArticlesController@show', [$this->article->project, $this->article]))
+            ->action('Review article', action('Project\ArticlesController@show', [
+                $this->article->project,
+                $this->article
+            ]))
             ->line('Thank you for using our application!');
     }
 

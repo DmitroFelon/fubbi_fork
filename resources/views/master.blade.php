@@ -68,7 +68,6 @@
                 class="btn btn-warning btn-lg question-btn">
             <i class="fa fa-youtube"></i> <span class="bold">{{$video->name}}</span>
         </button>
-
     @endforeach
     @endisset
 </div>

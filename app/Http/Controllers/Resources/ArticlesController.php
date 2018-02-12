@@ -8,7 +8,6 @@ use App\Models\Role;
 use App\Services\Google\Drive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Mockery\CountValidator\Exception;
 
 class ArticlesController extends Controller
 {
@@ -97,16 +96,24 @@ class ArticlesController extends Controller
     public function export(Article $article, Request $request)
     {
         try {
-            $as    = ($request->has('as')) ? $request->input('as') : Drive::MS_WORD;
+            $as    = ($request->has('as')) ? $request->input('as') : Drive::PDF;
             $media = $article->export($as);
 
-            if (!$media) {
-                throw new Exception(_i('Some error happened while exporting, try later please.'));
+            if (!$request->has('show')) {
+                return response()->download($media->getPath(), $article->title . '.' . Drive::getExtension($as));
+            } else {
+                return $media->getFullUrl();
             }
 
-            return response()->download($media->getPath(), $article->title . '.' . Drive::getExtension($as));
+            //return $media->getFullUrl();
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', _i('Some error happened while exporting, try later please.'));
+            if (!$request->has('show')) {
+                return redirect()->back()->with('error', _i('Some error happened while exporting, try later please.'));
+            } else {
+                return response(['error' => 'Some error happened while exporting, try later please.'], 400);
+            }
+
         }
     }
 

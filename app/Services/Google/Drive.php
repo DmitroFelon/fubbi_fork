@@ -241,7 +241,7 @@ class Drive
         $batch = $this->service->createBatch();
 
         //add permissions by role
-        /*foreach ($emails as $email => $role) {
+        foreach ($emails as $email => $role) {
             $userPermissionCollection = collect();
             $userPermissionCollection->put('type', $type);
             $userPermissionCollection->put('role', $role);
@@ -251,11 +251,12 @@ class Drive
             $request        = $this->service->permissions->create(
                 $file_id, $userPermission);
             $batch->add($request, $email);
-        }*/
+        }
 
         //add access to anyone
         $userPermissionCollection = collect();
         $userPermissionCollection->put('type', 'anyone');
+        $userPermissionCollection->put('role', 'writer');
 
         $userPermission = new Google_Service_Drive_Permission($userPermissionCollection->toArray());
         $request        = $this->service->permissions->create(
@@ -387,6 +388,12 @@ class Drive
             ]);
 
             $content = $response->getBody()->getContents();
+
+            if(!$content){
+                $exceptoin = new \Exception(_i('Some error happened while exporting, try later please.'));
+                report($exceptoin);
+                throw $exceptoin;
+            }
 
             return $content;
         } catch (\Exception $e) {

@@ -19,7 +19,7 @@
                         </div>
                     @endif
                     <ul>
-                        @foreach($idea->keywords()->suggestions()->get() as $keyword)
+                        @foreach($idea->keywords()->suggestions()->accepted()->get() as $keyword)
                             <li>{{$keyword->text}}</li>
                         @endforeach
                     </ul>
@@ -33,7 +33,7 @@
                         </div>
                     @endif
                     <ul>
-                        @foreach($idea->keywords()->questions()->get() as $keyword)
+                        @foreach($idea->keywords()->questions()->accepted()->get() as $keyword)
                             <li>{{$keyword->text}}</li>
                         @endforeach
                     </ul>

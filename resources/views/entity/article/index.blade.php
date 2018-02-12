@@ -53,10 +53,22 @@
             </div>
         </div>
     </div>
+    <a style="display: none" href="#" id="file-loader" frameborder="0"></a>
 @endsection
 
 
 @section('scripts')
+
+    <style>
+        .jq-ry-container > .jq-ry-group-wrapper > .jq-ry-group {
+            z-index: 0 !important;
+        }
+
+        .jq-ry-container > .jq-ry-group-wrapper > .jq-ry-group {
+            z-index: 0 !important;
+        }
+    </style>
+
     <script>
         $(".ratable").each(function (item) {
             $(this).rateYo({
@@ -65,5 +77,20 @@
                 readOnly: ($(this).attr('data-rating-read')) ? true : false
             });
         });
+
+        $(".dropdown-menu a").on('click', function (e) {
+            //e.preventDefault();
+            //$('.ibox').children('.ibox-content').toggleClass('sk-loading');
+        })
+
+        window.addEventListener('beforeunload', function (event) {
+            //$('.ibox').children('.ibox-content').toggleClass('sk-loading');
+        });
+
+        window.addEventListener('unload', function (event) {
+            //$('.ibox').children('.ibox-content').toggleClass('sk-loading');
+        });
+
+
     </script>
 @endsection

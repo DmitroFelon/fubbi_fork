@@ -42,11 +42,9 @@ switch ($mailMessage->level) {
 @endforeach
 
 {{-- Salutation --}}
-@if (! empty($mailMessage->salutation))
-    {{ $mailMessage->salutation }}
-@else
-    Regards, {!! config('app.name') !!}
-@endif
+Thank you!
+<br>
+The Fubbi Team
 
 {{-- Subcopy --}}
 @isset($mailMessage->actionText)

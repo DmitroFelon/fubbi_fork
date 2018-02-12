@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
 use App\Models\Invite;
 use App\Models\Project;
+use App\Observers\ArticleObserver;
 use App\Observers\InviteObserver;
 use App\Observers\MessageObserver;
 use App\Observers\ProjectObserver;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         Invite::observe(InviteObserver::class);
         User::observe(UserObserver::class);
         Message::observe(MessageObserver::class);
+        Article::observe(ArticleObserver::class);
     }
 
     /**

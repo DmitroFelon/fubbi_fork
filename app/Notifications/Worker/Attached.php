@@ -50,11 +50,10 @@ class Attached extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('You have been attached to project!')
-            ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('You have beed attached to project: "%s".', [$this->project->name]))
-            ->action('Review Project', action('Resources\ProjectController@show', $this->project))
-            ->line('Thank you for using our application!');
+            ->subject('Add to project!')
+            ->line(_i('Hello %s', [$notifiable->first_name]))
+            ->line(_i('You have been added to project.'))
+            ->action('Review Project', action('Resources\ProjectController@show', $this->project));
     }
 
 }

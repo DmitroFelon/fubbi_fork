@@ -95,8 +95,10 @@ class ProjectObserver
 
         $participants = $participants->unique();
 
-        $conversation = (Conversation::find($project->conversation_id))
-            ? Conversation::find($project->conversation_id)
+        $conversation = Conversation::find($project->conversation_id);
+
+        $conversation = ($conversation)
+            ? $conversation
             : ChatFacade::createConversation($participants->toArray());
 
         $conversation->update([

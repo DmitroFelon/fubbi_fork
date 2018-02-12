@@ -36,7 +36,6 @@ class CheckState implements ShouldQueue
         $this->check();
     }
 
-
     /**
      * Check articles state
      */

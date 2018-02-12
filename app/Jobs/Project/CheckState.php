@@ -4,6 +4,7 @@ namespace App\Jobs\Project;
 
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
+use App\Models\Project\Service;
 use App\Models\Role;
 use App\Notifications\Client\KeywordsIncomplete;
 use App\Notifications\Client\QuizIncomplete;
@@ -11,6 +12,7 @@ use App\Notifications\Manager\InviteOverdue;
 use App\Notifications\Project\Delayed;
 use App\Notifications\Project\Remind;
 use App\Notifications\Project\WillRemoved;
+use App\Notifications\Worker\HasTask;
 use App\Notifications\Worker\Progress;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -110,10 +112,9 @@ class CheckState implements ShouldQueue
                 } else {
                     $user->notify(new Progress($this->project));
                 }
-
-                User::withRole(Role::ADMIN)->get()->each(function (User $user) {
-                    $user->notify(new Delayed($this->project));
-                });
+            });
+            User::withRole(Role::ADMIN)->get()->each(function (User $user) {
+                $user->notify(new Delayed($this->project));
             });
         }
 
@@ -123,9 +124,9 @@ class CheckState implements ShouldQueue
                 if ($user->role == Role::ACCOUNT_MANAGER) {
                     $user->notify(new InviteOverdue($this->project));
                 }
-                User::withRole(Role::ADMIN)->get()->each(function (User $user) {
-                    $user->notify(new InviteOverdue($this->project));
-                });
+            });
+            User::withRole(Role::ADMIN)->get()->each(function (User $user) {
+                $user->notify(new InviteOverdue($this->project));
             });
         }
 
@@ -135,10 +136,79 @@ class CheckState implements ShouldQueue
             );
         }
 
-        if ($this->project->created_at->diffInDays(now()) > 3 and $this->project->state == ProjectStates::QUIZ_FILLING) {
+        if ($this->project->created_at->diffInDays(now()) > 3 and $this->project->state == ProjectStates::KEYWORDS_FILLING) {
             $this->project->client->notify(
                 new KeywordsIncomplete($this->project)
             );
+        }
+
+        if (!$this->project->requireWorkers() and $this->project->created_at->diffInDays(now()) > 1 and
+            $this->project->created_at->diffInDays(now()) < 3
+        ) {
+            $missed_services = collect();
+            $project         = Project::first();
+
+            $cycle = $project->cycle;
+
+            if (!$cycle) {
+                return;
+            }
+
+            $cycle_id = $cycle->id;
+
+            $project->services()
+                    ->withType(Service::TYPE_INTEGER)
+                    ->required()->get()
+                    ->each(function (Service $service) use ($missed_services, $project, $cycle_id) {
+                        $require = intval($service->value);
+                        $total   = intval($project->getArticleByType($service->name)->byCycle($cycle_id)->count());
+                        if ($require > $total) {
+                            $missed_services->push($service->display_name);
+                        }
+                    });
+
+            if ($missed_services->isEmpty()) {
+                return;
+            }
+
+            //notify workers
+            $project->workers->each(function (User $user) use ($project, $missed_services) {
+                $user->notify(new HasTask($project, 1, $missed_services->implode(', ')));
+            });
+        }
+
+        if (!$this->project->requireWorkers() and $this->project->created_at->diffInDays(now()) > 2
+        ) {
+            $missed_services = collect();
+            $project         = Project::first();
+
+            $cycle = $project->cycle;
+
+            if (!$cycle) {
+                return;
+            }
+
+            $cycle_id = $cycle->id;
+
+            $project->services()
+                    ->withType(Service::TYPE_INTEGER)
+                    ->required()->get()
+                    ->each(function (Service $service) use ($missed_services, $project, $cycle_id) {
+                        $require = intval($service->value);
+                        $total   = intval($project->getArticleByType($service->name)->byCycle($cycle_id)->count());
+                        if ($require > $total) {
+                            $missed_services->push($service->display_name);
+                        }
+                    });
+
+            if ($missed_services->isEmpty()) {
+                return;
+            }
+
+            //notify workers
+            $project->workers->each(function (User $user) use ($project, $missed_services) {
+                $user->notify(new HasTask($project, 1, $missed_services->implode(', ')));
+            });
         }
     }
 

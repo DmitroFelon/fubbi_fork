@@ -34,21 +34,20 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 });
 
 Route::get('test', function () {
-    dd(\Illuminate\Support\Facades\Session::all());
+    $project = \App\Models\Project::first();
+    dispatch(new \App\Jobs\Project\CheckState($project));
 });
 
 Route::get('/test_email/{index}', function ($index) {
 
     try {
-        $auth_user    = \App\User::find(1);
-        $demo_user    = \App\User::find(1);
-        $demo_project = \App\Models\Project::find(9);
-
+        $auth_user                = \App\User::first();
+        $demo_user                = \App\User::first();
+        $demo_project             = \App\Models\Project::first();
         $demo_article             = (!is_null($demo_project)) ? $demo_project->articles()->first() : null;
         $demo_invitations_team    = \App\Models\Invite::teams()->first();
         $demo_invitations_project = \App\Models\Invite::projects()->first();
-
-        $notifications = [
+        $notifications            = [
             ($demo_user) ? new \App\Notifications\Client\Registered($demo_user) : null,
             ($demo_project) ? new \App\Notifications\Worker\Attached($demo_project) : null,
             ($demo_project) ? new \App\Notifications\Worker\Detached($demo_project) : null,
@@ -65,15 +64,13 @@ Route::get('/test_email/{index}', function ($index) {
             ($demo_invitations_team) ? new \App\Notifications\Team\Invite($demo_invitations_team) : null,
 
             ($demo_article) ? new \App\Notifications\Project\ThirdArticleReject($demo_article) : null,
+            ($demo_article) ? new \App\Notifications\Article\Approval($demo_article) : null,
         ];
-
-        if (!isset($notifications[$index])) {
+        if (!isset($notifications[$index - 1])) {
             return 'Undefined notification';
         }
-
         $n        = $notifications[$index - 1];
         $mailable = new \App\Mail\TestingEmail($n->toMail($auth_user));
-
         return $mailable;
 
     } catch (\Exception $e) {

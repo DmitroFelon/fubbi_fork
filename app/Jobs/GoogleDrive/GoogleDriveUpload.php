@@ -86,6 +86,8 @@ class GoogleDriveUpload implements ShouldQueue
             $permissions = $this->createPermissions();
 
             $this->drive->addPermission($file_parent, $permissions->toArray());
+            
+            $this->article->export(Drive::PDF);
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());

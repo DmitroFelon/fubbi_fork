@@ -20,9 +20,9 @@ trait hasCycles
     /**
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
-    public function getCycleAttribute()
+    public function getCycleAttribute($query)
     {
-        return $this->cycles()->latest()->get();
+        return $this->cycles()->latest('id')->first();
     }
 
     /**

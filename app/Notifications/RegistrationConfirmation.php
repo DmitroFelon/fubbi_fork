@@ -44,12 +44,17 @@ class RegistrationConfirmation extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $message = (new MailMessage)->line('Thank You for registration');
+        $message = (new MailMessage)
+            ->subject('Set up your account')
+            ->line('Hi, ' . $this->user->first_name);
+
         if ($this->user->tmp_password) {
             $message->line('Your password is: ' . $this->user->tmp_password);
         }
-        $message->action('See your profile', url('/users/' . $this->user->id))
-                ->line('Thank you for using our application!');
+
+        $message
+            ->line('Please set up your account. ')
+            ->action('See your profile', url('/settings/'));
 
         return $message;
     }

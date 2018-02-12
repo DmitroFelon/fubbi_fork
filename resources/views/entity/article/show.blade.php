@@ -1,13 +1,13 @@
 @extends('master')
 
 @section('content')
+
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="ibox">
             <div class="ibox-title">
                 <h5>
                     {{$article->title}}
                 </h5>
-
                 @can('articles.accept', [$project, $article])
                     <div class="ibox-tools">
                         <a href="{{url()->action('Project\ArticlesController@accept', [$project, $article])}}"
@@ -18,7 +18,6 @@
                 @endcan
             </div>
             <div class="ibox-content">
-
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 p-xs">
                         @if($article->accepted === 1)
@@ -35,17 +34,17 @@
                             </div>
                         @endcan
                         @cannot('articles.accept', [$project, $article])
-                            <span data-rateyo-read-only="true" data-rating="{{$article->ratingPercent}}" class="ratable">
+                            <span data-rateyo-read-only="true" data-rating="{{$article->ratingPercent}}"
+                                  class="ratable">
                             </span>
                         @endcannot
                     </div>
                 </div>
                 <hr>
                 <div class="row">
-                    @if($article->google_id)
-                        @include('entity.article.partials.google-preview')
-                    @endif
+                    @include('entity.article.partials.google-preview')
                 </div>
+
                 @if($article->hasMedia('copyscape'))
                     <div class="row">
                         <h3 class="text-center">

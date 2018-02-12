@@ -249,7 +249,7 @@ class Article extends Model implements HasMedia
     public function export($as = Drive::MS_WORD, $api = null)
     {
         try {
-            if(!$this->google_id){
+            if (!$this->google_id) {
                 return;
             }
             $api       = (is_null($api)) ? new Drive() : $api;
@@ -258,8 +258,21 @@ class Article extends Model implements HasMedia
             $path      = storage_path('app/temp/' . $file_name);
             File::put($path, $file);
             $media = $this->addMedia($path)->toMediaCollection('google_export');
+
+            if ($as == Drive::PDF) {
+                $file_name = $this->google_id . '.' . Drive::getExtension($as);
+                $path      = storage_path('app/temp/pdf/' . $file_name);
+                File::put($path, $file);
+                $this->addMedia($path)->toMediaCollection('google_export_pdf');
+            }
+
+            if (!$media) {
+                throw new \Exception(_i('Some error happened while exporting, try later please.'));
+            }
+
             return $media;
         } catch (\Exception $e) {
+            report($e);
             throw $e;
         }
     }

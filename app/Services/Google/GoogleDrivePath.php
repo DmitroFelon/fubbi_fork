@@ -84,7 +84,7 @@ trait GoogleDrivePath
         //set article uploader as owner
         $permissions->put($this->article->author->email, 'writer');
         //set project client as commenter
-        $permissions->put($this->project->client->email, 'commenter');
+        $permissions->put($this->project->client->email, 'writer');
 
         //set other workers as writer
         $this->project->workers->each(function (User $worker) use ($permissions) {

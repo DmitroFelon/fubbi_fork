@@ -17,7 +17,6 @@ use App\Models\Project\Service;
  */
 trait hasServices
 {
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -33,7 +32,6 @@ trait hasServices
      */
     public function setServices(string $plan_id)
     {
-
         $services = collect();
 
         $conf_services = config('fubbi.services.' . $plan_id, false);
