@@ -345,7 +345,7 @@ class ProjectController extends Controller
             $project->attachWorker($user->id);
             $invite = $user->getInviteToProject($project->id);
             if (!$invite) {
-                abort(403);
+                return redirect()->back()->with('error', "You can't perform this action");
             }
             $invite->accept();
             $message = _i('You are applied to this project');
@@ -389,7 +389,7 @@ class ProjectController extends Controller
 
         $invite = $user->getInviteToProject($project->id);
         if (!$invite) {
-            abort(403);
+            return redirect()->back()->with('error', "You can't perform this action");
         }
         $invite->decline();
 
