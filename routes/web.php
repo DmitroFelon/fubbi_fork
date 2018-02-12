@@ -34,7 +34,12 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 });
 
 Route::get('test', function (\Illuminate\Http\Request $request) {
-    dd($request->server());
+    $server = $request->server();
+
+    if(isset($server['REQUEST_SCHEME']) and $server['REQUEST_SCHEME'] == 'http'){
+        return redirect()->secure($request->getRequestUri());
+    }
+
 });
 
 Route::get('/test_email/{index}', function ($index) {
