@@ -44,7 +44,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->formComponents();
 
-        $url->forceScheme('https');
+        if (App::environment('production')) {
+            $url->forceScheme('https');
+        }
     }
 
     /**
