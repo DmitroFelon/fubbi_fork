@@ -9,9 +9,9 @@
 
 This package offers taggable behaviour for your models. After the package is installed the only thing you have to do is add the `HasTags` trait to an Eloquent model to make it taggable. 
 
-But we didn't stop with the regular tagging capabilities you find in every package. Laravel Tags comes with batteries included. Out of the box it has support for [translating tags](https://docs.spatie.be/laravel-tags/v2/advanced-usage/adding-translations), [multiple tag types](https://docs.spatie.be/laravel-tags/v2/advanced-usage/using-types) and [sorting capabilities](https://docs.spatie.be/laravel-tags/v2/advanced-usage/sorting-tags).
+But we didn't stop with the regular tagging capabilities you find in every package. Laravel Tags comes with batteries included. Out of the box it has support for [translating tags](https://docs.spatie.be/laravel-tags/v1/advanced-usage/adding-translations), [multiple tag types](https://docs.spatie.be/laravel-tags/v1/advanced-usage/using-types) and [sorting capabilities](https://docs.spatie.be/laravel-tags/v1/advanced-usage/sorting-tags).
 
-You'll find the documentation on https://docs.spatie.be/laravel-tags/v2.
+You'll find the documentation on https://docs.spatie.be/laravel-tags/v1.
 
 Here are some code examples:
 
@@ -54,10 +54,10 @@ $tag->setTranslation('nl', 'mijn tag');
 $tag->save();
 
 //using tag types
-$tag = Tag::findOrCreate('tag 1', 'my type');
+$tag = Tag::create('tag 1', 'my type');
 
 //tags have slugs
-$tag = Tag::findOrCreate('yet another tag');
+$tag = Tag::create('yet another tag');
 $tag->slug; //returns "yet-another-tag"
 
 //tags are sortable
@@ -72,9 +72,17 @@ $tag->swapOrder($anotherTag);
 
 Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
+## Postcardware
+
+You're free to use this package (it's [MIT-licensed](LICENSE.md)), but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
+
+Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
+
+All postcards are published [on our website](https://spatie.be/en/opensource/postcards).
+
 ## Requirements
 
-This package requires Laravel 5.5 or higher, PHP 7.0 or higher and a database that supports `json` fields such as MySQL 5.7 or higher.
+This package requires Laravel 5.3 or higher, PHP 7.0 or higher and a database that supports `json` fields such as MySQL 5.7 or higher.
 
 ## Installation
 
@@ -116,20 +124,11 @@ return [
 
 
 ## Documentation
-You'll find the documentation on [https://docs.spatie.be/laravel-tags/v2](https://docs.spatie.be/laravel-tags/v2).
+You'll find the documentation on [https://docs.spatie.be/laravel-tags/v1](https://docs.spatie.be/laravel-tags/v1).
 
 Find yourself stuck using the package? Found a bug? Do you have general questions or suggestions for improving the `laravel-tags` package? Feel free to [create an issue on GitHub](https://github.com/spatie/laravel-tags/issues), we'll try to address it as soon as possible.
 
 If you've found a bug regarding security please mail [freek@spatie.be](mailto:freek@spatie.be) instead of using the issue tracker.
-
-## Testing
-
-1. Copy `.env.example` to `.env` and fill in your database credentials.
-2. Run `vendor/bin/phpunit`.
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
 ## Contributing
 
@@ -139,25 +138,18 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
 
-## Postcardware
+## Running the tests
 
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
-
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
+1. Copy `.env.example` to `.env` and fill in your database credentials.
+2. Run `vendor/bin/phpunit`.
 
 ## Credits
 
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
-## Support us
-
+## About Spatie
 Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
 

@@ -7,7 +7,6 @@ use Illuminate\Notifications\Notification;
 use Musonza\Chat\Chat;
 use Musonza\Chat\Conversations\Conversation;
 use Musonza\Chat\Eventing\EventGenerator;
-use Musonza\Chat\Notifications\MessageNotification;
 
 class Message extends Eloquent
 {
@@ -29,20 +28,9 @@ class Message extends Eloquent
         return $this->belongsTo(Chat::userModel(), 'user_id');
     }
 
-    public function unreadCount($user)
+    public function notifications()
     {
-        if (Chat::laravelNotifications()) {
-            return \DB::table('notifications')
-                ->where('notifiable_id', $user->id)
-                ->where('type', 'Musonza\Chat\Notifications\MessageSent')
-                ->whereNull('read_at')
-                ->whereNull('notifications.data->outgoing')
-                ->count();
-        }
-
-        return MessageNotification::where('user_id', $user->id)
-            ->where('is_seen', 0)
-            ->count();
+        return \DB::table('notifications')->all();
     }
 
     public function conversation()
@@ -83,14 +71,8 @@ class Message extends Eloquent
      */
     public function trash($user)
     {
-        if (Chat::laravelNotifications()) {
-            return $user->notifications()
-                ->where('data->message_id', $this->id)
-                ->delete();
-        }
-
-        return MessageNotification::where('user_id', $user->id)
-            ->where('message_id', $this->id)
+        return $user->notifications()
+            ->where('data->message_id', $this->id)
             ->delete();
     }
 
@@ -103,23 +85,16 @@ class Message extends Eloquent
      */
     public function getNotification($user)
     {
-        if (Chat::laravelNotifications()) {
-            return $user->notifications->filter(function ($item) use ($user) {
-                return $item->type == 'Musonza\Chat\Notifications\MessageSent' &&
-                    $item->data['message_id'] == $this->id &&
-                    $item->data['conversation_id'] == $this->conversation_id &&
-                    $item->notifiable_id == $user->id;
-            })->first();
-        }
-
-        return MessageNotification::where('user_id', $user->id)
-            ->where('message_id', $this->id)
-            ->select(['mc_message_notification.*', 'mc_message_notification.updated_at as read_at'])
-            ->first();
+        return $user->notifications->filter(function ($item) use ($user) {
+            return $item->type == 'Musonza\Chat\Notifications\MessageSent' &&
+            $item->data['message_id'] == $this->id &&
+            $item->data['conversation_id'] == $this->conversation_id &&
+            $item->notifiable_id == $user->id;
+        })->first();
     }
 
     /**
-     * Marks message as read.
+     * marks message as read.
      *
      * @param User $user
      *

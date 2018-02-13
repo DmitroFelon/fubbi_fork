@@ -22,10 +22,8 @@ class Google_Service_TPU_Node extends Google_Collection
   public $cidrBlock;
   public $createTime;
   public $description;
-  public $health;
   public $healthDescription;
   public $ipAddress;
-  public $labels;
   public $name;
   public $network;
   protected $networkEndpointsType = 'Google_Service_TPU_NetworkEndpoint';
@@ -67,14 +65,6 @@ class Google_Service_TPU_Node extends Google_Collection
   {
     return $this->description;
   }
-  public function setHealth($health)
-  {
-    $this->health = $health;
-  }
-  public function getHealth()
-  {
-    return $this->health;
-  }
   public function setHealthDescription($healthDescription)
   {
     $this->healthDescription = $healthDescription;
@@ -90,14 +80,6 @@ class Google_Service_TPU_Node extends Google_Collection
   public function getIpAddress()
   {
     return $this->ipAddress;
-  }
-  public function setLabels($labels)
-  {
-    $this->labels = $labels;
-  }
-  public function getLabels()
-  {
-    return $this->labels;
   }
   public function setName($name)
   {

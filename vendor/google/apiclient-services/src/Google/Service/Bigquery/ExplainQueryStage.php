@@ -23,9 +23,7 @@ class Google_Service_Bigquery_ExplainQueryStage extends Google_Collection
   public $computeMsMax;
   public $computeRatioAvg;
   public $computeRatioMax;
-  public $endMs;
   public $id;
-  public $inputStages;
   public $name;
   public $parallelInputs;
   public $readMsAvg;
@@ -36,7 +34,6 @@ class Google_Service_Bigquery_ExplainQueryStage extends Google_Collection
   public $recordsWritten;
   public $shuffleOutputBytes;
   public $shuffleOutputBytesSpilled;
-  public $startMs;
   public $status;
   protected $stepsType = 'Google_Service_Bigquery_ExplainQueryStep';
   protected $stepsDataType = 'array';
@@ -89,14 +86,6 @@ class Google_Service_Bigquery_ExplainQueryStage extends Google_Collection
   {
     return $this->computeRatioMax;
   }
-  public function setEndMs($endMs)
-  {
-    $this->endMs = $endMs;
-  }
-  public function getEndMs()
-  {
-    return $this->endMs;
-  }
   public function setId($id)
   {
     $this->id = $id;
@@ -104,14 +93,6 @@ class Google_Service_Bigquery_ExplainQueryStage extends Google_Collection
   public function getId()
   {
     return $this->id;
-  }
-  public function setInputStages($inputStages)
-  {
-    $this->inputStages = $inputStages;
-  }
-  public function getInputStages()
-  {
-    return $this->inputStages;
   }
   public function setName($name)
   {
@@ -192,14 +173,6 @@ class Google_Service_Bigquery_ExplainQueryStage extends Google_Collection
   public function getShuffleOutputBytesSpilled()
   {
     return $this->shuffleOutputBytesSpilled;
-  }
-  public function setStartMs($startMs)
-  {
-    $this->startMs = $startMs;
-  }
-  public function getStartMs()
-  {
-    return $this->startMs;
   }
   public function setStatus($status)
   {

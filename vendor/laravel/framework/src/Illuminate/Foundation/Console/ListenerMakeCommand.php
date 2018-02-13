@@ -70,8 +70,8 @@ class ListenerMakeCommand extends GeneratorCommand
         }
 
         return $this->option('event')
-                    ? __DIR__.'/stubs/listener.stub'
-                    : __DIR__.'/stubs/listener-duck.stub';
+            ? __DIR__ . '/stubs/listener.stub'
+            : __DIR__ . '/stubs/listener-duck.stub';
     }
 
     /**

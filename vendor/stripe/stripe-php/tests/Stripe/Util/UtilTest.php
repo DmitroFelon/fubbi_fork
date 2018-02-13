@@ -15,8 +15,8 @@ class UtilTest extends TestCase
 
     public function testThatPHPHasValueSemanticsForArrays()
     {
-        $original = array('php-arrays' => 'value-semantics');
-        $derived = $original;
+        $original              = array('php-arrays' => 'value-semantics');
+        $derived               = $original;
         $derived['php-arrays'] = 'reference-semantics';
 
         $this->assertSame('value-semantics', $original['php-arrays']);
@@ -58,11 +58,11 @@ class UtilTest extends TestCase
         $enc = Util\Util::urlEncode($a);
         $this->assertSame('my=value&that%5Byour%5D=example&bar=1', $enc);
 
-        $a = array('that' => array('your' => 'example', 'foo' => null));
+        $a   = array('that' => array('your' => 'example', 'foo' => null));
         $enc = Util\Util::urlEncode($a);
         $this->assertSame('that%5Byour%5D=example', $enc);
 
-        $a = array('that' => 'example', 'foo' => array('bar', 'baz'));
+        $a   = array('that' => 'example', 'foo' => array('bar', 'baz'));
         $enc = Util\Util::urlEncode($a);
         $this->assertSame('that=example&foo%5B%5D=bar&foo%5B%5D=baz', $enc);
 
@@ -73,17 +73,17 @@ class UtilTest extends TestCase
             'baz' => null
         );
 
-        $enc = Util\Util::urlEncode($a);
+        $enc      = Util\Util::urlEncode($a);
         $expected = 'my=value&that%5Byour%5D%5B%5D=cheese'
-              . '&that%5Byour%5D%5B%5D=whiz&bar=1';
+            . '&that%5Byour%5D%5B%5D=whiz&bar=1';
         $this->assertSame($expected, $enc);
 
         // Ignores an empty array
-        $enc = Util\Util::urlEncode(array('foo' => array(), 'bar' => 'baz'));
+        $enc      = Util\Util::urlEncode(array('foo' => array(), 'bar' => 'baz'));
         $expected = 'bar=baz';
         $this->assertSame($expected, $enc);
 
-        $a = array('foo' => array(array('bar' => 'baz'), array('bar' => 'bin')));
+        $a   = array('foo' => array(array('bar' => 'baz'), array('bar' => 'bin')));
         $enc = Util\Util::urlEncode($a);
         $this->assertSame('foo%5B0%5D%5Bbar%5D=baz&foo%5B1%5D%5Bbar%5D=bin', $enc);
     }

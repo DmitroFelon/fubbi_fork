@@ -8,7 +8,7 @@ class BitcoinReceiverTest extends TestCase
     {
         $classUrl = BitcoinReceiver::classUrl('Stripe_BitcoinReceiver');
         $this->assertSame($classUrl, '/v1/bitcoin/receivers');
-        $receiver = new BitcoinReceiver('abcd/efgh');
+        $receiver    = new BitcoinReceiver('abcd/efgh');
         $instanceUrl = $receiver->instanceUrl();
         $this->assertSame($instanceUrl, '/v1/bitcoin/receivers/abcd%2Fefgh');
     }

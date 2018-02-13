@@ -95,10 +95,7 @@ class Google_Service_CloudMachineLearningEngine_Resource_ProjectsModels extends 
    * Lists the models in a project.
    *
    * Each project can contain multiple models, and each model can have multiple
-   * versions.
-   *
-   * If there are no models that match the request parameters, the list request
-   * returns an empty response body: {}. (models.listProjectsModels)
+   * versions. (models.listProjectsModels)
    *
    * @param string $parent Required. The name of the project whose models are to
    * be listed.

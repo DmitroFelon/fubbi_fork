@@ -17,7 +17,6 @@
 
 class Google_Service_Iam_Permission extends Google_Model
 {
-  public $apiDisabled;
   public $customRolesSupportLevel;
   public $description;
   public $name;
@@ -25,14 +24,6 @@ class Google_Service_Iam_Permission extends Google_Model
   public $stage;
   public $title;
 
-  public function setApiDisabled($apiDisabled)
-  {
-    $this->apiDisabled = $apiDisabled;
-  }
-  public function getApiDisabled()
-  {
-    return $this->apiDisabled;
-  }
   public function setCustomRolesSupportLevel($customRolesSupportLevel)
   {
     $this->customRolesSupportLevel = $customRolesSupportLevel;

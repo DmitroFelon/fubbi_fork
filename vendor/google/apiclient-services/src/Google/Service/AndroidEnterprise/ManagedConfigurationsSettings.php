@@ -19,7 +19,6 @@ class Google_Service_AndroidEnterprise_ManagedConfigurationsSettings extends Goo
 {
   protected $collection_key = 'managedProperty';
   public $kind;
-  public $lastUpdatedTimestampMillis;
   protected $managedPropertyType = 'Google_Service_AndroidEnterprise_ManagedProperty';
   protected $managedPropertyDataType = 'array';
   public $mcmId;
@@ -32,14 +31,6 @@ class Google_Service_AndroidEnterprise_ManagedConfigurationsSettings extends Goo
   public function getKind()
   {
     return $this->kind;
-  }
-  public function setLastUpdatedTimestampMillis($lastUpdatedTimestampMillis)
-  {
-    $this->lastUpdatedTimestampMillis = $lastUpdatedTimestampMillis;
-  }
-  public function getLastUpdatedTimestampMillis()
-  {
-    return $this->lastUpdatedTimestampMillis;
   }
   /**
    * @param Google_Service_AndroidEnterprise_ManagedProperty

@@ -9,26 +9,11 @@ use Illuminate\Support\Str;
 class RouteUrlGenerator
 {
     /**
-     * The URL generator instance.
-     *
-     * @var \Illuminate\Routing\UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * The request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * The named parameter defaults.
      *
      * @var array
      */
     public $defaultParameters = [];
-
     /**
      * Characters that should not be URL encoded.
      *
@@ -50,6 +35,18 @@ class RouteUrlGenerator
         '%23' => '#',
         '%25' => '%',
     ];
+    /**
+     * The URL generator instance.
+     *
+     * @var \Illuminate\Routing\UrlGenerator
+     */
+    protected $url;
+    /**
+     * The request instance.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
 
     /**
      * Create a new Route URL generator.
@@ -129,23 +126,6 @@ class RouteUrlGenerator
     }
 
     /**
-     * Get the scheme for the given route.
-     *
-     * @param  \Illuminate\Routing\Route  $route
-     * @return string
-     */
-    protected function getRouteScheme($route)
-    {
-        if ($route->httpOnly()) {
-            return 'http://';
-        } elseif ($route->httpsOnly()) {
-            return 'https://';
-        }
-
-        return $this->url->formatScheme(null);
-    }
-
-    /**
      * Add the port to the domain if necessary.
      *
      * @param  string  $domain
@@ -162,60 +142,20 @@ class RouteUrlGenerator
     }
 
     /**
-     * Replace the parameters on the root path.
+     * Get the scheme for the given route.
      *
      * @param  \Illuminate\Routing\Route  $route
-     * @param  string  $domain
-     * @param  array  $parameters
      * @return string
      */
-    protected function replaceRootParameters($route, $domain, &$parameters)
+    protected function getRouteScheme($route)
     {
-        $scheme = $this->getRouteScheme($route);
+        if ($route->httpOnly()) {
+            return 'http://';
+        } elseif ($route->httpsOnly()) {
+            return 'https://';
+        }
 
-        return $this->replaceRouteParameters(
-            $this->url->formatRoot($scheme, $domain), $parameters
-        );
-    }
-
-    /**
-     * Replace all of the wildcard parameters for a route path.
-     *
-     * @param  string  $path
-     * @param  array  $parameters
-     * @return string
-     */
-    protected function replaceRouteParameters($path, array &$parameters)
-    {
-        $path = $this->replaceNamedParameters($path, $parameters);
-
-        $path = preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
-            return (empty($parameters) && ! Str::endsWith($match[0], '?}'))
-                        ? $match[0]
-                        : array_shift($parameters);
-        }, $path);
-
-        return trim(preg_replace('/\{.*?\?\}/', '', $path), '/');
-    }
-
-    /**
-     * Replace all of the named parameters in the path.
-     *
-     * @param  string  $path
-     * @param  array  $parameters
-     * @return string
-     */
-    protected function replaceNamedParameters($path, &$parameters)
-    {
-        return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
-            if (isset($parameters[$m[1]])) {
-                return Arr::pull($parameters, $m[1]);
-            } elseif (isset($this->defaultParameters[$m[1]])) {
-                return $this->defaultParameters[$m[1]];
-            }
-
-            return $m[0];
-        }, $path);
+        return $this->url->formatScheme(null);
     }
 
     /**
@@ -290,6 +230,63 @@ class RouteUrlGenerator
     protected function getNumericParameters(array $parameters)
     {
         return array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * Replace the parameters on the root path.
+     *
+     * @param  \Illuminate\Routing\Route $route
+     * @param  string $domain
+     * @param  array $parameters
+     * @return string
+     */
+    protected function replaceRootParameters($route, $domain, &$parameters)
+    {
+        $scheme = $this->getRouteScheme($route);
+
+        return $this->replaceRouteParameters(
+            $this->url->formatRoot($scheme, $domain), $parameters
+        );
+    }
+
+    /**
+     * Replace all of the wildcard parameters for a route path.
+     *
+     * @param  string $path
+     * @param  array $parameters
+     * @return string
+     */
+    protected function replaceRouteParameters($path, array &$parameters)
+    {
+        $path = $this->replaceNamedParameters($path, $parameters);
+
+        $path = preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
+            return (empty($parameters) && !Str::endsWith($match[0], '?}'))
+                ? $match[0]
+                : array_shift($parameters);
+        }, $path);
+
+        return trim(preg_replace('/\{.*?\?\}/', '', $path), '/');
+    }
+
+    /**
+     * Replace all of the named parameters in the path.
+     *
+     * @param  string $path
+     * @param  array $parameters
+     * @return string
+     */
+    protected function replaceNamedParameters($path, &$parameters)
+    {
+        return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
+            if (isset($parameters[$m[1]])) {
+                return Arr::pull($parameters, $m[1]);
+            } elseif (isset($this->defaultParameters[$m[1]])) {
+                return $this->defaultParameters[$m[1]];
+            }
+
+            return $m[0];
+        }, $path);
     }
 
     /**

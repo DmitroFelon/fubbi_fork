@@ -53,15 +53,13 @@ class SqlServerConnector extends Connector implements ConnectorInterface
     }
 
     /**
-     * Determine if the database configuration prefers ODBC.
+     * Get the available PDO drivers.
      *
-     * @param  array  $config
-     * @return bool
+     * @return array
      */
-    protected function prefersOdbc(array $config)
+    protected function getAvailableDrivers()
     {
-        return in_array('odbc', $this->getAvailableDrivers()) &&
-               ($config['odbc'] ?? null) === true;
+        return PDO::getAvailableDrivers();
     }
 
     /**
@@ -76,6 +74,48 @@ class SqlServerConnector extends Connector implements ConnectorInterface
             'host' => $this->buildHostString($config, ':'),
             'dbname' => $config['database'],
         ], Arr::only($config, ['appname', 'charset', 'version'])));
+    }
+
+    /**
+     * Build a connection string from the given arguments.
+     *
+     * @param  string $driver
+     * @param  array $arguments
+     * @return string
+     */
+    protected function buildConnectString($driver, array $arguments)
+    {
+        return $driver . ':' . implode(';', array_map(function ($key) use ($arguments) {
+            return sprintf('%s=%s', $key, $arguments[$key]);
+        }, array_keys($arguments)));
+    }
+
+    /**
+     * Build a host string from the given configuration.
+     *
+     * @param  array $config
+     * @param  string $separator
+     * @return string
+     */
+    protected function buildHostString(array $config, $separator)
+    {
+        if (isset($config['port']) && !empty($config['port'])) {
+            return $config['host'] . $separator . $config['port'];
+        } else {
+            return $config['host'];
+        }
+    }
+
+    /**
+     * Determine if the database configuration prefers ODBC.
+     *
+     * @param  array $config
+     * @return bool
+     */
+    protected function prefersOdbc(array $config)
+    {
+        return in_array('odbc', $this->getAvailableDrivers()) &&
+        ($config['odbc'] ?? null) === true;
     }
 
     /**
@@ -139,45 +179,5 @@ class SqlServerConnector extends Connector implements ConnectorInterface
         }
 
         return $this->buildConnectString('sqlsrv', $arguments);
-    }
-
-    /**
-     * Build a connection string from the given arguments.
-     *
-     * @param  string  $driver
-     * @param  array  $arguments
-     * @return string
-     */
-    protected function buildConnectString($driver, array $arguments)
-    {
-        return $driver.':'.implode(';', array_map(function ($key) use ($arguments) {
-            return sprintf('%s=%s', $key, $arguments[$key]);
-        }, array_keys($arguments)));
-    }
-
-    /**
-     * Build a host string from the given configuration.
-     *
-     * @param  array  $config
-     * @param  string  $separator
-     * @return string
-     */
-    protected function buildHostString(array $config, $separator)
-    {
-        if (isset($config['port']) && ! empty($config['port'])) {
-            return $config['host'].$separator.$config['port'];
-        } else {
-            return $config['host'];
-        }
-    }
-
-    /**
-     * Get the available PDO drivers.
-     *
-     * @return array
-     */
-    protected function getAvailableDrivers()
-    {
-        return PDO::getAvailableDrivers();
     }
 }

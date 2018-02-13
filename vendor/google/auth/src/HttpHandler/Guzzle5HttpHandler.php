@@ -108,7 +108,7 @@ class Guzzle5HttpHandler
         return $this->client->createRequest(
             $request->getMethod(),
             $request->getUri(),
-            array_merge_recursive([
+            array_merge([
                 'headers' => $request->getHeaders(),
                 'body' => $request->getBody(),
             ], $options)

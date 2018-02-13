@@ -311,8 +311,6 @@ class Client
     /**
      * Notify Bugsnag of a deployment.
      *
-     * @deprecated This function is being deprecated in favour of `build`.
-     *
      * @param string|null $repository the repository from which you are deploying the code
      * @param string|null $branch     the source control branch from which you are deploying
      * @param string|null $revision   the source control revision you are currently deploying
@@ -321,40 +319,21 @@ class Client
      */
     public function deploy($repository = null, $branch = null, $revision = null)
     {
-        $this->build($repository, $revision);
-    }
-
-    /**
-     * Notify Bugsnag of a build.
-     *
-     * @param string|null $repository  the repository from which you are deploying the code
-     * @param string|null $revision    the source control revision you are currently deploying
-     * @param string|null $provider    the provider of the source control for the build
-     * @param string|null $builderName the name of who or what is making the build
-     *
-     * @return void
-     */
-    public function build($repository = null, $revision = null, $provider = null, $builderName = null)
-    {
         $data = [];
 
         if ($repository) {
             $data['repository'] = $repository;
         }
 
+        if ($branch) {
+            $data['branch'] = $branch;
+        }
+
         if ($revision) {
             $data['revision'] = $revision;
         }
 
-        if ($provider) {
-            $data['provider'] = $provider;
-        }
-
-        if ($builderName) {
-            $data['builder'] = $builderName;
-        }
-
-        $this->http->sendBuildReport($data);
+        $this->http->deploy($data);
     }
 
     /**

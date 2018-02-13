@@ -19,7 +19,6 @@ class Google_Service_Vision_Symbol extends Google_Model
 {
   protected $boundingBoxType = 'Google_Service_Vision_BoundingPoly';
   protected $boundingBoxDataType = '';
-  public $confidence;
   protected $propertyType = 'Google_Service_Vision_TextProperty';
   protected $propertyDataType = '';
   public $text;
@@ -37,14 +36,6 @@ class Google_Service_Vision_Symbol extends Google_Model
   public function getBoundingBox()
   {
     return $this->boundingBox;
-  }
-  public function setConfidence($confidence)
-  {
-    $this->confidence = $confidence;
-  }
-  public function getConfidence()
-  {
-    return $this->confidence;
   }
   /**
    * @param Google_Service_Vision_TextProperty

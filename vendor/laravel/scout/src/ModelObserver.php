@@ -94,21 +94,6 @@ class ModelObserver
     }
 
     /**
-     * Handle the force deleted event for the model.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return void
-     */
-    public function forceDeleted($model)
-    {
-        if (static::syncingDisabledFor($model)) {
-            return;
-        }
-
-        $model->unsearchable();
-    }
-
-    /**
      * Handle the restored event for the model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model

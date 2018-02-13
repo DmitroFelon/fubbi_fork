@@ -14,7 +14,7 @@ class InvoiceTest extends TestCase
         );
         $resources = Invoice::all();
         $this->assertTrue(is_array($resources->data));
-        $this->assertInstanceOf("Stripe\\Invoice", $resources->data[0]);
+        $this->assertSame("Stripe\\Invoice", get_class($resources->data[0]));
     }
 
     public function testIsRetrievable()
@@ -24,7 +24,7 @@ class InvoiceTest extends TestCase
             '/v1/invoices/' . self::TEST_RESOURCE_ID
         );
         $resource = Invoice::retrieve(self::TEST_RESOURCE_ID);
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
     }
 
     public function testIsCreatable()
@@ -36,19 +36,19 @@ class InvoiceTest extends TestCase
         $resource = Invoice::create(array(
             "customer" => "cus_123"
         ));
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
     }
 
     public function testIsSaveable()
     {
-        $resource = Invoice::retrieve(self::TEST_RESOURCE_ID);
+        $resource                  = Invoice::retrieve(self::TEST_RESOURCE_ID);
         $resource->metadata["key"] = "value";
         $this->expectsRequest(
             'post',
             '/v1/invoices/' . self::TEST_RESOURCE_ID
         );
         $resource->save();
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
     }
 
     public function testIsUpdatable()
@@ -60,7 +60,7 @@ class InvoiceTest extends TestCase
         $resource = Invoice::update(self::TEST_RESOURCE_ID, array(
             "metadata" => array("key" => "value"),
         ));
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
     }
 
     public function testCanRetrieveUpcoming()
@@ -70,7 +70,7 @@ class InvoiceTest extends TestCase
             '/v1/invoices/upcoming'
         );
         $resource = Invoice::upcoming(array("customer" => "cus_123"));
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
     }
 
     public function testIsPayable()
@@ -81,7 +81,7 @@ class InvoiceTest extends TestCase
             '/v1/invoices/' . $invoice->id . '/pay'
         );
         $resource = $invoice->pay();
-        $this->assertInstanceOf("Stripe\\Invoice", $resource);
+        $this->assertSame("Stripe\\Invoice", get_class($resource));
         $this->assertSame($resource, $invoice);
     }
 }

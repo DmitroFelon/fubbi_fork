@@ -18,11 +18,28 @@
 class Google_Service_CloudMachineLearningEngine_GoogleIamV1Policy extends Google_Collection
 {
   protected $collection_key = 'bindings';
+  protected $auditConfigsType = 'Google_Service_CloudMachineLearningEngine_GoogleIamV1AuditConfig';
+  protected $auditConfigsDataType = 'array';
   protected $bindingsType = 'Google_Service_CloudMachineLearningEngine_GoogleIamV1Binding';
   protected $bindingsDataType = 'array';
   public $etag;
+  public $iamOwned;
   public $version;
 
+  /**
+   * @param Google_Service_CloudMachineLearningEngine_GoogleIamV1AuditConfig
+   */
+  public function setAuditConfigs($auditConfigs)
+  {
+    $this->auditConfigs = $auditConfigs;
+  }
+  /**
+   * @return Google_Service_CloudMachineLearningEngine_GoogleIamV1AuditConfig
+   */
+  public function getAuditConfigs()
+  {
+    return $this->auditConfigs;
+  }
   /**
    * @param Google_Service_CloudMachineLearningEngine_GoogleIamV1Binding
    */
@@ -44,6 +61,14 @@ class Google_Service_CloudMachineLearningEngine_GoogleIamV1Policy extends Google
   public function getEtag()
   {
     return $this->etag;
+  }
+  public function setIamOwned($iamOwned)
+  {
+    $this->iamOwned = $iamOwned;
+  }
+  public function getIamOwned()
+  {
+    return $this->iamOwned;
   }
   public function setVersion($version)
   {

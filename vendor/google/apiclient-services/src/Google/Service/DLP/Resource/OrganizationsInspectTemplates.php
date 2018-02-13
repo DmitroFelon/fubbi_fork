@@ -45,8 +45,7 @@ class Google_Service_DLP_Resource_OrganizationsInspectTemplates extends Google_S
    * Deletes inspect templates. (inspectTemplates.delete)
    *
    * @param string $name Resource name of the organization and inspectTemplate to
-   * be deleted, for example `organizations/433245324/inspectTemplates/432452342`
-   * or projects/project-id/inspectTemplates/432452342.
+   * be deleted, for example `organizations/433245324/inspectTemplates/432452342`.
    * @param array $optParams Optional parameters.
    * @return Google_Service_DLP_GoogleProtobufEmpty
    */
@@ -60,8 +59,7 @@ class Google_Service_DLP_Resource_OrganizationsInspectTemplates extends Google_S
    * Gets an inspect template. (inspectTemplates.get)
    *
    * @param string $name Resource name of the organization and inspectTemplate to
-   * be read, for example `organizations/433245324/inspectTemplates/432452342` or
-   * projects/project-id/inspectTemplates/432452342.
+   * be read, for example `organizations/433245324/inspectTemplates/432452342`.
    * @param array $optParams Optional parameters.
    * @return Google_Service_DLP_GooglePrivacyDlpV2beta2InspectTemplate
    */
@@ -94,8 +92,7 @@ class Google_Service_DLP_Resource_OrganizationsInspectTemplates extends Google_S
    * Updates the inspect template. (inspectTemplates.patch)
    *
    * @param string $name Resource name of organization and inspectTemplate to be
-   * updated, for example `organizations/433245324/inspectTemplates/432452342` or
-   * projects/project-id/inspectTemplates/432452342.
+   * updated, for example `organizations/433245324/inspectTemplates/432452342`.
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2UpdateInspectTemplateRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_DLP_GooglePrivacyDlpV2beta2InspectTemplate

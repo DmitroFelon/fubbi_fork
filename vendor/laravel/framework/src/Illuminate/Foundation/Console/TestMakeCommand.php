@@ -39,7 +39,7 @@ class TestMakeCommand extends GeneratorCommand
             return __DIR__.'/stubs/unit-test.stub';
         }
 
-        return __DIR__.'/stubs/test.stub';
+        return __DIR__ . '/stubs/test.stub';
     }
 
     /**
@@ -52,7 +52,17 @@ class TestMakeCommand extends GeneratorCommand
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return base_path('tests').str_replace('\\', '/', $name).'.php';
+        return $this->laravel->basePath().'/tests'.str_replace('\\', '/', $name).'.php';
+    }
+
+    /**
+     * Get the root namespace for the class.
+     *
+     * @return string
+     */
+    protected function rootNamespace()
+    {
+        return 'Tests';
     }
 
     /**
@@ -68,15 +78,5 @@ class TestMakeCommand extends GeneratorCommand
         } else {
             return $rootNamespace.'\Feature';
         }
-    }
-
-    /**
-     * Get the root namespace for the class.
-     *
-     * @return string
-     */
-    protected function rootNamespace()
-    {
-        return 'Tests';
     }
 }

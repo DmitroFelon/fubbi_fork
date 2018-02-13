@@ -9,38 +9,32 @@ namespace Stripe;
  * @property string $object
  * @property int $amount
  * @property int $amount_refunded
- * @property string $application
- * @property string $application_fee
+ * @property mixed $application_fee
  * @property string $balance_transaction
  * @property bool $captured
  * @property int $created
  * @property string $currency
  * @property string $customer
- * @property string $description
- * @property string $destination
- * @property string $dispute
- * @property string $failure_code
- * @property string $failure_message
+ * @property mixed $description
+ * @property mixed $destination
+ * @property string|null $dispute
+ * @property mixed $failure_code
+ * @property mixed $failure_message
  * @property mixed $fraud_details
- * @property string $invoice
+ * @property mixed $invoice
  * @property bool $livemode
- * @property AttachedObject $metadata
- * @property string $on_behalf_of
- * @property string $order
- * @property mixed $outcome
+ * @property mixed $metadata
+ * @property mixed $order
  * @property bool $paid
- * @property string $receipt_email
- * @property string $receipt_number
+ * @property mixed $receipt_email
+ * @property mixed $receipt_number
  * @property bool $refunded
- * @property Collection $refunds
- * @property string $review
+ * @property mixed $refunds
  * @property mixed $shipping
  * @property mixed $source
- * @property string $source_transfer
- * @property string $statement_descriptor
+ * @property mixed $source_transfer
+ * @property mixed $statement_descriptor
  * @property string $status
- * @property string $transfer
- * @property string $transfer_group
  *
  * @package Stripe
  */

@@ -14,7 +14,7 @@ class ProductTest extends TestCase
         );
         $resources = Product::all();
         $this->assertTrue(is_array($resources->data));
-        $this->assertInstanceOf("Stripe\\Product", $resources->data[0]);
+        $this->assertSame("Stripe\\Product", get_class($resources->data[0]));
     }
 
     public function testIsRetrievable()
@@ -24,7 +24,7 @@ class ProductTest extends TestCase
             '/v1/products/' . self::TEST_RESOURCE_ID
         );
         $resource = Product::retrieve(self::TEST_RESOURCE_ID);
-        $this->assertInstanceOf("Stripe\\Product", $resource);
+        $this->assertSame("Stripe\\Product", get_class($resource));
     }
 
     public function testIsCreatable()
@@ -36,19 +36,19 @@ class ProductTest extends TestCase
         $resource = Product::create(array(
             'name' => 'name'
         ));
-        $this->assertInstanceOf("Stripe\\Product", $resource);
+        $this->assertSame("Stripe\\Product", get_class($resource));
     }
 
     public function testIsSaveable()
     {
-        $resource = Product::retrieve(self::TEST_RESOURCE_ID);
+        $resource                  = Product::retrieve(self::TEST_RESOURCE_ID);
         $resource->metadata["key"] = "value";
         $this->expectsRequest(
             'post',
             '/v1/products/' . self::TEST_RESOURCE_ID
         );
         $resource->save();
-        $this->assertInstanceOf("Stripe\\Product", $resource);
+        $this->assertSame("Stripe\\Product", get_class($resource));
     }
 
     public function testIsUpdatable()
@@ -60,7 +60,7 @@ class ProductTest extends TestCase
         $resource = Product::update(self::TEST_RESOURCE_ID, array(
             "metadata" => array("key" => "value"),
         ));
-        $this->assertInstanceOf("Stripe\\Product", $resource);
+        $this->assertSame("Stripe\\Product", get_class($resource));
     }
 
     public function testIsDeletable()
@@ -71,6 +71,6 @@ class ProductTest extends TestCase
             '/v1/products/' . self::TEST_RESOURCE_ID
         );
         $resource->delete();
-        $this->assertInstanceOf("Stripe\\Product", $resource);
+        $this->assertSame("Stripe\\Product", get_class($resource));
     }
 }

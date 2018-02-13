@@ -11,8 +11,9 @@
 namespace PHPUnit\Framework\Constraint;
 
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
-class ArraySubsetTest extends ConstraintTestCase
+class ArraySubsetTest extends TestCase
 {
     /**
      * @param bool               $expected

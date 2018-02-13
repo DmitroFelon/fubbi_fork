@@ -20,7 +20,6 @@ class Google_Service_Vision_Word extends Google_Collection
   protected $collection_key = 'symbols';
   protected $boundingBoxType = 'Google_Service_Vision_BoundingPoly';
   protected $boundingBoxDataType = '';
-  public $confidence;
   protected $propertyType = 'Google_Service_Vision_TextProperty';
   protected $propertyDataType = '';
   protected $symbolsType = 'Google_Service_Vision_Symbol';
@@ -39,14 +38,6 @@ class Google_Service_Vision_Word extends Google_Collection
   public function getBoundingBox()
   {
     return $this->boundingBox;
-  }
-  public function setConfidence($confidence)
-  {
-    $this->confidence = $confidence;
-  }
-  public function getConfidence()
-  {
-    return $this->confidence;
   }
   /**
    * @param Google_Service_Vision_TextProperty

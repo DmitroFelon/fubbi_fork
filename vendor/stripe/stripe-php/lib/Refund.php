@@ -8,13 +8,11 @@ namespace Stripe;
  * @property string $id
  * @property string $object
  * @property int $amount
- * @property string $balance_transaction
+ * @property mixed $balance_transaction
  * @property string $charge
  * @property int $created
  * @property string $currency
- * @property string $failure_balance_transaction
- * @property string failure_reason
- * @property AttachedObject $metadata
+ * @property mixed $metadata
  * @property mixed $reason
  * @property mixed $receipt_number
  * @property string $status

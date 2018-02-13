@@ -19,7 +19,6 @@ class Google_Service_FirebaseDynamicLinks_DeviceInfo extends Google_Model
 {
   public $deviceModelName;
   public $languageCode;
-  public $languageCodeFromWebview;
   public $languageCodeRaw;
   public $screenResolutionHeight;
   public $screenResolutionWidth;
@@ -40,14 +39,6 @@ class Google_Service_FirebaseDynamicLinks_DeviceInfo extends Google_Model
   public function getLanguageCode()
   {
     return $this->languageCode;
-  }
-  public function setLanguageCodeFromWebview($languageCodeFromWebview)
-  {
-    $this->languageCodeFromWebview = $languageCodeFromWebview;
-  }
-  public function getLanguageCodeFromWebview()
-  {
-    return $this->languageCodeFromWebview;
   }
   public function setLanguageCodeRaw($languageCodeRaw)
   {

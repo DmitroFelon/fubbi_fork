@@ -160,6 +160,16 @@ class Google_Service_FirebaseRules extends Google_Service
                   'required' => true,
                 ),
               ),
+            ),'update' => array(
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
             ),
           )
         )

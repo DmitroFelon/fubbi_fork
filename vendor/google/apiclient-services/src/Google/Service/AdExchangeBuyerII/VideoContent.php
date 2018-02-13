@@ -18,7 +18,6 @@
 class Google_Service_AdExchangeBuyerII_VideoContent extends Google_Model
 {
   public $videoUrl;
-  public $videoVastXml;
 
   public function setVideoUrl($videoUrl)
   {
@@ -27,13 +26,5 @@ class Google_Service_AdExchangeBuyerII_VideoContent extends Google_Model
   public function getVideoUrl()
   {
     return $this->videoUrl;
-  }
-  public function setVideoVastXml($videoVastXml)
-  {
-    $this->videoVastXml = $videoVastXml;
-  }
-  public function getVideoVastXml()
-  {
-    return $this->videoVastXml;
   }
 }

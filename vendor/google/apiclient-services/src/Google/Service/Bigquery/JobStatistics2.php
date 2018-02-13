@@ -32,8 +32,6 @@ class Google_Service_Bigquery_JobStatistics2 extends Google_Collection
   protected $schemaType = 'Google_Service_Bigquery_TableSchema';
   protected $schemaDataType = '';
   public $statementType;
-  protected $timelineType = 'Google_Service_Bigquery_QueryTimelineSample';
-  protected $timelineDataType = 'array';
   public $totalBytesBilled;
   public $totalBytesProcessed;
   public $totalSlotMs;
@@ -143,20 +141,6 @@ class Google_Service_Bigquery_JobStatistics2 extends Google_Collection
   public function getStatementType()
   {
     return $this->statementType;
-  }
-  /**
-   * @param Google_Service_Bigquery_QueryTimelineSample
-   */
-  public function setTimeline($timeline)
-  {
-    $this->timeline = $timeline;
-  }
-  /**
-   * @return Google_Service_Bigquery_QueryTimelineSample
-   */
-  public function getTimeline()
-  {
-    return $this->timeline;
   }
   public function setTotalBytesBilled($totalBytesBilled)
   {

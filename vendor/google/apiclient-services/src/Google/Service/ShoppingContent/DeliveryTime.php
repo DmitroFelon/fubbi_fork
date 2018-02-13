@@ -15,28 +15,11 @@
  * the License.
  */
 
-class Google_Service_ShoppingContent_DeliveryTime extends Google_Collection
+class Google_Service_ShoppingContent_DeliveryTime extends Google_Model
 {
-  protected $collection_key = 'holidayCutoffs';
-  protected $holidayCutoffsType = 'Google_Service_ShoppingContent_HolidayCutoff';
-  protected $holidayCutoffsDataType = 'array';
   public $maxTransitTimeInDays;
   public $minTransitTimeInDays;
 
-  /**
-   * @param Google_Service_ShoppingContent_HolidayCutoff
-   */
-  public function setHolidayCutoffs($holidayCutoffs)
-  {
-    $this->holidayCutoffs = $holidayCutoffs;
-  }
-  /**
-   * @return Google_Service_ShoppingContent_HolidayCutoff
-   */
-  public function getHolidayCutoffs()
-  {
-    return $this->holidayCutoffs;
-  }
   public function setMaxTransitTimeInDays($maxTransitTimeInDays)
   {
     $this->maxTransitTimeInDays = $maxTransitTimeInDays;

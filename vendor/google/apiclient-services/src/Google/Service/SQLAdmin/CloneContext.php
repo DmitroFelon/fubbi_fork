@@ -21,7 +21,6 @@ class Google_Service_SQLAdmin_CloneContext extends Google_Model
   protected $binLogCoordinatesDataType = '';
   public $destinationInstanceName;
   public $kind;
-  public $pitrTimestampMs;
 
   /**
    * @param Google_Service_SQLAdmin_BinLogCoordinates
@@ -52,13 +51,5 @@ class Google_Service_SQLAdmin_CloneContext extends Google_Model
   public function getKind()
   {
     return $this->kind;
-  }
-  public function setPitrTimestampMs($pitrTimestampMs)
-  {
-    $this->pitrTimestampMs = $pitrTimestampMs;
-  }
-  public function getPitrTimestampMs()
-  {
-    return $this->pitrTimestampMs;
   }
 }

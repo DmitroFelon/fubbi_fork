@@ -170,9 +170,6 @@ class Configuration
         $this->xpath    = new DOMXPath($this->document);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     final private function __clone()
     {
     }

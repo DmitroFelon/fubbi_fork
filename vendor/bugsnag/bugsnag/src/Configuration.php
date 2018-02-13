@@ -14,13 +14,6 @@ class Configuration
     const SESSION_ENDPOINT = 'https://sessions.bugsnag.com';
 
     /**
-     * The default build endpoint.
-     *
-     * @var string
-     */
-    const BUILD_ENDPOINT = 'https://build.bugsnag.com';
-
-    /**
      * The Bugnsag API Key.
      *
      * @var string
@@ -76,7 +69,7 @@ class Configuration
      */
     protected $notifier = [
         'name' => 'Bugsnag PHP (Official)',
-        'version' => '3.12.0',
+        'version' => '3.11.0',
         'url' => 'https://bugsnag.com',
     ];
 
@@ -135,13 +128,6 @@ class Configuration
      * @var string
      */
     protected $sessionEndpoint = self::SESSION_ENDPOINT;
-
-    /**
-     * The endpoint to deliver build notifications to.
-     *
-     * @var string
-     */
-    protected $buildEndpoint;
 
     /**
      * Create a new config instance.
@@ -581,33 +567,5 @@ class Configuration
     public function shouldCaptureSessions()
     {
         return $this->autoCaptureSessions;
-    }
-
-    /**
-     * Sets the build endpoint.
-     *
-     * @param string $endpoint the build endpoint
-     *
-     * @return $this
-     */
-    public function setBuildEndpoint($endpoint)
-    {
-        $this->buildEndpoint = $endpoint;
-
-        return $this;
-    }
-
-    /**
-     * Returns the build endpoint.
-     *
-     * @return string
-     */
-    public function getBuildEndpoint()
-    {
-        if (isset($this->buildEndpoint)) {
-            return $this->buildEndpoint;
-        }
-
-        return self::BUILD_ENDPOINT;
     }
 }

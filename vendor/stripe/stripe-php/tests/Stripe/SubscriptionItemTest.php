@@ -14,7 +14,7 @@ class SubscriptionItemTest extends TestCase
         );
         $resources = SubscriptionItem::all();
         $this->assertTrue(is_array($resources->data));
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resources->data[0]);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resources->data[0]));
     }
 
     public function testIsRetrievable()
@@ -24,7 +24,7 @@ class SubscriptionItemTest extends TestCase
             '/v1/subscription_items/' . self::TEST_RESOURCE_ID
         );
         $resource = SubscriptionItem::retrieve(self::TEST_RESOURCE_ID);
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resource);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resource));
     }
 
     public function testIsCreatable()
@@ -37,19 +37,19 @@ class SubscriptionItemTest extends TestCase
             "plan" => "plan",
             "subscription" => "sub_123"
         ));
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resource);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resource));
     }
 
     public function testIsSaveable()
     {
-        $resource = SubscriptionItem::retrieve(self::TEST_RESOURCE_ID);
+        $resource                  = SubscriptionItem::retrieve(self::TEST_RESOURCE_ID);
         $resource->metadata["key"] = "value";
         $this->expectsRequest(
             'post',
             '/v1/subscription_items/' . $resource->id
         );
         $resource->save();
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resource);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resource));
     }
 
     public function testIsUpdatable()
@@ -61,7 +61,7 @@ class SubscriptionItemTest extends TestCase
         $resource = SubscriptionItem::update(self::TEST_RESOURCE_ID, array(
             "metadata" => array("key" => "value"),
         ));
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resource);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resource));
     }
 
     public function testIsDeletable()
@@ -72,6 +72,6 @@ class SubscriptionItemTest extends TestCase
             '/v1/subscription_items/' . $resource->id
         );
         $resource->delete();
-        $this->assertInstanceOf("Stripe\\SubscriptionItem", $resource);
+        $this->assertSame("Stripe\\SubscriptionItem", get_class($resource));
     }
 }

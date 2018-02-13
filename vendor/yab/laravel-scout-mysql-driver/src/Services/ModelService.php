@@ -10,11 +10,7 @@ class ModelService
 
     public $connectionName;
 
-    public $tablePrefix;
-
     public $tableName;
-
-    public $tablePrefixedName;
 
     public $indexName;
 
@@ -29,11 +25,7 @@ class ModelService
         $this->connectionName = $modelInstance->getConnectionName() !== null ?
             $modelInstance->getConnectionName() : config('database.default');
 
-        $this->tablePrefix = config("database.connections.$this->connectionName.prefix", '');
-
-        $this->tableName = $modelInstance->getTable();
-
-        $this->tablePrefixedName = $this->tablePrefix.$this->tableName;
+        $this->tableName = config("database.connections.$this->connectionName.prefix", '').$modelInstance->getTable();
 
         $this->indexName = $modelInstance->searchableAs();
 
@@ -48,7 +40,7 @@ class ModelService
         foreach ($searchableFields as $searchableField) {
 
             //@TODO cache this.
-            $sql = "SHOW FIELDS FROM $this->tablePrefixedName where Field = ?";
+            $sql = "SHOW FIELDS FROM $this->tableName where Field = ?";
             $column = DB::connection($this->connectionName)->select($sql, [$searchableField]);
 
             if (!isset($column[0])) {

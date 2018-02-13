@@ -19,7 +19,6 @@ class Google_Service_Monitoring_ListUptimeCheckConfigsResponse extends Google_Co
 {
   protected $collection_key = 'uptimeCheckConfigs';
   public $nextPageToken;
-  public $totalSize;
   protected $uptimeCheckConfigsType = 'Google_Service_Monitoring_UptimeCheckConfig';
   protected $uptimeCheckConfigsDataType = 'array';
 
@@ -30,14 +29,6 @@ class Google_Service_Monitoring_ListUptimeCheckConfigsResponse extends Google_Co
   public function getNextPageToken()
   {
     return $this->nextPageToken;
-  }
-  public function setTotalSize($totalSize)
-  {
-    $this->totalSize = $totalSize;
-  }
-  public function getTotalSize()
-  {
-    return $this->totalSize;
   }
   /**
    * @param Google_Service_Monitoring_UptimeCheckConfig

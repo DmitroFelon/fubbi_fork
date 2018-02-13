@@ -23,10 +23,7 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   public $createdAt;
   public $currency;
   public $displayString;
-  public $isSuperChatForGood;
   public $messageType;
-  protected $nonprofitType = 'Google_Service_YouTube_Nonprofit';
-  protected $nonprofitDataType = '';
   protected $supporterDetailsType = 'Google_Service_YouTube_ChannelProfileDetails';
   protected $supporterDetailsDataType = '';
 
@@ -78,14 +75,6 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   {
     return $this->displayString;
   }
-  public function setIsSuperChatForGood($isSuperChatForGood)
-  {
-    $this->isSuperChatForGood = $isSuperChatForGood;
-  }
-  public function getIsSuperChatForGood()
-  {
-    return $this->isSuperChatForGood;
-  }
   public function setMessageType($messageType)
   {
     $this->messageType = $messageType;
@@ -93,20 +82,6 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   public function getMessageType()
   {
     return $this->messageType;
-  }
-  /**
-   * @param Google_Service_YouTube_Nonprofit
-   */
-  public function setNonprofit(Google_Service_YouTube_Nonprofit $nonprofit)
-  {
-    $this->nonprofit = $nonprofit;
-  }
-  /**
-   * @return Google_Service_YouTube_Nonprofit
-   */
-  public function getNonprofit()
-  {
-    return $this->nonprofit;
   }
   /**
    * @param Google_Service_YouTube_ChannelProfileDetails

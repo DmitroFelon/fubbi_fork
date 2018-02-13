@@ -2,11 +2,6 @@
 
 All notable changes to `eloquent-sortable` will be documented in this file
 
-## 3.4.2 - 2018-02-08
-
-- add support for L5.6
-- drop support for anything lower that L5.5
-
 ## 3.4.1
 
 - fix deps

@@ -18,7 +18,6 @@
 class Google_Service_AndroidEnterprise_NewDeviceEvent extends Google_Model
 {
   public $deviceId;
-  public $dpcPackageName;
   public $managementType;
   public $userId;
 
@@ -29,14 +28,6 @@ class Google_Service_AndroidEnterprise_NewDeviceEvent extends Google_Model
   public function getDeviceId()
   {
     return $this->deviceId;
-  }
-  public function setDpcPackageName($dpcPackageName)
-  {
-    $this->dpcPackageName = $dpcPackageName;
-  }
-  public function getDpcPackageName()
-  {
-    return $this->dpcPackageName;
   }
   public function setManagementType($managementType)
   {

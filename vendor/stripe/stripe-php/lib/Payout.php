@@ -17,7 +17,7 @@ namespace Stripe;
  * @property string $failure_code
  * @property string $failure_message
  * @property bool $livemode
- * @property AttachedObject $metadata
+ * @property mixed $metadata
  * @property string $method
  * @property string $recipient
  * @property string $source_type

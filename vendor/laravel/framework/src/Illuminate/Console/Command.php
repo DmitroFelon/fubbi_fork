@@ -158,6 +158,26 @@ class Command extends SymfonyCommand
     }
 
     /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
+    }
+
+    /**
      * Run the console command.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
@@ -172,18 +192,6 @@ class Command extends SymfonyCommand
     }
 
     /**
-     * Execute the console command.
-     *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return mixed
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        return $this->laravel->call([$this, 'handle']);
-    }
-
-    /**
      * Call another console command.
      *
      * @param  string  $command
@@ -195,7 +203,7 @@ class Command extends SymfonyCommand
         $arguments['command'] = $command;
 
         return $this->getApplication()->find($command)->run(
-            $this->createInputFromArguments($arguments), $this->output
+            new ArrayInput($arguments), $this->output
         );
     }
 
@@ -211,23 +219,8 @@ class Command extends SymfonyCommand
         $arguments['command'] = $command;
 
         return $this->getApplication()->find($command)->run(
-            $this->createInputFromArguments($arguments), new NullOutput
+            new ArrayInput($arguments), new NullOutput
         );
-    }
-
-    /**
-     * Create an input instance from the given arguments.
-     *
-     * @param  array  $arguments
-     * @return \Symfony\Component\Console\Input\ArrayInput
-     */
-    protected function createInputFromArguments(array $arguments)
-    {
-        return tap(new ArrayInput($arguments), function ($input) {
-            if ($input->hasParameterOption(['--no-interaction'], true)) {
-                $input->setInteractive(false);
-            }
-        });
     }
 
     /**
@@ -239,6 +232,16 @@ class Command extends SymfonyCommand
     public function hasArgument($name)
     {
         return $this->input->hasArgument($name);
+    }
+
+    /**
+     * Get all of the arguments passed to the command.
+     *
+     * @return array
+     */
+    public function arguments()
+    {
+        return $this->argument();
     }
 
     /**
@@ -257,24 +260,24 @@ class Command extends SymfonyCommand
     }
 
     /**
-     * Get all of the arguments passed to the command.
-     *
-     * @return array
-     */
-    public function arguments()
-    {
-        return $this->argument();
-    }
-
-    /**
      * Determine if the given option is present.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     public function hasOption($name)
     {
         return $this->input->hasOption($name);
+    }
+
+    /**
+     * Get all of the options passed to the command.
+     *
+     * @return array
+     */
+    public function options()
+    {
+        return $this->option();
     }
 
     /**
@@ -290,16 +293,6 @@ class Command extends SymfonyCommand
         }
 
         return $this->input->getOption($key);
-    }
-
-    /**
-     * Get all of the options passed to the command.
-     *
-     * @return array
-     */
-    public function options()
-    {
-        return $this->option();
     }
 
     /**
@@ -445,15 +438,20 @@ class Command extends SymfonyCommand
     }
 
     /**
-     * Write a string as comment output.
+     * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
-     * @param  string  $string
-     * @param  null|int|string  $verbosity
-     * @return void
+     * @param  string|int $level
+     * @return int
      */
-    public function comment($string, $verbosity = null)
+    protected function parseVerbosity($level = null)
     {
-        $this->line($string, 'comment', $verbosity);
+        if (isset($this->verbosityMap[$level])) {
+            $level = $this->verbosityMap[$level];
+        } elseif (!is_int($level)) {
+            $level = $this->verbosity;
+        }
+
+        return $level;
     }
 
     /**
@@ -510,55 +508,19 @@ class Command extends SymfonyCommand
         $this->comment('*     '.$string.'     *');
         $this->comment(str_repeat('*', strlen($string) + 12));
 
-        $this->output->newLine();
+        $this->output->writeln('');
     }
 
     /**
-     * Set the verbosity level.
+     * Write a string as comment output.
      *
-     * @param  string|int  $level
+     * @param  string $string
+     * @param  null|int|string $verbosity
      * @return void
      */
-    protected function setVerbosity($level)
+    public function comment($string, $verbosity = null)
     {
-        $this->verbosity = $this->parseVerbosity($level);
-    }
-
-    /**
-     * Get the verbosity level in terms of Symfony's OutputInterface level.
-     *
-     * @param  string|int  $level
-     * @return int
-     */
-    protected function parseVerbosity($level = null)
-    {
-        if (isset($this->verbosityMap[$level])) {
-            $level = $this->verbosityMap[$level];
-        } elseif (! is_int($level)) {
-            $level = $this->verbosity;
-        }
-
-        return $level;
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [];
+        $this->line($string, 'comment', $verbosity);
     }
 
     /**
@@ -590,5 +552,28 @@ class Command extends SymfonyCommand
     public function setLaravel($laravel)
     {
         $this->laravel = $laravel;
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @param  \Symfony\Component\Console\Input\InputInterface $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @return mixed
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        return $this->laravel->call([$this, 'handle']);
+    }
+
+    /**
+     * Set the verbosity level.
+     *
+     * @param  string|int $level
+     * @return void
+     */
+    protected function setVerbosity($level)
+    {
+        $this->verbosity = $this->parseVerbosity($level);
     }
 }

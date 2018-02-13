@@ -233,7 +233,7 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
     private $mockObjects = [];
 
     /**
-     * @var MockGenerator
+     * @var array
      */
     private $mockObjectGenerator;
 
@@ -969,6 +969,11 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
             $e = $_e;
         }
 
+        if (isset($_e)) {
+            $this->status        = BaseTestRunner::STATUS_ERROR;
+            $this->statusMessage = $_e->getMessage();
+        }
+
         // Clean up the mock objects.
         $this->mockObjects = [];
         $this->prophet     = null;
@@ -999,11 +1004,6 @@ abstract class TestCase extends Assert implements Test, SelfDescribing
             if (!isset($e)) {
                 $e = $_e;
             }
-        }
-
-        if (isset($_e)) {
-            $this->status        = BaseTestRunner::STATUS_ERROR;
-            $this->statusMessage = $_e->getMessage();
         }
 
         \clearstatcache();

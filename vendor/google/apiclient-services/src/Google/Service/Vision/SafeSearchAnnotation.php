@@ -19,7 +19,6 @@ class Google_Service_Vision_SafeSearchAnnotation extends Google_Model
 {
   public $adult;
   public $medical;
-  public $racy;
   public $spoof;
   public $violence;
 
@@ -38,14 +37,6 @@ class Google_Service_Vision_SafeSearchAnnotation extends Google_Model
   public function getMedical()
   {
     return $this->medical;
-  }
-  public function setRacy($racy)
-  {
-    $this->racy = $racy;
-  }
-  public function getRacy()
-  {
-    return $this->racy;
   }
   public function setSpoof($spoof)
   {

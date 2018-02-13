@@ -15,12 +15,10 @@
  * the License.
  */
 
-class Google_Service_DLP_GooglePrivacyDlpV2beta2InfoTypeDescription extends Google_Collection
+class Google_Service_DLP_GooglePrivacyDlpV2beta2InfoTypeDescription extends Google_Model
 {
-  protected $collection_key = 'supportedBy';
   public $displayName;
   public $name;
-  public $supportedBy;
 
   public function setDisplayName($displayName)
   {
@@ -37,13 +35,5 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2InfoTypeDescription extends Goog
   public function getName()
   {
     return $this->name;
-  }
-  public function setSupportedBy($supportedBy)
-  {
-    $this->supportedBy = $supportedBy;
-  }
-  public function getSupportedBy()
-  {
-    return $this->supportedBy;
   }
 }

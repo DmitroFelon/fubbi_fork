@@ -12,7 +12,7 @@ namespace Stripe;
  * @property mixed $data
  * @property bool $livemode
  * @property int $pending_webhooks
- * @property mixed $request
+ * @property string $request
  * @property string $type
  *
  * @package Stripe

@@ -18,7 +18,6 @@
 class Google_Service_Bigquery_JobReference extends Google_Model
 {
   public $jobId;
-  public $location;
   public $projectId;
 
   public function setJobId($jobId)
@@ -28,14 +27,6 @@ class Google_Service_Bigquery_JobReference extends Google_Model
   public function getJobId()
   {
     return $this->jobId;
-  }
-  public function setLocation($location)
-  {
-    $this->location = $location;
-  }
-  public function getLocation()
-  {
-    return $this->location;
   }
   public function setProjectId($projectId)
   {

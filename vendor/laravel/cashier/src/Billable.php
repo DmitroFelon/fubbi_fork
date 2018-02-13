@@ -468,8 +468,6 @@ trait Billable
         $this->cards()->each(function ($card) {
             $card->delete();
         });
-        
-        $this->updateCardFromStripe();
     }
 
     /**

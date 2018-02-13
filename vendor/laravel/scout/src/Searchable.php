@@ -12,6 +12,7 @@ trait Searchable
      * Additional metadata attributes managed by Scout.
      *
      * @var array
+     * 
      */
     protected $scoutMetadata = [];
 
@@ -92,9 +93,7 @@ trait Searchable
      */
     public static function search($query, $callback = null)
     {
-        return new Builder(
-            new static, $query, $callback, config('scout.soft_delete', false)
-        );
+        return new Builder(new static, $query, $callback);
     }
 
     /**

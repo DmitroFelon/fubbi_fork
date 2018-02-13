@@ -306,25 +306,6 @@ class Google_Service_Storage extends Google_Service
                   'type' => 'string',
                 ),
               ),
-            ),'lockRetentionPolicy' => array(
-              'path' => 'b/{bucket}/lockRetentionPolicy',
-              'httpMethod' => 'POST',
-              'parameters' => array(
-                'bucket' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'ifMetagenerationMatch' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'userProject' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-              ),
             ),'patch' => array(
               'path' => 'b/{bucket}',
               'httpMethod' => 'PATCH',

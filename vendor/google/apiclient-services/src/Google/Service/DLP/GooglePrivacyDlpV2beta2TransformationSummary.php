@@ -30,7 +30,6 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2TransformationSummary extends Go
   protected $resultsDataType = 'array';
   protected $transformationType = 'Google_Service_DLP_GooglePrivacyDlpV2beta2PrimitiveTransformation';
   protected $transformationDataType = '';
-  public $transformedBytes;
 
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2beta2FieldId
@@ -115,13 +114,5 @@ class Google_Service_DLP_GooglePrivacyDlpV2beta2TransformationSummary extends Go
   public function getTransformation()
   {
     return $this->transformation;
-  }
-  public function setTransformedBytes($transformedBytes)
-  {
-    $this->transformedBytes = $transformedBytes;
-  }
-  public function getTransformedBytes()
-  {
-    return $this->transformedBytes;
   }
 }

@@ -6,7 +6,7 @@ class StripeObjectTest extends TestCase
 {
     public function testArrayAccessorsSemantics()
     {
-        $s = new StripeObject();
+        $s        = new StripeObject();
         $s['foo'] = 'a';
         $this->assertSame($s['foo'], 'a');
         $this->assertTrue(isset($s['foo']));
@@ -16,7 +16,7 @@ class StripeObjectTest extends TestCase
 
     public function testNormalAccessorsSemantics()
     {
-        $s = new StripeObject();
+        $s      = new StripeObject();
         $s->foo = 'a';
         $this->assertSame($s->foo, 'a');
         $this->assertTrue(isset($s->foo));
@@ -26,7 +26,7 @@ class StripeObjectTest extends TestCase
 
     public function testArrayAccessorsMatchNormalAccessors()
     {
-        $s = new StripeObject();
+        $s      = new StripeObject();
         $s->foo = 'a';
         $this->assertSame($s['foo'], 'a');
 
@@ -36,14 +36,14 @@ class StripeObjectTest extends TestCase
 
     public function testKeys()
     {
-        $s = new StripeObject();
+        $s      = new StripeObject();
         $s->foo = 'a';
         $this->assertSame($s->keys(), array('foo'));
     }
 
     public function testToArray()
     {
-        $s = new StripeObject();
+        $s      = new StripeObject();
         $s->foo = 'a';
 
         $converted = $s->__toArray();
@@ -59,7 +59,7 @@ class StripeObjectTest extends TestCase
         $z = new StripeObject();
 
         $s->child = $z;
-        $z->foo = 'a';
+        $z->foo   = 'a';
 
         $converted = $s->__toArray(true);
 
@@ -89,7 +89,7 @@ class StripeObjectTest extends TestCase
             return;
         }
 
-        $s = new StripeObject();
+        $s      = new StripeObject();
         $s->foo = 'a';
 
         $this->assertEquals('{"foo":"a"}', json_encode($s->__toArray()));
@@ -113,14 +113,14 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnNewObjectWithSubObject()
     {
-        $obj = new StripeObject();
+        $obj           = new StripeObject();
         $obj->metadata = array('foo' => 'bar');
         $this->assertSame(array('metadata' => array('foo' => 'bar')), $obj->serializeParameters());
     }
 
     public function testSerializeParametersOnMoreComplexObject()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj                = StripeObject::constructFrom(array(
             'metadata' => StripeObject::constructFrom(array(
                 'bar' => null,
                 'baz' => null,
@@ -132,7 +132,7 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnArray()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj      = StripeObject::constructFrom(array(
             'foo' => null,
         ), new Util\RequestOptions());
         $obj->foo = array('new-value');
@@ -141,7 +141,7 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnArrayThatShortens()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj      = StripeObject::constructFrom(array(
             'foo' => array('0-index', '1-index', '2-index'),
         ), new Util\RequestOptions());
         $obj->foo = array('new-value');
@@ -150,7 +150,7 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnArrayThatLengthens()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj      = StripeObject::constructFrom(array(
             'foo' => array('0-index', '1-index', '2-index'),
         ), new Util\RequestOptions());
         $obj->foo = array_fill(0, 4, 'new-value');
@@ -159,7 +159,7 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnArrayOfHashes()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj                            = StripeObject::constructFrom(array(
             'additional_owners' => array(
                 StripeObject::constructFrom(array('bar' => null), new Util\RequestOptions())
             ),
@@ -178,7 +178,7 @@ class StripeObjectTest extends TestCase
 
     public function testSerializeParametersOnReplacedAttachedObject()
     {
-        $obj = StripeObject::constructFrom(array(
+        $obj           = StripeObject::constructFrom(array(
             'metadata' => AttachedObject::constructFrom(array(
                 'bar' => 'foo',
             ), new Util\RequestOptions()),

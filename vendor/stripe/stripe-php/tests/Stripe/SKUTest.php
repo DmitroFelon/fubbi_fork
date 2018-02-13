@@ -14,7 +14,7 @@ class SKUTest extends TestCase
         );
         $resources = SKU::all();
         $this->assertTrue(is_array($resources->data));
-        $this->assertInstanceOf("Stripe\\SKU", $resources->data[0]);
+        $this->assertSame("Stripe\\SKU", get_class($resources->data[0]));
     }
 
     public function testIsRetrievable()
@@ -24,7 +24,7 @@ class SKUTest extends TestCase
             '/v1/skus/' . self::TEST_RESOURCE_ID
         );
         $resource = SKU::retrieve(self::TEST_RESOURCE_ID);
-        $this->assertInstanceOf("Stripe\\SKU", $resource);
+        $this->assertSame("Stripe\\SKU", get_class($resource));
     }
 
     public function testIsCreatable()
@@ -34,27 +34,27 @@ class SKUTest extends TestCase
             '/v1/skus'
         );
         $resource = SKU::create(array(
-            'currency'  => 'usd',
+            'currency' => 'usd',
             'inventory' => array(
-                'type'     => 'finite',
+                'type' => 'finite',
                 'quantity' => 1
             ),
-            'price'     => 100,
-            'product'   => "prod_123"
+            'price' => 100,
+            'product' => "prod_123"
         ));
-        $this->assertInstanceOf("Stripe\\SKU", $resource);
+        $this->assertSame("Stripe\\SKU", get_class($resource));
     }
 
     public function testIsSaveable()
     {
-        $resource = SKU::retrieve(self::TEST_RESOURCE_ID);
+        $resource                  = SKU::retrieve(self::TEST_RESOURCE_ID);
         $resource->metadata["key"] = "value";
         $this->expectsRequest(
             'post',
             '/v1/skus/' . self::TEST_RESOURCE_ID
         );
         $resource->save();
-        $this->assertInstanceOf("Stripe\\SKU", $resource);
+        $this->assertSame("Stripe\\SKU", get_class($resource));
     }
 
     public function testIsUpdatable()
@@ -66,7 +66,7 @@ class SKUTest extends TestCase
         $resource = SKU::update(self::TEST_RESOURCE_ID, array(
             "metadata" => array("key" => "value"),
         ));
-        $this->assertInstanceOf("Stripe\\SKU", $resource);
+        $this->assertSame("Stripe\\SKU", get_class($resource));
     }
 
     public function testIsDeletable()
@@ -77,6 +77,6 @@ class SKUTest extends TestCase
             '/v1/skus/' . self::TEST_RESOURCE_ID
         );
         $resource->delete();
-        $this->assertInstanceOf("Stripe\\SKU", $resource);
+        $this->assertSame("Stripe\\SKU", get_class($resource));
     }
 }
