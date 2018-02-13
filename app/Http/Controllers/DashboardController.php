@@ -55,6 +55,7 @@ class DashboardController extends Controller
 
         if ($page == 'home') {
             //set dynamic home page by role
+
             $redirect = $this->composeRedirect();
             if ($redirect) {
                 return $redirect;
@@ -95,7 +96,6 @@ class DashboardController extends Controller
                 break;
             default:
                 return null;
-
         }
     }
 

@@ -34,11 +34,6 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
 });
 
 Route::get('test', function (\Illuminate\Http\Request $request) {
-    $server = $request->server();
-    if(isset($server['HTTP_X_FORWARDED_PROTO']) and $server['HTTP_X_FORWARDED_PROTO'] == 'http'){
-        return redirect()->secure($request->getRequestUri());
-    }
-
 });
 
 Route::get('/test_email/{index}', function ($index) {
@@ -108,7 +103,7 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
         if ($project) {
             return redirect()->action('Project\ArticlesController@edit', [
                 $project,
-                ['s' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING]
+                's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING
             ]);
         }
     }
