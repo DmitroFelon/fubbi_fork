@@ -99,7 +99,7 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
 
     //in case user already has an account
     if ($user->projects()->count() > 1) {
-        $project = $user->projects()->latest()->get();
+        $project = $user->projects()->latest()->first();
         if ($project) {
             return redirect()->action('Resources\ProjectController@edit', [
                 $project,
