@@ -78,7 +78,7 @@ Route::get('/test_email/{index}', function ($index) {
 
 });
 
-Route::get('/cart_redirect(:all?)', function (\Illuminate\Http\Request $request) {
+Route::get('/cart_redirect', function (\Illuminate\Http\Request $request) {
     //looking for a new client account created by webhook handler
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
