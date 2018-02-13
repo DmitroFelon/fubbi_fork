@@ -101,7 +101,7 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     if ($user->projects()->count() > 1) {
         $project = $user->projects()->latest()->get();
         if ($project) {
-            return redirect()->action('Project\ArticlesController@edit', [
+            return redirect()->action('Resources\ProjectController@edit', [
                 $project,
                 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING
             ]);
