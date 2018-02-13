@@ -34,6 +34,7 @@ trait hasStates
     {
         $reviewable_states = [
             ProjectStates::MANAGER_REVIEW,
+            ProjectStates::REJECTED_BY_MANAGER
         ];
 
         return in_array($this->state, $reviewable_states);

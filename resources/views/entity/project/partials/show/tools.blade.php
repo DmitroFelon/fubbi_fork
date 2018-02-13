@@ -3,7 +3,6 @@
 </a>
 
 @can('project.accept-review', $project)
-
     @if($project->isOnReview())
         <a href="{{ action('Resources\ProjectController@accept_review', $project) }}"
            class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
