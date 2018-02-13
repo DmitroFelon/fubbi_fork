@@ -20,6 +20,8 @@ class TrivecartController extends Controller
 {
     public function handle(Request $request)
     {
+        Log::debug($request->input());
+
         $event      = $request->input('event');
         $hash       = $request->input('thrivecart_secret');
         $product_id = $request->input('base_product');
@@ -98,6 +100,8 @@ class TrivecartController extends Controller
             $project->save();
             $project->setServices($plan_id);
             $project->setCycle($plan_id);
+
+
 
         } catch (\Exception $e) {
             Log::error($e);
