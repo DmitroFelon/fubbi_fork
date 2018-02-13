@@ -78,17 +78,26 @@ Route::get('/test_email/{index}', function ($index) {
 
 });
 
-Route::get('/cart_redirect', function (\Illuminate\Http\Request $request) {
+Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
+
+
     //looking for a new client account created by webhook handler
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
+
 
     //if client tries to open the link again
     if (!$email) {
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
     }
 
-    $user = \App\User::whereEmail($email)->firstOrFail();
+
+    $user = \App\User::whereEmail($email)->first();
+
+    if (!$user) {
+        return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
+    }
+
     Auth::logout();
     Auth::login($user, true);
 
