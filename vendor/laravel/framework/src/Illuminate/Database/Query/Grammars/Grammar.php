@@ -2,10 +2,10 @@
 
 namespace Illuminate\Database\Query\Grammars;
 
-use Illuminate\Support\Arr;
+use Illuminate\Database\Grammar as BaseGrammar;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\Grammar as BaseGrammar;
+use Illuminate\Support\Arr;
 
 class Grammar extends BaseGrammar
 {
@@ -152,7 +152,7 @@ class Grammar extends BaseGrammar
      */
     protected function compileJoins(Builder $query, $joins)
     {
-        return collect($joins)->map(function ($join) use ($query) {
+        return collect($joins)->map(function ($join) {
             $table = $this->wrapTable($join->table);
 
             return trim("{$join->type} join {$table} {$this->compileWheres($join)}");

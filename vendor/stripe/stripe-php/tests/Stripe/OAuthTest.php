@@ -96,7 +96,7 @@ class OAuthTest extends TestCase
         );
 
         $resp = OAuth::deauthorize(array(
-            'stripe_user_id' => 'acct_test_deauth',
+                'stripe_user_id' => 'acct_test_deauth',
         ));
         $this->assertSame('acct_test_deauth', $resp->stripe_user_id);
     }

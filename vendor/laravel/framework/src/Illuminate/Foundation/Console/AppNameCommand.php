@@ -3,10 +3,10 @@
 namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Composer;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Composer;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Finder\Finder;
 
 class AppNameCommand extends Command
 {
@@ -224,7 +224,7 @@ class AppNameCommand extends Command
     protected function setDatabaseFactoryNamespaces()
     {
         $files = Finder::create()
-                            ->in($this->laravel->databasePath().'/factories')
+                            ->in(database_path('factories'))
                             ->contains($this->currentRoot)
                             ->name('*.php');
 
@@ -268,7 +268,7 @@ class AppNameCommand extends Command
      */
     protected function getComposerPath()
     {
-        return $this->laravel->basePath().'/composer.json';
+        return base_path('composer.json');
     }
 
     /**

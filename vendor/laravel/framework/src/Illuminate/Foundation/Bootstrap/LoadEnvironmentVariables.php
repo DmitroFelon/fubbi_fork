@@ -4,8 +4,8 @@ namespace Illuminate\Foundation\Bootstrap;
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
-use Symfony\Component\Console\Input\ArgvInput;
 use Illuminate\Contracts\Foundation\Application;
+use Symfony\Component\Console\Input\ArgvInput;
 
 class LoadEnvironmentVariables
 {
@@ -39,9 +39,11 @@ class LoadEnvironmentVariables
     protected function checkForSpecificEnvironmentFile($app)
     {
         if ($app->runningInConsole() && ($input = new ArgvInput)->hasParameterOption('--env')) {
-            $this->setEnvironmentFilePath(
+            if ($this->setEnvironmentFilePath(
                 $app, $app->environmentFile().'.'.$input->getParameterOption('--env')
-            );
+            )) {
+                return;
+            }
         }
 
         if (! env('APP_ENV')) {
@@ -58,12 +60,16 @@ class LoadEnvironmentVariables
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  string  $file
-     * @return void
+     * @return bool
      */
     protected function setEnvironmentFilePath($app, $file)
     {
         if (file_exists($app->environmentPath().'/'.$file)) {
             $app->loadEnvironmentFrom($file);
+
+            return true;
         }
+
+        return false;
     }
 }

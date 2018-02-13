@@ -9,20 +9,20 @@ class ApiRequestorTest extends TestCase
     public function testEncodeObjects()
     {
         $reflector = new \ReflectionClass('Stripe\\ApiRequestor');
-        $method    = $reflector->getMethod('_encodeObjects');
+        $method = $reflector->getMethod('_encodeObjects');
         $method->setAccessible(true);
 
-        $a   = array('customer' => new Customer('abcd'));
+        $a = array('customer' => new Customer('abcd'));
         $enc = $method->invoke(null, $a);
         $this->assertSame($enc, array('customer' => 'abcd'));
 
         // Preserves UTF-8
-        $v   = array('customer' => "☃");
+        $v = array('customer' => "☃");
         $enc = $method->invoke(null, $v);
         $this->assertSame($enc, $v);
 
         // Encodes latin-1 -> UTF-8
-        $v   = array('customer' => "\xe9");
+        $v = array('customer' => "\xe9");
         $enc = $method->invoke(null, $v);
         $this->assertSame($enc, array('customer' => "\xc3\xa9"));
     }
@@ -30,7 +30,7 @@ class ApiRequestorTest extends TestCase
     public function testHttpClientInjection()
     {
         $reflector = new \ReflectionClass('Stripe\\ApiRequestor');
-        $method    = $reflector->getMethod('httpClient');
+        $method = $reflector->getMethod('httpClient');
         $method->setAccessible(true);
 
         $curl = new CurlClient();
@@ -44,12 +44,12 @@ class ApiRequestorTest extends TestCase
     public function testDefaultHeaders()
     {
         $reflector = new \ReflectionClass('Stripe\\ApiRequestor');
-        $method    = $reflector->getMethod('_defaultHeaders');
+        $method = $reflector->getMethod('_defaultHeaders');
         $method->setAccessible(true);
 
         // no way to stub static methods with PHPUnit 4.x :(
         Stripe::setAppInfo('MyTestApp', '1.2.34', 'https://mytestapp.example');
-        $apiKey     = 'sk_test_notarealkey';
+        $apiKey = 'sk_test_notarealkey';
         $clientInfo = array('httplib' => 'testlib 0.1.2');
 
         $headers = $method->invoke(null, $apiKey, $clientInfo);

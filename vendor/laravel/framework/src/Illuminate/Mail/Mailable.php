@@ -56,48 +56,55 @@ class Mailable implements MailableContract, Renderable
      * @var string
      */
     public $subject;
-    /**
-     * The view to use for the message.
-     *
-     * @var string
-     */
-    public $view;
-    /**
-     * The plain text view to use for the message.
-     *
-     * @var string
-     */
-    public $textView;
-    /**
-     * The view data for the message.
-     *
-     * @var array
-     */
-    public $viewData = [];
-    /**
-     * The attachments for the message.
-     *
-     * @var array
-     */
-    public $attachments = [];
-    /**
-     * The raw attachments for the message.
-     *
-     * @var array
-     */
-    public $rawAttachments = [];
-    /**
-     * The callbacks for the message.
-     *
-     * @var array
-     */
-    public $callbacks = [];
+
     /**
      * The Markdown template for the message (if applicable).
      *
      * @var string
      */
     protected $markdown;
+
+    /**
+     * The view to use for the message.
+     *
+     * @var string
+     */
+    public $view;
+
+    /**
+     * The plain text view to use for the message.
+     *
+     * @var string
+     */
+    public $textView;
+
+    /**
+     * The view data for the message.
+     *
+     * @var array
+     */
+    public $viewData = [];
+
+    /**
+     * The attachments for the message.
+     *
+     * @var array
+     */
+    public $attachments = [];
+
+    /**
+     * The raw attachments for the message.
+     *
+     * @var array
+     */
+    public $rawAttachments = [];
+
+    /**
+     * The callbacks for the message.
+     *
+     * @var array
+     */
+    public $callbacks = [];
 
     /**
      * Send the message using the given mailer.
@@ -116,6 +123,59 @@ class Mailable implements MailableContract, Renderable
                  ->buildAttachments($message)
                  ->runCallbacks($message);
         });
+    }
+
+    /**
+     * Queue the message for sending.
+     *
+     * @param  \Illuminate\Contracts\Queue\Factory  $queue
+     * @return mixed
+     */
+    public function queue(Queue $queue)
+    {
+        if (property_exists($this, 'delay')) {
+            return $this->later($this->delay, $queue);
+        }
+
+        $connection = property_exists($this, 'connection') ? $this->connection : null;
+
+        $queueName = property_exists($this, 'queue') ? $this->queue : null;
+
+        return $queue->connection($connection)->pushOn(
+            $queueName ?: null, new SendQueuedMailable($this)
+        );
+    }
+
+    /**
+     * Deliver the queued message after the given delay.
+     *
+     * @param  \DateTimeInterface|\DateInterval|int  $delay
+     * @param  \Illuminate\Contracts\Queue\Factory  $queue
+     * @return mixed
+     */
+    public function later($delay, Queue $queue)
+    {
+        $connection = property_exists($this, 'connection') ? $this->connection : null;
+
+        $queueName = property_exists($this, 'queue') ? $this->queue : null;
+
+        return $queue->connection($connection)->laterOn(
+            $queueName ?: null, $delay, new SendQueuedMailable($this)
+        );
+    }
+
+    /**
+     * Render the mailable into a view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function render()
+    {
+        Container::getInstance()->call([$this, 'build']);
+
+        return Container::getInstance()->make('mailer')->render(
+            $this->buildView(), $this->buildViewData()
+        );
     }
 
     /**
@@ -191,15 +251,49 @@ class Mailable implements MailableContract, Renderable
     }
 
     /**
-     * Run the callbacks for the message.
+     * Add the sender to the message.
      *
      * @param  \Illuminate\Mail\Message  $message
      * @return $this
      */
-    protected function runCallbacks($message)
+    protected function buildFrom($message)
     {
-        foreach ($this->callbacks as $callback) {
-            $callback($message->getSwiftMessage());
+        if (! empty($this->from)) {
+            $message->from($this->from[0]['address'], $this->from[0]['name']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add all of the recipients to the message.
+     *
+     * @param  \Illuminate\Mail\Message  $message
+     * @return $this
+     */
+    protected function buildRecipients($message)
+    {
+        foreach (['to', 'cc', 'bcc', 'replyTo'] as $type) {
+            foreach ($this->{$type} as $recipient) {
+                $message->{$type}($recipient['address'], $recipient['name']);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the subject for the message.
+     *
+     * @param  \Illuminate\Mail\Message  $message
+     * @return $this
+     */
+    protected function buildSubject($message)
+    {
+        if ($this->subject) {
+            $message->subject($this->subject);
+        } else {
+            $message->subject(Str::title(Str::snake(class_basename($this), ' ')));
         }
 
         return $this;
@@ -227,105 +321,18 @@ class Mailable implements MailableContract, Renderable
     }
 
     /**
-     * Set the subject for the message.
+     * Run the callbacks for the message.
      *
      * @param  \Illuminate\Mail\Message  $message
      * @return $this
      */
-    protected function buildSubject($message)
+    protected function runCallbacks($message)
     {
-        if ($this->subject) {
-            $message->subject($this->subject);
-        } else {
-            $message->subject(Str::title(Str::snake(class_basename($this), ' ')));
+        foreach ($this->callbacks as $callback) {
+            $callback($message->getSwiftMessage());
         }
 
         return $this;
-    }
-
-    /**
-     * Add all of the recipients to the message.
-     *
-     * @param  \Illuminate\Mail\Message  $message
-     * @return $this
-     */
-    protected function buildRecipients($message)
-    {
-        foreach (['to', 'cc', 'bcc', 'replyTo'] as $type) {
-            foreach ($this->{$type} as $recipient) {
-                $message->{$type}($recipient['address'], $recipient['name']);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add the sender to the message.
-     *
-     * @param  \Illuminate\Mail\Message  $message
-     * @return $this
-     */
-    protected function buildFrom($message)
-    {
-        if (!empty($this->from)) {
-            $message->from($this->from[0]['address'], $this->from[0]['name']);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Queue the message for sending.
-     *  
-     * @param  \Illuminate\Contracts\Queue\Factory $queue
-     * @return mixed
-     */
-    public function queue(Queue $queue)
-    {
-        if (property_exists($this, 'delay')) {
-            return $this->later($this->delay, $queue);
-        }
-
-        $connection = property_exists($this, 'connection') ? $this->connection : null;
-
-        $queueName = property_exists($this, 'queue') ? $this->queue : null;
-
-        return $queue->connection($connection)->pushOn(
-            $queueName ?: null, new SendQueuedMailable($this)
-        );
-    }
-
-    /**
-     * Deliver the queued message after the given delay.
-     *
-     * @param  \DateTimeInterface|\DateInterval|int $delay
-     * @param  \Illuminate\Contracts\Queue\Factory $queue
-     * @return mixed
-     */
-    public function later($delay, Queue $queue)
-    {
-        $connection = property_exists($this, 'connection') ? $this->connection : null;
-
-        $queueName = property_exists($this, 'queue') ? $this->queue : null;
-
-        return $queue->connection($connection)->laterOn(
-            $queueName ?: null, $delay, new SendQueuedMailable($this)
-        );
-    }
-
-    /**
-     * Render the mailable into a view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function render()
-    {
-        Container::getInstance()->call([$this, 'build']);
-
-        return Container::getInstance()->make('mailer')->render(
-            $this->buildView(), $this->buildViewData()
-        );
     }
 
     /**
@@ -358,63 +365,6 @@ class Mailable implements MailableContract, Renderable
     }
 
     /**
-     * Set the recipients of the message.
-     *
-     * All recipients are stored internally as [['name' => ?, 'address' => ?]]
-     *
-     * @param  object|array|string  $address
-     * @param  string|null  $name
-     * @param  string $property
-     * @return $this
-     */
-    protected function setAddress($address, $name = null, $property = 'to')
-    {
-        foreach ($this->addressesToArray($address, $name) as $recipient) {
-            $recipient = $this->normalizeRecipient($recipient);
-
-            $this->{$property}[] = [
-                'name' => $recipient->name ?? null,
-                'address' => $recipient->email,
-            ];
-        }
-
-        return $this;
-    }
-
-    /**
-     * Convert the given recipient arguments to an array.
-     *
-     * @param  object|array|string  $address
-     * @param  string|null  $name
-     * @return array
-     */
-    protected function addressesToArray($address, $name)
-    {
-        if (!is_array($address) && !$address instanceof Collection) {
-            $address = is_string($name) ? [['name' => $name, 'email' => $address]] : [$address];
-        }
-
-        return $address;
-    }
-
-    /**
-     * Convert the given recipient into an object.
-     *
-     * @param  mixed $recipient
-     * @return object
-     */
-    protected function normalizeRecipient($recipient)
-    {
-        if (is_array($recipient)) {
-            return (object)$recipient;
-        } elseif (is_string($recipient)) {
-            return (object)['email' => $recipient];
-        }
-
-        return $recipient;
-    }
-
-    /**
      * Determine if the given recipient is set on the mailable.
      *
      * @param  object|array|string  $address
@@ -424,34 +374,6 @@ class Mailable implements MailableContract, Renderable
     public function hasFrom($address, $name = null)
     {
         return $this->hasRecipient($address, $name, 'from');
-    }
-
-    /**
-     * Determine if the given recipient is set on the mailable.
-     *
-     * @param  object|array|string  $address
-     * @param  string|null  $name
-     * @param  string $property
-     * @return bool
-     */
-    protected function hasRecipient($address, $name = null, $property = 'to')
-    {
-        $expected = $this->normalizeRecipient(
-            $this->addressesToArray($address, $name)[0]
-        );
-
-        $expected = [
-            'name' => $expected->name ?? null,
-            'address' => $expected->email,
-        ];
-
-        return collect($this->{$property})->contains(function ($actual) use ($expected) {
-            if (!isset($expected['name'])) {
-                return $actual['address'] == $expected['address'];
-            }
-
-            return $actual == $expected;
-        });
     }
 
     /**
@@ -529,8 +451,8 @@ class Mailable implements MailableContract, Renderable
     /**
      * Set the "reply to" address of the message.
      *
-     * @param  object|array|string $address
-     * @param  string|null $name
+     * @param  object|array|string  $address
+     * @param  string|null  $name
      * @return $this
      */
     public function replyTo($address, $name = null)
@@ -548,6 +470,91 @@ class Mailable implements MailableContract, Renderable
     public function hasReplyTo($address, $name = null)
     {
         return $this->hasRecipient($address, $name, 'replyTo');
+    }
+
+    /**
+     * Set the recipients of the message.
+     *
+     * All recipients are stored internally as [['name' => ?, 'address' => ?]]
+     *
+     * @param  object|array|string  $address
+     * @param  string|null  $name
+     * @param  string  $property
+     * @return $this
+     */
+    protected function setAddress($address, $name = null, $property = 'to')
+    {
+        foreach ($this->addressesToArray($address, $name) as $recipient) {
+            $recipient = $this->normalizeRecipient($recipient);
+
+            $this->{$property}[] = [
+                'name' => $recipient->name ?? null,
+                'address' => $recipient->email,
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Convert the given recipient arguments to an array.
+     *
+     * @param  object|array|string  $address
+     * @param  string|null  $name
+     * @return array
+     */
+    protected function addressesToArray($address, $name)
+    {
+        if (! is_array($address) && ! $address instanceof Collection) {
+            $address = is_string($name) ? [['name' => $name, 'email' => $address]] : [$address];
+        }
+
+        return $address;
+    }
+
+    /**
+     * Convert the given recipient into an object.
+     *
+     * @param  mixed  $recipient
+     * @return object
+     */
+    protected function normalizeRecipient($recipient)
+    {
+        if (is_array($recipient)) {
+            return (object) $recipient;
+        } elseif (is_string($recipient)) {
+            return (object) ['email' => $recipient];
+        }
+
+        return $recipient;
+    }
+
+    /**
+     * Determine if the given recipient is set on the mailable.
+     *
+     * @param  object|array|string  $address
+     * @param  string|null  $name
+     * @param  string  $property
+     * @return bool
+     */
+    protected function hasRecipient($address, $name = null, $property = 'to')
+    {
+        $expected = $this->normalizeRecipient(
+            $this->addressesToArray($address, $name)[0]
+        );
+
+        $expected = [
+            'name' => $expected->name ?? null,
+            'address' => $expected->email,
+        ];
+
+        return collect($this->{$property})->contains(function ($actual) use ($expected) {
+            if (! isset($expected['name'])) {
+                return $actual['address'] == $expected['address'];
+            }
+
+            return $actual == $expected;
+        });
     }
 
     /**
@@ -604,6 +611,24 @@ class Mailable implements MailableContract, Renderable
     {
         $this->textView = $textView;
         $this->viewData = array_merge($this->viewData, $data);
+
+        return $this;
+    }
+
+    /**
+     * Set the view data for the message.
+     *
+     * @param  string|array  $key
+     * @param  mixed   $value
+     * @return $this
+     */
+    public function with($key, $value = null)
+    {
+        if (is_array($key)) {
+            $this->viewData = array_merge($this->viewData, $key);
+        } else {
+            $this->viewData[$key] = $value;
+        }
 
         return $this;
     }
@@ -666,23 +691,5 @@ class Mailable implements MailableContract, Renderable
         }
 
         throw new BadMethodCallException("Method [$method] does not exist on mailable.");
-    }
-
-    /**
-     * Set the view data for the message.
-     *
-     * @param  string|array $key
-     * @param  mixed $value
-     * @return $this
-     */
-    public function with($key, $value = null)
-    {
-        if (is_array($key)) {
-            $this->viewData = array_merge($this->viewData, $key);
-        } else {
-            $this->viewData[$key] = $value;
-        }
-
-        return $this;
     }
 }

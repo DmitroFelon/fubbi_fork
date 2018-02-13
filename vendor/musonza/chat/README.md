@@ -1,4 +1,5 @@
-[![Downloads](https://img.shields.io/packagist/dt/musonza/chat.svg?style=flat-square)](https://packagist.org/packages/musonza/chat)
+[![Downloads](https://img.shields.io/packagist/dt/musonza/chat.svg)](https://packagist.org/packages/musonza/chat)
+[![Packagist](https://img.shields.io/packagist/v/musonza/chat.svg)](https://packagist.org/packages/musonza/chat)
 [![StyleCI](https://styleci.io/repos/54214978/shield?branch=master)](https://styleci.io/repos/54214978)
 ## Chat 
 
@@ -7,10 +8,13 @@
 - [Usage](#usage)
   - [Creating a conversation](#creating-a-conversation)
   - [Get a conversation by Id](#get-a-conversation-by-id)
+  - [Update conversation details](#update-conversation-details)
   - [Send a text message](#send-a-text-message)
   - [Send a message of custom type](#send-a-message-of-custom-type)
+  - [Get a message by id](#get-a-message-by-id)
   - [Mark a message as read](#mark-a-message-as-read)
   - [Mark whole conversation as read](#mark-whole-conversation-as-read)
+  - [Unread messages count](#unread-messages-count)
   - [Delete a message](#delete-a-message)
   - [Clear a conversation](#clear-a-conversation)
   - [Get a conversation between two users](#get-a-conversation-between-two-users)
@@ -65,6 +69,30 @@ This will publish database migrations and a configuration file `musonza_chat.php
 > **Note:** This package takes advantage of Laravel Notifications. 
 If you have already setup Laravel notifications you can delete the `2017_07_12_034227_create_notifications_table.php` migration file.
 
+## Configuration
+
+```php
+[
+    'user_model'            => 'App\User',
+
+    /**
+     * This will allow you to broadcast an event when a message is sent
+     * Example:
+     * Channel: private-mc-chat-conversation.2, 
+     * Event: Musonza\Chat\Messages\MessageWasSent 
+     */
+    'broadcasts'            => false,
+
+    /**
+     * If set to true, this will use Laravel notifications table to store each
+     * user message notification.
+     * Otherwise it will use mc_message_notification table.
+     * If your database doesn't support JSON columns you will need to set this to false.
+     */
+    'laravel_notifications' => true,
+];
+```
+
 Run the migrations:
 
 ```
@@ -78,15 +106,22 @@ By default the package assumes you have a User model in the App namespace.
 However, you can update the user model in `musonza_chat.php` published in the `config` folder.
 
 #### Creating a conversation
-```
+```php
 $participants = [$userId, $userId2,...];
 
 $conversation = Chat::createConversation($participants); 
 ```
 
 #### Get a conversation by id
-```
+```php
 $conversation = Chat::conversation($conversation_id);
+```
+
+#### Update conversation details
+
+```php
+$data = ['title' => 'PHP Channel', 'description' => 'PHP Channel Description'];
+$conversation->update(['data' => $data]);
 ```
 
 #### Send a text message
@@ -109,6 +144,12 @@ $message = Chat::message('http://example.com/img')
 		->send(); 
 ```
 
+### Get a message by id
+
+```php
+$message = Chat::messageById($id);
+```
+
 
 #### Mark a message as read
 
@@ -121,6 +162,12 @@ Chat::messages($message)->for($user)->markRead();
 ```php
 Chat::conversations($conversation)->for($user)->readAll();
 ```	
+
+#### Unread messages count
+
+```php
+$unreadCount = Chat::for($user)->unreadCount();
+```
 
 #### Delete a message
 
@@ -145,9 +192,7 @@ Chat::getConversationBetween($user1, $user2);
 ```php
 $conversations = Chat::commonConversations($users);
 ```
-$users can be an array of user ids ex. [1,4,6]
-
-OR a collection (\Illuminate\Database\Eloquent\Collection) of users
+`$users` can be an array of user ids ex. `[1,4,6]` or a collection `(\Illuminate\Database\Eloquent\Collection)` of users
 
 #### Remove users from a conversation
 

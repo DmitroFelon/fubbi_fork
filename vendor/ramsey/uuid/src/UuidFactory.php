@@ -14,12 +14,12 @@
 
 namespace Ramsey\Uuid;
 
+use Ramsey\Uuid\Builder\UuidBuilderInterface;
+use Ramsey\Uuid\Codec\CodecInterface;
 use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Provider\NodeProviderInterface;
 use Ramsey\Uuid\Generator\RandomGeneratorInterface;
 use Ramsey\Uuid\Generator\TimeGeneratorInterface;
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Builder\UuidBuilderInterface;
+use Ramsey\Uuid\Provider\NodeProviderInterface;
 
 class UuidFactory implements UuidFactoryInterface
 {

@@ -2,18 +2,18 @@
 
 namespace Spatie\MediaLibrary;
 
-use Spatie\Image\Image;
-use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Facades\File;
+use Spatie\Image\Image;
 use Spatie\MediaLibrary\Conversion\Conversion;
-use Spatie\MediaLibrary\Filesystem\Filesystem;
-use Spatie\MediaLibrary\Jobs\PerformConversions;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Spatie\MediaLibrary\Events\ConversionWillStart;
-use Spatie\MediaLibrary\ImageGenerators\ImageGenerator;
 use Spatie\MediaLibrary\Conversion\ConversionCollection;
 use Spatie\MediaLibrary\Events\ConversionHasBeenCompleted;
+use Spatie\MediaLibrary\Events\ConversionWillStart;
+use Spatie\MediaLibrary\Filesystem\Filesystem;
 use Spatie\MediaLibrary\Helpers\File as MediaLibraryFileHelper;
+use Spatie\MediaLibrary\ImageGenerators\ImageGenerator;
+use Spatie\MediaLibrary\Jobs\PerformConversions;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class FileManipulator
 {
@@ -73,10 +73,10 @@ class FileManipulator
         );
 
         $conversions
-            ->reject(function(Conversion $conversion) use ($onlyIfMissing, $media) {
+            ->reject(function (Conversion $conversion) use ($onlyIfMissing, $media) {
                 return $onlyIfMissing && file_exists($media->getPath($conversion->getName()));
             })
-            ->each(function(Conversion $conversion) use ($media, $imageGenerator, $copiedOriginalFile) {
+            ->each(function (Conversion $conversion) use ($media, $imageGenerator, $copiedOriginalFile) {
                 event(new ConversionWillStart($media, $conversion));
 
                 $copiedOriginalFile = $imageGenerator->convert($copiedOriginalFile, $conversion);

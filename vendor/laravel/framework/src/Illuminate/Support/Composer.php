@@ -36,16 +36,6 @@ class Composer
     }
 
     /**
-     * Regenerate the optimized Composer autoloader files.
-     *
-     * @return void
-     */
-    public function dumpOptimized()
-    {
-        $this->dumpAutoloads('--optimize');
-    }
-
-    /**
      * Regenerate the Composer autoloader files.
      *
      * @param  string  $extra
@@ -61,13 +51,13 @@ class Composer
     }
 
     /**
-     * Get a new Symfony process instance.
+     * Regenerate the optimized Composer autoloader files.
      *
-     * @return \Symfony\Component\Process\Process
+     * @return void
      */
-    protected function getProcess()
+    public function dumpOptimized()
     {
-        return (new Process('', $this->workingPath))->setTimeout(null);
+        $this->dumpAutoloads('--optimize');
     }
 
     /**
@@ -82,6 +72,16 @@ class Composer
         }
 
         return 'composer';
+    }
+
+    /**
+     * Get a new Symfony process instance.
+     *
+     * @return \Symfony\Component\Process\Process
+     */
+    protected function getProcess()
+    {
+        return (new Process('', $this->workingPath))->setTimeout(null);
     }
 
     /**

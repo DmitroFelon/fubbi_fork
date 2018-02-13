@@ -2,8 +2,6 @@
 
 namespace Illuminate\Notifications;
 
-use Illuminate\Support\Collection;
-
 trait HasDatabaseNotifications
 {
     /**
@@ -26,11 +24,10 @@ trait HasDatabaseNotifications
 
     /**
      * Get the entity's unread notifications.
-     * 
-     * 
      */
     public function unreadNotifications()
     {
-        return $this->notifications()->whereNull('read_at');
+        return $this->notifications()
+                            ->whereNull('read_at');
     }
 }

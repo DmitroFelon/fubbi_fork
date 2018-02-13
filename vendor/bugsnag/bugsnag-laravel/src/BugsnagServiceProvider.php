@@ -28,7 +28,7 @@ class BugsnagServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    const VERSION = '2.12.0';
+    const VERSION = '2.13.0';
 
     /**
      * Boot the service provider.
@@ -206,6 +206,10 @@ class BugsnagServiceProvider extends ServiceProvider
             if (isset($config['auto_capture_sessions']) && $config['auto_capture_sessions']) {
                 $endpoint = isset($config['session_endpoint']) ? $config['session_endpoint'] : null;
                 $this->setupSessionTracking($client, $endpoint, $this->app->events);
+            }
+
+            if (isset($config['build_endpoint'])) {
+                $client->setBuildEndpoint($config['build_endpoint']);
             }
 
             return $client;

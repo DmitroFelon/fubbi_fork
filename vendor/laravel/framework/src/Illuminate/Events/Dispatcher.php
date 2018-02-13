@@ -55,31 +55,6 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Determine if a given event has listeners.
-     *
-     * @param  string $eventName
-     * @return bool
-     */
-    public function hasListeners($eventName)
-    {
-        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
-    }
-
-    /**
-     * Register an event and payload to be fired later.
-     *
-     * @param  string $event
-     * @param  array $payload
-     * @return void
-     */
-    public function push($event, $payload = [])
-    {
-        $this->listen($event . '_pushed', function () use ($event, $payload) {
-            $this->dispatch($event, $payload);
-        });
-    }
-
-    /**
      * Register an event listener with the dispatcher.
      *
      * @param  string|array  $events
@@ -110,195 +85,92 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Register an event listener with the dispatcher.
+     * Determine if a given event has listeners.
      *
-     * @param  \Closure|string $listener
-     * @param  bool $wildcard
-     * @return \Closure
-     */
-    public function makeListener($listener, $wildcard = false)
-    {
-        if (is_string($listener)) {
-            return $this->createClassListener($listener, $wildcard);
-        }
-
-        return function ($event, $payload) use ($listener, $wildcard) {
-            if ($wildcard) {
-                return $listener($event, $payload);
-            }
-
-            return $listener(...array_values($payload));
-        };
-    }
-
-    /**
-     * Create a class based listener using the IoC container.
-     *
-     * @param  string $listener
-     * @param  bool $wildcard
-     * @return \Closure
-     */
-    public function createClassListener($listener, $wildcard = false)
-    {
-        return function ($event, $payload) use ($listener, $wildcard) {
-            if ($wildcard) {
-                return call_user_func($this->createClassCallable($listener), $event, $payload);
-            }
-
-            return call_user_func_array(
-                $this->createClassCallable($listener), $payload
-            );
-        };
-    }
-
-    /**
-     * Create the class based event callable.
-     *
-     * @param  string $listener
-     * @return callable
-     */
-    protected function createClassCallable($listener)
-    {
-        list($class, $method) = $this->parseClassCallable($listener);
-
-        if ($this->handlerShouldBeQueued($class)) {
-            return $this->createQueuedHandlerCallable($class, $method);
-        }
-
-        return [$this->container->make($class), $method];
-    }
-
-    /**
-     * Parse the class listener into class and method.
-     *
-     * @param  string $listener
-     * @return array
-     */
-    protected function parseClassCallable($listener)
-    {
-        return Str::parseCallback($listener, 'handle');
-    }
-
-    /**
-     * Determine if the event handler class should be queued.
-     *
-     * @param  string $class
+     * @param  string  $eventName
      * @return bool
      */
-    protected function handlerShouldBeQueued($class)
+    public function hasListeners($eventName)
     {
-        try {
-            return (new ReflectionClass($class))->implementsInterface(
-                ShouldQueue::class
-            );
-        } catch (Exception $e) {
-            return false;
-        }
+        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
     }
 
     /**
-     * Create a callable for putting an event handler on the queue.
+     * Register an event and payload to be fired later.
      *
-     * @param  string $class
-     * @param  string $method
-     * @return \Closure
-     */
-    protected function createQueuedHandlerCallable($class, $method)
-    {
-        return function () use ($class, $method) {
-            $arguments = array_map(function ($a) {
-                return is_object($a) ? clone $a : $a;
-            }, func_get_args());
-
-            if ($this->handlerWantsToBeQueued($class, $arguments)) {
-                $this->queueHandler($class, $method, $arguments);
-            }
-        };
-    }
-
-    /**
-     * Determine if the event handler wants to be queued.
-     *
-     * @param  string $class
-     * @param  array $arguments
-     * @return bool
-     */
-    protected function handlerWantsToBeQueued($class, $arguments)
-    {
-        if (method_exists($class, 'shouldQueue')) {
-            return $this->container->make($class)->shouldQueue($arguments[0]);
-        }
-
-        return true;
-    }
-
-    /**
-     * Queue the handler class.
-     *
-     * @param  string $class
-     * @param  string $method
-     * @param  array $arguments
+     * @param  string  $event
+     * @param  array  $payload
      * @return void
      */
-    protected function queueHandler($class, $method, $arguments)
+    public function push($event, $payload = [])
     {
-        list($listener, $job) = $this->createListenerAndJob($class, $method, $arguments);
-
-        $connection = $this->resolveQueue()->connection(
-            $listener->connection ?? null
-        );
-
-        $queue = $listener->queue ?? null;
-
-        isset($listener->delay)
-            ? $connection->laterOn($queue, $listener->delay, $job)
-            : $connection->pushOn($queue, $job);
-    }
-
-    /**
-     * Create the listener and job for a queued listener.
-     *
-     * @param  string $class
-     * @param  string $method
-     * @param  array $arguments
-     * @return array
-     */
-    protected function createListenerAndJob($class, $method, $arguments)
-    {
-        $listener = (new ReflectionClass($class))->newInstanceWithoutConstructor();
-
-        return [
-            $listener, $this->propagateListenerOptions(
-                $listener, new CallQueuedListener($class, $method, $arguments)
-            )
-        ];
-    }
-
-    /**
-     * Propagate listener options to the job.
-     *
-     * @param  mixed $listener
-     * @param  mixed $job
-     * @return mixed
-     */
-    protected function propagateListenerOptions($listener, $job)
-    {
-        return tap($job, function ($job) use ($listener) {
-            $job->tries     = $listener->tries ?? null;
-            $job->timeout   = $listener->timeout ?? null;
-            $job->timeoutAt = method_exists($listener, 'retryUntil')
-                ? $listener->retryUntil() : null;
+        $this->listen($event.'_pushed', function () use ($event, $payload) {
+            $this->dispatch($event, $payload);
         });
     }
 
     /**
-     * Get the queue implementation from the resolver.
+     * Flush a set of pushed events.
      *
-     * @return \Illuminate\Contracts\Queue\Queue
+     * @param  string  $event
+     * @return void
      */
-    protected function resolveQueue()
+    public function flush($event)
     {
-        return call_user_func($this->queueResolver);
+        $this->dispatch($event.'_pushed');
+    }
+
+    /**
+     * Register an event subscriber with the dispatcher.
+     *
+     * @param  object|string  $subscriber
+     * @return void
+     */
+    public function subscribe($subscriber)
+    {
+        $subscriber = $this->resolveSubscriber($subscriber);
+
+        $subscriber->subscribe($this);
+    }
+
+    /**
+     * Resolve the subscriber instance.
+     *
+     * @param  object|string  $subscriber
+     * @return mixed
+     */
+    protected function resolveSubscriber($subscriber)
+    {
+        if (is_string($subscriber)) {
+            return $this->container->make($subscriber);
+        }
+
+        return $subscriber;
+    }
+
+    /**
+     * Fire an event until the first non-null response is returned.
+     *
+     * @param  string|object  $event
+     * @param  mixed  $payload
+     * @return array|null
+     */
+    public function until($event, $payload = [])
+    {
+        return $this->dispatch($event, $payload, true);
+    }
+
+    /**
+     * Fire an event and call the listeners.
+     *
+     * @param  string|object  $event
+     * @param  mixed  $payload
+     * @param  bool  $halt
+     * @return array|null
+     */
+    public function fire($event, $payload = [], $halt = false)
+    {
+        return $this->dispatch($event, $payload, $halt);
     }
 
     /**
@@ -458,67 +330,198 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Flush a set of pushed events.
+     * Register an event listener with the dispatcher.
      *
-     * @param  string $event
-     * @return void
+     * @param  \Closure|string  $listener
+     * @param  bool  $wildcard
+     * @return \Closure
      */
-    public function flush($event)
+    public function makeListener($listener, $wildcard = false)
     {
-        $this->dispatch($event . '_pushed');
-    }
-
-    /**
-     * Register an event subscriber with the dispatcher.
-     *
-     * @param  object|string $subscriber
-     * @return void
-     */
-    public function subscribe($subscriber)
-    {
-        $subscriber = $this->resolveSubscriber($subscriber);
-
-        $subscriber->subscribe($this);
-    }
-
-    /**
-     * Resolve the subscriber instance.
-     *
-     * @param  object|string $subscriber
-     * @return mixed
-     */
-    protected function resolveSubscriber($subscriber)
-    {
-        if (is_string($subscriber)) {
-            return $this->container->make($subscriber);
+        if (is_string($listener)) {
+            return $this->createClassListener($listener, $wildcard);
         }
 
-        return $subscriber;
+        return function ($event, $payload) use ($listener, $wildcard) {
+            if ($wildcard) {
+                return $listener($event, $payload);
+            }
+
+            return $listener(...array_values($payload));
+        };
     }
 
     /**
-     * Fire an event until the first non-null response is returned.
+     * Create a class based listener using the IoC container.
      *
-     * @param  string|object $event
-     * @param  mixed $payload
-     * @return array|null
+     * @param  string  $listener
+     * @param  bool  $wildcard
+     * @return \Closure
      */
-    public function until($event, $payload = [])
+    public function createClassListener($listener, $wildcard = false)
     {
-        return $this->dispatch($event, $payload, true);
+        return function ($event, $payload) use ($listener, $wildcard) {
+            if ($wildcard) {
+                return call_user_func($this->createClassCallable($listener), $event, $payload);
+            }
+
+            return call_user_func_array(
+                $this->createClassCallable($listener), $payload
+            );
+        };
     }
 
     /**
-     * Fire an event and call the listeners.
+     * Create the class based event callable.
      *
-     * @param  string|object $event
-     * @param  mixed $payload
-     * @param  bool $halt
-     * @return array|null
+     * @param  string  $listener
+     * @return callable
      */
-    public function fire($event, $payload = [], $halt = false)
+    protected function createClassCallable($listener)
     {
-        return $this->dispatch($event, $payload, $halt);
+        list($class, $method) = $this->parseClassCallable($listener);
+
+        if ($this->handlerShouldBeQueued($class)) {
+            return $this->createQueuedHandlerCallable($class, $method);
+        }
+
+        return [$this->container->make($class), $method];
+    }
+
+    /**
+     * Parse the class listener into class and method.
+     *
+     * @param  string  $listener
+     * @return array
+     */
+    protected function parseClassCallable($listener)
+    {
+        return Str::parseCallback($listener, 'handle');
+    }
+
+    /**
+     * Determine if the event handler class should be queued.
+     *
+     * @param  string  $class
+     * @return bool
+     */
+    protected function handlerShouldBeQueued($class)
+    {
+        try {
+            return (new ReflectionClass($class))->implementsInterface(
+                ShouldQueue::class
+            );
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Create a callable for putting an event handler on the queue.
+     *
+     * @param  string  $class
+     * @param  string  $method
+     * @return \Closure
+     */
+    protected function createQueuedHandlerCallable($class, $method)
+    {
+        return function () use ($class, $method) {
+            $arguments = array_map(function ($a) {
+                return is_object($a) ? clone $a : $a;
+            }, func_get_args());
+
+            if ($this->handlerWantsToBeQueued($class, $arguments)) {
+                $this->queueHandler($class, $method, $arguments);
+            }
+        };
+    }
+
+    /**
+     * Determine if the event handler wants to be queued.
+     *
+     * @param  string  $class
+     * @param  array  $arguments
+     * @return bool
+     */
+    protected function handlerWantsToBeQueued($class, $arguments)
+    {
+        if (method_exists($class, 'shouldQueue')) {
+            return $this->container->make($class)->shouldQueue($arguments[0]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Queue the handler class.
+     *
+     * @param  string  $class
+     * @param  string  $method
+     * @param  array  $arguments
+     * @return void
+     */
+    protected function queueHandler($class, $method, $arguments)
+    {
+        list($listener, $job) = $this->createListenerAndJob($class, $method, $arguments);
+
+        $connection = $this->resolveQueue()->connection(
+            $listener->connection ?? null
+        );
+
+        $queue = $listener->queue ?? null;
+
+        isset($listener->delay)
+                    ? $connection->laterOn($queue, $listener->delay, $job)
+                    : $connection->pushOn($queue, $job);
+    }
+
+    /**
+     * Create the listener and job for a queued listener.
+     *
+     * @param  string  $class
+     * @param  string  $method
+     * @param  array  $arguments
+     * @return array
+     */
+    protected function createListenerAndJob($class, $method, $arguments)
+    {
+        $listener = (new ReflectionClass($class))->newInstanceWithoutConstructor();
+
+        return [$listener, $this->propagateListenerOptions(
+            $listener, new CallQueuedListener($class, $method, $arguments)
+        )];
+    }
+
+    /**
+     * Propagate listener options to the job.
+     *
+     * @param  mixed  $listener
+     * @param  mixed  $job
+     * @return mixed
+     */
+    protected function propagateListenerOptions($listener, $job)
+    {
+        return tap($job, function ($job) use ($listener) {
+            $job->tries = $listener->tries ?? null;
+            $job->timeout = $listener->timeout ?? null;
+            $job->timeoutAt = method_exists($listener, 'retryUntil')
+                                ? $listener->retryUntil() : null;
+        });
+    }
+
+    /**
+     * Remove a set of listeners from the dispatcher.
+     *
+     * @param  string  $event
+     * @return void
+     */
+    public function forget($event)
+    {
+        if (Str::contains($event, '*')) {
+            unset($this->wildcards[$event]);
+        } else {
+            unset($this->listeners[$event]);
+        }
     }
 
     /**
@@ -536,18 +539,13 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Remove a set of listeners from the dispatcher.
+     * Get the queue implementation from the resolver.
      *
-     * @param  string  $event
-     * @return void
+     * @return \Illuminate\Contracts\Queue\Queue
      */
-    public function forget($event)
+    protected function resolveQueue()
     {
-        if (Str::contains($event, '*')) {
-            unset($this->wildcards[$event]);
-        } else {
-            unset($this->listeners[$event]);
-        }
+        return call_user_func($this->queueResolver);
     }
 
     /**

@@ -26,10 +26,11 @@
 class Google_Service_ServiceConsumerManagement_Resource_ServicesTenancyUnits extends Google_Service_Resource
 {
   /**
-   * Add a new tenant project to the tenancy unit. If there are previously failed
-   * AddTenantProject calls, you might need to call RemoveTenantProject first to
-   * clean them before you can make another AddTenantProject with the same tag.
-   * Operation. (tenancyUnits.addProject)
+   * Add a new tenant project to the tenancy unit. There can be at most 512 tenant
+   * projects in a tenancy units. If there are previously failed AddTenantProject
+   * calls, you might need to call RemoveTenantProject first to clean them before
+   * you can make another AddTenantProject with the same tag. Operation.
+   * (tenancyUnits.addProject)
    *
    * @param string $parent Name of the tenancy unit.
    * @param Google_Service_ServiceConsumerManagement_AddTenantProjectRequest $postBody
@@ -89,13 +90,13 @@ class Google_Service_ServiceConsumerManagement_Resource_ServicesTenancyUnits ext
    * example 'service.googleapis.com'.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string filter Filter expression over tenancy resources field.
+   * Optional.
    * @opt_param string pageToken The continuation token, which is used to page
    * through large result sets. To get the next page of results, set this
    * parameter to the value of `nextPageToken` from the previous response.
    * @opt_param int pageSize The maximum number of results returned by this
    * request.
-   * @opt_param string filter Filter expression over tenancy resources field.
-   * Optional.
    * @return Google_Service_ServiceConsumerManagement_ListTenancyUnitsResponse
    */
   public function listServicesTenancyUnits($parent, $optParams = array())

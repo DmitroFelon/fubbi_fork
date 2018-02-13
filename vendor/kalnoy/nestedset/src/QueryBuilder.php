@@ -2,15 +2,14 @@
 
 namespace Kalnoy\Nestedset;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Query\Builder as Query;
 use Illuminate\Database\Query\Builder as BaseQueryBuilder;
+use Illuminate\Database\Query\Builder as Query;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use LogicException;
-use Illuminate\Database\Query\Expression;
 
 class QueryBuilder extends Builder
 {
@@ -715,6 +714,7 @@ class QueryBuilder extends Builder
     protected function getDuplicatesQuery()
     {
         $table = $this->wrappedTable();
+        $keyName = $this->wrappedKey();
 
         $firstAlias = 'c1';
         $secondAlias = 'c2';
@@ -726,7 +726,7 @@ class QueryBuilder extends Builder
             ->newNestedSetQuery($firstAlias)
             ->toBase()
             ->from($this->query->raw("{$table} as {$waFirst}, {$table} {$waSecond}"))
-            ->whereRaw("{$waFirst}.id < {$waSecond}.id")
+            ->whereRaw("{$waFirst}.{$keyName} < {$waSecond}.{$keyName}")
             ->whereNested(function (BaseQueryBuilder $inner) use ($waFirst, $waSecond) {
                 list($lft, $rgt) = $this->wrappedColumns();
 

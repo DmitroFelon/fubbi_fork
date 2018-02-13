@@ -5,17 +5,17 @@
 @can('project.accept-review', $project)
 
     @if($project->isOnReview())
-        <a href="{{url("project/accept_review/{$project->id}")}}"
+        <a href="{{ action('Resources\ProjectController@accept_review', $project) }}"
            class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
             {{_i('Accept review')}}
         </a>
-        <a href="{{url("project/reject_review/{$project->id}")}}"
+        <a href="{{action('Resources\ProjectController@reject_review', $project)}}"
            class="btn btn-danger btn-xs btn-xs m-r-sm p-w-sm">
             {{_i('Reject review')}}
         </a>
     @endif()
 
-    <a href="{{url()->action('Project\PlanController@edit', [$project, $project->subscription->stripe_plan])}}"
+    <a href="{{action('Project\PlanController@edit', [$project, $project->subscription->stripe_plan])}}"
        class="btn btn-warning btn-xs btn-xs m-r-sm p-w-sm">
         {{_i('Modify Plan')}}
     </a>
@@ -23,7 +23,7 @@
 
 @role([\App\Models\Role::ADMIN, \App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::CLIENT])
 @can('project.update', $project)
-    <a href="{{url()->action('Resources\ProjectController@edit', $project)}}"
+    <a href="{{action('Resources\ProjectController@edit', $project)}}"
        class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
         {{_i('Edit project')}}
     </a>
@@ -32,7 +32,7 @@
 
 
 @can('articles.create', $project)
-    <a href="{{url()->action('Project\ArticlesController@create', $project)}}"
+    <a href="{{action('Project\ArticlesController@create', $project)}}"
        class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
         {{_i('Add article')}}
     </a>

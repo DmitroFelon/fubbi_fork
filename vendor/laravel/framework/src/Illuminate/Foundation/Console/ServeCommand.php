@@ -32,11 +32,26 @@ class ServeCommand extends Command
      */
     public function handle()
     {
-        chdir($this->laravel->publicPath());
+        chdir(public_path());
 
         $this->line("<info>Laravel development server started:</info> <http://{$this->host()}:{$this->port()}>");
 
         passthru($this->serverCommand());
+    }
+
+    /**
+     * Get the full server command.
+     *
+     * @return string
+     */
+    protected function serverCommand()
+    {
+        return sprintf('%s -S %s:%s %s/server.php',
+            ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)),
+            $this->host(),
+            $this->port(),
+            ProcessUtils::escapeArgument(base_path())
+        );
     }
 
     /**
@@ -57,21 +72,6 @@ class ServeCommand extends Command
     protected function port()
     {
         return $this->input->getOption('port');
-    }
-
-    /**
-     * Get the full server command.
-     *
-     * @return string
-     */
-    protected function serverCommand()
-    {
-        return sprintf('%s -S %s:%s %s/server.php',
-            ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)),
-            $this->host(),
-            $this->port(),
-            ProcessUtils::escapeArgument($this->laravel->basePath())
-        );
     }
 
     /**

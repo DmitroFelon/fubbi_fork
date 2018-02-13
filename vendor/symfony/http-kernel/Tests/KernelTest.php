@@ -16,16 +16,16 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\EnvParametersResource;
 use Symfony\Component\HttpKernel\DependencyInjection\ResettableServicePass;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Tests\Fixtures\KernelForTest;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\Tests\Fixtures\KernelForOverrideName;
+use Symfony\Component\HttpKernel\Tests\Fixtures\KernelForTest;
 use Symfony\Component\HttpKernel\Tests\Fixtures\KernelWithoutBundles;
 use Symfony\Component\HttpKernel\Tests\Fixtures\ResettableService;
 
@@ -63,6 +63,31 @@ class KernelTest extends TestCase
         $this->assertFalse($clone->isBooted());
         $this->assertLessThanOrEqual(microtime(true), $clone->getStartTime());
         $this->assertNull($clone->getContainer());
+    }
+
+    public function testInitializeContainerClearsOldContainers()
+    {
+        $fs = new Filesystem();
+        $legacyContainerDir = __DIR__.'/Fixtures/cache/custom/ContainerA123456';
+        $fs->mkdir($legacyContainerDir);
+        touch($legacyContainerDir.'.legacy');
+
+        $kernel = new CustomProjectDirKernel();
+        $kernel->boot();
+
+        $containerDir = __DIR__.'/Fixtures/cache/custom/'.substr(get_class($kernel->getContainer()), 0, 16);
+        $this->assertTrue(unlink(__DIR__.'/Fixtures/cache/custom/FixturesCustomDebugProjectContainer.php.meta'));
+        $this->assertFileExists($containerDir);
+        $this->assertFileNotExists($containerDir.'.legacy');
+
+        $kernel = new CustomProjectDirKernel(function ($container) { $container->register('foo', 'stdClass')->setPublic(true); });
+        $kernel->boot();
+
+        $this->assertFileExists($containerDir);
+        $this->assertFileExists($containerDir.'.legacy');
+
+        $this->assertFileNotExists($legacyContainerDir);
+        $this->assertFileNotExists($legacyContainerDir.'.legacy');
     }
 
     public function testBootInitializesBundlesAndContainer()
@@ -1022,7 +1047,7 @@ class CustomProjectDirKernel extends Kernel
 
 class PassKernel extends CustomProjectDirKernel implements CompilerPassInterface
 {
-    public function __construct(\Closure $buildContainer = null)
+    public function __construct()
     {
         parent::__construct();
         Kernel::__construct('pass', true);

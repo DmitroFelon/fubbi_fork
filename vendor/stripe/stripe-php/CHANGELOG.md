@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.9.2 - 2018-02-07
+* [#431](https://github.com/stripe/stripe-php/pull/431) Update PHPDoc @property tags for latest API version
+
+## 5.9.1 - 2018-02-06
+* [#427](https://github.com/stripe/stripe-php/pull/427) Add and update PHPDoc @property tags on all API resources
+
+## 5.9.0 - 2018-01-17
+* [#421](https://github.com/stripe/stripe-php/pull/421) Updated bundled CA certificates
+
 ## 5.8.0 - 2017-12-20
 * [#403](https://github.com/stripe/stripe-php/pull/403) Add `__debugInfo()` magic method to `StripeObject`
 

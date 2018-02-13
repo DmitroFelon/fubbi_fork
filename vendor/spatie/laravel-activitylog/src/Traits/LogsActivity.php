@@ -2,12 +2,12 @@
 
 namespace Spatie\Activitylog\Traits;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\ActivityLogger;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\ActivitylogServiceProvider;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait LogsActivity
 {
@@ -66,6 +66,10 @@ trait LogsActivity
 
     public function getLogNameToUse(string $eventName = ''): string
     {
+        if (isset(static::$logName)) {
+            return static::$logName;
+        }
+
         return config('activitylog.default_log_name');
     }
 
@@ -84,7 +88,7 @@ trait LogsActivity
             'deleted',
         ]);
 
-        if (collect(class_uses_recursive(__CLASS__))->contains(SoftDeletes::class)) {
+        if (collect(class_uses_recursive(static::class))->contains(SoftDeletes::class)) {
             $events->push('restored');
         }
 

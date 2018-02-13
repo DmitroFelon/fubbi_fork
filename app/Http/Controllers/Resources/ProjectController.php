@@ -34,12 +34,18 @@ use Stripe\Plan;
  */
 class ProjectController extends Controller
 {
+    
+    protected $project;
+    
     /**
      * ProjectController constructor.
      *
      */
-    public function __construct()
+    public function __construct(Project $project)
     {
+        
+        $this->project = $project;
+        
         $this->middleware('can:index,' . Project::class)->only(['index']);
         $this->middleware('can:project.show,project')->only([
             'show',
@@ -70,7 +76,7 @@ class ProjectController extends Controller
 
         switch ($user->role) {
             case \App\Models\Role::ADMIN:
-                $projects = Project::query();
+                $projects = $this->project->query();
 
                 if ($request->has('status') and $request->get('status')) {
                     if ($request->get('status') == 'active') {

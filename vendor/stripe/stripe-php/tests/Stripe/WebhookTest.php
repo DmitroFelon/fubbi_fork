@@ -10,25 +10,25 @@ class WebhookTest extends TestCase
 }";
     const SECRET = "whsec_test_secret";
 
-    public function testValidJsonAndHeader()
-    {
-        $sigHeader = $this->generateHeader();
-        $event     = Webhook::constructEvent(self::EVENT_PAYLOAD, $sigHeader, self::SECRET);
-        $this->assertEquals("evt_test_webhook", $event->id);
-    }
-
     private function generateHeader($opts = array())
     {
         $timestamp = array_key_exists('timestamp', $opts) ? $opts['timestamp'] : time();
-        $payload   = array_key_exists('payload', $opts) ? $opts['payload'] : self::EVENT_PAYLOAD;
-        $secret    = array_key_exists('secret', $opts) ? $opts['secret'] : self::SECRET;
-        $scheme    = array_key_exists('scheme', $opts) ? $opts['scheme'] : WebhookSignature::EXPECTED_SCHEME;
+        $payload = array_key_exists('payload', $opts) ? $opts['payload'] : self::EVENT_PAYLOAD;
+        $secret = array_key_exists('secret', $opts) ? $opts['secret'] : self::SECRET;
+        $scheme = array_key_exists('scheme', $opts) ? $opts['scheme'] : WebhookSignature::EXPECTED_SCHEME;
         $signature = array_key_exists('signature', $opts) ? $opts['signature'] : null;
         if ($signature === null) {
             $signedPayload = "$timestamp.$payload";
-            $signature     = hash_hmac("sha256", $signedPayload, $secret);
+            $signature = hash_hmac("sha256", $signedPayload, $secret);
         }
         return "t=$timestamp,$scheme=$signature";
+    }
+
+    public function testValidJsonAndHeader()
+    {
+        $sigHeader = $this->generateHeader();
+        $event = Webhook::constructEvent(self::EVENT_PAYLOAD, $sigHeader, self::SECRET);
+        $this->assertEquals("evt_test_webhook", $event->id);
     }
 
     /**
@@ -36,7 +36,7 @@ class WebhookTest extends TestCase
      */
     public function testInvalidJson()
     {
-        $payload   = "this is not valid JSON";
+        $payload = "this is not valid JSON";
         $sigHeader = $this->generateHeader(array("payload" => $payload));
         Webhook::constructEvent($payload, $sigHeader, self::SECRET);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project\Cycle;
 use App\Models\Project\Service;
 use App\Services\Google\Drive;
 use App\User;
@@ -140,6 +141,11 @@ class Article extends Model implements HasMedia
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function cycle()
+    {
+        return $this->belongsTo(Cycle::class);
     }
 
     /**

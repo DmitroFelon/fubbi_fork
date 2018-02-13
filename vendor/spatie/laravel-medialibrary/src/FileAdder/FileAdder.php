@@ -2,18 +2,18 @@
 
 namespace Spatie\MediaLibrary\FileAdder;
 
-use Spatie\MediaLibrary\Media;
-use Spatie\MediaLibrary\Helpers\File;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\Filesystem\Filesystem;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\UnknownType;
-use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\UnknownType;
+use Spatie\MediaLibrary\Filesystem\Filesystem;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Spatie\MediaLibrary\Helpers\File;
+use Spatie\MediaLibrary\Media;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileAdder
 {
@@ -358,7 +358,7 @@ class FileAdder
      * @param Media $media
      * @param FileAdder $fileAdder
      */
-    protected function processMediaItem(HasMedia $model, Media $media, FileAdder $fileAdder)
+    protected function processMediaItem(HasMedia $model, Media $media, self $fileAdder)
     {
         $model->media()->save($media);
 

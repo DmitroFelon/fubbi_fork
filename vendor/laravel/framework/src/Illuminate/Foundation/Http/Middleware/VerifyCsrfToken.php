@@ -3,11 +3,11 @@
 namespace Illuminate\Foundation\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Foundation\Application;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\InteractsWithTime;
 use Symfony\Component\HttpFoundation\Cookie;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Session\TokenMismatchException;
 
 class VerifyCsrfToken
 {
@@ -104,7 +104,7 @@ class VerifyCsrfToken
                 $except = trim($except, '/');
             }
 
-            if ($request->is($except)) {
+            if ($request->fullUrlIs($except) || $request->is($except)) {
                 return true;
             }
         }

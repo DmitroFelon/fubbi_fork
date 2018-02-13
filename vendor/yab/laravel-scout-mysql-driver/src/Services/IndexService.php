@@ -2,10 +2,10 @@
 
 namespace Yab\MySQLScout\Services;
 
-use Laravel\Scout\Searchable;
-use Illuminate\Support\Facades\DB;
-use Yab\MySQLScout\Events;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\DB;
+use Laravel\Scout\Searchable;
+use Yab\MySQLScout\Events;
 
 class IndexService
 {
@@ -67,7 +67,7 @@ class IndexService
     protected function createIndex()
     {
         $indexName = $this->modelService->indexName;
-        $tableName = $this->modelService->tableName;
+        $tableName = $this->modelService->tablePrefixedName;
         $indexFields = implode(',', array_map(function($indexField) {
             return "`$indexField`";
         }, $this->modelService->getFullTextIndexFields()));
@@ -84,7 +84,7 @@ class IndexService
 
     protected function indexAlreadyExists()
     {
-        $tableName = $this->modelService->tableName;
+        $tableName = $this->modelService->tablePrefixedName;
         $indexName = $this->modelService->indexName;
 
         return !empty(DB::connection($this->modelService->connectionName)->
@@ -102,7 +102,7 @@ class IndexService
     protected function getIndexFields()
     {
         $indexName = $this->modelService->indexName;
-        $tableName = $this->modelService->tableName;
+        $tableName = $this->modelService->tablePrefixedName;
 
         $index = DB::connection($this->modelService->connectionName)->
         select("SHOW INDEX FROM $tableName WHERE Key_name = ?", [$indexName]);
@@ -131,7 +131,7 @@ class IndexService
     public function dropIndex()
     {
         $indexName = $this->modelService->indexName;
-        $tableName = $this->modelService->tableName;
+        $tableName = $this->modelService->tablePrefixedName;
 
         if ($this->indexAlreadyExists()) {
             DB::connection($this->modelService->connectionName)

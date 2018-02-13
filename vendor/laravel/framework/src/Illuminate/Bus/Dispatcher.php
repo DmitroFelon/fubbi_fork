@@ -77,6 +77,54 @@ class Dispatcher implements QueueingDispatcher
     }
 
     /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $command
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    public function dispatchNow($command, $handler = null)
+    {
+        if ($handler || $handler = $this->getCommandHandler($command)) {
+            $callback = function ($command) use ($handler) {
+                return $handler->handle($command);
+            };
+        } else {
+            $callback = function ($command) {
+                return $this->container->call([$command, 'handle']);
+            };
+        }
+
+        return $this->pipeline->send($command)->through($this->pipes)->then($callback);
+    }
+
+    /**
+     * Determine if the given command has a handler.
+     *
+     * @param  mixed  $command
+     * @return bool
+     */
+    public function hasCommandHandler($command)
+    {
+        return array_key_exists(get_class($command), $this->handlers);
+    }
+
+    /**
+     * Retrieve the handler for a command.
+     *
+     * @param  mixed  $command
+     * @return bool|mixed
+     */
+    public function getCommandHandler($command)
+    {
+        if ($this->hasCommandHandler($command)) {
+            return $this->container->make($this->handlers[get_class($command)]);
+        }
+
+        return false;
+    }
+
+    /**
      * Determine if the given command should be queued.
      *
      * @param  mixed  $command
@@ -134,54 +182,6 @@ class Dispatcher implements QueueingDispatcher
         }
 
         return $queue->push($command);
-    }
-
-    /**
-     * Dispatch a command to its appropriate handler in the current process.
-     *
-     * @param  mixed $command
-     * @param  mixed $handler
-     * @return mixed
-     */
-    public function dispatchNow($command, $handler = null)
-    {
-        if ($handler || $handler = $this->getCommandHandler($command)) {
-            $callback = function ($command) use ($handler) {
-                return $handler->handle($command);
-            };
-        } else {
-            $callback = function ($command) {
-                return $this->container->call([$command, 'handle']);
-            };
-        }
-
-        return $this->pipeline->send($command)->through($this->pipes)->then($callback);
-    }
-
-    /**
-     * Retrieve the handler for a command.
-     *
-     * @param  mixed $command
-     * @return bool|mixed
-     */
-    public function getCommandHandler($command)
-    {
-        if ($this->hasCommandHandler($command)) {
-            return $this->container->make($this->handlers[get_class($command)]);
-        }
-
-        return false;
-    }
-
-    /**
-     * Determine if the given command has a handler.
-     *
-     * @param  mixed $command
-     * @return bool
-     */
-    public function hasCommandHandler($command)
-    {
-        return array_key_exists(get_class($command), $this->handlers);
     }
 
     /**

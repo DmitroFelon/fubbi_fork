@@ -38,6 +38,22 @@ class Schedule
     }
 
     /**
+     * Add a new callback event to the schedule.
+     *
+     * @param  string|callable  $callback
+     * @param  array   $parameters
+     * @return \Illuminate\Console\Scheduling\CallbackEvent
+     */
+    public function call($callback, array $parameters = [])
+    {
+        $this->events[] = $event = new CallbackEvent(
+            $this->mutex, $callback, $parameters
+        );
+
+        return $event;
+    }
+
+    /**
      * Add a new Artisan command event to the schedule.
      *
      * @param  string  $command
@@ -53,6 +69,26 @@ class Schedule
         return $this->exec(
             Application::formatCommandString($command), $parameters
         );
+    }
+
+    /**
+     * Add a new job callback event to the schedule.
+     *
+     * @param  object|string  $job
+     * @param  string|null  $queue
+     * @return \Illuminate\Console\Scheduling\CallbackEvent
+     */
+    public function job($job, $queue = null)
+    {
+        return $this->call(function () use ($job, $queue) {
+            $job = is_string($job) ? resolve($job) : $job;
+
+            if ($job instanceof ShouldQueue) {
+                dispatch($job)->onQueue($queue);
+            } else {
+                dispatch_now($job);
+            }
+        })->name(is_string($job) ? $job : get_class($job));
     }
 
     /**
@@ -92,42 +128,6 @@ class Schedule
 
             return is_numeric($key) ? $value : "{$key}={$value}";
         })->implode(' ');
-    }
-
-    /**
-     * Add a new job callback event to the schedule.
-     *
-     * @param  object|string $job
-     * @param  string|null $queue
-     * @return \Illuminate\Console\Scheduling\CallbackEvent
-     */
-    public function job($job, $queue = null)
-    {
-        return $this->call(function () use ($job, $queue) {
-            $job = is_string($job) ? resolve($job) : $job;
-
-            if ($job instanceof ShouldQueue) {
-                dispatch($job)->onQueue($queue);
-            } else {
-                dispatch_now($job);
-            }
-        })->name(is_string($job) ? $job : get_class($job));
-    }
-
-    /**
-     * Add a new callback event to the schedule.
-     *
-     * @param  string|callable $callback
-     * @param  array $parameters
-     * @return \Illuminate\Console\Scheduling\CallbackEvent
-     */
-    public function call($callback, array $parameters = [])
-    {
-        $this->events[] = $event = new CallbackEvent(
-            $this->mutex, $callback, $parameters
-        );
-
-        return $event;
     }
 
     /**

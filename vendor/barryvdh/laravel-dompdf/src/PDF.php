@@ -4,9 +4,9 @@ namespace Barryvdh\DomPDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Exception;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Response;
 
 /**
@@ -201,7 +201,7 @@ class PDF{
 
         if ( $this->showWarnings ) {
             global $_dompdf_warnings;
-            if(count($_dompdf_warnings)){
+            if(!empty($_dompdf_warnings) && count($_dompdf_warnings)){
                 $warnings = '';
                 foreach ($_dompdf_warnings as $msg){
                     $warnings .= $msg . "\n";

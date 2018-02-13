@@ -3,12 +3,12 @@
 namespace Spatie\MediaLibrary;
 
 use DateTimeInterface;
-use Illuminate\Support\Collection;
-use Spatie\MediaLibrary\Helpers\File;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\Conversion\Conversion;
 use Spatie\MediaLibrary\Conversion\ConversionCollection;
+use Spatie\MediaLibrary\Helpers\File;
 use Spatie\MediaLibrary\UrlGenerator\UrlGeneratorFactory;
 
 class Media extends Model implements Responsable
@@ -235,9 +235,6 @@ class Media extends Model implements Responsable
      */
     public function toResponse($request)
     {
-        return response()
-            ->file($this->getPath(), [
-                'Content-Type' => $this->mime_type,
-            ]);
+        return response()->download($this->getPath(), $this->file_name);
     }
 }

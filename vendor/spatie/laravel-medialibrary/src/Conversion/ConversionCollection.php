@@ -2,13 +2,13 @@
 
 namespace Spatie\MediaLibrary\Conversion;
 
-use Illuminate\Support\Arr;
-use Spatie\MediaLibrary\Media;
-use Spatie\Image\Manipulations;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\Exceptions\InvalidConversion;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use Spatie\MediaLibrary\Media;
 
 class ConversionCollection extends Collection
 {
@@ -125,7 +125,7 @@ class ConversionCollection extends Collection
     /*
      * Get all the conversions in the collection that should be queued.
      */
-    public function getQueuedConversions(string $collectionName = ''): ConversionCollection
+    public function getQueuedConversions(string $collectionName = ''): self
     {
         return $this->getConversions($collectionName)->filter->shouldBeQueued();
     }
@@ -143,7 +143,7 @@ class ConversionCollection extends Collection
     /*
      * Get all the conversions in the collection that should not be queued.
      */
-    public function getNonQueuedConversions(string $collectionName = ''): ConversionCollection
+    public function getNonQueuedConversions(string $collectionName = ''): self
     {
         return $this->getConversions($collectionName)->reject->shouldBeQueued();
     }
@@ -151,7 +151,7 @@ class ConversionCollection extends Collection
     /**
      * Return the list of conversion files.
      */
-    public function getConversionsFiles(string $collectionName = ''): ConversionCollection
+    public function getConversionsFiles(string $collectionName = ''): self
     {
         return $this->getConversions($collectionName)->map(function (Conversion $conversion) {
             return "{$conversion->getName()}.{$conversion->getResultExtension()}";

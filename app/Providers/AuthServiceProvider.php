@@ -50,6 +50,7 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('project.invite', ProjectPolicy::class . '@invite_users');
         $gate->define('project.show', ProjectPolicy::class . '@show');
         $gate->define('project.apply_to_project', ProjectPolicy::class . '@apply_to_project');
+        $gate->define('project.export', ProjectPolicy::class . '@export');
 
         /*
          * articles additional policies

@@ -85,14 +85,12 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     //looking for a new client account created by webhook handler
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
-
-
+    
     //if client tries to open the link again
     if (!$email) {
         return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
     }
-
-
+    
     $user = \App\User::whereEmail($email)->first();
 
     if (!$user) {
@@ -169,22 +167,24 @@ Route::middleware(['auth'])->group(function () {
         }
     );
 
-    Route::prefix('project')->group(
-        function () {
-            Route::group(['middleware' => ['role:admin|account_manager']], function () {
-                Route::get('accept_review/{project}', "ProjectController@accept_review");
-                Route::get('reject_review/{project}', "ProjectController@reject_review");
-            });
-            Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
-            Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
-
-
-            Route::get('decline_project/{project}', "ProjectController@decline_project");
-        }
-    );
-
 
     Route::namespace('Resources')->group(function () {
+
+        Route::prefix('project')->group(
+            function () {
+                Route::group(['middleware' => ['role:admin|account_manager']], function () {
+                    Route::get('accept_review/{project}', "ProjectController@accept_review");
+                    Route::get('reject_review/{project}', "ProjectController@reject_review");
+                });
+                Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+                Route::get('apply_to_project/{project}', "ProjectController@apply_to_project");
+
+
+                Route::get('decline_project/{project}', "ProjectController@decline_project");
+            }
+        );
+
+
         Route::prefix('projects')->group(function () {
             Route::post('{project}/prefill', 'ProjectController@prefill');
             Route::put('{project}/prefill', 'ProjectController@prefill');

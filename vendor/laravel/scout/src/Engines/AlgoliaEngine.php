@@ -2,10 +2,10 @@
 
 namespace Laravel\Scout\Engines;
 
-use Laravel\Scout\Builder;
 use AlgoliaSearch\Client as Algolia;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Builder;
 
 class AlgoliaEngine extends Engine
 {
@@ -177,7 +177,7 @@ class AlgoliaEngine extends Engine
             collect($results['hits'])->pluck('objectID')->values()->all()
         )->get()->keyBy($model->getKeyName());
 
-        return Collection::make($results['hits'])->map(function ($hit) use ($model, $models) {
+        return Collection::make($results['hits'])->map(function ($hit) use ($models) {
             $key = $hit['objectID'];
 
             if (isset($models[$key])) {

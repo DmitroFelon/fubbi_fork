@@ -25,7 +25,7 @@ class CurlClientTest extends TestCase
 
     public function testUserAgentInfo()
     {
-        $curl   = new CurlClient();
+        $curl = new CurlClient();
         $uaInfo = $curl->getUserAgentInfo();
         $this->assertNotNull($uaInfo);
         $this->assertNotNull($uaInfo['httplib']);
@@ -35,12 +35,12 @@ class CurlClientTest extends TestCase
     public function testDefaultOptions()
     {
         // make sure options array loads/saves properly
-        $optionsArray     = array(CURLOPT_PROXY => 'localhost:80');
+        $optionsArray = array(CURLOPT_PROXY => 'localhost:80');
         $withOptionsArray = new CurlClient($optionsArray);
         $this->assertSame($withOptionsArray->getDefaultOptions(), $optionsArray);
 
         // make sure closure-based options work properly, including argument passing
-        $ref         = null;
+        $ref = null;
         $withClosure = new CurlClient(function ($method, $absUrl, $headers, $params, $hasFile) use (&$ref) {
             $ref = func_get_args();
             return array();
@@ -60,7 +60,7 @@ class CurlClientTest extends TestCase
     public function testSslOption()
     {
         // make sure options array loads/saves properly
-        $optionsArray     = array(CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1);
+        $optionsArray = array(CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1);
         $withOptionsArray = new CurlClient($optionsArray);
         $this->assertSame($withOptionsArray->getDefaultOptions(), $optionsArray);
     }

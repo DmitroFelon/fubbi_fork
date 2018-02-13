@@ -2,9 +2,9 @@
 
 namespace Laravel\Scout;
 
-use Laravel\Scout\Jobs\MakeSearchable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
+use Laravel\Scout\Jobs\MakeSearchable;
 
 trait Searchable
 {
@@ -12,7 +12,6 @@ trait Searchable
      * Additional metadata attributes managed by Scout.
      *
      * @var array
-     * 
      */
     protected $scoutMetadata = [];
 
@@ -93,7 +92,9 @@ trait Searchable
      */
     public static function search($query, $callback = null)
     {
-        return new Builder(new static, $query, $callback);
+        return new Builder(
+            new static, $query, $callback, config('scout.soft_delete', false)
+        );
     }
 
     /**

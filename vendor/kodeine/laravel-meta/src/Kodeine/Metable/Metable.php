@@ -3,8 +3,8 @@
 namespace Kodeine\Metable;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection as BaseCollection;
 
 trait Metable
 {
@@ -15,8 +15,8 @@ trait Metable
      */
     public function scopeMeta($query)
     {
-        return $query->join($this->table.'_meta', $this->table.'.id', '=', $this->table.'_meta.'.$this->getMetaKeyName())
-            ->select($this->table.'.*');
+            return $query->join($this->getMetaTable(), $this->getQualifiedKeyName(), '=', $this->getMetaTable().'.'.$this->getMetaKeyName())
+                ->select($this->getTable().'.*');
     }
 
     /**
@@ -303,8 +303,12 @@ trait Metable
         // unset attributes and relations
         parent::__unset($key);
 
-        // delete meta
-        $this->unsetMeta($key);
+        // delete meta, only if pivot-prefix is not detected in order to avoid unnecessary (N+1) queries
+        // since Eloquent tries to "unset" pivot-prefixed attributes in m2m queries on pivot tables.
+        // N.B. Regular unset of pivot-prefixed keys is thus compromised.
+        if (strpos($key, 'pivot_') !== 0) {
+            $this->unsetMeta($key);
+        }
     }
 
     public function __get($attr)

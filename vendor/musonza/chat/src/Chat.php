@@ -295,6 +295,18 @@ class Chat
     }
 
     /**
+     * Get messages by id.
+     *
+     * @param int $id
+     *
+     * @return Message
+     */
+    public function messageById($id)
+    {
+        return $this->message->findOrFail($id);
+    }
+
+    /**
      * Deletes message.
      *
      * @return void
@@ -323,7 +335,8 @@ class Chat
     }
 
     /**
-     * Get conversations that users have in common
+     * Get conversations that users have in common.
+     *
      *  @param array | collection $users
      *
      * @return Conversations
@@ -368,6 +381,11 @@ class Chat
         return array_values(array_intersect($conversation1, $conversation2));
     }
 
+    public function unreadCount()
+    {
+        return $this->message->unreadCount($this->user);
+    }
+
     /**
      * Returns the User Model class.
      *
@@ -378,8 +396,13 @@ class Chat
         return config('musonza_chat.user_model');
     }
 
-    public static function eventDispatcher()
+    public static function broadcasts()
     {
-        return config('musonza_chat.event_dispatcher');
+        return config('musonza_chat.broadcasts');
+    }
+
+    public static function laravelNotifications()
+    {
+        return config('musonza_chat.laravel_notifications');
     }
 }

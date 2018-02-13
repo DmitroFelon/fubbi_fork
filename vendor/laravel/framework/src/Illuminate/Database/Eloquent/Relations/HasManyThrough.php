@@ -2,11 +2,11 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HasManyThrough extends Relation
 {
@@ -125,7 +125,7 @@ class HasManyThrough extends Relation
      */
     public function getQualifiedParentKeyName()
     {
-        return $this->parent->getTable().'.'.$this->secondLocalKey;
+        return $this->parent->qualifyColumn($this->secondLocalKey);
     }
 
     /**
@@ -495,7 +495,7 @@ class HasManyThrough extends Relation
      */
     public function getQualifiedFirstKeyName()
     {
-        return $this->throughParent->getTable().'.'.$this->firstKey;
+        return $this->throughParent->qualifyColumn($this->firstKey);
     }
 
     /**
@@ -505,7 +505,7 @@ class HasManyThrough extends Relation
      */
     public function getQualifiedForeignKeyName()
     {
-        return $this->related->getTable().'.'.$this->secondKey;
+        return $this->related->qualifyColumn($this->secondKey);
     }
 
     /**
@@ -515,6 +515,6 @@ class HasManyThrough extends Relation
      */
     public function getQualifiedLocalKeyName()
     {
-        return $this->farParent->getTable().'.'.$this->localKey;
+        return $this->farParent->qualifyColumn($this->localKey);
     }
 }
