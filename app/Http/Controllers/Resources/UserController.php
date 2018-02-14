@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use App\Models\Helpers\ProjectStates;
-use App\Models\Role;
-use App\Services\User\SearchSuggestions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -26,7 +24,7 @@ class UserController extends Controller
     {
         $this->request = $request;
         $this->middleware('can:index,' . User::class)->only(['index']);
-        $this->middleware('can:view,user')->only(['show']);
+        //$this->middleware('can:show')->only(['show']);
         //c$this->middleware('can:create,user')->only(['create', 'store']);
         $this->middleware('can:update,user')->only(['edit', 'update']);
     }
@@ -36,40 +34,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        //get roles
-        $roles = Cache::remember(
-            'role_names',
-            10,
-            function () {
-                return Role::all();
-            }
-        );
+        $users = $user->withTrashed()->get();
 
-        //process search
-        if ($this->request->input('s')) {
-            $users = User::search($this->request->input('s'))->get();
-        } else {
-            $users = User::all();
-        }
-
-        $users = $users->filter(function (User $user) {
-            return isset($user->role);
-        });
-
-        $search_suggestions = SearchSuggestions::toView();
-
-        //separate users by roles
-        $groupedByRoles = $users->groupBy('role');
-
-        //fill emprty roles by emprty collection
-        foreach ($roles as $role) {
-            $groupedByRoles[$role->name] = (isset($groupedByRoles[$role->name])) ? $groupedByRoles[$role->name]
-                : collect();
-        }
-
-        return view('entity.user.index', compact('users', 'groupedByRoles', 'roles', 'search_suggestions'));
+        return view('entity.user.index', compact('users'));
     }
 
     /**
@@ -119,8 +88,9 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
+        $user = User::withTrashed()->findOrFail($id);
         return view('entity.user.show', ['user' => $user]);
     }
 
@@ -181,4 +151,17 @@ class UserController extends Controller
 
     }
 
+    public function destroy($id)
+    {
+        $user = User::withTrashed()->find($id);
+
+        if ($user->trashed()) {
+            $user->restore();
+            return redirect()->back()->with('success', $user->name . ' has been restored');
+        }
+
+        $user->delete();
+        return redirect()->back()->with('error', $user->name . ' has been blocked');
+
+    }
 }

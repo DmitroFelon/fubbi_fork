@@ -28,18 +28,19 @@ class UserPolicy
         ];
 
         return in_array($user->role, $allow);
-
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\User $user
-     * @param  \App\User $model
+     * @param $id
      * @return mixed
+     * @internal param User $model
      */
-    public function view(User $user, User $model)
+    public function show(User $user, $id)
     {
+        $model = User::withTrashed()->findOrFail($id);
         $skip = [
             Role::ADMIN,
             Role::ACCOUNT_MANAGER

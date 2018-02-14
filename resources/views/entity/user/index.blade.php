@@ -21,7 +21,7 @@
                            id="role_all"
                            value="all"
                            checked>
-                    <span style="margin-top:-0.1em;" class="badge badge-primary">{{\App\User::count()}}</span>
+                    <span style="margin-top:-0.1em;" class="badge badge-primary">{{\App\User::withTrashed()->count()}}</span>
                     <b class="">All</b>
                 </label>
                 @foreach(\App\Models\Role::all() as $role)
@@ -32,7 +32,7 @@
                                id="role_{{$role->name}}"
                                value="{{$role->display_name}}">
                         <span style="margin-top:-0.1em;"
-                              class="badge badge-primary">{{\App\User::withRole($role->name)->count()}}</span>
+                              class="badge badge-primary">{{\App\User::withRole($role->name)->withTrashed()->count()}}</span>
                         <b class="">{{$role->display_name}}</b>
                     </label>
                 @endforeach
@@ -47,6 +47,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th data-filterable="true">Role</th>
+                    <th>Block</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,7 +61,13 @@
                         </td>
                         <td>{{$user->email}}</td>
                         <td>{{$user->phone}}</td>
-                        <td>{{$user->roles()->first()->display_name}}</td>
+                        <td>{{@$user->roles()->first()->display_name}}</td>
+                        <td>
+                            {!! Form::open([ 'method'  => 'delete', 'route' => [ 'users.destroy', $user ] ]) !!}
+                            {!! Form::submit( ($user->trashed()) ? 'Restore' : 'Block',
+                            ['class' => ($user->trashed()) ? 'btn btn-success btn-xs' : 'btn btn-danger btn-xs'] ) !!}
+                            {!! Form::close() !!}
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -101,7 +108,8 @@
                     {"name": "name", "title": "Name"},
                     {"name": "email", "title": "Email"},
                     {"name": "phone", "title": "Phone"},
-                    {"name": "role", "title": "Role"}
+                    {"name": "role", "title": "Role"},
+                    {"name": "block", "title": ""}
                 ],
                 "paging": {
                     "enabled": true,

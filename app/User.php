@@ -12,6 +12,7 @@ use App\Models\Team;
 use App\Models\Traits\User\hasNotificationSettings;
 use Ghanem\Rating\Traits\Ratingable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -93,6 +94,7 @@ class User extends Authenticatable implements HasMedia
     use Metable;
     use Ratingable;
     use hasNotificationSettings;
+    use SoftDeletes;
 
 
     /**

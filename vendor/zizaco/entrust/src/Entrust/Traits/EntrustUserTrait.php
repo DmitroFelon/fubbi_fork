@@ -55,17 +55,7 @@ trait EntrustUserTrait
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function restore()
-    {   //soft delete undo's
-        $result = parent::restore();
-        if(Cache::getStore() instanceof TaggableStore) {
-            Cache::tags(Config::get('entrust.role_user_table'))->flush();
-        }
-        return $result;
-    }
+    
 
     /**
      * Many-to-Many relations with Role.
@@ -87,14 +77,7 @@ trait EntrustUserTrait
     public static function boot()
     {
         parent::boot();
-
-        static::deleting(function($user) {
-            if (!method_exists(Config::get('auth.model'), 'bootSoftDeletes')) {
-                $user->roles()->sync([]);
-            }
-
-            return true;
-        });
+        
     }
 
     /**

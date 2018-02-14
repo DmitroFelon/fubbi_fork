@@ -61,6 +61,11 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('articles.delete', ArticlePolicy::class . '@delete');
         $gate->define('articles.accept', ArticlePolicy::class . '@accept');
 
+        /*
+         * User Policy
+         * */
+        $gate->define('user.show', UserPolicy::class . '@show');
+
 
     }
 }
