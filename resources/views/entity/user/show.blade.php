@@ -95,15 +95,7 @@
 
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <strong>
-                                    {{_i('How did You find us')}}:
-                                </strong>
-                                {{$user->how_did_you_find_us}}
 
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>

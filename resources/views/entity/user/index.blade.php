@@ -52,7 +52,12 @@
                 <tbody>
                 @foreach($users as $user)
                     <tr>
-                        <td>{{$user->name}}</td>
+                        <td>
+                            <a target="_blank"
+                               href="{{action('Resources\UserController@show', $user)}}">
+                                {{$user->name}}
+                            </a>
+                        </td>
                         <td>{{$user->email}}</td>
                         <td>{{$user->phone}}</td>
                         <td>{{$user->roles()->first()->display_name}}</td>
