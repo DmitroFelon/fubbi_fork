@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Helpers\ProjectStates;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
@@ -153,6 +154,11 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+
+        if (Auth::user()->id == $id) {
+            return redirect()->back()->with('error', "You can't block yourself");
+        }
+
         $user = User::withTrashed()->find($id);
 
         if ($user->trashed()) {
