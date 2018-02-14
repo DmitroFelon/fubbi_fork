@@ -14,21 +14,26 @@
         </div>
         <div class="ibox-content">
             <div class="">
-                <label class="radio-inline">
+                <label class="radio-inline bg-muted b-r-xl p-xs border-left border-right border-top border-bottom">
                     <input type="radio"
+                           class="hidden"
                            name="role"
                            id="role_all"
                            value="all"
                            checked>
-                    All
+                    <span style="margin-top:-0.1em;" class="badge badge-primary">{{\App\User::count()}}</span>
+                    <b class="">All</b>
                 </label>
                 @foreach(\App\Models\Role::all() as $role)
-                    <label class="radio-inline">
+                    <label class="radio-inline b-r-xl p-xs border-left border-right border-top border-bottom">
                         <input type="radio"
+                               class="hidden"
                                name="role"
                                id="role_{{$role->name}}"
                                value="{{$role->display_name}}">
-                        {{$role->display_name}}
+                        <span style="margin-top:-0.1em;"
+                              class="badge badge-primary">{{\App\User::withRole($role->name)->count()}}</span>
+                        <b class="">{{$role->display_name}}</b>
                     </label>
                 @endforeach
             </div>
@@ -62,7 +67,6 @@
     </div>
 @endsection
 
-
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-footable/3.1.6/footable.core.min.js"
             integrity="sha256-0gbetQZJW5O/3L5HemCVmjRftfszer/l2fAOve5aOuk=" crossorigin="anonymous"></script>
@@ -79,7 +83,6 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-footable/3.1.6/footable.paging.min.css"
           integrity="sha256-nn/ARKd+l1ZLJK9Xw62iyxfdRyL3YXZU2EIItdBpqbE=" crossorigin="anonymous"/>
-
     <style>
         .input-group-btn .dropdown-toggle {
             display: none;
@@ -87,6 +90,7 @@
     </style>
     <script>
         jQuery(function ($) {
+
             $('#users-table').footable({
                 "columns": [
                     {"name": "name", "title": "Name"},
@@ -99,14 +103,18 @@
                     "page-size": 1
                 }
             });
+            var table = FooTable.get('#users-table').use(FooTable.Filtering);
             $('input[type=text]').on('change', function () {
                 if ($(this).val() === '') {
                     $('input[type=radio][name=role]').val(['all']);
+                    $('[name=role]').parent('label').removeClass('bg-muted');
+                    $('input[type=radio][name=role][value="all"]').parent('label').addClass('bg-muted');
                 }
             });
             $('[name=role]').on('change', function () {
-                var table = FooTable.get('#users-table').use(FooTable.Filtering);
                 var value = $(this).val();
+                $('[name=role]').parent('label').removeClass('bg-muted');
+                $(this).parent('label').toggleClass('bg-muted');
                 if (value === 'all') {
                     table.removeFilter('role');
                 } else {
