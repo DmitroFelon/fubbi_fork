@@ -64,9 +64,11 @@ class ProjectObserver
         $should_be_invited = [
             Role::ACCOUNT_MANAGER,
         ];
-
-        //send confirmation to client
-        $project->client->notify(new Created($project));
+        
+        if($project->client){
+            //send confirmation to client
+            $project->client->notify(new Created($project));
+        }
 
         foreach ($should_be_notified as $role => $model) {
             $users = User::withRole($role)->get();

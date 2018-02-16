@@ -117,13 +117,13 @@ class Invite extends Model
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	/*public function invitable()
+	public function invitable()
 	{
 		return $this->belongsTo(
 			$this->invitable_type,
 			'invitable_id'
 		);
-	}*/
+	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
