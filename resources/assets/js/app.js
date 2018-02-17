@@ -205,10 +205,10 @@ jQuery(document).ready(function ($) {
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green'
             });
-            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-            elems.forEach(function (html) {
-                var switchery = new Switchery(html, {color: '#1AB394'});
-            });
+            var switches = document.getElementsByClassName("js-switch");
+            for (var i = 0; i < switches.length; i++) {
+                new Switchery(switches[i], {color: '#1AB394'});
+            }
 
             keyword_dropzones.forEach(function (dropzone) {
                 dropzone.off();
