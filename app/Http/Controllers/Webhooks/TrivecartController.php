@@ -102,7 +102,6 @@ class TrivecartController extends Controller
             $project->setCycle($plan_id);
 
 
-
         } catch (\Exception $e) {
             Log::error($e);
         }
