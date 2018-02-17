@@ -92,7 +92,7 @@
             </div>
         </div>
         {!! Form::bsText('homepage', null,
-         _i('What is the home page url of the website we are creating content for?'), '', ['required'], 'url') !!}
+         _i('What is the home page url of the website we are creating content for?'), 'Should be a valid url, like: http://example.com', ['required'], 'url') !!}
     </fieldset>
     <h1>Step 3</h1>
     <fieldset>
@@ -182,32 +182,26 @@
         {!! Form::bsSelect('graphic_styles', config('fubbi.form.quiz.graphic_style'), null,
          _i("Please select from the drop-down menu the style you prefer"), '', ['required']) !!}
 
-        @if($project->subscription->plan_id != 'fubbi-basic-plan-v2')
+        @if($project->services()->where('name', 'quora')->first() and $project->services()->where('name', 'quora')->first()->value)
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="panel-group">
-                        <div class="panel panel-default">
-                            <div class="panel-heading collapsible" data-toggle="collapse" href="#quora-block">
-                                <h4 class="panel-title">
-                                    <span>{{_i("For some of our packages we publish on Quora.
-                                     Do you have a Quora account? (it’s a secure field)")}}</span>
-                                    <i class="text-right fa fa-expand right" aria-hidden="true"></i>
-                                </h4>
-                            </div>
-                            <div id="quora-block" class="panel-collapse row collapse">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        {!! Form::bsText('quora_username', null, _i("Username"), null,
-                                         ['autocomplete' => 'off']) !!}
-                                    </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        {!! Form::bsText('quora_password', null, _i("Password"), null,
-                                         ['autocomplete' => 'new-password'], 'password') !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <label for="is-quora-block"
+                       class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
+                    {{_i('For some of our packages we publish on Quora.
+                                     Do you have a Quora account? (it’s a secure field)')}}
+                </label>
+                <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                    <input id="is-seo-block"
+                           type="checkbox" value="yes" data-target="quora-block" class="js-switch condition-cb"/>
+                </div>
+            </div>
+            <div style="display:none;" class="row" id="quora-block">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    {!! Form::bsText('quora_username', null, _i("Username"), null,
+                     ['autocomplete' => 'off']) !!}
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    {!! Form::bsText('quora_password', null, _i("Password"), null,
+                     ['autocomplete' => 'new-password'], 'password') !!}
                 </div>
             </div>
         @endif

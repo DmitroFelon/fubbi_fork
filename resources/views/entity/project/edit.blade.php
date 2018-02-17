@@ -5,7 +5,7 @@
         <div class="col-sm-4 p-md">
             <div>
                 <a class="lead" target="_blank" href="{{url()->action('Resources\ProjectController@show', $project)}}">
-                    {{title_case($project->subscription->name)}}
+                    {{title_case($project->name)}}
                 </a><br>
                 <small class="text-muted">
                     {{_i('Created')}}: {{$project->subscription->created_at->diffForHumans()}}
@@ -20,13 +20,13 @@
                 </small>
 
                 @role([\App\Models\Role::CLIENT])
-                    <div class="m-t-md">
+                <div class="m-t-md">
                             <span class="text-primary">
                                 <a target="_blank" href="{{action('ResearchController@index')}}">
-                                    {{_i('Make a research before filling quiz')}}
+                                    {{_i('Click here to conduct research before filling out quiz')}}
                                 </a>
                             </span>
-                    </div>
+                </div>
                 @endrole
             </div>
         </div>
@@ -37,11 +37,4 @@
     <div class="ibox">
         @include('entity.project.form')
     </div>
-
-@endsection
-
-@section('before-scripts')
-    @if($project->step == \App\Models\Helpers\ProjectStates::PLAN_SELECTION)
-        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    @endif
 @endsection

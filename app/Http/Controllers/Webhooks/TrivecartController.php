@@ -84,7 +84,7 @@ class TrivecartController extends Controller
 
             $subscription              = new \Laravel\Cashier\Subscription;
             $subscription->user_id     = $user->id;
-            $subscription->name        = str_random(10);
+            $subscription->name        = $customer['business_name'] ?? str_random(10);
             $subscription->stripe_id   = $subscription_id;
             $subscription->stripe_plan = $plan_id;
             $subscription->quantity    = 1;
@@ -94,7 +94,7 @@ class TrivecartController extends Controller
             $project                  = new Project;
             $project->client_id       = $user->id;
             $project->subscription_id = $subscription->id;
-            $project->name            = 'Project #' . strval($request->input('order_id'));
+            $project->name            = $customer['business_name'] ?? 'Project #' . strval($request->input('order_id'));
             $project->state           = ProjectStates::QUIZ_FILLING;
 
             $project->save();

@@ -14,11 +14,21 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * Class GlobalNotification
+ * @package App\Services\User
+ */
 class GlobalNotification
 {
 
+    /**
+     * @var
+     */
     protected $user;
 
+    /**
+     *
+     */
     public function make()
     {
         if (!Auth::check()) {
@@ -32,6 +42,9 @@ class GlobalNotification
 
     }
 
+    /**
+     *
+     */
     private function client()
     {
         $filling_states = [
@@ -53,31 +66,50 @@ class GlobalNotification
 
     }
 
+    /**
+     *
+     */
     private function account_manager()
     {
 
     }
 
+    /**
+     *
+     */
     private function writer()
     {
 
     }
 
+    /**
+     *
+     */
     private function designer()
     {
 
     }
 
+    /**
+     *
+     */
     private function editor()
     {
 
     }
 
+    /**
+     *
+     */
     private function researcher()
     {
 
     }
 
+    /**
+     * @param string $type
+     * @param string $value
+     */
     private function push(string $type, string $value)
     {
         Session::push($type, $value);
