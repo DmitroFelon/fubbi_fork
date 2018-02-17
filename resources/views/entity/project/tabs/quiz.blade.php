@@ -190,8 +190,10 @@
                                      Do you have a Quora account? (it’s a secure field)')}}
                 </label>
                 <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                    <strong class="m-r-sm">No</strong>
                     <input id="is-quora-block"
                            type="checkbox" value="yes" data-target="quora-block" class="js-switch condition-cb"/>
+                    <strong class="m-l-sm">Yes</strong>
                 </div>
             </div>
             <div style="display:none;" class="row" id="quora-block">
