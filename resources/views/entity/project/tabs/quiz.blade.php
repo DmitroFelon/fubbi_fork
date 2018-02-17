@@ -199,11 +199,11 @@
             <div style="display:none;" class="row" id="quora-block">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     {!! Form::bsText('quora_username', null, _i("Username"), null,
-                     ['autocomplete' => 'off']) !!}
+                     ['autocomplete' => 'off', 'required']) !!}
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     {!! Form::bsText('quora_password', null, _i("Password"), null,
-                     ['autocomplete' => 'new-password'], 'password') !!}
+                     ['autocomplete' => 'new-password', 'required'], 'password') !!}
                 </div>
             </div>
         @endif
