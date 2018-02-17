@@ -189,7 +189,9 @@ jQuery(document).ready(function ($) {
             }
         },
         onFinishing: function (event, currentIndex) {
-
+            window.onbeforeunload = function () {
+                // blank function do nothing
+            }
             preUploadKeywords();
             return true;
         },

@@ -2,7 +2,7 @@
 
 namespace Spatie\MediaLibrary\Helpers;
 
-use finfo;
+
 
 class File
 {
@@ -32,7 +32,7 @@ class File
 
     public static function getMimetype(string $path) : string
     {
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
+        $finfo = new \Finfo(FILEINFO_MIME_TYPE);
 
         return $finfo->file($path);
     }
