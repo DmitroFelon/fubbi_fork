@@ -215,8 +215,10 @@
                 {{_i('Do you have an SEO Company?')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-seo-block"
                        type="checkbox" value="yes" data-target="seo-block" class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 
@@ -246,9 +248,11 @@
                 {{_i('Do you have branding guidelines?')}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-compliance_guideline-block"
                        type="checkbox" value="yes" data-target="compliance_guideline-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 
@@ -266,9 +270,11 @@
                 {{_i('Do you have a high resolution logo that we can use?')}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-logo-block"
                        type="checkbox" value="yes" data-target="logo-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 
@@ -286,9 +292,11 @@
                 {{_i("Do you want us to add images to your articles?")}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-article_images"
                        type="checkbox" value="yes" data-target="article_images-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
 
         </div>
@@ -324,9 +332,11 @@
                 {{_i("Do you have keywords that you want us to avoid or content that you would not want us to use?")}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-avoid_keywords"
                        type="checkbox" value="yes" data-target="avoid_keywords-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 
@@ -346,9 +356,11 @@
                 {{_i("Do you want us to add calls to action (CTA) to the end of your articles?")}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-cta"
                        type="checkbox" value="yes" data-target="cta-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 
@@ -369,9 +381,11 @@
                 see in future articles? If so, please upload transcripts.")}}
             </label>
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <strong class="m-r-sm">No</strong>
                 <input id="is-ready_content"
                        type="checkbox" value="yes" data-target="ready_content-block"
                        class="js-switch condition-cb"/>
+                <strong class="m-l-sm">Yes</strong>
             </div>
         </div>
 

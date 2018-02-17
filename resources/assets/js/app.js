@@ -183,6 +183,10 @@ jQuery(document).ready(function ($) {
                 localStorage.setItem("keywords-form-step", currentIndex);
             } else {
             }
+            var switches = document.getElementsByClassName("js-switch");
+            for (var i = 0; i < switches.length; i++) {
+                new Switchery(switches[i], {color: '#1AB394'});
+            }
         },
         onFinishing: function (event, currentIndex) {
 
