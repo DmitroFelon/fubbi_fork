@@ -86,6 +86,10 @@ jQuery(document).ready(function ($) {
                     jQuery("#quiz-form-t-" + localStorage.getItem("quiz-form-step")).click();
                 }
             }
+            var switches = document.getElementsByClassName("js-switch");
+            for (var i = 0; i < switches.length; i++) {
+                new Switchery(switches[i], {color: '#1AB394'});
+            }
         },
         onStepChanging: function (event, currentIndex, newIndex) {
 
@@ -97,7 +101,6 @@ jQuery(document).ready(function ($) {
             var form = $("#quiz-form");
 
             if (currentIndex < newIndex) {
-
                 // To remove error styles
                 form.find(".body:eq(" + newIndex + ") label.error").remove();
                 form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
@@ -111,7 +114,6 @@ jQuery(document).ready(function ($) {
                 },
                 "Please fill at least 10 themes"
             );
-
             if (currentIndex === 0) {
                 form.validate({
                     rules: {
@@ -122,34 +124,29 @@ jQuery(document).ready(function ($) {
                     }
                 })
             }
-
-
             form.validate().settings.ignore = ":disabled,:hidden:not('#themes')";
-
             if (form.valid()) {
                 preUploadQuiz();
                 return true;
             }
-
             return false;
         },
-
         onStepChanged: function (event, currentIndex) {
-            //todo save data to server
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("quiz-form-step", currentIndex);
             } else {
             }
         },
         onFinishing: function (event, currentIndex) {
+            window.onbeforeunload = function () {
+            }
             preUploadQuiz()
             return true;
-            //todo add validation
         },
         onFinished: function (event, currentIndex) {
             var form = $(this);
             form.submit();
-        },
+        }
     });
 
     /*
@@ -173,9 +170,7 @@ jQuery(document).ready(function ($) {
             }
         },
         onStepChanging: function (event, currentIndex) {
-
             preUploadKeywords();
-
             return true;
         },
         onStepChanged: function (event, currentIndex) {
@@ -183,15 +178,8 @@ jQuery(document).ready(function ($) {
                 localStorage.setItem("keywords-form-step", currentIndex);
             } else {
             }
-            var switches = document.getElementsByClassName("js-switch");
-            for (var i = 0; i < switches.length; i++) {
-                new Switchery(switches[i], {color: '#1AB394'});
-            }
         },
         onFinishing: function (event, currentIndex) {
-            window.onbeforeunload = function () {
-                // blank function do nothing
-            }
             preUploadKeywords();
             return true;
         },
