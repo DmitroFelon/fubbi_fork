@@ -2,6 +2,8 @@
 
 namespace Spatie\MediaLibrary\Helpers;
 
+use finfo;
+
 class File
 {
     public static function renameInDirectory(string $fileNameWithDirectory, string $newFileNameWithoutDirectory) : string
