@@ -356,6 +356,10 @@ class User extends Authenticatable implements HasMedia
                 return;
             }
 
+            if(!$message->sender){
+                return null;
+            }
+
             if ($message->sender->id == $this->id) {
                 $notification->markAsRead();
                 return null;
