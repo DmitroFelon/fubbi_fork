@@ -158,6 +158,7 @@ class TrivecartController extends Controller
         //if there is no email provided form thrivecart with redirect
         if (!$email) {
             Log::debug($request->input());
+            Session::flash('change_password');
             return redirect()
                 ->action('Auth\LoginController@login')
                 ->with(
@@ -171,6 +172,8 @@ class TrivecartController extends Controller
 
         //if user has not beed created by thrivecart webhook handler
         if (!$user) {
+            Log::debug(User::where('email', $email)->first());
+            Session::flash('change_password');
             return redirect()
                 ->action('Auth\LoginController@login')
                 ->with(
