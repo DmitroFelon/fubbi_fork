@@ -63,7 +63,7 @@ class HelpVideo extends Model
      */
     public function getPlayerAttribute($value)
     {
-        return 'http://www.youtube.com/embed/' . $this->youtube_id;
+        return 'https://www.youtube.com/embed/' . $this->youtube_id;
     }
 
     /**
@@ -72,7 +72,7 @@ class HelpVideo extends Model
      */
     public function getThumbnailAttribute($value)
     {
-        return 'http://img.youtube.com/vi/' . $this->youtube_id . '/default.jpg';
+        return 'https://img.youtube.com/vi/' . $this->youtube_id . '/default.jpg';
     }
 
     /**
