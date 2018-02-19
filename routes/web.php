@@ -88,10 +88,10 @@ Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
     if (!$email) {
         Log::debug($request->input());
         return redirect()->action('Auth\LoginController@login')
-                         ->with('error', 'Session expired, your email not found');
+                         ->with('error', 'Wrong redirect link');
     }
 
-    $user = \App\User::whereEmail($email)->first();
+    $user = \App\User::where('email', $email)->first();
 
     if (!$user) {
         return redirect()->action('Auth\LoginController@login')
