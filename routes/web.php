@@ -14,28 +14,31 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+//global notifications for test
 View::composer('master', function () {
     \App\Facades\GlobalNotification::make();
 });
 
+//stripe and thrivecard hooks
 Route::namespace('Webhooks')->group(function () {
     //Stripe routes
     Route::post('stripe/webhook', 'WebhookController@handleWebhook');
     //Thrivecart handler
     Route::post('thrivecart', 'TrivecartController@handle');
+
+    Route::get('cart_redirect', 'TrivecartController@cartRedirect');
 });
 
 //Auth
 Auth::routes();
 
+//hide closed alrets
 Route::get('coockie/{key}/{value}', function (string $key, string $value) {
     Session::put($key, $value);
     return ['ok'];
 });
 
-Route::get('test', function (\Illuminate\Http\Request $request) {
-});
-
+//shows rendered emails
 Route::get('/test_email/{index}', function ($index) {
 
     try {
@@ -78,57 +81,13 @@ Route::get('/test_email/{index}', function ($index) {
 
 });
 
-Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
-
-    //looking for a new client account created by webhook handler
-    $customer_data = $request->input('thrivecart');
-    $email         = $customer_data['customer']['email'] ?? false;
-
-    //if client tries to open the link again
-    if (!$email) {
-        Log::debug($request->input());
-        return redirect()->action('Auth\LoginController@login')
-                         ->with('error', 'Wrong redirect link');
-    }
-
-    $user = \App\User::where('email', $email)->first();
-
-    if (!$user) {
-        return redirect()->action('Auth\LoginController@login')
-                         ->with('error', 'Session expired, there is no account with your email');
-    }
-
-    Auth::logout();
-    Auth::login($user, true);
-
-    if (!$user->role) {
-        $role = \App\Models\Role::where('name', \App\Models\Role::CLIENT)->first();
-        $user->attachRole($role);
-    }
-
-    //in case user already has an account
-    if ($user->projects()->count() > 1) {
-        $project = $user->projects()->latest()->first();
-        if ($project) {
-            return redirect()->action('Resources\ProjectController@edit', [
-                $project,
-                's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING
-            ]);
-        }
-    }
-
-    //in case user has to set the password
-    \Illuminate\Support\Facades\Session::flash('change_password');
-
-    return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
-});
-
 //Socket auth
 Broadcast::routes();
 
 Broadcast::channel('App.User.{user_id}', function ($user, $user_id) {
     return true;
 });
+
 //Notifications
 Broadcast::channel('conversation.{conversation_id}', function ($user, $conversation_id) {
     $conversation = \Musonza\Chat\Facades\ChatFacade::conversation($conversation_id);

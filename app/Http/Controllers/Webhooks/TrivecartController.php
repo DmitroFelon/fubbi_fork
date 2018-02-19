@@ -8,14 +8,21 @@ use App\Models\Project;
 use App\Models\Role;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Stripe\Customer;
 use Stripe\Subscription;
 
+/**
+ * Class TrivecartController
+ * @package App\Http\Controllers\Webhooks
+ */
 class TrivecartController extends Controller
 {
 
@@ -29,13 +36,21 @@ class TrivecartController extends Controller
      */
     protected $subscription;
 
+    /**
+     * TrivecartController constructor.
+     * @param Project $project
+     * @param \Laravel\Cashier\Subscription $subscription
+     */
     public function __construct(Project $project, \Laravel\Cashier\Subscription $subscription)
     {
         $this->project      = $project;
         $this->subscription = $subscription;
     }
 
-
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function handle(Request $request)
     {
         Log::debug($request->input());
@@ -127,5 +142,62 @@ class TrivecartController extends Controller
         Log::debug('TrivecartController:handle end');
 
         return new Response('Webhook Handled', 200);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function cartRedirect(Request $request)
+    {
+        //looking for data of a new client account created by thrivecart webhook handler
+        $customer_data = $request->input('thrivecart');
+        $email         = $customer_data['customer']['email'] ?? false;
+
+        //if there is no email provided form thrivecart with redirect
+        if (!$email) {
+            Log::debug($request->input());
+            return redirect()
+                ->action('Auth\LoginController@login')
+                ->with(
+                    'error',
+                    'Something wrong happened while redirecting, please find the password in your email inbox'
+                );
+        }
+
+        //find new user
+        $user = User::where('email', $email)->first();
+
+        //if user has not beed created by thrivecart webhook handler
+        if (!$user) {
+            return redirect()
+                ->action('Auth\LoginController@login')
+                ->with(
+                    'error',
+                    'Please, find the password in your email inbox'
+                );
+        }
+
+        //re-login user
+        Auth::logout();
+        Auth::login($user, true);
+
+        //in case user already has an account
+        if ($user->projects()->count() > 1) {
+            $project = $user->projects()->latest()->first();
+            if ($project) {
+                return redirect()->action('Resources\ProjectController@edit', [
+                    $project,
+                    's' => ProjectStates::QUIZ_FILLING
+                ]);
+            }
+        }
+
+        //in case user has to set the password
+        Session::flash('change_password');
+
+        //redirect to project filling page
+        return redirect()->action('SettingsController@index')->with('success', 'Please create a new password');
     }
 }
