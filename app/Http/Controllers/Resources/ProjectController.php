@@ -34,18 +34,18 @@ use Stripe\Plan;
  */
 class ProjectController extends Controller
 {
-    
+
     protected $project;
-    
+
     /**
      * ProjectController constructor.
      *
      */
     public function __construct(Project $project)
     {
-        
+
         $this->project = $project;
-        
+
         $this->middleware('can:index,' . Project::class)->only(['index']);
         $this->middleware('can:project.show,project')->only([
             'show',
@@ -222,9 +222,11 @@ class ProjectController extends Controller
      */
     public function edit(Project $project, Request $request)
     {
-        $step = ($request->has('s'))
-            ? $request->input('s')
-            : $project->state;
+        if (!$request->has('s')) {
+            return redirect()->action('Resources\ProjectController@edit', [$project, 's' => $project->state]);
+        }
+
+        $step = $project->state;
 
         $plans = ($step == ProjectStates::PLAN_SELECTION)
             ? Cache::rememberForever('public_plans', function () {

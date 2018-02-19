@@ -41,12 +41,5 @@
 
 
 @section('scripts')
-    <script>
-        jQuery(document).ready(function ($) {
-            var switches = document.getElementsByClassName("js-switch");
-            for (var i = 0; i < switches.length; i++) {
-                new Switchery(switches[i], {color: '#1AB394'});
-            }
-        });
-    </script>
+
 @endsection
