@@ -167,8 +167,16 @@ class TrivecartController extends Controller
                 );
         }
 
-        //find new user
-        $user = User::where('email', $email)->first();
+
+        //find new user, 3 attempts
+        for ($i = 0; $i < 3; $i++) {
+            $user = User::where('email', $email)->first();
+            if (!$user) {
+                sleep(3); //wait 3 seconds before next attempt
+            } else {
+                break;
+            }
+        }
 
         //if user has not beed created by thrivecart webhook handler
         if (!$user) {
