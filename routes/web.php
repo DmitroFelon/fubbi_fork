@@ -79,22 +79,23 @@ Route::get('/test_email/{index}', function ($index) {
 });
 
 Route::get('cart_redirect', function (\Illuminate\Http\Request $request) {
-    
-    Log::debug($request->input());
 
     //looking for a new client account created by webhook handler
     $customer_data = $request->input('thrivecart');
     $email         = $customer_data['customer']['email'] ?? false;
-    
+
     //if client tries to open the link again
     if (!$email) {
-        return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
+        Log::debug($request->input());
+        return redirect()->action('Auth\LoginController@login')
+                         ->with('error', 'Session expired, your email not found');
     }
-    
+
     $user = \App\User::whereEmail($email)->first();
 
     if (!$user) {
-        return redirect()->action('Auth\LoginController@login')->with('error', 'Session expired');
+        return redirect()->action('Auth\LoginController@login')
+                         ->with('error', 'Session expired, there is no account with your email');
     }
 
     Auth::logout();

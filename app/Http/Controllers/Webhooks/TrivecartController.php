@@ -18,6 +18,24 @@ use Stripe\Subscription;
 
 class TrivecartController extends Controller
 {
+
+
+    /**
+     * @var Project
+     */
+    protected $project;
+    /**
+     * @var \Laravel\Cashier\Subscription
+     */
+    protected $subscription;
+
+    public function __construct(Project $project, \Laravel\Cashier\Subscription $subscription)
+    {
+        $this->project      = $project;
+        $this->subscription = $subscription;
+    }
+
+
     public function handle(Request $request)
     {
         Log::debug($request->input());
@@ -82,7 +100,7 @@ class TrivecartController extends Controller
                 $user->save();
             }
 
-            $subscription              = new \Laravel\Cashier\Subscription;
+            $subscription              = $this->subscription;
             $subscription->user_id     = $user->id;
             $subscription->name        = $customer['business_name'] ?? str_random(10);
             $subscription->stripe_id   = $subscription_id;
@@ -91,7 +109,7 @@ class TrivecartController extends Controller
 
             $subscription->save();
 
-            $project                  = new Project;
+            $project                  = $this->project;
             $project->client_id       = $user->id;
             $project->subscription_id = $subscription->id;
             $project->name            = $customer['business_name'] ?? 'Project #' . strval($request->input('order_id'));

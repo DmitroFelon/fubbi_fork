@@ -27,8 +27,6 @@ class WebhookController extends Controller
 
         $method = 'handle' . studly_case(str_replace('.', '_', $payload['type']));
 
-        Log::debug($method);
-
         if (method_exists($this, $method)) {
             return $this->{$method}($payload);
         } else {
