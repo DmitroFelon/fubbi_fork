@@ -168,8 +168,8 @@ class TrivecartController extends Controller
         }
 
 
-        //find new user, 3 attempts
-        for ($i = 0; $i < 3; $i++) {
+        //find new user, 5 attempts
+        for ($i = 0; $i < 5; $i++) {
             Log::debug($email . ' attempt: ' . $i);
             $user = User::where('email', $email)->first();
             if (!$user) {
