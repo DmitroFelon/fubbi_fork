@@ -31,7 +31,8 @@ class StatusChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ($notifiable->disabled_notifications()->where('name', get_class($this))->get())
+            ? [] : ['mail'];
     }
 
     /**
@@ -44,7 +45,7 @@ class StatusChanged extends Notification
     {
         return (new MailMessage)
             ->subject('Project status changed')
-            ->line(_i('"%s" status has been changed to "%s"', [
+            ->line(_i('"%s" status has been changed to: %s', [
                 $this->project->name,
                 ucfirst(str_replace('_', ' ', $this->project->state))
             ]))
