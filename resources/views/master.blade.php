@@ -80,7 +80,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-<script src="{!! asset('js/app.js') !!}" type="text/javascript"></script>
+<script src="{!! asset('js/app.js') !!}?v=1" type="text/javascript"></script>
 
 @yield('scripts')
 
