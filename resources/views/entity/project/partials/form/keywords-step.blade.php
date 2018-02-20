@@ -2,7 +2,7 @@
     <h3>{{_i('Please, fill out the fields below')}} </h3>
 </div>
 
-<script type="text/javascript">
+<script data-cfasync='false' type="text/javascript">
     var idea_id = "{{$idea->id}}";
     console.log('idea init' + idea_id);
 </script>
