@@ -2,6 +2,12 @@
     <h3>{{_i('Please, fill out the fields below')}} </h3>
 </div>
 
+<script type="text/javascript">
+    var meta_dropzone_id = "meta-{{str_replace(' ', '_', $idea->id)}}-files";
+    var idea_id = "{{$idea->id}}";
+    var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $idea->id)}}-collection";
+</script>
+
 <div class="row p-h-lg">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <input value="0" name="meta[{{$idea->id}}][this_month]" type="hidden"/>
@@ -86,11 +92,6 @@
 
         </div>
     </div>
-    <script type="text/javascript">
-        var meta_dropzone_id = "meta-{{str_replace(' ', '_', $idea->id)}}-files";
-        var idea_id = "{{$idea->id}}";
-        var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $idea->id)}}-collection";
-    </script>
 </div>
 
 <div class="row text-center">
