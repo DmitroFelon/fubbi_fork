@@ -3,9 +3,9 @@
 </div>
 
 <script type="text/javascript">
-    var meta_dropzone_id = "meta-{{str_replace(' ', '_', $idea->id)}}-files";
+    var meta_dropzone_id = "meta-{{$idea->id}}-files";
     var idea_id = "{{$idea->id}}";
-    var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $idea->id)}}-collection";
+    var meta_dropzone_collection = "meta-{{$idea->id}}-collection";
 </script>
 
 <div class="row p-h-lg">
