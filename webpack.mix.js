@@ -45,4 +45,4 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],
-        'public/js/app.js') .version();
+        'public/js/app.js');
