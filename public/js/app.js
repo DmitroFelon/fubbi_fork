@@ -350,7 +350,7 @@ jQuery(document).ready(function ($) {
                 dropzone.destroy();
             });
 
-            var dropzone = new Dropzone('div#' + meta_dropzone_id, {
+            var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
                 url: "/ideas/" + idea_id + "/prefill_meta_files",
                 paramName: 'files',
                 method: 'POST',

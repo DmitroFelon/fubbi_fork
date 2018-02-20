@@ -5,7 +5,6 @@
 <script type="text/javascript">
     var meta_dropzone_id = "meta-{{$idea->id}}-files";
     var idea_id = "{{$idea->id}}";
-    var meta_dropzone_collection = "meta-{{$idea->id}}-collection";
 </script>
 
 <div class="row p-h-lg">
