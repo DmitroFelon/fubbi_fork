@@ -3,7 +3,6 @@
 </div>
 
 <script type="text/javascript">
-    var meta_dropzone_id = "meta-{{$idea->id}}-files";
     var idea_id = "{{$idea->id}}";
 </script>
 
@@ -82,7 +81,7 @@
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div data-theme="{{$idea->id}}" id="meta-{{$idea->id}}-files"
+                    <div onload="" data-theme="{{$idea->id}}" id="meta-{{$idea->id}}-files"
                          class="dropzone keyword-dropzone">
                     </div>
                 </div>
