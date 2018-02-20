@@ -58,7 +58,10 @@ class GlobalNotification
             $message = 'Please, continue filling project: <br>';
 
             $projects->each(function (Project $project) use (&$message) {
-                $message .= '<a href="' . action('Resources\ProjectController@show', $project) . '">' . $project->name . '</a><br>';
+                $message .= '<a href="' . action('Resources\ProjectController@edit', [
+                        $project,
+                        's' => $project->state
+                    ]) . '">' . $project->name . '</a><br>';
             });
 
             $this->push('info', $message);
