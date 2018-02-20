@@ -12,49 +12,49 @@
         <input value="0" name="meta[{{$idea->id}}][this_month]" type="hidden"/>
         <input value="0" name="meta[{{$idea->id}}][next_moth]" type="hidden"/>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-points_covered"
+            <label for="meta-{{$idea->id}}-points_covered"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('What points should we cover in the content?')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
-                <textarea id="meta-{{str_replace(' ', '_', $idea->id)}}-points_covered"
+                <textarea id="meta-{{$idea->id}}-points_covered"
                           name="meta[{{$idea->id}}][points_covered]"
                           type="text" class="autoheight form-control">{{$idea->points_covered}}</textarea>
                 <span class="help-block"></span>
             </div>
         </div>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-points_avoid"
+            <label for="meta-{{$idea->id}}-points_avoid"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('What points should we avoid in content?')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
-                <textarea id="meta-{{str_replace(' ', '_', $idea->id)}}-points_avoid"
+                <textarea id="meta-{{$idea->id}}-points_avoid"
                           name="meta[{{$idea->id}}][points_avoid]"
                           type="text" class="autoheight form-control">{{$idea->points_avoid}}</textarea>
                 <span class="help-block"></span>
             </div>
         </div>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-references"
+            <label for="meta-{{$idea->id}}-references"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('Links to references articles, research, trancripts references to help us write the contract? Please copy and paste links here')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
-                <textarea id="meta-{{str_replace(' ', '_', $idea->id)}}-references"
+                <textarea id="meta-{{$idea->id}}-references"
                           name="meta[{{$idea->id}}][references]"
                           type="text" class="autoheight form-control">{{$idea->references}}</textarea>
                 <span class="help-block"></span>
             </div>
         </div>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-this_month"
+            <label for="meta-{{$idea->id}}-this_month"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('Write about topic this month?')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
 
-                <input id="meta-{{str_replace(' ', '_', $idea->id)}}-this_month"
+                <input id="meta-{{$idea->id}}-this_month"
                        name="meta[{{$idea->id}}][this_month]"
                        {{($idea->this_month) ? 'checked' : ''}}
                        type="checkbox" value="1" class="js-switch"/>
@@ -62,13 +62,13 @@
             </div>
         </div>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-next_month"
+            <label for="meta-{{$idea->id}}-next_month"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('Write about topic next month?')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
 
-                <input id="meta-{{str_replace(' ', '_', $idea->id)}}-next_month"
+                <input id="meta-{{$idea->id}}-next_month"
                        name="meta[{{$idea->id}}][next_month]"
                        {{($idea->next_month) ? 'checked' : ''}}
                        type="checkbox" value="1" class="js-switch"/>
@@ -76,13 +76,13 @@
             </div>
         </div>
         <div class="row">
-            <label for="meta-{{str_replace(' ', '_', $idea->id)}}-next_moth"
+            <label for="meta-{{$idea->id}}-next_moth"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('Upload documents')}}
             </label>
             <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div data-theme="{{$idea->id}}" id="meta-{{str_replace(' ', '_', $idea->id)}}-files"
+                    <div data-theme="{{$idea->id}}" id="meta-{{$idea->id}}-files"
                          class="dropzone keyword-dropzone">
                     </div>
                 </div>

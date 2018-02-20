@@ -207,7 +207,7 @@ jQuery(document).ready(function ($) {
             keyword_dropzones.forEach(function (dropzone) {
                 dropzone.off();
                 dropzone.destroy();
-            });
+            }); 
 
             var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
                 url: "/ideas/" + idea_id + "/prefill_meta_files",
@@ -255,7 +255,7 @@ jQuery(document).ready(function ($) {
 
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
+            radioClass: 'iradio_square-green'
         });
     });
 
@@ -285,7 +285,7 @@ jQuery(document).ready(function ($) {
 
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
+            radioClass: 'iradio_square-green'
         });
     });
 

@@ -19,7 +19,7 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/sass/plugins/bootstrap-markdown/bootstrap-markdown.min.css',
             'resources/assets/sass/plugins/datapicker/datepicker3.css',
             'resources/assets/sass/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
-            'resources/assets/sass/plugins/dropzone/dropzone.css',
+            'resources/assets/sass/plugins/dropzone/dropzone.css'
         ],
         'public/css/vendor.css')
     .js(
@@ -37,11 +37,11 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/iCheck/icheck.min.js',
             'resources/assets/js/plugins/bootstrap-markdown/bootstrap-markdown.js',
             'resources/assets/js/plugins/bootstrap-markdown/markdown.js',
-            'resources/assets/js/plugins/datapicker/bootstrap-datepicker.js',
+            'resources/assets/js/plugins/datapicker/bootstrap-datepicker.js'
         ],
         'public/js/lib.js')
     .sourceMaps().version()
-    .scripts(
+    .babel(
         [
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
