@@ -40,9 +40,10 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
             'resources/assets/js/plugins/datapicker/bootstrap-datepicker.js'
         ],
         'public/js/lib.js')
-    .babel(
+    .sourceMaps().version()
+    .scripts(
         [
             'resources/assets/js/inspinia.js',
             'resources/assets/js/app.js'
         ],
-        'public/js/app.js');
+        'public/js/app.js') .version();
