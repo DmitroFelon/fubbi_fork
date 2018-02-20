@@ -209,8 +209,6 @@ jQuery(document).ready(function ($) {
                 dropzone.destroy();
             });
             
-            console.log('get idea');
-
             var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
                 url: "/ideas/" + idea_id + "/prefill_meta_files",
                 paramName: 'files',
