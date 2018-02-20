@@ -81,5 +81,8 @@ class SettingsController extends Controller
                 );
             }
         }
+
+
+        return back()->with('error', 'Something wrong happened while billing info updating, please try later.');
     }
 }
