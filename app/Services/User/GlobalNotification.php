@@ -51,7 +51,8 @@ class GlobalNotification
             ProjectStates::KEYWORDS_FILLING,
         ];
 
-        $projects = $this->user->projects()->whereIn('state', $filling_states)->where('created_at', '<', now()->subDay())->get();
+        // $projects = $this->user->projects()->whereIn('state', $filling_states)->where('created_at', '<', now()->subDay())->get();
+        $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
 
         if ($projects->isNotEmpty()) {
             $message = 'Please, continue filling project: <br>';
@@ -70,7 +71,7 @@ class GlobalNotification
      */
     public function admin()
     {
-        
+
     }
 
     /**
