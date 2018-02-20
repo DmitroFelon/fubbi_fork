@@ -70,7 +70,7 @@ class SettingsController extends Controller
                 $user->updateCard($request->input('stripeToken'));
 
                 return redirect()->back()->with(
-                    'sucess', _i('Card has been updated Successfully')
+                    'success', _i('Card has been updated Successfully')
                 );
 
             } catch (\Stripe\Error\Card $e) {
