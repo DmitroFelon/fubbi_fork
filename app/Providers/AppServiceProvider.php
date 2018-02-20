@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->formComponents();
 
-        if (App::environment('production')) {
+        if (App::environment('development')) {
             $url->forceScheme('https');
         }
 
@@ -105,7 +105,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (!App::environment('production')) {
+        if (!App::environment('development')) {
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $processName = $processUser['name'];
