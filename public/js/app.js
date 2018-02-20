@@ -348,7 +348,9 @@ jQuery(document).ready(function ($) {
             keyword_dropzones.forEach(function (dropzone) {
                 dropzone.off();
                 dropzone.destroy();
-            }); 
+            });
+            
+            console.log('get idea');
 
             var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
                 url: "/ideas/" + idea_id + "/prefill_meta_files",

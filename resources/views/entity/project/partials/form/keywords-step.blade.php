@@ -4,6 +4,7 @@
 
 <script type="text/javascript">
     var idea_id = "{{$idea->id}}";
+    console.log('idea init' + idea_id);
 </script>
 
 <div class="row p-h-lg">

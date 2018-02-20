@@ -1,5 +1,6 @@
 //require('./bootstrap');
 
+jQuery(document).ready(function ($) {
     /*
      * Hide notifications
      * */
@@ -207,17 +208,19 @@
                 dropzone.off();
                 dropzone.destroy();
             });
+            
+            console.log('get idea');
 
-            /*var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
-             url: "/ideas/" + idea_id + "/prefill_meta_files",
-             paramName: 'files',
-             method: 'POST',
-             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-             addRemoveLinks: true,
-             init: dropzone_init_meta,
-             success: dropzone_success,
-             removedfile: dropzone_removedfile_meta
-             });*/
+            var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
+                url: "/ideas/" + idea_id + "/prefill_meta_files",
+                paramName: 'files',
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                addRemoveLinks: true,
+                init: dropzone_init_meta,
+                success: dropzone_success,
+                removedfile: dropzone_removedfile_meta
+            });
 
             keyword_dropzones.push(dropzone);
 
@@ -227,21 +230,6 @@
             form.submit();
         }
     });
-
-    function loadMetaDropzone(idea_id) {
-        var dropzone = new Dropzone('div#meta-' + idea_id + "-files", {
-            url: "/ideas/" + idea_id + "/prefill_meta_files",
-            paramName: 'files',
-            method: 'POST',
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            addRemoveLinks: true,
-            init: dropzone_init_meta,
-            success: dropzone_success,
-            removedfile: dropzone_removedfile_meta
-        });
-
-        keyword_dropzones.push(dropzone);
-    }
 
     /*
      * Add manual keyword
@@ -648,7 +636,7 @@
         $.get('/ideas/' + item.model_id + '/remove_stored_file/' + item.id);
         item.previewElement.remove();
     }
-
+})
 
 
 
