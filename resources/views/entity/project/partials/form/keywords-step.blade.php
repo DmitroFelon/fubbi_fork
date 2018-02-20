@@ -6,7 +6,6 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <input value="0" name="meta[{{$idea->id}}][this_month]" type="hidden"/>
         <input value="0" name="meta[{{$idea->id}}][next_moth]" type="hidden"/>
-
         <div class="row">
             <label for="meta-{{str_replace(' ', '_', $idea->id)}}-points_covered"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
@@ -84,13 +83,14 @@
                 </div>
                 <span class="help-block"></span>
             </div>
-            <script>
-                var meta_dropzone_id = "meta-{{str_replace(' ', '_', $idea->id)}}-files";
-                var idea_id = "{{$idea->id}}";
-                var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $idea->id)}}-collection";
-            </script>
+
         </div>
     </div>
+    <script type="text/javascript">
+        var meta_dropzone_id = "meta-{{str_replace(' ', '_', $idea->id)}}-files";
+        var idea_id = "{{$idea->id}}";
+        var meta_dropzone_collection = "meta-{{str_replace(' ', '_', $idea->id)}}-collection";
+    </script>
 </div>
 
 <div class="row text-center">
