@@ -195,7 +195,9 @@ class ProjectObserver
 
         $conversation = ChatFacade::conversation($project->conversation_id);
 
-        ChatFacade::removeParticipants($conversation, $worker_id);
+        if($conversation){
+            ChatFacade::removeParticipants($conversation, $worker_id);
+        }
 
         $worker = User::find($worker_id);
 

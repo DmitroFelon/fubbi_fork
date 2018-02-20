@@ -35,6 +35,9 @@ use Stripe\Plan;
 class ProjectController extends Controller
 {
 
+    /**
+     * @var Project
+     */
     protected $project;
 
     /**
@@ -377,7 +380,27 @@ class ProjectController extends Controller
             $message = _i("%s has beed removed from project", [$user->name]);
         } catch (\Exception $e) {
             $message_key = 'error';
-            $message     = _i("%s is not attached to this project", [$user->name]);
+            $message     = _i("%s is not attached to this project". $e->getMessage(), [$user->name]);
+        }
+
+        return redirect()->back()->with($message_key, $message);
+    }
+
+    /**
+     * @param Project $project
+     * @param Team $team
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function remove_team_from_project(Project $project, Team $team)
+    {
+        $message_key = 'info';
+        try {
+            $project->teams()->detach($team->id);
+            $message = _i("%s has beed removed from project", [$team->name]);
+        } catch (\Exception $e) {
+            report($e);
+            $message_key = 'error';
+            $message     = _i("%s is not attached to this project" , [$team->name]);
         }
 
         return redirect()->back()->with($message_key, $message);

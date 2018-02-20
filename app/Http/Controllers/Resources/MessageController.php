@@ -33,6 +33,9 @@ class MessageController extends Controller
         if ($user->role == Role::ADMIN) {
             $users = User::all();
             $users->each(function (User $user) use ($chat, $conversations) {
+                if ($user->id == Auth::user()->id) {
+                    return;
+                }
                 $conversation = $chat->getConversationBetween($user->id, Auth::user()->id);
                 if (!$conversation) {
                     $conversation = $chat->createConversation([$user->id, Auth::user()->id]);
@@ -46,6 +49,11 @@ class MessageController extends Controller
                 }
                 $conversations->push($conversation);
             });
+        }
+
+
+        if ($user->role == Role::ACCOUNT_MANAGER) {
+
         }
 
         $conversations = $conversations->unique();

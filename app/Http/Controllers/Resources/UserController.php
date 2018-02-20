@@ -9,25 +9,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers\Resources
+ */
 class UserController extends Controller
 {
     /**
      * @var \Illuminate\Http\Request
      */
     protected $request;
+    /**
+     * @var User
+     */
+    protected $user;
 
     /**
      * ProjectController constructor.
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, User $user)
     {
         $this->request = $request;
         $this->middleware('can:index,' . User::class)->only(['index']);
         //$this->middleware('can:show')->only(['show']);
         //c$this->middleware('can:create,user')->only(['create', 'store']);
         $this->middleware('can:update,user')->only(['edit', 'update']);
+        $this->user = $user;
     }
 
     /**
@@ -35,9 +44,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index()
     {
-        $users = $user->withTrashed()->get();
+        $users = $this->user->withTrashed()->get();
 
         return view('entity.user.index', compact('users'));
     }
@@ -86,12 +95,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\User $user
+     * @param $id
      * @return \Illuminate\Http\Response
+     * @internal param User $user
      */
     public function show($id)
     {
-        $user = User::withTrashed()->findOrFail($id);
+        $user = $this->user->withTrashed()->findOrFail($id);
         return view('entity.user.show', ['user' => $user]);
     }
 
@@ -152,6 +162,10 @@ class UserController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function destroy($id)
     {
 
@@ -159,7 +173,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', "You can't block yourself");
         }
 
-        $user = User::withTrashed()->find($id);
+        $user = $this->user->withTrashed()->find($id);
 
         if ($user->trashed()) {
             $user->restore();

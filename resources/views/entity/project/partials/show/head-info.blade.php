@@ -71,6 +71,12 @@
                         <a target="_blank" href="{{url()->action('Resources\TeamController@show', $team)}}">
                             {{$team->name}}
                         </a>
+                        @role([\App\Models\Role::ADMIN])
+                        <a class="text-danger" title="Remove from project"
+                           href="{{action('Resources\ProjectController@remove_team_from_project', [$project, $team])}}">
+                            <i class="fa fa-times"></i>
+                        </a>
+                        @endrole
                     </dd>
                 @endforeach
 

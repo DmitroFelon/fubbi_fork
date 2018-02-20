@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Session;
  */
 class GlobalNotification
 {
-
     /**
      * @var
      */
@@ -64,6 +63,14 @@ class GlobalNotification
             $this->push('info', $message);
         }
 
+    }
+
+    /**
+     *
+     */
+    public function admin()
+    {
+        
     }
 
     /**

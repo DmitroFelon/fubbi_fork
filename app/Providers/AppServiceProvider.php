@@ -11,9 +11,11 @@ use App\Observers\MessageObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\UserObserver;
 use App\Services\Api\Keywords\KeywordsFactoryInterface;
+use App\Services\Api\Keywords\LocalKeywords;
 use App\Services\Api\KeywordTool;
 use App\User;
 use Form;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +23,7 @@ use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Musonza\Chat\Messages\Message;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AppServiceProvider
@@ -32,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
-     * @return void
+     * @param UrlGenerator $url
      */
     public function boot(UrlGenerator $url)
     {
@@ -47,6 +50,8 @@ class AppServiceProvider extends ServiceProvider
         if (App::environment('production')) {
             $url->forceScheme('https');
         }
+
+
     }
 
     /**
@@ -100,10 +105,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
         if (!App::environment('production')) {
-
-
             $this->app->configureMonologUsing(function (Logger $monolog) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $processName = $processUser['name'];
@@ -112,9 +114,14 @@ class AppServiceProvider extends ServiceProvider
                 $handler  = new RotatingFileHandler($filename);
                 $monolog->pushHandler($handler);
             });
+            $this->app->bind(KeywordsFactoryInterface::class, LocalKeywords::class);
+
+        } else {
+            $this->app->alias('bugsnag.logger', Log::class);
+            $this->app->alias('bugsnag.logger', LoggerInterface::class);
+            $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
         }
-        $this->app->bind(KeywordsFactoryInterface::class, KeywordTool::class);
-        //$this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
-        //$this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+
+
     }
 }

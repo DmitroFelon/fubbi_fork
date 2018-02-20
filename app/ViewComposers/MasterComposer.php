@@ -4,9 +4,7 @@
 namespace App\ViewComposers;
 
 use App\Models\Helpers\Page;
-use App\Models\HelpVideo;
 use App\Models\Project;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -69,6 +67,8 @@ class MasterComposer
                 'help_video_src'        => $this->helpVideoSrc()
             ];
         }
+
+        \App\Facades\GlobalNotification::make();
 
         return $view->with($data);
     }

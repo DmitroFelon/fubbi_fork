@@ -14,10 +14,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-//global notifications for test
-View::composer('master', function () {
-    \App\Facades\GlobalNotification::make();
+Route::get('test', function () {
 });
+
 
 //stripe and thrivecard hooks
 Route::namespace('Webhooks')->group(function () {
@@ -157,6 +156,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('{project}/invite_team', 'ProjectController@invite_team');
 
             Route::get('{project}/remove_from_project/{user}', 'ProjectController@remove_from_project');
+            Route::get('{project}/remove_team_from_project/{team}', 'ProjectController@remove_team_from_project');
         });
 
         Route::prefix('teams')->group(function () {

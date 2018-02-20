@@ -8,6 +8,7 @@ use App\Facades\ProjectExport;
 use App\Models\Interfaces\Invitable;
 use App\Models\Traits\hasInvite;
 use App\Models\Traits\Project\hasArticles;
+use App\Models\Traits\Project\hasConversation;
 use App\Models\Traits\Project\hasCycles;
 use App\Models\Traits\Project\hasIdeas;
 use App\Models\Traits\Project\hasPlan;
@@ -86,11 +87,13 @@ class Project extends Model implements HasMediaConversions, Invitable
     use hasTeams;
     use hasArticles;
     use hasInvite;
+    use hasConversation;
 
     use HasMediaTrait;
     use Metable;
     use SoftDeletes;
     use LogsActivity;
+
 
     public function test()
     {

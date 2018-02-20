@@ -14,7 +14,7 @@ class GlobalNotificationProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+       
     }
 
     /**
