@@ -47,7 +47,7 @@ class ArticleOverdue extends Notification
         return (new MailMessage)
             ->subject(_i('Article Overdue'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Article "%s" is overdue.', [$this->article->title]))
+            ->line(_i('Article %s is overdue.', [$this->article->title]))
             ->action('Review article', action('Project\ArticlesController@show', [
                 $this->article->project,
                 $this->article

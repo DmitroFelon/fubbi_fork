@@ -46,7 +46,7 @@ class Subscription extends Notification
         return (new MailMessage)
             ->subject(_i('Subscription renewal'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Subscription of Your project "%s" will be renewed soon.', [$this->project->name]))
+            ->line(_i('Subscription of Your project %s will be renewed soon.', [$this->project->name]))
             ->action('Review project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }

@@ -46,7 +46,7 @@ class InviteOverdue extends Notification
         return (new MailMessage)
             ->subject(_i('Invite Overdue'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" requires workers: ', [
+            ->line(_i('Project %s requires workers: ', [
                 $this->project->name,
                 implode(', ', $this->project->requireWorkers())
             ]))

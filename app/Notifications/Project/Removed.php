@@ -4,8 +4,8 @@ namespace App\Notifications\Project;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class Removed extends Notification
 {
@@ -46,7 +46,7 @@ class Removed extends Notification
         return (new MailMessage)
             ->subject(_i('Project has been removed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" has been removed', [$this->project->name]))
+            ->line(_i('Project %s has been removed', [$this->project->name]))
             ->line('Thank you for using our application!');
     }
 

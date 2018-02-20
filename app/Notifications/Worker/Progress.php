@@ -45,7 +45,7 @@ class Progress extends Notification
     {
         return (new MailMessage)
             ->subject('Reminder!')
-            ->line(_i('Please, continue working on project: "%s"', [$this->project->name]))
+            ->line(_i('Please, continue working on project: %s', [$this->project->name]))
             ->action('Review project', url()->action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }

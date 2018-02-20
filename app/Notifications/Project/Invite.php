@@ -45,9 +45,9 @@ class Invite extends Notification
     public function toMail($notifiable)
     {
         $email = (new MailMessage)
-            ->subject(_i('Invitation to project "%s', [$this->invitation->invitable->getInvitableName()]))
+            ->subject(_i('Invitation to project %s', [$this->invitation->invitable->getInvitableName()]))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('You have beed invited to project "%s". Please apply or decline it', [$this->invitation->invitable->getInvitableName()]))
+            ->line(_i('You have beed invited to project %s. Please apply or decline it', [$this->invitation->invitable->getInvitableName()]))
             ->action('Review Project', $this->invitation->invitable->getInvitableUrl())
             ->line('Thank you for using our application!');
 
@@ -68,7 +68,7 @@ class Invite extends Notification
     {
         $notification = NotificationPayload::make(
             _i(
-                'You have beed invited to project "%s". Please apply or decline it',
+                'You have beed invited to project %s. Please apply or decline it',
                 [$this->invitation->invitable->getInvitableName()]
             ),
             $this->invitation->invitable->getInvitableUrl(),

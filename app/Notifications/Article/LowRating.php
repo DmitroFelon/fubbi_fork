@@ -47,7 +47,7 @@ class LowRating extends Notification
         return (new MailMessage)
             ->subject(_i('Low rating'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Article "%s" has low rating.', [$this->article->title]))
+            ->line(_i('Article %s has low rating.', [$this->article->title]))
             ->line(_i('Please, contact to author.'))
             ->action('Review article', action('Project\ArticlesController@show', [$this->article->project, $this->article]))
             ->line('Thank you for using our application!');

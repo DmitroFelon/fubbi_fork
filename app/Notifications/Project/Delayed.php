@@ -47,7 +47,7 @@ class Delayed extends Notification
         return (new MailMessage)
             ->subject(_i('Project is delayed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" is delayed.', [$this->project->name]))
+            ->line(_i('Project %s is delayed.', [$this->project->name]))
             ->line(_i('Please, contact to workers.'))
             ->action('Review project', action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');

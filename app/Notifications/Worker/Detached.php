@@ -4,9 +4,8 @@ namespace App\Notifications\Worker;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class Detached extends Notification
 {
@@ -47,7 +46,7 @@ class Detached extends Notification
         return (new MailMessage)
             ->subject('You have been attached to project!')
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('You have beed detached from project: "%s".', [$this->project->name]))
+            ->line(_i('You have beed detached from project: %s.', [$this->project->name]))
             ->line('Thank you for using our application!');
     }
 

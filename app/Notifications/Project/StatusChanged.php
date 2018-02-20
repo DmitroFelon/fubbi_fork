@@ -45,7 +45,8 @@ class StatusChanged extends Notification
     {
         return (new MailMessage)
             ->subject('Project status changed')
-            ->line(_i('"%s" status has been changed to: %s', [
+            ->line(_i('Hello %s', [$notifiable->first_name]))
+            ->line(_i('%s status has been changed to: %s', [
                 $this->project->name,
                 ucfirst(str_replace('_', ' ', $this->project->state))
             ]))

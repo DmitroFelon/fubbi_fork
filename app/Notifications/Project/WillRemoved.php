@@ -48,7 +48,7 @@ class WillRemoved extends Notification
         return (new MailMessage)
             ->subject(_i('Project will be removed!'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Project "%s" will be removed at: %s.', [
+            ->line(_i('Project %s will be removed at: %s.', [
                 $this->project->name,
                 ($this->project->subscription->ends_at)
                     ? $this->project->subscription->ends_at->format('m.d.y h:i:s')

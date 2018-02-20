@@ -46,7 +46,7 @@ class OutstandingApproval extends Notification
         return (new MailMessage)
             ->subject(_i('Outstanding Approval'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Please review the "%s".', [$this->article->title]))
+            ->line(_i('Please review the %s.', [$this->article->title]))
             ->action('Review', action('Project\ArticlesController@show', [
                 $this->article->project,
                 $this->article

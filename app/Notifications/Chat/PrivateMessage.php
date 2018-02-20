@@ -47,7 +47,7 @@ class PrivateMessage extends Notification
         return (new MailMessage)
             ->subject(_i('New Message'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('You have a new message from "%s".', [$this->message->sender->name]))
+            ->line(_i('You have a new message from %s.', [$this->message->sender->name]))
             ->action('Open conversation', action('Resources\MessageController@index', ['c' => $this->message->conversation->id]))
             ->line('Thank you for using our application!');
     }
