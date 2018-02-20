@@ -12,6 +12,7 @@ namespace App\Services\User;
 use App\Models\Helpers\ProjectStates;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -51,6 +52,7 @@ class GlobalNotification
             ProjectStates::KEYWORDS_FILLING,
         ];
 
+
         // $projects = $this->user->projects()->whereIn('state', $filling_states)->where('created_at', '<', now()->subDay())->get();
         $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
 
@@ -63,6 +65,10 @@ class GlobalNotification
                         's' => $project->state
                     ]) . '">' . $project->name . '</a><br>';
             });
+
+            if (Request::is('settings') or Request::is('projects')) {
+                return;
+            }
 
             $this->push('info', $message);
         }

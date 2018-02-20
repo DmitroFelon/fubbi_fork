@@ -43,7 +43,9 @@ switch ($mailMessage->level) {
 
 {{-- Salutation --}}
 Thank you!
-<br />
+
+<br/>
+
 The Fubbi Team
 
 {{-- Subcopy --}}
