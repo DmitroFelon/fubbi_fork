@@ -14,7 +14,11 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test', function () {
+Route::get('test/value', function () {
+
+
+    dd(strpos( \Illuminate\Support\Facades\Request::url(), 'test'));
+
 });
 
 

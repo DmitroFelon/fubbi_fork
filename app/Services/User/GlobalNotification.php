@@ -66,7 +66,7 @@ class GlobalNotification
                     ]) . '">' . $project->name . '</a><br>';
             });
 
-            if (Request::is('settings') or Request::is('projects')) {
+            if (strpos(Request::url(), 'settings') or strpos(Request::url(), 'projects')) {
                 return;
             }
 
