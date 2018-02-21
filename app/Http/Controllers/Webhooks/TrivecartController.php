@@ -36,6 +36,20 @@ class TrivecartController extends Controller
      */
     protected $subscription;
 
+
+    /**
+     * @var array
+     */
+    protected $events = [
+        'order.success',
+        'order.subscription_payment',
+        'order.refund',
+        'order.subscription_cancelled',
+        'affiliate.commission_earned',
+        'affiliate.commission_payout',
+        'affiliate.commission_refund'
+    ];
+
     /**
      * TrivecartController constructor.
      * @param Project $project
@@ -53,21 +67,33 @@ class TrivecartController extends Controller
      */
     public function handle(Request $request)
     {
-        Log::debug($request->input());
-
-        $event      = $request->input('event');
-        $hash       = $request->input('thrivecart_secret');
-        $product_id = $request->input('base_product');
-
-        if ($event != 'order.success') {
-            Log::error('wrong event: ' . $event);
-            return new Response('Webhook Handled', 200);
-        }
+        $event = $request->input('event');
+        $hash  = $request->input('thrivecart_secret');
 
         if ($hash != config('fubbi.thrivecart_key')) {
             Log::error('wrong hash: ' . $hash);
-            return new Response('Webhook Handled', 200);
+            return new Response('Unauthorized request', 200);
         }
+
+        if (!in_array($event, $this->events)) {
+            Log::error('wrong event: ' . $event);
+            return new Response('Undefined event', 200);
+        }
+
+        $method = camel_case(str_replace('.', '_', $event));
+
+        return method_exists($this, $method)
+            ? call_user_func([$this, $method], $request)
+            : new Response('Webhook Handled', 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response|string
+     */
+    public function orderSuccess(Request $request)
+    {
+        $product_id = $request->input('base_product');
 
         if (!$product_id or !isset(config('fubbi.thrive_cart_plans')[$product_id])) {
             Log::error('wrong product_id: ' . $product_id);
@@ -79,8 +105,7 @@ class TrivecartController extends Controller
             $customer            = $request->input('customer'); //form data
             $subscription_id     = collect($request->input('subscriptions'))->first(); //subscription ids, get first
 
-            $plan_id = config('fubbi.thrive_cart_plans')[$product_id];
-
+            $plan_id        = config('fubbi.thrive_cart_plans')[$product_id];
             $customer_email = $customer['email']??'';
 
             $stripe_customer     = Customer::retrieve($customer_identifier);
@@ -139,11 +164,8 @@ class TrivecartController extends Controller
             Log::error($e);
         }
 
-        Log::debug('TrivecartController:handle end');
-
         return new Response('Webhook Handled', 200);
     }
-
 
     /**
      * @param Request $request
@@ -157,7 +179,6 @@ class TrivecartController extends Controller
 
         //if there is no email provided form thrivecart with redirect
         if (!$email) {
-            Log::debug($request->input());
             Session::flash('change_password');
             return redirect()
                 ->action('Auth\LoginController@login')
@@ -167,10 +188,8 @@ class TrivecartController extends Controller
                 );
         }
 
-
         //find new user, 5 attempts
         for ($i = 0; $i < 5; $i++) {
-            Log::debug($email . ' attempt: ' . $i);
             $user = User::where('email', $email)->first();
             if (!$user) {
                 sleep(3); //wait 3 seconds before next attempt
@@ -181,7 +200,6 @@ class TrivecartController extends Controller
 
         //if user has not beed created by thrivecart webhook handler
         if (!$user) {
-            Log::debug(User::where('email', $email)->first());
             Session::flash('change_password');
             return redirect()
                 ->action('Auth\LoginController@login')

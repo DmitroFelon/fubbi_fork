@@ -14,14 +14,6 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test/value', function () {
-
-
-    dd(strpos( \Illuminate\Support\Facades\Request::url(), 'test'));
-
-});
-
-
 //stripe and thrivecard hooks
 Route::namespace('Webhooks')->group(function () {
     //Stripe routes
