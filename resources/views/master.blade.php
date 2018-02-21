@@ -53,7 +53,7 @@
 
 </div>
 <!-- End wrapper-->
-<script>
+<script data-cfasync='false'>
     var stripe_pub = "{{config('services.stripe.key')}}";
     var user = @json((\Illuminate\Support\Facades\Auth::check())?\Illuminate\Support\Facades\Auth::user():'');
     var conversation_id = null;
