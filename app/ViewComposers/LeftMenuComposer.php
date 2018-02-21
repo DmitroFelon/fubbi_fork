@@ -194,7 +194,7 @@ class LeftMenuComposer
             [
                 'name'  => 'Ideas',
                 'url'   => action('Resources\InspirationController@index'),
-                'icon'  => 'fa fa-lightbulb',
+                'icon'  => 'fa fa-lightbulb-o',
                 'order' => 100,
             ],
         ];
