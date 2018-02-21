@@ -74,13 +74,13 @@
 
 @yield('before-scripts')
 
-<script src="{!! asset('js/lib.js') !!}" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+<script data-cfasync='false' src="{!! asset('js/lib.js') !!}" type="text/javascript"></script>
+<script data-cfasync='false' src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script data-cfasync='false' src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script data-cfasync='false' src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css" property=""/>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-<script type="text/javascript" src="{!! asset('js/app.js') !!}?v=1"></script>
+<script data-cfasync='false' type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<script data-cfasync='false' type="text/javascript" src="{!! asset('js/app.js') !!}?v=1"></script>
 
 @yield('scripts')
 
