@@ -67,7 +67,7 @@
 
 @section('scripts')
 
-    <script>
+    <script data-cfasync='false'>
         jQuery(document).ready(function ($) {
             var dropzones = [
                 'questions_group',

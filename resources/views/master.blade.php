@@ -84,7 +84,6 @@
 
 @yield('scripts')
 
-
 <script>
     jQuery(document).ready(function ($) {
         jQuery(".condition-cb").on('change', function () {
