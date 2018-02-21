@@ -191,6 +191,12 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-search',
                 'order' => 100,
             ],
+            [
+                'name'  => 'Ideas',
+                'url'   => action('Resources\InspirationController@index@index'),
+                'icon'  => 'fa fa-search',
+                'order' => 100,
+            ],
         ];
     }
 
@@ -261,6 +267,9 @@ class LeftMenuComposer
         ];
     }
 
+    /**
+     * @return array
+     */
     public function researcher()
     {
         return [

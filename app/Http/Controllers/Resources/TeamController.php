@@ -192,6 +192,6 @@ class TeamController extends Controller
 
         $invite->decline();
 
-        return redirect()->back()->with('info', _i('Invitation has beed declined'));
+        return redirect()->back()->with('info', _i('Invitation has been declined'));
     }
 }

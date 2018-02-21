@@ -53,8 +53,8 @@ class Filled extends Notification implements ShouldQueue
         }
         
         $message = (new MailMessage)
-            ->subject('New project has beed filled.')
-            ->line(_i('New project %s has beed filled.', [$this->project->name]))
+            ->subject('New project has been filled.')
+            ->line(_i('New project %s has been filled.', [$this->project->name]))
             ->action('Review project', url()->action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
         if ($export) {
@@ -75,7 +75,7 @@ class Filled extends Notification implements ShouldQueue
     {
         $notification = NotificationPayload::make(
             _i(
-                'New project %s has beed filled.',
+                'New project %s has been filled.',
                 [$this->project->name]
             ),
             url()->action('Resources\ProjectController@show', $this->project),

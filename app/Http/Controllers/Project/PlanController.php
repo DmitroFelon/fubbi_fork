@@ -67,6 +67,6 @@ class PlanController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Plan has beed modified succesfully');
+        return redirect()->back()->with('success', 'Plan has been modified succesfully');
     }
 }

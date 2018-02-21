@@ -46,7 +46,7 @@ class Registered extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('New client')
-            ->line(_i('New client %s has beed registered.', [$this->user->name]))
+            ->line(_i('New client %s has been registered.', [$this->user->name]))
             ->action('See new client', action('Resources\UserController@show', $this->user))
             ->line('Thank you for using our application!');
     }
@@ -60,7 +60,7 @@ class Registered extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         $notification = NotificationPayload::make(
-            _i('New user %s has beed registered.', [$this->user->name]),
+            _i('New user %s has been registered.', [$this->user->name]),
             url()->action('Resources\UserController@show', $this->user),
             get_class($this->user),
             $this->user->id

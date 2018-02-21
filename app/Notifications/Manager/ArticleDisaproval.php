@@ -46,7 +46,7 @@ class ArticleDisaproval extends Notification
         return (new MailMessage)
             ->subject(_i('Article Disaproved'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Article %s has beed disaproved %d times.', [$this->article->title, $this->article->attempts]))
+            ->line(_i('Article %s has been disaproved %d times.', [$this->article->title, $this->article->attempts]))
             ->action('Review article', action('Project\ArticlesController@show', [$this->article->project, $this->article]))
             ->line('Thank you for using our application!');
     }

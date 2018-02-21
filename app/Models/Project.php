@@ -95,6 +95,9 @@ class Project extends Model implements HasMediaConversions, Invitable
     use LogsActivity;
 
 
+    /**
+     *
+     */
     public function test()
     {
         $this->fireModelEvent('created', false);
@@ -186,6 +189,14 @@ class Project extends Model implements HasMediaConversions, Invitable
     public function subscription()
     {
         return $this->belongsTo(Subscription::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function inspirations()
+    {
+        return $this->hasMany(Inspiration::class);
     }
 
     /**

@@ -177,7 +177,7 @@ class ProjectObserver
             ->causedBy(Auth::user())
             ->performedOn($project)
             ->withProperties(['worker' => $worker])
-            ->log('User ' . $worker->name . ' has beed attached to project ' . $project->name);
+            ->log('User ' . $worker->name . ' has been attached to project ' . $project->name);
 
         $worker->notify(new Attached($project));
     }
@@ -205,7 +205,7 @@ class ProjectObserver
             ->causedBy(Auth::user())
             ->performedOn($project)
             ->withProperties(['worker' => $worker])
-            ->log('User ' . $worker->name . ' has beed detached from project ' . $project->name);
+            ->log('User ' . $worker->name . ' has been detached from project ' . $project->name);
 
         $worker->notify(new Detached($project));
     }
@@ -243,7 +243,7 @@ class ProjectObserver
             ->causedBy(Auth::user())
             ->performedOn($project)
             ->withProperties(['team' => $team])
-            ->log('Team ' . $team->name . ' has beed attached to project project ' . $project->name);
+            ->log('Team ' . $team->name . ' has been attached to project project ' . $project->name);
     }
 
     /**

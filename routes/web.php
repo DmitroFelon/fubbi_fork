@@ -173,14 +173,21 @@ Route::middleware(['auth'])->group(function () {
             Route::get('request_access/{article}', 'ArticlesController@request_access');
         });
 
+        Route::prefix('inspirations')->group(function () {
+            Route::get('{id}/getFiles/{collection}', 'InspirationController@getFiles');
+            Route::post('{id}/storeFile/{collection}', 'InspirationController@storeFile');
+            Route::delete('{id}/removeFile/{file_id}', 'InspirationController@removeFile');
+        });
+
         Route::resources(
             [
-                'projects' => 'ProjectController',
-                'messages' => 'MessageController',
-                'users'    => 'UserController',
-                'teams'    => 'TeamController',
-                'issues'   => 'IssueController',
-                'articles' => 'ArticlesController',
+                'projects'     => 'ProjectController',
+                'messages'     => 'MessageController',
+                'users'        => 'UserController',
+                'teams'        => 'TeamController',
+                'issues'       => 'IssueController',
+                'articles'     => 'ArticlesController',
+                'inspirations' => 'InspirationController'
             ]
         );
 

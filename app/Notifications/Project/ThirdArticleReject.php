@@ -45,7 +45,7 @@ class ThirdArticleReject extends Notification
         return (new MailMessage)
             ->subject(_i('Article has been rejected 3 times'))
             ->line(_i('Hello %s', [$notifiable->name]))
-            ->line(_i('Article %s has beed rejected 3 times', [$this->article->title]))
+            ->line(_i('Article %s has been rejected 3 times', [$this->article->title]))
             ->line(_i('Please contact to article author: %s.', [$this->article->author->name]))
             ->line(_i('Phone: %s', [$this->article->author->phone]))
             ->line(_i('Email: %s', [$this->article->author->email]))

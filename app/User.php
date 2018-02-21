@@ -4,6 +4,7 @@ namespace App;
 
 use Activity;
 use App\Models\Article;
+use App\Models\Inspiration;
 use App\Models\Interfaces\Invitable;
 use App\Models\Invite;
 use App\Models\Project;
@@ -228,6 +229,14 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function inspirations()
+    {
+        return $this->hasMany(Inspiration::class);
+    }
+
+    /**
      * @param \App\Models\Interfaces\Invitable $whereInvite
      */
     public function inviteTo(Invitable $whereInvite)
@@ -356,7 +365,7 @@ class User extends Authenticatable implements HasMedia
                 return;
             }
 
-            if(!$message->sender){
+            if (!$message->sender) {
                 return null;
             }
 
@@ -434,6 +443,6 @@ class User extends Authenticatable implements HasMedia
     {
         return ($this->disabled_notifications()->where('name', $notification_type)->get())
             ? false : true;
-        
+
     }
 }

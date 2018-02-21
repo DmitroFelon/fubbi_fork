@@ -377,7 +377,7 @@ class ProjectController extends Controller
         $message_key = 'info';
         try {
             $project->detachWorker($user->id);
-            $message = _i("%s has beed removed from project", [$user->name]);
+            $message = _i("%s has been removed from project", [$user->name]);
         } catch (\Exception $e) {
             $message_key = 'error';
             $message     = _i("%s is not attached to this project". $e->getMessage(), [$user->name]);
@@ -396,7 +396,7 @@ class ProjectController extends Controller
         $message_key = 'info';
         try {
             $project->teams()->detach($team->id);
-            $message = _i("%s has beed removed from project", [$team->name]);
+            $message = _i("%s has been removed from project", [$team->name]);
         } catch (\Exception $e) {
             report($e);
             $message_key = 'error';

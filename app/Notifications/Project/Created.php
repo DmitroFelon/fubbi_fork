@@ -45,9 +45,9 @@ class Created extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('New project has beed created.')
+            ->subject('New project has been created.')
             ->line(_i('Hello %s', [$notifiable->first_name]))
-            ->line(_i('New project %s has beed created.', [$this->project->name]))
+            ->line(_i('New project %s has been created.', [$this->project->name]))
             ->action('Review project', url()->action('Resources\ProjectController@show', $this->project))
             ->line('Thank you for using our application!');
     }
@@ -62,7 +62,7 @@ class Created extends Notification implements ShouldQueue
     {
         $notification = NotificationPayload::make(
             _i(
-                'New project %s has beed created.',
+                'New project %s has been created.',
                 [$this->project->name]
             ),
             url()->action('Resources\ProjectController@show', $this->project),
