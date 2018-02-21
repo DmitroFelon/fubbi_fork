@@ -239,8 +239,8 @@
     </fieldset>
     <h1>Step 4</h1>
     <fieldset>
-        {!! Form::bsText('example_article', null, _i("Please copy the URL of one article the exhibits a
-         writing style that would like for your content"), null, [], 'url') !!}
+        {!! Form::bsText('example_article', null, _i("Please copy the URL of one article thet exhibits a
+         writing style that You would like for your content"), null, [], 'url') !!}
 
         <div class="row m-t-md">
             <label for="is-compliance_guideline-block"
@@ -367,7 +367,7 @@
         <div style="display: none" class="" id="cta-block">
             {!! Form::bsText('cta', null, _i(""),
              _i("Examples include phoning your office for a complimentary consultation or review. Other times it might
-              be to option in to receive a free report. If you want us to close your articles with a CTA please provide us with
+              be to opt in to receive a free report. If you want us to close your articles with a CTA please provide us with
                specific information i.e. if you want them to download a free report, please share a link to the download offer.
                 If you want people to phone your office please provide details of what you’ll share on the phone call.
                  We will, in turn create a one paragraph call to action for your articles"), ['rows' => '3'],'textarea') !!}

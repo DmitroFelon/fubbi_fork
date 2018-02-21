@@ -174,7 +174,7 @@ class LeftMenuComposer
     {
         return [
             [
-                'name'  => 'Projects',
+                'name'  => 'Dashboard',
                 'url'   => action('Resources\ProjectController@index'),
                 'icon'  => 'fa fa-file-o',
                 'order' => 100,

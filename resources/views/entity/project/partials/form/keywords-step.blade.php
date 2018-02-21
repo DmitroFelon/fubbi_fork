@@ -47,6 +47,21 @@
             </div>
         </div>
         <div class="row">
+            <label for="meta-{{$idea->id}}-next_moth"
+                   class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
+                {{_i('Upload documents')}}
+            </label>
+            <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div onload="" data-theme="{{$idea->id}}" id="meta-{{$idea->id}}-files"
+                         class="dropzone keyword-dropzone">
+                    </div>
+                </div>
+                <span class="help-block"></span>
+            </div>
+
+        </div>
+        <div class="row">
             <label for="meta-{{$idea->id}}-this_month"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
                 {{_i('Write about topic this month?')}}
@@ -73,21 +88,6 @@
                        type="checkbox" value="1" class="js-switch"/>
                 <span class="help-block"></span>
             </div>
-        </div>
-        <div class="row">
-            <label for="meta-{{$idea->id}}-next_moth"
-                   class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
-                {{_i('Upload documents')}}
-            </label>
-            <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div onload="" data-theme="{{$idea->id}}" id="meta-{{$idea->id}}-files"
-                         class="dropzone keyword-dropzone">
-                    </div>
-                </div>
-                <span class="help-block"></span>
-            </div>
-
         </div>
     </div>
 </div>
