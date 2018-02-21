@@ -61,6 +61,7 @@
             </div>
 
         </div>
+        <br>
         <div class="row">
             <label for="meta-{{$idea->id}}-this_month"
                    class="col-lg-2 col-md-12 col-sm-12 col-xs-12 control-label">
