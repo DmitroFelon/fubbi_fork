@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inspiration;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -33,11 +34,14 @@ class InspirationController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $inspirations = Auth::user()->inspirations()->paginate(10);
+        $inspirations = $request->has('u')
+            ? User::findOrFail($request->input('u'))->inspirations()->paginate(10)
+            : Auth::user()->inspirations()->paginate(10);
 
         return view('entity.inspiration.index', compact('inspirations'));
     }
