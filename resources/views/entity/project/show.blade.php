@@ -40,10 +40,10 @@
             @slot('title') Quiz result @endslot
             @slot('tools')
             @can('project:edit', $project)
-            <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
-               class="btn btn-primary btn-xs m-r-sm p-w-sm">
-                {{_i('Edit')}}
-            </a>
+                <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
+                   class="btn btn-primary btn-xs m-r-sm p-w-sm">
+                    {{_i('Edit')}}
+                </a>
             @endcan
             <a class="collapse-link">
                 <i class="fa fa-chevron-down"></i>
@@ -58,17 +58,17 @@
             @slot('title') Ideas @endslot
             @slot('tools')
             @can('project:edit', $project)
-            <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
-               class="btn btn-primary btn-xs m-r-sm p-w-sm">
-                {{_i('Edit')}}
-            </a>
+                <a href="{{url()->action('Resources\ProjectController@edit', ['id' => $project->id, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
+                   class="btn btn-primary btn-xs m-r-sm p-w-sm">
+                    {{_i('Edit')}}
+                </a>
             @endcan
             <a class="collapse-link">
                 <i class="fa fa-chevron-down"></i>
             </a>
             @endslot
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <h3>{{_('Themes')}}</h3>
                     <ul>
                         @if($project->ideas()->themes()->get()->isEmpty())
@@ -86,7 +86,7 @@
                     </ul>
 
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <h3>{{_('Questions')}}</h3>
                     <ul>
                         @if($project->ideas()->questions()->get()->isEmpty())
@@ -98,6 +98,24 @@
                             <li>
                                 <a target="_blank" href="{{action('IdeaController@show', $idea)}}">
                                     {{$idea->theme}}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <h3>{{_('Ideas')}}</h3>
+                    <ul>
+                        @if($project->client->inspirations->isEmpty())
+                            <div class="text-muted">
+                                {{_i('Empty')}}
+                            </div>
+                        @endif
+                        @foreach($project->client->inspirations as $inspiration)
+                            <li>
+                                <a target="_blank"
+                                   href="{{action('Resources\InspirationController@show', $inspiration)}}">
+                                    Idea: {{$inspiration->id}}
                                 </a>
                             </li>
                         @endforeach
