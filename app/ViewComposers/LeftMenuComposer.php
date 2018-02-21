@@ -193,7 +193,7 @@ class LeftMenuComposer
             ],
             [
                 'name'  => 'Ideas',
-                'url'   => action('Resources\InspirationController@index@index'),
+                'url'   => action('Resources\InspirationController@index'),
                 'icon'  => 'fa fa-search',
                 'order' => 100,
             ],
