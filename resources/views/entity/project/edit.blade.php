@@ -32,9 +32,11 @@
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
-                        <iframe id="=" type="text/html" width="300"
-                                src="{{$video->player}}"
-                                frameborder="0"></iframe>
+                        <div class="pull-right">
+                            <iframe id="=" type="text/html" width="300"
+                                    src="{{$video->player}}"
+                                    frameborder="0"></iframe>
+                        </div>
                     @endforeach
 
                 </div>
