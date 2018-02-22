@@ -200,14 +200,15 @@ class LeftMenuComposer
             ],
         ];
 
-        $has_incoplete_project = (
-            $this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
-                ProjectStates::QUIZ_FILLING,
-                ProjectStates::KEYWORDS_FILLING
-            ]));
+        $filling_states = [
+            ProjectStates::QUIZ_FILLING,
+            ProjectStates::KEYWORDS_FILLING,
+        ];
 
-        if ($has_incoplete_project) {
-            $project = $this->user->projects->first();
+        $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
+
+        if ($projects->isNotEmpty()) {
+            $project = $projects->first();
 
             $links[] = [
                 'name'  => 'Quiz',
