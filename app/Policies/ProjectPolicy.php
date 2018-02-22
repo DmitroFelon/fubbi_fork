@@ -96,7 +96,7 @@ class ProjectPolicy
             return true;
         }
 
-        return ($user->projects()->find($model->id));
+        return false;
     }
 
     /**
@@ -108,8 +108,6 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $model)
     {
-
-
         $skip = [
             Role::ADMIN
         ];

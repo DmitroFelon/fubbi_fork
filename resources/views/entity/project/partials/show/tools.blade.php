@@ -14,14 +14,6 @@
             {{_i('Reject review')}}
         </a>
     @endif()
-
-    @if(!in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
-        <a href="{{action('Resources\ProjectController@allow_modifications', [$project])}}"
-           class="btn btn-warning btn-xs btn-xs m-r-sm p-w-sm">
-            {{_i('Allow modifications')}}
-        </a>
-    @endif
-
 @endcan
 
 @role([\App\Models\Role::ADMIN, \App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::CLIENT])
