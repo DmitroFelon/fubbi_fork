@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers;
 
+use App\Models\Helpers\ProjectStates;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -199,11 +200,13 @@ class LeftMenuComposer
             ],
         ];
 
-       /* if ($this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
+        $has_incoplete_project = (
+            $this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
                 ProjectStates::QUIZ_FILLING,
                 ProjectStates::KEYWORDS_FILLING
-            ])
-        ) {
+            ]));
+
+        if ($has_incoplete_project) {
             $links[] = [
                 'name'  => 'Quiz',
                 'url'   => action('Resources\ProjectController@edit', [
@@ -213,7 +216,7 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-check',
                 'order' => 110,
             ];
-        }*/
+        }
 
         return $links;
 
