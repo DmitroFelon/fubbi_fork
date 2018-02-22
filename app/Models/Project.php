@@ -94,15 +94,6 @@ class Project extends Model implements HasMediaConversions, Invitable
     use SoftDeletes;
     use LogsActivity;
 
-
-    /**
-     *
-     */
-    public function test()
-    {
-        $this->fireModelEvent('created', false);
-    }
-
     /**
      *
      */

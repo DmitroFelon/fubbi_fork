@@ -8,6 +8,7 @@
 
 namespace App\Models\Traits\Project;
 
+use App\Models\Role;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Auth;
 trait hasWorkers
 {
 
+    /**
+     * @var array
+     */
     public $eventData = [];
 
     /**
@@ -124,5 +128,28 @@ trait hasWorkers
         return array_diff($required_workers, $has_worker);
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getManager()
+    {
+        return $this->workers()->withRole(Role::ACCOUNT_MANAGER)->first();
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isManager(User $user)
+    {
+        $manager = $this->getManager();
+
+        if ($manager and $manager->id == $user->id) {
+            return true;
+        }
+
+        return false;
+    }
 
 }
