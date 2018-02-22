@@ -38,13 +38,14 @@
 @endcan
 @endrole
 
-
-@can('articles.create', $project)
-    <a href="{{action('Project\ArticlesController@create', $project)}}"
-       class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
-        {{_i('Add article')}}
-    </a>
-@endcan
+@if(!in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
+    @can('articles.create', $project)
+        <a href="{{action('Project\ArticlesController@create', $project)}}"
+           class="btn btn-success btn-xs btn-xs m-r-sm p-w-sm">
+            {{_i('Add article')}}
+        </a>
+    @endcan
+@endif
 <a class="collapse-link">
     <i class="fa fa-chevron-up"></i>
 </a>
