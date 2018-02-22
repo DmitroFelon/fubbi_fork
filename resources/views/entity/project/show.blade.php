@@ -45,10 +45,7 @@
                     {{_i('Edit')}}
                 </a>
             @endcan
-            <a href="{{url()->action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
-               class="btn btn-primary btn-xs m-r-sm p-w-sm">
-                {{_i('Edit2')}}
-            </a>
+
             <a class="collapse-link">
                 <i class="fa fa-chevron-down"></i>
             </a>
