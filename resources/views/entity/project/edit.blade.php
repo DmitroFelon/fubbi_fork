@@ -4,7 +4,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-sm-12 p-md">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
                     <a class="lead" target="_blank" href="{{url()->action('Resources\ProjectController@show', $project)}}">
                         {{title_case($project->name)}}
                     </a><br>
@@ -30,7 +30,7 @@
                     </div>
                     @endrole
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9">
                     @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
                         <div class="pull-right m-l-md">
                             <iframe id="=" type="text/html" width="300"
