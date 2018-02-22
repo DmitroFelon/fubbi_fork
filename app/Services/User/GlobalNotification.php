@@ -51,9 +51,7 @@ class GlobalNotification
             ProjectStates::QUIZ_FILLING,
             ProjectStates::KEYWORDS_FILLING,
         ];
-
-
-        // $projects = $this->user->projects()->whereIn('state', $filling_states)->where('created_at', '<', now()->subDay())->get();
+        
         $projects = $this->user->projects()->whereIn('state', $filling_states)->get();
 
         if ($projects->isNotEmpty()) {

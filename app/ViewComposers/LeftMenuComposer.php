@@ -8,6 +8,7 @@
 
 namespace App\ViewComposers;
 
+use App\Models\Helpers\ProjectStates;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -172,7 +173,7 @@ class LeftMenuComposer
      */
     public function client()
     {
-        return [
+        $links = [
             [
                 'name'  => 'Dashboard',
                 'url'   => action('Resources\ProjectController@index'),
@@ -198,6 +199,25 @@ class LeftMenuComposer
                 'order' => 100,
             ],
         ];
+
+        if ($this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
+                ProjectStates::QUIZ_FILLING,
+                ProjectStates::KEYWORDS_FILLING
+            ])
+        ) {
+            $links[] = [
+                'name'  => 'Quiz',
+                'url'   => action('Resources\ProjectController@edit', [
+                    $this->user->projects->first(),
+                    ['s' => $this->user->projects->first()->state]
+                ]),
+                'icon'  => 'fa fa-lightbulb-o',
+                'order' => 100,
+            ];
+        }
+
+        return $links;
+
     }
 
     /**
