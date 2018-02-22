@@ -8,7 +8,6 @@
 
 namespace App\ViewComposers;
 
-use App\Models\Helpers\ProjectStates;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -200,7 +199,7 @@ class LeftMenuComposer
             ],
         ];
 
-        if ($this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
+       /* if ($this->user->projects->count() == 1 and in_array($this->user->projects->first()->state, [
                 ProjectStates::QUIZ_FILLING,
                 ProjectStates::KEYWORDS_FILLING
             ])
@@ -214,7 +213,7 @@ class LeftMenuComposer
                 'icon'  => 'fa fa-check',
                 'order' => 110,
             ];
-        }
+        }*/
 
         return $links;
 
