@@ -380,7 +380,7 @@ class ProjectController extends Controller
             $message = _i("%s has been removed from project", [$user->name]);
         } catch (\Exception $e) {
             $message_key = 'error';
-            $message     = _i("%s is not attached to this project". $e->getMessage(), [$user->name]);
+            $message     = _i("%s is not attached to this project" . $e->getMessage(), [$user->name]);
         }
 
         return redirect()->back()->with($message_key, $message);
@@ -400,7 +400,7 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             report($e);
             $message_key = 'error';
-            $message     = _i("%s is not attached to this project" , [$team->name]);
+            $message     = _i("%s is not attached to this project", [$team->name]);
         }
 
         return redirect()->back()->with($message_key, $message);
@@ -590,5 +590,16 @@ class ProjectController extends Controller
         }
 
         return redirect()->back()->with('error', _i('Team was not specified'));
+    }
+
+    /**
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function allow_modifications(Project $project)
+    {
+        $project->setState(ProjectStates::QUIZ_FILLING);
+
+        return redirect()->back()->with('success', 'Project state set to "Quiz Filling"');
     }
 }

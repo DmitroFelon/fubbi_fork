@@ -1,4 +1,5 @@
-<a href="{{action('Resources\ProjectController@export', $project)}}" class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
+<a href="{{action('Resources\ProjectController@export', $project)}}"
+   class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
     <i class="fa fa-download"></i> {{_i('Export')}}
 </a>
 
@@ -14,9 +15,9 @@
         </a>
     @endif()
 
-    <a href="{{action('Project\PlanController@edit', [$project, $project->subscription->stripe_plan])}}"
+    <a href="{{action('Resources\ProjectController@allow_modifications', [$project])}}"
        class="btn btn-warning btn-xs btn-xs m-r-sm p-w-sm">
-        {{_i('Modify Plan')}}
+        {{_i('Allow modifications')}}
     </a>
 @endcan
 

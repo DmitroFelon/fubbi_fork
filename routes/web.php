@@ -153,6 +153,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('{project}/remove_from_project/{user}', 'ProjectController@remove_from_project');
             Route::get('{project}/remove_team_from_project/{team}', 'ProjectController@remove_team_from_project');
+            Route::get('{project}/allow_modifications', 'ProjectController@allow_modifications');
         });
 
         Route::prefix('teams')->group(function () {
