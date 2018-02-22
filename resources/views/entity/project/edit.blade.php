@@ -5,7 +5,8 @@
         <div class="col-sm-12 p-md">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
-                    <a class="lead" target="_blank" href="{{url()->action('Resources\ProjectController@show', $project)}}">
+                    <a class="lead" target="_blank"
+                       href="{{url()->action('Resources\ProjectController@show', $project)}}">
                         {{title_case($project->name)}}
                     </a><br>
                     <small class="text-muted">
@@ -31,14 +32,15 @@
                     @endrole
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9">
-                    @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
-                        <div class="pull-right m-l-md">
-                            <iframe id="=" type="text/html" width="300"
-                                    src="{{$video->player}}"
-                                    frameborder="0"></iframe>
-                        </div>
-                    @endforeach
-
+                    <div class="row">
+                        @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <iframe id="=" type="text/html" width="300"
+                                        src="{{$video->player}}"
+                                        frameborder="0"></iframe>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
