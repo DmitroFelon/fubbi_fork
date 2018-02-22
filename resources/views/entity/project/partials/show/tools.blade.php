@@ -31,10 +31,12 @@
 
 @role([\App\Models\Role::ADMIN, \App\Models\Role::ACCOUNT_MANAGER, \App\Models\Role::CLIENT])
 @can('project.update', $project)
-    <a href="{{action('Resources\ProjectController@edit', $project)}}"
-       class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
-        {{_i('Edit project')}}
-    </a>
+    @if(in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
+        <a href="{{action('Resources\ProjectController@edit', $project)}}"
+           class="btn btn-primary btn-xs btn-xs m-r-sm p-w-sm">
+            {{_i('Complete Quiz')}}
+        </a>
+    @endif
 @endcan
 @endrole
 
