@@ -15,7 +15,6 @@ namespace App\Models\Helpers;
  */
 use App\Models\HelpVideo;
 use App\Models\Role;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request as RequestFacade;
 
@@ -176,9 +175,7 @@ class Page
     public static function getRelatedVideos()
     {
         $videos = HelpVideo::all();
-
         $appropriate = collect();
-
         $videos->each(function (HelpVideo $video) use ($appropriate) {
             if (!isset(RequestFacade::route()->action['as'])) {
                 return;
@@ -221,8 +218,6 @@ class Page
                 return;
             }
         });
-
         return $appropriate;
-
     }
 }
