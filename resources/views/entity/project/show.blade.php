@@ -39,8 +39,8 @@
             @component('components.ibox')
             @slot('title') Quiz result @endslot
             @slot('tools')
-            @can('project:update', $project)
-                <a href="{{url()->action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
+            @can('project.update', $project)
+                <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
                    class="btn btn-primary btn-xs m-r-sm p-w-sm">
                     {{_i('Edit')}}
                 </a>
@@ -59,7 +59,7 @@
             @slot('title') Ideas @endslot
             @slot('tools')
             @can('project.update', $project)
-                <a href="{{url()->action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
+                <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
                    class="btn btn-primary btn-xs m-r-sm p-w-sm">
                     {{_i('Edit')}}
                 </a>
