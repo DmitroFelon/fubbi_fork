@@ -38,7 +38,12 @@
                 @endforeach
                 @endisset
 
-                ttestasrt
+                <?php
+
+                    var_dump(isset($help_video_src));
+
+                ?>
+
             </div>
         </div>
     </div>
