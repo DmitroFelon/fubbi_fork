@@ -36,6 +36,11 @@
                         @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <iframe id="=" type="text/html" width="100%" height="auto"
+                                        allowfullscreen="allowfullscreen"
+                                        mozallowfullscreen="mozallowfullscreen"
+                                        msallowfullscreen="msallowfullscreen"
+                                        oallowfullscreen="oallowfullscreen"
+                                        webkitallowfullscreen="webkitallowfullscreen"
                                         src="{{$video->player}}"
                                         frameborder="0"></iframe>
                             </div>
