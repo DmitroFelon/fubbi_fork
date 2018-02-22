@@ -35,7 +35,7 @@
                     <div class="row">
                         @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <iframe id="=" type="text/html" width="300"
+                                <iframe id="=" type="text/html" width="100%" height="auto"
                                         src="{{$video->player}}"
                                         frameborder="0"></iframe>
                             </div>
