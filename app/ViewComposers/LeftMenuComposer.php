@@ -207,12 +207,11 @@ class LeftMenuComposer
             ]));
 
         if ($has_incoplete_project) {
+            $project = $this->user->projects->first();
+
             $links[] = [
                 'name'  => 'Quiz',
-                'url'   => action('Resources\ProjectController@edit', [
-                    $this->user->projects->first(),
-                    ['s' => $this->user->projects->first()->state]
-                ]),
+                'url'   => action('Resources\ProjectController@edit', [$project, 's' => $project->state]),
                 'icon'  => 'fa fa-check',
                 'order' => 110,
             ];
