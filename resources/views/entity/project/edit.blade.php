@@ -29,20 +29,12 @@
                 </div>
                 @endrole
 
-                @isset($help_video_src)
-                @foreach($help_video_src as $video)
+                @foreach(\App\Models\Helpers\Page::getRelatedVideos() as $video)
                     test
                     <iframe id="=" type="text/html" width="640" height="360"
                             src="{{$video->player}}"
                             frameborder="0"></iframe>
                 @endforeach
-                @endisset
-
-                <?php
-
-                    var_dump(isset($help_video_src));
-
-                ?>
 
             </div>
         </div>
