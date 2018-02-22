@@ -231,23 +231,12 @@ class ProjectController extends Controller
 
         $step = $project->state;
 
-        $plans = ($step == ProjectStates::PLAN_SELECTION)
-            ? Cache::rememberForever('public_plans', function () {
-                $filtered_plans = collect();
-                collect(Plan::all()->data)->each(function ($plan) use ($filtered_plans) {
-                    if (in_array($plan->id, config('fubbi.plans'))) {
-                        $filtered_plans->push($plan);
-                    }
-                });
-                return $filtered_plans->reverse();
-            })
-            : collect();
 
         $articles = ($step == ProjectStates::QUIZ_FILLING)
             ? $project->articles
             : collect();
 
-        return view('entity.project.edit', compact('articles', 'project', 'step', 'plans'));
+        return view('entity.project.edit', compact('articles', 'project', 'step'));
     }
 
     /**
