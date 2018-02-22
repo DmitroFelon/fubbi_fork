@@ -40,10 +40,12 @@
             @slot('title') Quiz result @endslot
             @slot('tools')
             @can('project.update', $project)
-                <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
-                   class="btn btn-primary btn-xs m-r-sm p-w-sm">
-                    {{_i('Edit')}}
-                </a>
+                @if(in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
+                    <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::QUIZ_FILLING])}}"
+                       class="btn btn-primary btn-xs m-r-sm p-w-sm">
+                        {{($project->state == \App\Models\Helpers\ProjectStates::QUIZ_FILLING) ? 'Complete' : 'Edit'}}
+                    </a>
+                @endif
             @endcan
 
             <a class="collapse-link">
@@ -59,10 +61,12 @@
             @slot('title') Ideas @endslot
             @slot('tools')
             @can('project.update', $project)
-                <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
-                   class="btn btn-primary btn-xs m-r-sm p-w-sm">
-                    {{_i('Edit')}}
-                </a>
+                @if(in_array($project->state, [\App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
+                    <a href="{{action('Resources\ProjectController@edit', [$project, 's' => \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING])}}"
+                       class="btn btn-primary btn-xs m-r-sm p-w-sm">
+                        {{($project->state == \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING) ? 'Complete' : 'Edit'}}
+                    </a>
+                @endif
             @endcan
 
             <a class="collapse-link">
