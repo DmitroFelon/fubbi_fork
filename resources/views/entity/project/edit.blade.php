@@ -28,6 +28,13 @@
                             </span>
                 </div>
                 @endrole
+                @isset($help_video_src)
+                @foreach($help_video_src as $video)
+                    <iframe id="ytplayer" type="text/html" width="640" height="360"
+                            src="{{$video->player}}"
+                            frameborder="0"></iframe>
+                @endforeach
+                @endisset
             </div>
         </div>
     </div>
