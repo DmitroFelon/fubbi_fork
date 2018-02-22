@@ -211,8 +211,8 @@ class LeftMenuComposer
                     $this->user->projects->first(),
                     ['s' => $this->user->projects->first()->state]
                 ]),
-                'icon'  => 'fa fa-lightbulb-o',
-                'order' => 100,
+                'icon'  => 'fa fa-check',
+                'order' => 110,
             ];
         }
 
