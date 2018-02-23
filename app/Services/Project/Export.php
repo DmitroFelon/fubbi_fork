@@ -92,13 +92,13 @@ class Export
             $pdf = $pdf->loadView('pdf.export', compact('meta', 'project'));
 
             //zip everything
-            $path        = storage_path('app/public/exports/');
-            $zipper      = new Zipper;
-            $project_path_name = str_replace(' ', '-', $project->name);
-            $main_folder = 'project - ' . $project_path_name;
-            $zip_name    = $project_path_name . '-' . $project->id . '.zip';
-            $full_path   = $path . $zip_name;
-            $pdf_path    = $path . $project_path_name . '-' . $project->id . '.pdf';
+            $path              = storage_path('app/public/exports/');
+            $zipper            = new Zipper;
+            $project_path_name = str_replace([' ', "\\"], '-', $project->name);
+            $main_folder       = 'project - ' . $project_path_name;
+            $zip_name          = $project_path_name . '-' . $project->id . '.zip';
+            $full_path         = $path . $zip_name;
+            $pdf_path          = $path . $project_path_name . '-' . $project->id . '.pdf';
             $pdf->save($pdf_path);
             $zipper->make($full_path)->folder($main_folder)->add($pdf_path);
 
