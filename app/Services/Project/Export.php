@@ -84,8 +84,8 @@ class Export
         $meta = $meta->filter();
 
         try {
-            $pdf = App::make('dompdf.wrapper');
-            $pdf = $pdf->loadView('pdf.export', compact('meta', 'project'));
+            //$pdf = App::make('dompdf.wrapper');
+            $pdf = PDF::loadView('pdf.export', compact('meta', 'project'));
         } catch (\Exception $e) {
             throw $e;
         }
