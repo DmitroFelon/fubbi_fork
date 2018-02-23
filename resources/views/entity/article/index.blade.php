@@ -23,7 +23,9 @@
             <div class="ibox-content">
                 <div class="row m-b-sm m-t-sm">
                     @include('entity.article.partials.search')
-                    @include('entity.article.partials.export')
+                    @if($articles->count() > 0)
+                        @include('entity.article.partials.export')
+                    @endif
                 </div>
 
                 <hr>
