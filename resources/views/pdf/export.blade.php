@@ -14,7 +14,7 @@
     <h1>Project: {{$project->name}}</h1>
 </center>
 <h4>Client: {{$project->client->name}}</h4>
-
+<h4>Plan: {{title_case(str_replace('-',' ',$project->subscription->stripe_plan))}} </h4>
 <p>
     Link: <a href="{{action('Resources\ProjectController@show', $project)}}">Click</a>
 </p>
