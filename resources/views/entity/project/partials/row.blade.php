@@ -31,9 +31,12 @@
         <a href="{{action('Project\ArticlesController@index', [$project])}}" class="btn btn-white btn-sm blue-bg">
             <i class="fa fa-folder"></i> {{_i('Content')}}
         </a>
-        <a style="width:15em;" href="{{action('Resources\ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
-            <i class="fa fa-download"></i> {{_i('Download Requirements')}}
-        </a>
+        @if(!in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
+            <a style="width:15em;" href="{{action('Resources\ProjectController@export', $project)}}"
+               class="btn btn-white btn-sm yellow-bg">
+                <i class="fa fa-download"></i> {{_i('Download Requirements')}}
+            </a>
+        @endif
         @role([\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])
         <a href="{{action('Resources\MessageController@index', ['c' => $project->conversation_id])}}"
            class="btn btn-white btn-sm lazur-bg">
