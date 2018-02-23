@@ -11,6 +11,7 @@ namespace App\Services\Project;
 
 use App;
 use App\Models\Project;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\Media;
 
