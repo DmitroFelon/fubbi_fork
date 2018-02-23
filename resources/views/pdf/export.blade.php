@@ -23,18 +23,13 @@
     <h2>Plan requirments</h2>
 </center>
 <table class="table table-bordered">
-    @foreach($project->plan_metadata as $key => $value)
+    @foreach($project->services as $service)
         <tr>
             <td>
-                {{ucwords( str_replace('_',' ',$key) )}}:
+                {{ucwords( str_replace('_',' ',$service->display_name) )}}:
             </td>
             <td>
-                @if($project->isModified($key))
-                    {{ (is_bool($project->getModified($key)))
-                    ? ($project->getModified($key)) ?_i('Yes') : _i('No') : $project->getModified($key)  }}
-                @else
-                    {{ (is_bool($value)) ? ($value) ?_i('Yes') : _i('No') : $value  }}
-                @endif
+                {{$service->print_value}}
             </td>
         </tr>
     @endforeach

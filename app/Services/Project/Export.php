@@ -83,9 +83,12 @@ class Export
         });
         $meta = $meta->filter();
 
-        $pdf     = App::make('dompdf.wrapper');
-        $project = $project;
-        $pdf     = $pdf->loadView('pdf.export', compact('meta', 'project'));
+        try {
+            $pdf = App::make('dompdf.wrapper');
+            $pdf = $pdf->loadView('pdf.export', compact('meta', 'project'));
+        } catch (\Exception $e) {
+            throw $e;
+        }
 
         //zip everything
         $path        = storage_path('app/public/exports/');
