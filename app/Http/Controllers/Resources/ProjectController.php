@@ -531,7 +531,8 @@ class ProjectController extends Controller
         try {
             return response()->download($project->export());
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            report($e);
+            return redirect()->back()->with('error', 'Somethig wrong happened while requirements export. Please, try later.');
         }
     }
 
