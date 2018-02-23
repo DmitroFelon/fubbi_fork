@@ -38,7 +38,6 @@ class Export
                     $collection_files->each(function (Media $item) use (&$data, $collection) {
                         $collection = str_replace('-', ' ', $collection);
                         $collection = str_replace('_', ' ', $collection);
-
                         if (File::exists($item->getPath())) {
                             $data['media'][$collection][] = $item->getPath();
                         }
@@ -86,7 +85,7 @@ class Export
 
             $pdf = App::make('dompdf.wrapper');
 
-            if(!is_object($pdf)){
+            if (!is_object($pdf)) {
                 throw new \Exception('Pdf wrapper error');
             }
 
