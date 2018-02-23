@@ -103,11 +103,11 @@ abstract class ProjectStates
         self::MANAGER_REVIEW,
     ];
 
-   public static $changeable_states = [
-       self::PLAN_SELECTION,
-       self::QUIZ_FILLING,
-       self::KEYWORDS_FILLING,
-   ];
+    public static $changeable_states = [
+        self::PLAN_SELECTION,
+        self::QUIZ_FILLING,
+        self::KEYWORDS_FILLING,
+    ];
 
     public static function getTab($state)
     {
