@@ -33,6 +33,12 @@ Route::get('coockie/{key}/{value}', function (string $key, string $value) {
     return ['ok'];
 });
 
+
+//shows rendered emails
+Route::get('/test', function () {
+    
+});
+
 //shows rendered emails
 Route::get('/test_email/{index}', function ($index) {
 
