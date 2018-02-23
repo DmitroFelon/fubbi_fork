@@ -1,7 +1,7 @@
 @if(!in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))
     <a href="{{action('Resources\ProjectController@export', $project)}}"
        class="btn btn-white yellow-bg btn-xs btn-xs m-r-sm p-w-sm">
-        <i class="fa fa-download"></i> {{_i('Export')}}
+        <i class="fa fa-download"></i> {{_i('Download Requirements')}}
     </a>
 @endif
 
@@ -16,7 +16,6 @@
             {{_i('Reject review')}}
         </a>
     @endif()
-
 
     @if($project->isManager(Auth::user()))
         @if(!in_array($project->state, [\App\Models\Helpers\ProjectStates::QUIZ_FILLING, \App\Models\Helpers\ProjectStates::KEYWORDS_FILLING]))

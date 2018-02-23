@@ -32,7 +32,7 @@
             <i class="fa fa-folder"></i> {{_i('Content')}}
         </a>
         <a href="{{action('Resources\ProjectController@export', $project)}}" class="btn btn-white btn-sm yellow-bg">
-            <i class="fa fa-download"></i> {{_i('Export')}}
+            <i class="fa fa-download"></i> {{_i('Download Requirements')}}
         </a>
         @role([\App\Models\Role::ADMIN, \App\Models\Role::CLIENT])
         <a href="{{action('Resources\MessageController@index', ['c' => $project->conversation_id])}}"

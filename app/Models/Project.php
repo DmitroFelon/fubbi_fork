@@ -408,7 +408,6 @@ class Project extends Model implements HasMediaConversions, Invitable
             }
             return ProjectExport::make($this);
         } catch (\Exception $e) {
-            return '';
             throw new \Exception(_('Somethig wrong happened while project export, please try later.'));
         }
 
