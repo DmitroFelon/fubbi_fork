@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {!! Form::bsText('last_name', null, _i('Last Name'), null, [], 'text') !!}
+                    {!! Form::bsText('last_name', null, _i('Last Name'), null, ['required'], 'text') !!}
                 </div>
             </div>
 
@@ -46,11 +46,11 @@
 
             <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {!! Form::bsText('email', null, _i('Email'), null, [], 'email') !!}
+                    {!! Form::bsText('email', null, _i('Email'), null, ['required'], 'email') !!}
                 </div>
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {!! Form::bsText('phone', null, _i('Phone'), null, [], 'phone') !!}
+                    {!! Form::bsText('phone', null, _i('Phone'), null, ['required'], 'phone') !!}
                 </div>
             </div>
 
@@ -71,12 +71,12 @@
             <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     {!! Form::bsSelect('role', Illuminate\Support\Arr::pluck(\App\Models\Role::all(['id', 'display_name']), 'display_name', 'id'),
-        null, _i("Please user's role"), '', ['required']) !!}
+        null, _i("Please, select user's role"), '', ['required']) !!}
                 </div>
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    {!! Form::bsSelect('writing_style', ['' => 'select team'] +Illuminate\Support\Arr::pluck(\App\Models\Team::all(['id', 'name']), 'name', 'id'),
-         null, _i("Please user's team if necessary"), '') !!}
+                    {!! Form::bsSelect('team', ['' => 'select team'] +Illuminate\Support\Arr::pluck(\App\Models\Team::all(['id', 'name']), 'name', 'id'),
+         null, _i("Please, select user's team if necessary"), '') !!}
                 </div>
             </div>
 

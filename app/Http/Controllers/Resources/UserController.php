@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use App\Models\Helpers\ProjectStates;
+use App\Models\Team;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,16 +80,30 @@ class UserController extends Controller
             'role'       => 'required|integer'
         ]);
 
+        try {
+            $user->fill($request->input());
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+            $user->roles()->attach($request->input('role'));
+            $user->save();
 
-        $user->fill($request->input());
-        $user->password = bcrypt($request->input('password'));
-        $user->save();
-        $user->roles()->attach($request->input('role'));
-        $user->save();
+            if ($request->has('team') and $request->input('team') > 0) {
+                $team = Team::find($request->input('team'));
+
+                if ($team) {
+                    $user->teams()->attach($team);
+                }
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()
+                             ->with('error', 'Something wrong happened while user creation. Try again, please.');
+        }
 
         Cache::set('temp_password_' . $user->id, $request->input('password'));
 
-        return redirect()->action('Resources\UserController@index');
+
+        return redirect()->action('Resources\UserController@index')
+                         ->with('success', 'User has been created successully');
 
     }
 
